@@ -1,5 +1,7 @@
 ## Changes in 'drc' 
 
+2026-03-06: Comprehensive repository cleanup and code quality improvements. Removed obsolete configuration files (.travis.yml, drc.Rproj, _pkgdown.yml, README.Rmd) and redundant reference files (_gitignore, _Rbuildignore). Removed the /tests directory containing outdated development artifacts with no testing value. Updated .gitignore and .Rbuildignore with standard R/RStudio settings. Rewrote README.md with comprehensive documentation including quick-start examples, available models, key functions, and supported data types. Removed debug print() statements in drmEMstandard.R and findbe.r. Removed dead code block (commented-out experimental code wrapped in if (FALSE)) in drmEMstandard.R and llogistic.ssf.R. Fixed a bug in noEffect.R where the Poisson null model incorrectly referenced 'resp' instead of using the response vector from the fitted object. Replaced unsafe eval(parse(text=...)) calls with match.fun() and do.call() in rdrm.r. Improved options() handling in searchdrc.R by saving and restoring the original warn setting using on.exit(add=TRUE).
+
 2017-12-19: Updating the event-time part of "drc", in particular in drm() (improved code provided by Andrea Onofri).
 
 2017-09-29: The argument checkND has been added to the predict method. It allows switching off comparing names of variables
@@ -44,7 +46,7 @@ Calculation of the log likelihood for binomial data has updated and improved.
 
 2015-08-07: Help page for EDcomp() updated.
 
-2015-07-30: Robust estimation is working again (ater reports from Kathy Mutambanengwe, Sten Ilmjärv, and Corina Dueñas Roca).
+2015-07-30: Robust estimation is working again (ater reports from Kathy Mutambanengwe, Sten Ilmjï¿½rv, and Corina Dueï¿½as Roca).
 
 2015-04-14: Minor labelling issue in the plot method resolved (with help from Bert Oosthuyse). 
 
@@ -114,7 +116,7 @@ was applied.
 
 2012-11-19: Small bug in drm() related to starting values for event-time models resolved. 
 
-2012-10-22: hatvalues and cooks.distance methods have been added (after a question from Sunniva Förster). 
+2012-10-22: hatvalues and cooks.distance methods have been added (after a question from Sunniva Fï¿½rster). 
 noEffect() function included for testing the dose-response model against a simpler model with no dose effect 
 (after a suggestion by Ryan Hechinger).
 
@@ -160,7 +162,7 @@ noEffect() function included for testing the dose-response model against a simpl
 
 2011-10-27: Help page of mixture() has been slightly improved. 
 
-2011-09-20: Problem with logDose argument in drm() and subsequent plotting has been solved (reported by Ralf Schäfer). 
+2011-09-20: Problem with logDose argument in drm() and subsequent plotting has been solved (reported by Ralf Schï¿½fer). 
 
 2011-09-02: Constrained estimation uses the actual limits provided (bug report by Andrew Kniss).
 
@@ -175,7 +177,7 @@ benn added.
 
 2011-07-01: Small update in the calculation of confidence intervals (after a suggestion from Scott Ray). 
 
-2011-06-24: The model function W2x.4() has been added (after a suggestion by Cécile Cornou).
+2011-06-24: The model function W2x.4() has been added (after a suggestion by Cï¿½cile Cornou).
 
 2011-05-24: Small improvement in the calculation of ED value for the log-normal and Weibull type 2 models. 
 "display" and "type" arguments have been added to maED(). 
@@ -191,7 +193,7 @@ benn added.
 2011-04-09: multdrc() has been completely removed. 
 
 2011-04-04: The model function weibull2x() (a model including a sort of "lag time" parameter) 
-has been added (after a suggestion by Cécile Cornou).
+has been added (after a suggestion by Cï¿½cile Cornou).
 
 2011-03-23: A small bug in ED() has been fixed (after a report from Nathan Pace).
 
@@ -240,7 +242,7 @@ involving several curves (after a suggestion from Andre Kleensang).
 2010-04-23: Minor bug in the predict method has been fixed. This means that type="bars" in the plot method now works again 
 (after a bug report by Andy Robinson). 
 
-2010-04-16: The help for NEC() has been improved (after a question from Inés González). 
+2010-04-16: The help for NEC() has been improved (after a question from Inï¿½s Gonzï¿½lez). 
 
 2010-04-15: The comped() has been re-introduced (after suggestion from Jochen Zubrod). 
 
