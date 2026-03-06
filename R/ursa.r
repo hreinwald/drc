@@ -1,5 +1,5 @@
 "ursa" <- function(
-fixed = rep(NA, 7), names = c("b1", "b2", "c", "d", "e1", "e1", "f"), ssfct = NULL)
+fixed = rep(NA, 7), names = c("b1", "b2", "c", "d", "e1", "e2", "f"), ssfct = NULL)
 {
     ## Checking arguments
     numParm <- 7

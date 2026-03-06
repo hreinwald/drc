@@ -17,7 +17,7 @@
 \alias{uml4c}
 
 
-\title{Cedergreen-Ritz-Streibig dose-reponse model for describing hormesis}
+\title{Cedergreen-Ritz-Streibig dose-response model for describing hormesis}
 
 \description{
   'CRS.5a', 'CRS.5b' and 'CRS.5c' provide the Cedergreen-Ritz-Streibig modified log-logistic model for describing

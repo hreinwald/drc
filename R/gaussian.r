@@ -121,7 +121,7 @@ fctName, fctText, loge = FALSE)
         pProp <- 1 - (100-p) / 100
 
         ## deriv(~b*(-2*22)^(1 / f)+e, c("b", "c", "d", "e", "f"), function(b,c,d,e,f){})
-        ## using "22" insted of log(pProp)
+        ## using "22" instead of log(pProp)
         EDfct <- function (b, c, d, e, f) 
         {
 #            .expr2 <- -2 * 22

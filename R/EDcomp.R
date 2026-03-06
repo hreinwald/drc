@@ -15,7 +15,7 @@ display = TRUE, pool = TRUE, logBase = NULL, multcomp = FALSE, ...)
     }
 #    sifct <- createsifct(object$"fct"$"edfct", logBase, identical(interval, "fls"), object$"indexMat", length(coef(object)))
 
-    ## Checking contain of percVec vector ... should be numbers between 0 and 100
+    ## Checking contents of percVec vector ... should be numbers between 0 and 100
     if ( (type == "relative") && any(percVec<=0 | percVec>=100) ) 
     {
         stop("Percentages outside the interval [0, 100] not allowed")
