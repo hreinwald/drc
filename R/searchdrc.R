@@ -10,7 +10,7 @@
 
    found <- FALSE
    oldWarn <- getOption("warn")
-   on.exit(options(warn = oldWarn))
+   on.exit(options(warn = oldWarn), add = TRUE)
    for (i in seq(range[1], range[2], length.out = len))
    {
        sv[whichInd] <- i 

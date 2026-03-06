@@ -133,7 +133,7 @@ and imports from: car, gtools, multcomp, plotrix, sandwich, scales.
 ## References
 
 - Ritz, C., Baty, F., Streibig, J. C., and Gerhard, D. (2015). Dose-Response Analysis Using R. *PLOS ONE*, 10(12), e0146021.
-- Ritz, C. and Streibig, J. C. (2005). Bioassay Analysis using R. *Journal of Statistical Software*, 12(5).
+- Ritz, C. and Streibig, J. C. (2005). Bioassay Analysis using R. *Journal of Statistical Software*, 12(5), 1–22.
 
 ## Bug Reports
 
