@@ -1,3 +1,57 @@
+#' @title Comparison of relative potencies between dose-response curves
+#'
+#' @description
+#' Relative potencies (also called selectivity indices) for arbitrary doses are compared between
+#' fitted dose-response curves.
+#'
+#' @param object an object of class 'drc'.
+#' @param percVec a numeric vector of dosage values.
+#' @param percMat a matrix with 2 columns providing the pairs of indices of \code{percVec} to be
+#'   compared. By default all pairs are compared.
+#' @param compMatch an optional character vector of names of assays to be compared. If not specified
+#'   all comparisons are supplied.
+#' @param od logical. If TRUE adjustment for over-dispersion is used. This argument only makes a
+#'   difference for binomial data.
+#' @param vcov. function providing the variance-covariance matrix. \code{\link{vcov}} is the default,
+#'   but \code{sandwich} is also an option (for obtaining robust standard errors).
+#' @param reverse logical. If TRUE the order of comparison of two curves is reversed.
+#' @param interval character string specifying the type of confidence intervals to be supplied.
+#'   The default is \code{"none"}. Use \code{"delta"} for asymptotics-based confidence intervals,
+#'   \code{"fieller"} for confidence intervals based on Fieller's theorem, or \code{"fls"} for
+#'   confidence intervals back-transformed from logarithm scale.
+#' @param level numeric. The level for the confidence intervals. Default is 0.95.
+#' @param reference character string. Is the upper limit or the control level the reference?
+#' @param type character string specifying whether absolute or relative response levels are supplied.
+#' @param display logical. If TRUE results are displayed. Otherwise they are not (useful in simulations).
+#' @param pool logical. If TRUE curves are pooled. Otherwise they are not. This argument only works
+#'   for models with independently fitted curves as specified in \code{\link{drm}}.
+#' @param logBase numeric. The base of the logarithm in case logarithm transformed dose values are used.
+#' @param multcomp logical to switch on output for use with the package \pkg{multcomp}. Default is FALSE.
+#' @param ... additional arguments passed to the function doing the calculations.
+#'
+#' @return An invisible matrix containing the estimates and the corresponding estimated standard
+#'   errors and possibly lower and upper confidence limits. Or, alternatively, a list with elements
+#'   that may be plugged directly into \code{parm} in the package \pkg{multcomp} (when \code{multcomp}
+#'   is TRUE).
+#'
+#' @details
+#' Fieller's theorem is incorporated using the formulas provided by Kotz and Johnson (1983) and
+#' Finney (1978).
+#'
+#' For objects of class 'braincousens' or 'mlogistic' the additional argument may be the 'upper'
+#' argument or the 'interval' argument specifying limits for the bisection method.
+#'
+#' @seealso \code{\link{ED.drc}} for calculating effective doses.
+#'
+#' @examples
+#' spinach.LL.4 <- drm(SLOPE~DOSE, CURVE, data = spinach, fct = LL.4())
+#'
+#' EDcomp(spinach.LL.4, c(50, 50))
+#' EDcomp(spinach.LL.4, c(10, 50))
+#' EDcomp(spinach.LL.4, c(10, 50), reverse = TRUE)
+#'
+#' @author Christian Ritz
+#' @keywords models nonlinear
 "EDcomp" <-
 function(object, percVec, percMat = NULL, compMatch = NULL, od = FALSE, vcov. = vcov, reverse = FALSE, 
 interval = c("none", "delta", "fieller", "fls"), level = ifelse(!(interval == "none"), 0.95, NULL), 
@@ -305,6 +359,8 @@ display = TRUE, pool = TRUE, logBase = NULL, multcomp = FALSE, ...)
 #SI <- EDcomp
 
 
+#' @title Fieller's confidence interval
+#' @keywords internal
 "fieller" <-
 function(mu, df, vcMat, level = 0.95, finney = FALSE, resVar)
 {
@@ -351,6 +407,8 @@ function(mu, df, vcMat, level = 0.95, finney = FALSE, resVar)
     return(c(lowerL, upperL))
 }
 
+#' @title Split index vectors into shared and unique components
+#' @keywords internal
 "splitInd"  <- function(ind1, ind2)
 {
     matchVec1 <- ind1%in%ind2
@@ -375,6 +433,8 @@ function(mu, df, vcMat, level = 0.95, finney = FALSE, resVar)
     return(list(only1, only2, inCommon))
 }
 
+#' @title Create selectivity index function
+#' @keywords internal
 createsifct <- function(edfct, logBase = NULL, fls = FALSE, indexMat, lenCoef)
 {
     if (is.null(edfct)) 
