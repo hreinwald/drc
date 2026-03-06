@@ -1,3 +1,5 @@
+#' @title Replace characters in strings
+#' @keywords internal
 "repChar" <- function(str, names, fixed, keep)  # used in 'mixdrc'
 {
     if (is.null(fixed)) {fixed <- rep(NA, length(names))}

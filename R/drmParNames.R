@@ -1,3 +1,5 @@
+#' @title Generate parameter names for drm
+#' @keywords internal
 "drmParNames" <- 
 function(numNames, parNames, collapseList2, repStr1 = "factor(pmodels[, i])", repStr2 = "factor(assayNo)")
 {

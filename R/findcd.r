@@ -1,3 +1,5 @@
+#' @title Find c and d parameters
+#' @keywords internal
 "findcd" <- function(x, y, scaleInc = 0.001)
 { 
     yRange <- range(y)

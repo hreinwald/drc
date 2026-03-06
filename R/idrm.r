@@ -1,3 +1,5 @@
+#' @title Interactive dose-response modelling
+#' @keywords internal
 "idrm" <- function(x, y, curveid, weights, fct, type, control)
 {
     oneFunction <- !is.list(fct[[1]])

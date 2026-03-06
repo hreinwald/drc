@@ -1,3 +1,5 @@
+#' @title Optimisation wrapper for drm
+#' @keywords internal
 "drmOpt" <- 
 function(opfct, opdfct1, startVec, optMethod, constrained, warnVal, 
 upperLimits, lowerLimits, errorMessage, maxIt, relTol, opdfct2 = NULL, parmVec, traceVal, silentVal = TRUE,

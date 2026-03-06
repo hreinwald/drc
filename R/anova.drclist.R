@@ -1,3 +1,5 @@
+#' @title ANOVA for list of drc objects
+#' @keywords internal
 "anova.drclist" <- function(object, ...,  details = TRUE, test = NULL)
 {
     objects <- list(object, ...)

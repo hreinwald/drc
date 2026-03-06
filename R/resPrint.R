@@ -1,3 +1,5 @@
+#' @title Print residual information
+#' @keywords internal
 "resPrint" <- function(resMat, headerText, interval, intervalLabel, display)
 {
 # Note: arguments "interval", "intervalLabel" no longer used

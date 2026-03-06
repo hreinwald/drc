@@ -1,3 +1,5 @@
+#' @title Lack-of-fit test for least squares
+#' @keywords internal
 "drmLOFls" <- function()
 {
     ## Defining lack-of-fit/goodness-of-fit tests

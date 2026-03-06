@@ -1,3 +1,5 @@
+#' @title Construct contrast matrix
+#' @keywords internal
 commatFct <- function(object, compMatch)
 {
     parmMat <- object$parmMat

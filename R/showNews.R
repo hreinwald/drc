@@ -1,3 +1,5 @@
+#' @title Show package news
+#' @keywords internal
 "showNews" <- function(pkgname, filename = c("NEWS", "CHANGES"))
 {
     filename <- match.arg(filename)

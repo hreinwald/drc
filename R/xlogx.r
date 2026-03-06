@@ -1,6 +1,8 @@
 ## Helper functions
 ##  used in llogistic, weibull1, weibull2
 
+#' @title Helper functions for x*log(x) calculations
+#' @keywords internal
 #"xlogx" <- function(x, p)
 #{
 #    lv <- (x < 1e-12)

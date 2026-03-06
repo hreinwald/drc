@@ -70,6 +70,8 @@ function(dose, resp, multCurves, doseScaling = 1)
 }
 
 
+#' @title EM algorithm for event time data
+#' @keywords internal
 "drmLOFeventtime" <- function()
 {
     return(list(anovaTest = NULL, gofTest = NULL))

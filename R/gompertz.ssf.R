@@ -1,3 +1,5 @@
+#' @title Self-starter for Gompertz model
+#' @keywords internal
 "gompertz.ssf" <- function(method = c("1", "2", "3", "4"), fixed, useFixed = FALSE)
 {
     method <- match.arg(method)
