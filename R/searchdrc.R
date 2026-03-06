@@ -9,14 +9,16 @@
    if (length(whichInd)<1) {stop(paste("No such parameter ", which, sep = ""))}
 
    found <- FALSE
+   oldWarn <- getOption("warn")
+   on.exit(options(warn = oldWarn))
    for (i in seq(range[1], range[2], length.out = len))
    {
        sv[whichInd] <- i 
 
        options(warn = -1)
        modelFit <- try(update(object, start = sv, control = drmc(noMessage = TRUE)), silent=TRUE)
+       options(warn = oldWarn)
        if (!inherits(modelFit, "try-error")) {found <- TRUE; break}
-       options(warn = 0)
    }
    
    if (found) 

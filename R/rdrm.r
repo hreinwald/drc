@@ -6,8 +6,8 @@ onlyY = FALSE)
     {
         x <- xerror
     } else {
-        evalStr1 <- paste(xerror, "(", paste(xpar, sep = ",", collapse = ","), ")")
-        x <- eval(parse(text = evalStr1))
+        xFun <- match.fun(xerror)
+        x <- do.call(xFun, as.list(xpar))
     }
     lenx <- length(x)
     x <- sort(x)
@@ -18,6 +18,7 @@ onlyY = FALSE)
     meanVec <- fct$fct(x, matrix(mpar, lenx*nosim, length(mpar), byrow = TRUE))
     
     ## Constructing the simulated response values
+    yFun <- match.fun(yerror)
     if (yerror == "rbinom")
     {
         if (length(ypar) == 1)
@@ -27,8 +28,7 @@ onlyY = FALSE)
         } else {
             wMat <- matrix(ypar, nosim, lenx, byrow = TRUE)
         }
-        evalStr2 <- paste(deparse(substitute(yerror)), "(", lenx*nosim, ", ypar, meanVec)")
-        errorVec <- eval(parse(text = evalStr2))
+        errorVec <- yFun(lenx*nosim, ypar, meanVec)
         
         yMat <- matrix(errorVec, nosim, lenx, byrow = TRUE)
 
@@ -40,9 +40,7 @@ onlyY = FALSE)
             return(list(x = xMat, w = wMat, y = yMat))
         }
     }  else {
-        evalStr2 <- paste(yerror, "(", lenx*nosim, ",",
-        paste(ypar, sep = ",", collapse = ","), ")")
-        errorVec <- eval(parse(text = evalStr2))
+        errorVec <- do.call(yFun, c(list(lenx*nosim), as.list(ypar)))
         
         yMat <- matrix(meanVec, nosim, lenx, byrow = TRUE) + errorVec
 

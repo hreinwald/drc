@@ -98,7 +98,6 @@ findbe2 <- function(bfct, efct, method, sgnb = 1)
         {
             bVal <- (sgnb) * (-regSlope)
         }
-        print(c(bVal, eVal))
         return(c(bVal, eVal))
     },
     "Normolle" = 
