@@ -9,7 +9,8 @@ noEffect <- function(object)
     
     if (identical(object$"type", "Poisson"))
     {
-        llNull <- logLik(glm(resp ~ 1, family = poisson))
+        respVec <- object$"dataList"$resp
+        llNull <- logLik(glm(respVec ~ 1, family = poisson))
     }
 
     if (identical(object$"type", "continuous"))
