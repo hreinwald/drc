@@ -1,3 +1,39 @@
+#' @title Estimating function for the sandwich estimator
+#'
+#' @description
+#' Evaluates the estimating function (the "meat") for the sandwich estimator of the
+#' variance-covariance matrix for objects of class 'drc'.
+#'
+#' @param x object of class \code{drc}.
+#' @param ... additional arguments. At the moment none are supported.
+#'
+#' @details The details are provided by Zeileis (2006).
+#'
+#' @return The estimating function evaluated at the data and the parameter estimates.
+#'   By default no clustering is assumed, corresponding to robust standard errors
+#'   under independence.
+#'
+#' @references
+#' Zeileis, A. (2006) Object-oriented Computation of Sandwich Estimators,
+#' \emph{J. Statist. Software}, \bold{16}, Issue 9.
+#'
+#' @author Christian Ritz
+#'
+#' @examples
+#' ## The lines below requires that the packages
+#' ## 'lmtest' and 'sandwich' are installed
+#' # library(lmtest)
+#' # library(sandwich)
+#'
+#' # ryegrass.m1<-drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#'
+#' # Standard summary output
+#' # coeftest(ryegrass.m1)
+#'
+#' # Output with robust standard errors
+#' # coeftest(ryegrass.m1, vcov = sandwich)
+#'
+#' @keywords models nonlinear
 "estfun.drc" <- function (x, ...)
 #"estfun.drc" <- function (x, cvar = NULL, ...)  
 {
@@ -119,6 +155,26 @@
     rval
 }
 
+#' @title Bread for the sandwich estimator
+#'
+#' @description
+#' Computes the "bread" (unscaled hessian) for the sandwich estimator of the
+#' variance-covariance matrix for objects of class 'drc'.
+#'
+#' @param x object of class \code{drc}.
+#' @param ... additional arguments. At the moment none are supported.
+#'
+#' @details The details are provided by Zeileis (2006).
+#'
+#' @return The unscaled hessian matrix.
+#'
+#' @references
+#' Zeileis, A. (2006) Object-oriented Computation of Sandwich Estimators,
+#' \emph{J. Statist. Software}, \bold{16}, Issue 9.
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "bread.drc" <- function (x, ...) 
 {
 #    if (identical(x$type, "binomial"))
