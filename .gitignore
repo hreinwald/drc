@@ -1,4 +1,36 @@
+# R session files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+# R package build artifacts
+*.tar.gz
+*.Rcheck/
+
+# pkgdown generated site
+docs/
+
+# knitr / RMarkdown cache
+*_cache/
+/cache/
+
+# OAuth token
+.httr-oauth
+
+# Tests output
+tests/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# R environment files
+.Renviron
+
+# Quarto
+.quarto/
+
+# Reference/backup files
+_gitignore
+_Rbuildignore
