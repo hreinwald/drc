@@ -1,3 +1,37 @@
+#' @title Fractional polynomial-logistic dose-response model
+#'
+#' @description
+#' Model function for specifying dose-response models that are a combination of a logistic model
+#' and an appropriate class of fractional polynomials.
+#'
+#' @param p1 numeric denoting the negative power of log(dose+1) in the fractional polynomial.
+#' @param p2 numeric denoting the positive power of log(dose+1) in the fractional polynomial.
+#' @param fixed numeric vector. Specifies which parameters are fixed and at what value they are fixed.
+#'   NAs for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters (should not contain ":").
+#'   The order of the parameters is: b, c, d, e.
+#' @param method character string indicating the self starter function to use.
+#' @param ssfct a self starter function to be used.
+#' @param fctName optional character string used internally by convenience functions.
+#' @param fctText optional character string used internally by convenience functions.
+#'
+#' @details
+#' The fractional polynomial dose-response models introduced by Namata et al. (2008) are implemented
+#' using the logistic model as base.
+#'
+#' @return A list containing the nonlinear function, the self starter function
+#'   and the parameter names.
+#'
+#' @references
+#' Namata, Harriet and Aerts, Marc and Faes, Christel and Teunis, Peter (2008)
+#' Model Averaging in Microbial Risk Assessment Using Fractional Polynomials,
+#' \emph{Risk Analysis} \bold{28}, 891--905.
+#'
+#' @author Christian Ritz
+#'
+#' @seealso \code{\link{FPL.4}}, \code{\link{maED}}, \code{\link{drm}}
+#'
+#' @keywords models nonlinear
 "fplogistic" <- function(
 p1, p2, fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), 
 method = c("1", "2", "3", "4"), ssfct = NULL,
@@ -158,6 +192,22 @@ fctName, fctText)
     invisible(returnList)    
 }
 
+#' @title Four-parameter fractional polynomial-logistic model
+#'
+#' @description
+#' Convenience function for the four-parameter fractional polynomial-logistic model.
+#'
+#' @param p1 numeric denoting the negative power of log(dose+1) in the fractional polynomial.
+#' @param p2 numeric denoting the positive power of log(dose+1) in the fractional polynomial.
+#' @param fixed numeric vector of length 4 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{fplogistic}}.
+#'
+#' @return A list (see \code{\link{fplogistic}}).
+#'
+#' @seealso \code{\link{fplogistic}}, \code{\link{maED}}
+#'
+#' @keywords models nonlinear
 "FPL.4" <-
 function(p1, p2, fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 {

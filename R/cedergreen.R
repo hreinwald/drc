@@ -1,3 +1,42 @@
+#' @title The Cedergreen-Ritz-Streibig model
+#'
+#' @description
+#' \code{cedergreen} provides a very general way of specifying the Cedergreen-Ritz-Streibig
+#' modified log-logistic model for describing hormesis, under various constraints on the parameters.
+#'
+#' @param fixed numeric vector. Specifies which parameters are fixed and at what value they are fixed.
+#'   NAs for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters (should not contain ":").
+#'   The order of the parameters is: b, c, d, e, f.
+#' @param method character string indicating the self starter function to use.
+#' @param ssfct a self starter function to be used.
+#' @param alpha numeric value between 0 and 1, reflecting the steepness of the hormesis peak.
+#'   This argument must be specified.
+#' @param fctName optional character string used internally by convenience functions.
+#' @param fctText optional character string used internally by convenience functions.
+#'
+#' @details
+#' The model is given by the expression
+#' \deqn{f(x) = c + \frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}}
+#' which is a five-parameter model (alpha is fixed).
+#'
+#' @return A list containing the non-linear function, the self starter function
+#'   and the parameter names.
+#'
+#' @references
+#' Cedergreen, N. and Ritz, C. and Streibig, J. C. (2005)
+#' Improved empirical models describing hormesis,
+#' \emph{Environmental Toxicology and Chemistry} \bold{24}, 3166--3172.
+#'
+#' @author Christian Ritz
+#'
+#' @seealso \code{\link{CRS.4a}}, \code{\link{CRS.5a}}, \code{\link{ucedergreen}}, \code{\link{drm}}
+#'
+#' @examples
+#' lettuce.crsm1 <- drm(weight ~ conc, data = lettuce, fct = CRS.6())
+#' summary(lettuce.crsm1)
+#'
+#' @keywords models nonlinear
 "cedergreen" <- function(
 fixed = c(NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f"), 
 method = c("1", "2", "3", "4"), ssfct = NULL, 
@@ -291,6 +330,26 @@ if (FALSE)
     invisible(returnList)
 }
 
+#' @title Cedergreen-Ritz-Streibig model with lower limit 0 (alpha=1)
+#'
+#' @description
+#' Four-parameter CRS hormesis model with the lower limit fixed at 0 and alpha=1.
+#'
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#'
+#' @return A list (see \code{\link{cedergreen}}).
+#'
+#' @author Christian Ritz
+#'
+#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.5a}}, \code{\link{UCRS.4a}}
+#'
+#' @examples
+#' lettuce.crsm1 <- drm(lettuce[,c(2,1)], fct = CRS.4a())
+#' summary(lettuce.crsm1)
+#' ED(lettuce.crsm1, c(50))
+#'
+#' @keywords models nonlinear
 "CRS.4a" <-
 function(names = c("b", "d", "e", "f"), ...)
 {
@@ -303,8 +362,25 @@ function(names = c("b", "d", "e", "f"), ...)
     ...))
 }
 
+#' @title Alias for CRS.4a
+#' @description \code{ml3a} is an alias for \code{\link{CRS.4a}}.
+#' @seealso \code{\link{CRS.4a}}
+#' @keywords models nonlinear
 ml3a <- CRS.4a
 
+#' @title Cedergreen-Ritz-Streibig model with lower limit 0 (alpha=0.5)
+#'
+#' @description
+#' Four-parameter CRS hormesis model with the lower limit fixed at 0 and alpha=0.5.
+#'
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#'
+#' @return A list (see \code{\link{cedergreen}}).
+#'
+#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{CRS.5b}}
+#'
+#' @keywords models nonlinear
 "CRS.4b" <-
 function(names = c("b", "d", "e", "f"), ...)
 {
@@ -317,8 +393,25 @@ function(names = c("b", "d", "e", "f"), ...)
     ...))
 }
 
+#' @title Alias for CRS.4b
+#' @description \code{ml3b} is an alias for \code{\link{CRS.4b}}.
+#' @seealso \code{\link{CRS.4b}}
+#' @keywords models nonlinear
 ml3b <- CRS.4b
 
+#' @title Cedergreen-Ritz-Streibig model with lower limit 0 (alpha=0.25)
+#'
+#' @description
+#' Four-parameter CRS hormesis model with the lower limit fixed at 0 and alpha=0.25.
+#'
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#'
+#' @return A list (see \code{\link{cedergreen}}).
+#'
+#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{CRS.5c}}
+#'
+#' @keywords models nonlinear
 "CRS.4c" <-
 function(names = c("b", "d", "e", "f"), ...)
 {
@@ -331,8 +424,32 @@ function(names = c("b", "d", "e", "f"), ...)
     ...))
 }
 
+#' @title Alias for CRS.4c
+#' @description \code{ml3c} is an alias for \code{\link{CRS.4c}}.
+#' @seealso \code{\link{CRS.4c}}
+#' @keywords models nonlinear
 ml3c <- CRS.4c
 
+#' @title Cedergreen-Ritz-Streibig five-parameter model (alpha=1)
+#'
+#' @description
+#' Five-parameter CRS hormesis model with alpha=1.
+#'
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#'
+#' @return A list (see \code{\link{cedergreen}}).
+#'
+#' @author Christian Ritz
+#'
+#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{UCRS.5a}}
+#'
+#' @examples
+#' lettuce.m1 <- drm(lettuce[,c(2,1)], fct = CRS.5a())
+#' summary(lettuce.m1)
+#' ED(lettuce.m1, c(50))
+#'
+#' @keywords models nonlinear
 "CRS.5a" <-
 function(names = c("b", "c", "d", "e", "f"), ...)
 {
@@ -345,8 +462,25 @@ function(names = c("b", "c", "d", "e", "f"), ...)
     ...))
 }
 
+#' @title Alias for CRS.5a
+#' @description \code{ml4a} is an alias for \code{\link{CRS.5a}}.
+#' @seealso \code{\link{CRS.5a}}
+#' @keywords models nonlinear
 ml4a <- CRS.5a
 
+#' @title Cedergreen-Ritz-Streibig five-parameter model (alpha=0.5)
+#'
+#' @description
+#' Five-parameter CRS hormesis model with alpha=0.5.
+#'
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#'
+#' @return A list (see \code{\link{cedergreen}}).
+#'
+#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4b}}, \code{\link{CRS.5a}}
+#'
+#' @keywords models nonlinear
 "CRS.5b" <-
 function(names = c("b", "c", "d", "e", "f"), ...)
 {
@@ -359,8 +493,25 @@ function(names = c("b", "c", "d", "e", "f"), ...)
     ...))
 }
 
+#' @title Alias for CRS.5b
+#' @description \code{ml4b} is an alias for \code{\link{CRS.5b}}.
+#' @seealso \code{\link{CRS.5b}}
+#' @keywords models nonlinear
 ml4b <- CRS.5b
 
+#' @title Cedergreen-Ritz-Streibig five-parameter model (alpha=0.25)
+#'
+#' @description
+#' Five-parameter CRS hormesis model with alpha=0.25.
+#'
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#'
+#' @return A list (see \code{\link{cedergreen}}).
+#'
+#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4c}}, \code{\link{CRS.5a}}
+#'
+#' @keywords models nonlinear
 "CRS.5c" <-
 function(names = c("b", "c", "d", "e", "f"), ...)
 {
@@ -373,5 +524,9 @@ function(names = c("b", "c", "d", "e", "f"), ...)
     ...))
 }
 
+#' @title Alias for CRS.5c
+#' @description \code{ml4c} is an alias for \code{\link{CRS.5c}}.
+#' @seealso \code{\link{CRS.5c}}
+#' @keywords models nonlinear
 ml4c <- CRS.5c
 
