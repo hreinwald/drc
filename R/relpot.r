@@ -1,3 +1,24 @@
+#' Relative potency function
+#'
+#' Calculates and optionally plots relative potency as a function of the response level
+#' for two curves in a dose-response model, using \code{\link{EDcomp}} for the underlying comparisons.
+#'
+#' @param object an object of class 'drc'.
+#' @param plotit logical. If TRUE (default), a plot of relative potency against response level is produced.
+#' @param compMatch a numeric vector of length 2 specifying which two curves to compare.
+#' @param percVec numeric vector of response levels at which to evaluate relative potency.
+#'   If NULL, a suitable range is determined automatically.
+#' @param interval character string specifying confidence interval type. Default is "none".
+#' @param type character string. Either "relative" (default) or "absolute" response levels.
+#' @param scale character string. One of "original" (default), "percent", or "unconstrained".
+#' @param ... additional graphical arguments passed to \code{plot}.
+#'
+#' @return An invisible list with components \code{x}, \code{y} (relative potency values),
+#'   and \code{percVec}.
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "relpot" <- function(object, plotit = TRUE, compMatch = NULL, percVec = NULL, interval = "none", 
 type = c("relative", "absolute"), scale = c("original", "percent", "unconstrained"), ...)
 {
