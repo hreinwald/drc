@@ -1,3 +1,32 @@
+#' Multistage Dose-Response Model with Quadratic Terms
+#'
+#' A five-parameter multistage dose-response model useful for describing more complex
+#' dose-response patterns.
+#'
+#' The multistage model function with quadratic terms is:
+#'
+#' \deqn{f(x) = c + (d-c)\exp(-b1 - b2 x - b3 x^2)}
+#'
+#' where x denotes the dose or the logarithm-transformed dose.
+#'
+#' @param fixed numeric vector specifying which parameters are fixed and at what value
+#'   they are fixed. NAs are used for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters
+#'   (should not contain ":"). The default is reasonable.
+#' @param ssfct a self starter function to be used.
+#' @param fctName optional character string used internally by convenience functions.
+#' @param fctText optional character string used internally by convenience functions.
+#'
+#' @return A list containing the nonlinear function, the self starter function,
+#'   and the parameter names.
+#'
+#' @references Wheeler, M. W., Bailer, A. J. (2009)
+#'   Comparing model averaging with other model selection strategies for benchmark
+#'   dose estimation, \emph{Environmental and Ecological Statistics}, \bold{16}, 37--51.
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "multi2" <- function(
 fixed = c(NA, NA, NA, NA, NA), names = c("b1", "b2", "b3", "c", "d"), 
 ssfct = NULL, fctName, fctText)
