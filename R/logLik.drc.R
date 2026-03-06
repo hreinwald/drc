@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' ## Fitting a four-parameter log-logistic model
-#' ryegrass.m1 <- drm(rootl ~conc, data = ryegrass, fct = LL.4())
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 #' logLik(ryegrass.m1)
 #'
 #' @author Christian Ritz
