@@ -1,3 +1,130 @@
+#' @title Plotting fitted dose-response curves
+#'
+#' @description
+#' \code{plot} displays fitted curves and observations in the same plot window,
+#' distinguishing between curves by different plot symbols and line types.
+#'
+#' @param x an object of class 'drc'.
+#' @param ... additional graphical arguments. For instance, use \code{lwd=2} or
+#'   \code{lwd=3} to increase the width of plot symbols.
+#' @param add logical. If TRUE then add to already existing plot.
+#' @param level vector of character strings. To plot only the curves specified
+#'   by their names.
+#' @param type a character string specifying how to plot the data. Options are:
+#'   \code{"average"} (averages and fitted curve(s); default), \code{"none"}
+#'   (only the fitted curve(s)), \code{"obs"} (only the data points),
+#'   \code{"all"} (all data points and fitted curve(s)), \code{"bars"}
+#'   (averages and fitted curve(s) with model-based standard errors), and
+#'   \code{"confidence"} (confidence bands for fitted curve(s)).
+#' @param broken logical. If TRUE the x axis is broken provided this axis is
+#'   logarithmic (using functionality in the CRAN package 'plotrix').
+#' @param bp numeric value specifying the break point below which the dose is
+#'   zero. The default is the base-10 value corresponding to the rounded value
+#'   of the minimum of the log10 values of all positive dose values. Only works
+#'   for logarithmic dose axes.
+#' @param bcontrol a list with components \code{factor}, \code{style} and
+#'   \code{width} controlling the appearance of the break (when \code{broken}
+#'   is \code{TRUE}).
+#' @param conName character string. Name on x axis for dose zero. Default is
+#'   \code{"0"}.
+#' @param axes logical indicating whether both axes should be drawn on the plot.
+#' @param gridsize numeric. Number of points in the grid used for plotting the
+#'   fitted curves.
+#' @param log a character string which contains \code{"x"} if the x axis is to
+#'   be logarithmic, \code{"y"} if the y axis is to be logarithmic and
+#'   \code{"xy"} or \code{"yx"} if both axes are to be logarithmic. The default
+#'   is \code{"x"}. The empty string \code{""} yields the original axes.
+#' @param xtsty a character string specifying the dose axis style for
+#'   arrangement of tick marks. By default for a logarithmic axis only base 10
+#'   tick marks are shown (\code{"base10"}). Otherwise sensible equidistantly
+#'   located tick marks are shown (\code{"standard"}).
+#' @param xttrim logical specifying if the number of tick marks should be
+#'   trimmed in case too many tick marks are initially determined.
+#' @param xt a numeric vector containing the positions of the tick marks on the
+#'   x axis.
+#' @param xtlab a vector containing the tick marks on the x axis.
+#' @param xlab an optional label for the x axis.
+#' @param xlim a numeric vector of length two, containing the lower and upper
+#'   limit for the x axis.
+#' @param yt a numeric vector containing the positions of the tick marks on the
+#'   y axis.
+#' @param ytlab a vector containing the tick marks on the y axis.
+#' @param ylab an optional label for the y axis.
+#' @param ylim a numeric vector of length two, containing the lower and upper
+#'   limit for the y axis.
+#' @param cex numeric or numeric vector specifying the size of plotting symbols
+#'   and text (see \code{\link{par}} for details).
+#' @param cex.axis numeric value specifying the magnification to be used for
+#'   axis annotation relative to the current setting of cex.
+#' @param col either logical or a vector of colours. If TRUE default colours are
+#'   used. If FALSE (default) no colours are used.
+#' @param lty a numeric vector specifying the line types.
+#' @param pch a vector of plotting characters or symbols (see
+#'   \code{\link{points}}).
+#' @param legend logical. If TRUE a legend is displayed.
+#' @param legendText a character string or vector of character strings
+#'   specifying the legend text.
+#' @param legendPos numeric vector of length 2 giving the position of the
+#'   legend.
+#' @param cex.legend numeric specifying the legend text size.
+#' @param normal logical. If TRUE the plot of the normalized data and fitted
+#'   curves are shown (see Weimer et al. (2012) for details).
+#' @param normRef numeric specifying the reference for the normalization
+#'   (default is 1).
+#' @param confidence.level confidence level for error bars. Defaults to 0.95.
+#'
+#' @return An invisible data frame with the values used for plotting the fitted
+#'   curves. The first column contains the dose values, and the following
+#'   columns (one for each curve) contain the fitted response values.
+#'
+#' @details
+#' The use of \code{xlim} allows changing the range of the x axis,
+#' extrapolating the fitted dose-response curves. Note that changing the range
+#' on the x axis may also entail a change of the range on the y axis. Sometimes
+#' it may be useful to extend the upper limit on the y axis (using \code{ylim})
+#' in order to fit a legend into the plot.
+#'
+#' See \code{\link{colors}} for the available colours. Suitable labels are
+#' automatically provided.
+#'
+#' The arguments \code{broken} and \code{bcontrol} rely on the function
+#' \code{axis.break} with arguments \code{style} and \code{brw} in the package
+#' \pkg{plotrix}.
+#'
+#' The model-based standard errors used for the error bars are calculated as the
+#' fitted value plus/minus the estimated error times the 1-(alpha/2) quantile in
+#' the t distribution with degrees of freedom equal to the residual degrees of
+#' freedom for the model (or using a standard normal distribution in case of
+#' binomial and Poisson data), where alpha = 1 - confidence.level. The standard
+#' errors are obtained using the predict method with the arguments
+#' \code{interval = "confidence"} and \code{level = confidence.level}.
+#'
+#' @seealso \code{\link{colors}}
+#'
+#' @examples
+#' ## Fitting models to be plotted below
+#' ryegrass.m1 <- drm(rootl~conc, data = ryegrass, fct = LL.4())
+#' ryegrass.m2 <- drm(rootl~conc, data = ryegrass, fct = LL.3())
+#'
+#' ## Plotting observations and fitted curve for the first model
+#' plot(ryegrass.m1, broken = TRUE)
+#'
+#' ## Adding fitted curve for the second model
+#' plot(ryegrass.m2, broken = TRUE, add = TRUE, type = "none", col = 2, lty = 2)
+#'
+#' ## Add confidence region for the first model
+#' plot(ryegrass.m1, broken = TRUE, type="confidence", add=TRUE)
+#'
+#' ## Fitting model with multiple curves
+#' spinach.m1 <- drm(SLOPE~DOSE, CURVE, data = spinach, fct = LL.4())
+#'
+#' ## Plot with default colours
+#' plot(spinach.m1, col = TRUE, main = "Default colours")
+#'
+#' @author Christian Ritz and Jens C. Streibig. Contributions from Xiaoyan Wang
+#'   and Greg Warnes.
+#'
+#' @keywords aplot
 "plot.drc" <-
 function(x, ..., add = FALSE, level = NULL, type = c("average", "all", "bars", "none", "obs", "confidence"), 
 broken = FALSE, bp, bcontrol = NULL, conName = NULL, axes = TRUE, gridsize = 100, 

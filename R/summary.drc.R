@@ -1,3 +1,27 @@
+#' @title Summarising non-linear model fits
+#'
+#' @description
+#' \code{summary} compiles a comprehensive summary for objects of class 'drc'.
+#'
+#' @param object an object of class 'drc'.
+#' @param od logical. If TRUE adjustment for over-dispersion is used.
+#' @param pool logical. If TRUE curves are pooled. Otherwise they are not. This
+#'   argument only works for models with independently fitted curves as
+#'   specified in \code{\link{drm}}.
+#' @param ... additional arguments.
+#'
+#' @return A list of summary statistics that includes parameter estimates and
+#'   estimated standard errors.
+#'
+#' @seealso \code{\link{drm}}, \code{\link{coef.drc}}, \code{\link{confint.drc}}
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#' summary(ryegrass.m1)
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "summary.drc" <-
 function(object, od = FALSE, pool = TRUE, ...)
 {
