@@ -1,3 +1,76 @@
+#' @title Fitting dose-response models
+#'
+#' @description A general model fitting function for analysis of various types of dose-response data.
+#'
+#' @param formula a symbolic description of the model to be fit. Either of the form
+#'   \code{response ~ dose} or as a data frame with response values in first column and dose
+#'   values in second column.
+#' @param curveid a numeric vector or factor containing the grouping of the data.
+#' @param pmodels a data frame with as many columns as there are parameters in the non-linear
+#'   function. Or a list containing a formula for each parameter in the nonlinear function.
+#' @param weights a numeric vector containing weights. For continuous/quantitative responses,
+#'   inverse weights are multiplied inside the squared errors (weights should have the same unit
+#'   as the response). For binomial responses weights provide information about the total number
+#'   of binary observations used to obtain the response.
+#' @param data an optional data frame containing the variables in the model.
+#' @param subset an optional vector specifying a subset of observations to be used in the
+#'   fitting process.
+#' @param fct a list with three or more elements specifying the non-linear function, the
+#'   accompanying self starter function, the names of the parameters in the non-linear function
+#'   and, optionally, the first and second derivatives as well as information used for
+#'   calculation of ED values. Use \code{\link{getMeanFunctions}} for a full list.
+#' @param type a character string specifying the distribution of the data. The default is
+#'   \code{"continuous"}, corresponding to a normal distribution. Other choices include
+#'   \code{"binomial"}, \code{"Poisson"}, \code{"negbin1"}, \code{"negbin2"}, \code{"event"},
+#'   and \code{"ssd"}.
+#' @param bcVal a numeric value specifying the lambda parameter to be used in the Box-Cox
+#'   transformation.
+#' @param bcAdd a numeric value specifying the constant to be added on both sides prior to
+#'   Box-Cox transformation. The default is 0.
+#' @param start an optional numeric vector containing starting values for all mean parameters
+#'   in the model. Overrules any self starter function.
+#' @param na.action a function for treating missing values (\code{NA}s). Default is
+#'   \code{\link{na.omit}}.
+#' @param robust a character string specifying the rho function for robust estimation.
+#'   Default is non-robust least squares estimation (\code{"mean"}). Available robust methods
+#'   are: \code{"median"}, \code{"lms"}, \code{"lts"}, \code{"trimmed"}, \code{"winsor"}, and
+#'   \code{"tukey"}.
+#' @param logDose a numeric value or \code{NULL}. If log dose values are provided the base of
+#'   the logarithm should be specified (e.g., \code{exp(1)} for natural logarithm, \code{10}
+#'   for base 10).
+#' @param control a list of arguments controlling constrained optimisation, maximum iterations,
+#'   relative tolerance, and warnings. See \code{\link{drmc}}.
+#' @param lowerl a numeric vector of lower limits for all parameters in the model (the default
+#'   corresponds to minus infinity for all parameters).
+#' @param upperl a numeric vector of upper limits for all parameters in the model (the default
+#'   corresponds to plus infinity for all parameters).
+#' @param separate logical value indicating whether curves should be fit separately
+#'   (independent of each other).
+#' @param pshifts a matrix of constants to be added to the matrix of parameters. Default is no
+#'   shift for all parameters.
+#' @param varcov an optional user-defined known variance-covariance matrix for the responses.
+#'   Default is the identity matrix (\code{NULL}), corresponding to independent response values
+#'   with a common standard deviation estimated from the data.
+#'
+#' @return An object of (S3) class \code{"drc"}.
+#'
+#' @details This function relies on \code{\link{optim}} for minimisation of the negative log
+#'   likelihood function. For a continuous response this reduces to least squares estimation.
+#'   Response values are assumed to be mutually independent unless \code{varcov} is specified.
+#'   For robust estimation MAD (median absolute deviance) is used to estimate the residual
+#'   variance. Setting \code{lowerl} and/or \code{upperl} automatically invokes constrained
+#'   optimisation. Control arguments may be specified using \code{\link{drmc}}.
+#'
+#' @seealso \code{\link{drmc}}, \code{\link{LL.4}}, \code{\link{getMeanFunctions}}
+#'
+#' @examples
+#' ## Fitting a four-parameter log-logistic model to the ryegrass data
+#' model <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#' summary(model)
+#'
+#' @author Christian Ritz and Jens C. Streibig
+#'
+#' @keywords models nonlinear
 "drm" <- function(
 formula, curveid, pmodels, weights, data = NULL, subset, fct, 
 type = c("continuous", "binomial", "Poisson", "negbin1", "negbin2", "event", "ssd"), bcVal = NULL, bcAdd = 0, 

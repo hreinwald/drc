@@ -1,3 +1,31 @@
+#' @title Comparison of effective dose values
+#'
+#' @description
+#' Comparison of a pair of effective dose values from independent experiments where only the
+#' estimates and their standard errors are reported.
+#'
+#' @param est a numeric vector of length 2 containing the two estimated ED values.
+#' @param se a numeric vector of length 2 containing the two standard errors.
+#' @param log logical indicating whether or not estimates and standard errors are on log scale.
+#' @param interval logical indicating whether or not a confidence interval should be returned.
+#' @param operator character string taking one of the two values \code{"-"} (default) or \code{"/"}
+#'   corresponding to a comparison based on the difference or the ratio.
+#' @param level numeric value giving the confidence level.
+#' @param df numeric value specifying the degrees of freedom for the percentile used in the
+#'   confidence interval (optional). By default confidence interval relies on the normal distribution.
+#'
+#' @return A matrix with the estimated difference or ratio and the associated standard error and the
+#'   resulting confidence interval (unless not requested).
+#'
+#' @examples
+#' ## Comparing ED50 values as a ratio
+#' comped(c(28.396, 65.573), c(1.875, 5.619), log = FALSE, operator = "/")
+#'
+#' ## Comparing ED50 values as a difference
+#' comped(c(28.396, 65.573), c(1.875, 5.619), log = FALSE, operator = "-")
+#'
+#' @author Christian Ritz
+#' @keywords models nonlinear
 "comped" <- function(est, se, log = TRUE, interval = TRUE, operator = c("-", "/"), level = 0.95, df = NULL)
 {
     operator <- match.arg(operator)

@@ -1,6 +1,8 @@
 ## Defining functions for finding initial values of the b and e parameter
 
 ## Finding b and e based on linear regression after logit transformation (classical approach)
+#' @title Find initial parameter estimates
+#' @keywords internal
 findbe1 <- function(doseTr, respTr, sgnb = 1, back = exp)
 {
     function(x, y, cVal, dVal)

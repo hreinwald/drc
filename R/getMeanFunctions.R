@@ -1,3 +1,34 @@
+#' Display available dose-response models
+#'
+#' Display information about available, built-in dose-response models.
+#' The arguments \code{noParm} and \code{fname} can be combined.
+#'
+#' @param noParm numeric specifying the number of parameters of the models to be displayed.
+#'   The default (NA) results in display of all models, regardless of number of parameters.
+#' @param fname character string or vector of character strings specifying the short name(s)
+#'   of the models to be displayed (need to match exactly).
+#' @param flist list of built-in functions to be displayed.
+#' @param display logical indicating whether or not the requested models should be displayed
+#'   on the R console.
+#'
+#' @return An invisible list of functions or a list of strings with brief function descriptions.
+#'
+#' @author Christian Ritz
+#'
+#' @examples
+#' ## Listing all functions
+#' getMeanFunctions()
+#'
+#' ## Listing all functions with 4 parameters
+#' getMeanFunctions(4)
+#'
+#' ## Listing all (log-)logistic functions
+#' getMeanFunctions(fname = "L")
+#'
+#' ## Listing all three-parameter (log-)logistic or Weibull functions
+#' getMeanFunctions(3, fname = c("LL", "W"))
+#'
+#' @keywords models nonlinear
 "getMeanFunctions" <- function(noParm = NA, fname = NULL, flist = NULL, display = TRUE)
 {
     if (is.null(flist))

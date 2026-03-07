@@ -1,3 +1,5 @@
+#' @title Self-starter for Weibull type 2 model
+#' @keywords internal
 "weibull2.ssf" <- function(method = c("1", "2", "3", "4"), fixed, useFixed = FALSE)
 {
     method <- match.arg(method)

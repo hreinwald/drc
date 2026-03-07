@@ -1,4 +1,36 @@
-## Simulating ED values
+#' Simulation of dose-response data and ED estimation
+#'
+#' Simulates dose-response datasets using parametric or non-parametric methods and estimates
+#' effective doses (ED values) from each simulated dataset. Useful for assessing the
+#' performance of ED estimation methods via Monte Carlo simulation.
+#'
+#' @param noSim integer. Number of simulations to run.
+#' @param edVal numeric vector of ED levels to estimate (default is \code{c(10, 20, 50)}).
+#' @param type character string. Either "non-parametric" or "parametric" simulation.
+#' @param response character string. Either "bin" (binomial) or "con" (continuous) response.
+#' @param fct dose-response function used for simulation (default is \code{LL.2()}).
+#' @param coefVec numeric vector of model coefficients for parametric simulation.
+#' @param method character string. Estimation method: "sp" (semi-parametric), "p" (parametric),
+#'   or "np" (non-parametric).
+#' @param doseVec numeric vector of dose values.
+#' @param nVec numeric vector of sample sizes per dose (for binomial response).
+#' @param pVec numeric vector of expected response probabilities (for non-parametric simulation).
+#' @param rVec numeric vector of responses.
+#' @param resVar numeric. Residual variance (for continuous response).
+#' @param pfct dose-response function used for fitting (defaults to \code{fct}).
+#' @param reference character string specifying the reference for ED estimation.
+#' @param span numeric. Smoothing parameter for local regression. NA uses default.
+#' @param minmax character string. Type of min/max calculation. Default is "response".
+#' @param lower numeric. Lower bounds for optimization.
+#' @param upper numeric. Upper bounds for optimization.
+#' @param seedVal integer. Random seed for reproducibility (default is 200810201).
+#'
+#' @return A list with components \code{edArray} (array of ED estimates), \code{mixVec},
+#'   \code{edVal}, \code{aicVec}, and \code{spanVec}.
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "simFct" <- function(noSim, edVal = c(10, 20, 50), type = c("non-parametric", "parametric"), 
 response = c("bin", "con"), fct = LL.2(), coefVec, method = c("sp", "p", "np"), 
 doseVec, nVec, pVec, rVec, resVar, pfct = fct, reference = NULL, span = NA, 

@@ -29,7 +29,7 @@
   \item{weights}{
     a numeric vector containing weights. For continuous/quantitative responses, inverse weights are multiplied inside the squared errors; this means that weights should have the same unit as the response 
     (see the details below).
-    For binomial reponses weights provide information about the total number of binary observations used to obtain the response (which is a proportion): 
+    For binomial responses weights provide information about the total number of binary observations used to obtain the response (which is a proportion): 
     1/2 and 10/20 lead to different analyses due to the different totals (2 vs. 20) even though the proportion in both cases is 0.5.
   }
   
@@ -57,7 +57,7 @@
   \item{start}{an optional numeric vector containing starting values for all mean parameters in the model. 
   Overrules any self starter function.}
    
-  \item{na.action}{a function for treating mising values ('NA's). Default is \code{\link{na.omit}}.}
+  \item{na.action}{a function for treating missing values ('NA's). Default is \code{\link{na.omit}}.}
    
   \item{robust}{a character string specifying the rho function for robust estimation. Default is non-robust 
   least squares estimation ("mean"). Available robust methods are: median estimation ("median"), 

@@ -23,7 +23,7 @@
 }
 
 \usage{
-  ursa(fixed = rep(NA, 7), names = c("b1", "b2", "c", "d", "e1", "e1", "f"), 
+  ursa(fixed = rep(NA, 7), names = c("b1", "b2", "c", "d", "e1", "e2", "f"), 
   ssfct = NULL)
   
 }

@@ -1,3 +1,29 @@
+#' Gamma Dose-Response Model
+#'
+#' A four-parameter dose-response model derived from the cumulative distribution
+#' function of the gamma distribution. Only suitable for increasing dose-response data.
+#'
+#' Following Wheeler and Bailer (2009) the model function is:
+#'
+#' \deqn{f(x) = c + (d-c) \cdot \mathrm{pgamma}(b \cdot x, e, 1)}
+#'
+#' @param fixed numeric vector specifying which parameters are fixed and at what value
+#'   they are fixed. NAs are used for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters
+#'   (should not contain ":"). The default is reasonable.
+#' @param fctName optional character string used internally by convenience functions.
+#' @param fctText optional character string used internally by convenience functions.
+#'
+#' @return A list containing the nonlinear function, the self starter function,
+#'   and the parameter names.
+#'
+#' @references Wheeler, M. W., Bailer, A. J. (2009)
+#'   Comparing model averaging with other model selection strategies for benchmark
+#'   dose estimation, \emph{Environmental and Ecological Statistics}, \bold{16}, 37--51.
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "gammadr" <- function(
 fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), 
 fctName, fctText)

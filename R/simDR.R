@@ -1,4 +1,37 @@
 
+#' Simulating ED values under various scenarios
+#'
+#' Simulating ED values for a given model and given dose values.
+#'
+#' The arguments \code{mpar} and \code{sigma} are typically obtained from a previous model fit.
+#'
+#' Only dose-response models assuming normally distributed errors can be used.
+#'
+#' @param mpar numeric vector of model parameters.
+#' @param sigma numeric specifying the residual standard deviation.
+#' @param fct list supplying the chosen mean function.
+#' @param noSim numeric giving the number of simulations.
+#' @param conc numeric vector of concentration/dose values.
+#' @param edVec numeric vector of ED values to estimate in each simulation.
+#' @param seedVal numeric giving the seed used to initiate the random number generator.
+#'
+#' @return A list of matrices with as many components as there are chosen ED values. The
+#'   entries in the matrices are empirical standard deviations of the estimated ED values.
+#'   Row-wise from top to bottom more and more concentration/dose values are included in
+#'   the simulations; top row starting with 5 concentrations. The number of replicates
+#'   increases column by column from left to right.
+#'
+#'   The list is returned invisibly as the matrices also are displayed.
+#'
+#' @author Christian Ritz
+#'
+#' @examples
+#' ryegrass.m1 <- drm(ryegrass, fct=LL.4())
+#'
+#' simDR(coef(ryegrass.m1), sqrt(summary(ryegrass.m1)$resVar), LL.4(), 2,
+#' c(1.88, 3.75, 7.50, 0.94, 15, 0.47, 30, 0.23, 60), seedVal = 200710291)
+#'
+#' @keywords models nonlinear
 ## One curve only
 "simDR" <- function(mpar, sigma, fct, noSim = 1000, conc, edVec = c(10, 50), seedVal = 20070723)
 {

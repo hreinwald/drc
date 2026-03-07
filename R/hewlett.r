@@ -1,3 +1,24 @@
+#' Hewlett Mixture Model
+#'
+#' Provides the Hewlett model for describing the joint action of two compounds
+#' in binary mixture experiments. Used internally by \code{\link{mixture}}.
+#'
+#' @param fixed numeric vector. Specifies which parameters are fixed and at what value
+#'   they are fixed. NAs for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters
+#'   (should not contain ":").
+#' @param method character string indicating the self starter function to use.
+#' @param ssfct a self starter function to be used (optional).
+#' @param eps numeric tolerance for handling zero dose values.
+#'
+#' @return A list containing the nonlinear model function, the self starter function,
+#'   and the parameter names.
+#'
+#' @author Christian Ritz
+#'
+#' @seealso \code{\link{mixture}}, \code{\link{voelund}}
+#'
+#' @keywords internal
 "hewlett" <- function(
 fixed = c(NA, NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f", "g"), 
 method = c("1", "2", "3", "4"), ssfct = NULL,

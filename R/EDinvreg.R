@@ -1,3 +1,5 @@
+#' @title Inverse regression for ED estimation
+#' @keywords internal
 "EDinvreg" <- function(object, respLev, catLev = NA, intType = "confidence", level, type, extFactor = 10)
 {
   if (!is.na(catLev))

@@ -52,6 +52,8 @@ function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1)
 }
 
 
+#' @title EM algorithm for Poisson response
+#' @keywords internal
 "drmLOFPoisson" <- function()
 {
     return(list(anovaTest = NULL, gofTest = NULL))

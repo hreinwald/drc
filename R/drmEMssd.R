@@ -64,6 +64,8 @@ function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1, multCurv
 }
 
 
+#' @title EM algorithm for species sensitivity distribution
+#' @keywords internal
 "drmLOFssd" <- function()
 {
     return(list(anovaTest = NULL, gofTest = NULL))

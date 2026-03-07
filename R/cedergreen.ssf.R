@@ -1,3 +1,5 @@
+#' @title Self-starter for Cedergreen model
+#' @keywords internal
 "cedergreen.ssf" <- function(method = c("1", "2", "3", "4"), fixed, alpha, useFixed = FALSE)
 {
     method <- match.arg(method)

@@ -66,6 +66,8 @@ function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1, dist.typ
 }
 
 
+#' @title EM algorithm for negative binomial
+#' @keywords internal
 "drmLOFnegbin" <- function()
 {
     return(list(anovaTest = NULL, gofTest = NULL))

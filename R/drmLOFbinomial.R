@@ -1,3 +1,5 @@
+#' @title Lack-of-fit test for binomial response
+#' @keywords internal
 "drmLOFbinomial" <- function()
 {
     ## Defining a goodness-of-fit test

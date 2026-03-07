@@ -1,5 +1,53 @@
+#' Universal Response Surface Approach (URSA) for Drug Interaction
+#'
+#' URSA provides a parametric approach for modelling the joint action of several
+#' agents. The model allows quantification of synergistic effects through a single
+#' parameter. The model function is defined implicitly through an appropriate equation.
+#'
+#' @param fixed numeric vector. Specifies which parameters are fixed and at what value
+#'   they are fixed. NAs for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters.
+#'   The default is reasonable.
+#' @param ssfct a self starter function to be used (optional).
+#'
+#' @return A list containing the nonlinear function, the self starter function,
+#'   and the parameter names.
+#'
+#' @references
+#'   Greco, W. R. and Park H. S. and Rustum, Y. M. (1990) Application of a New
+#'   Approach for the Quantitation of Drug Synergism to the Combination of
+#'   cis-Diamminedichloroplatinum and 1-beta-D-Arabinofuranosylcytosine,
+#'   \emph{Cancer Research}, \bold{50}, 5318--5327.
+#'
+#'   Greco, W. R. Bravo, G. and Parsons, J. C. (1995) The Search for Synergy:
+#'   A Critical Review from a Response Surface Perspective,
+#'   \emph{Pharmacological Reviews}, \bold{47}, Issue 2, 331--385.
+#'
+#' @author Christian Ritz after an idea by Hugo Ceulemans.
+#'
+#' @seealso Other models for fitting mixture data: \code{\link{mixture}}.
+#'
+#' @examples
+#' \dontrun{
+#' d1 <- c(0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 10, 20, 50, 2, 2, 2,
+#' 2, 2, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 20, 20, 20, 20,
+#' 20, 50, 50, 50, 50, 50)
+#' d2 <- c(0, 0, 0, 0.2, 0.5, 1, 2, 5, 0, 0, 0, 0, 0, 0.2,
+#' 0.5, 1, 2, 5, 0.2, 0.5, 1, 2, 5, 0.2, 0.5, 1, 2, 5, 0.2,
+#' 0.5, 1, 2, 5, 0.2, 0.5, 1, 2, 5)
+#' effect <- c(106, 99.2, 115, 79.2, 70.1, 49, 21, 3.83, 74.2,
+#' 71.5, 48.1, 30.9, 16.3, 76.3, 48.8, 44.5, 15.5, 3.21, 56.7,
+#' 47.5, 26.8, 16.9, 3.25, 46.7, 35.6, 21.5, 11.1, 2.94, 24.8,
+#' 21.6, 17.3, 7.78, 1.84, 13.6, 11.1, 6.43, 3.34, 0.89)
+#' greco <- data.frame(d1, d2, effect)
+#' greco.m1 <- drm(effect ~ d1 + d2, data = greco,
+#'   fct = ursa(fixed = c(NA, NA, 0, NA, NA, NA, NA)))
+#' summary(greco.m1)
+#' }
+#'
+#' @keywords models nonlinear
 "ursa" <- function(
-fixed = rep(NA, 7), names = c("b1", "b2", "c", "d", "e1", "e1", "f"), ssfct = NULL)
+fixed = rep(NA, 7), names = c("b1", "b2", "c", "d", "e1", "e2", "f"), ssfct = NULL)
 {
     ## Checking arguments
     numParm <- 7

@@ -6,6 +6,8 @@ doseScaling = 1, respScaling = 1)
     iv <- ( (multCurves(dose/doseScaling, startVec) > zeroTol) & (multCurves(dose/doseScaling, startVec) < 1-zeroTol) )
 
     ## Defining the objective function                
+#' @title EM algorithm for binomial response
+#' @keywords internal
     opfct <- function(c)  # dose, resp and weights are fixed
     {                      
 #        prob <- (multCurves(dose / doseScaling, c))[iv]

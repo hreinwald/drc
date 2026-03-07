@@ -1,3 +1,29 @@
+#' Three-Phase Dose-Response Model
+#'
+#' A ten-parameter dose-response model combining three log-logistic components,
+#' extending the two-phase model (\code{\link{twophase}}) for describing even more
+#' complex dose-response patterns.
+#'
+#' The model function is the sum of a four-parameter log-logistic model and two
+#' three-parameter log-logistic models:
+#'
+#' \deqn{f(x) = \mathrm{LL.4}(x; b1, c1, d1, e1) + \mathrm{LL.3}(x; b2, d2, e2) + \mathrm{LL.3}(x; b3, d3, e3)}
+#'
+#' @param fixed numeric vector specifying which parameters are fixed and at what value
+#'   they are fixed. NAs are used for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters
+#'   (should not contain ":"). The default is reasonable.
+#' @param fctName optional character string used internally by convenience functions.
+#' @param fctText optional character string used internally by convenience functions.
+#'
+#' @return A list containing the nonlinear function, the self starter function,
+#'   and the parameter names.
+#'
+#' @author Christian Ritz
+#'
+#' @seealso \code{\link{twophase}}, \code{\link{llogistic}}
+#'
+#' @keywords models nonlinear
 "threephase" <- function(
 fixed = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA), 
 names = c("b1", "c1", "d1", "e1", "b2", "d2", "e2", "b3", "d3", "e3"), 

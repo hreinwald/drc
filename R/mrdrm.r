@@ -1,6 +1,8 @@
 ### Model-robust dose-response modelling
 
 ## Calculating leave-one-out predictions for the parametric and non-parametric fits separately
+#' @title Model-robust dose-response modelling
+#' @keywords internal
 leaveOneOut <- function(object1, object2, dose, dataSet, resp, fixedEnd)
 {   
     ## Leave-one-out predictions

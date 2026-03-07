@@ -1,3 +1,37 @@
+#' The general asymmetric five-parameter logistic model
+#'
+#' The five-parameter logistic model given by the expression
+#' \deqn{f(x) = c + \frac{d - c}{(1 + \exp(b(x - e)))^f}}
+#'
+#' This model differs from the log-logistic in that it uses \code{x} directly
+#' rather than \code{log(x)}. It is sometimes referred to as the Boltzmann model.
+#'
+#' @param fixed numeric vector of length 5. Specifies which parameters are fixed
+#'   and at what value they are fixed. \code{NA} indicates that the corresponding
+#'   parameter is not fixed.
+#' @param names character vector of length 5 giving the names of the parameters
+#'   \code{(b, c, d, e, f)}. Default is \code{c("b", "c", "d", "e", "f")}.
+#' @param method character string indicating the self starter function to use
+#'   (\code{"1"}, \code{"2"}, \code{"3"}, or \code{"4"}).
+#' @param ssfct a self starter function to be used. If \code{NULL} (default),
+#'   a built-in self starter is selected via \code{method}.
+#' @param fctName optional character string used internally to overwrite the
+#'   function name.
+#' @param fctText optional character string used internally to overwrite the
+#'   description text.
+#'
+#' @return A list of class \code{"Boltzmann"} containing the nonlinear function,
+#'   self starter function, and parameter names.
+#'
+#' @author Christian Ritz
+#'
+#' @seealso \code{\link{L.3}}, \code{\link{L.4}}, \code{\link{L.5}},
+#'   \code{\link{llogistic}}
+#'
+#' @keywords models nonlinear
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.4())
 "logistic" <- function(
 fixed = c(NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f"), 
 method = c("1", "2", "3", "4"), ssfct = NULL,
@@ -212,6 +246,27 @@ if (FALSE)
 
 #"boltzmann" <- logistic
 
+#' Three-parameter logistic model
+#'
+#' A three-parameter logistic model with the lower limit fixed at 0, given by
+#' \deqn{f(x) = \frac{d}{1 + \exp(b(x - e))}}
+#'
+#' @param fixed numeric vector of length 3. Specifies which parameters are fixed
+#'   and at what value they are fixed. \code{NA} indicates that the corresponding
+#'   parameter is not fixed.
+#' @param names character vector of length 3 giving the names of the parameters
+#'   \code{(b, d, e)}. Default is \code{c("b", "d", "e")}.
+#' @param ... additional arguments passed to \code{\link{logistic}}.
+#'
+#' @return A list of class \code{"Boltzmann"} containing the nonlinear function,
+#'   self starter function, and parameter names.
+#'
+#' @seealso \code{\link{logistic}}, \code{\link{L.4}}, \code{\link{L.5}}
+#'
+#' @keywords models nonlinear
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.3())
 "L.3" <-
 function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 {
@@ -228,6 +283,27 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #b3 <- B.3
 #L.3 <- B.3
 
+#' Four-parameter logistic model
+#'
+#' A four-parameter logistic model (symmetric, with \code{f = 1}), given by
+#' \deqn{f(x) = c + \frac{d - c}{1 + \exp(b(x - e))}}
+#'
+#' @param fixed numeric vector of length 4. Specifies which parameters are fixed
+#'   and at what value they are fixed. \code{NA} indicates that the corresponding
+#'   parameter is not fixed.
+#' @param names character vector of length 4 giving the names of the parameters
+#'   \code{(b, c, d, e)}. Default is \code{c("b", "c", "d", "e")}.
+#' @param ... additional arguments passed to \code{\link{logistic}}.
+#'
+#' @return A list of class \code{"Boltzmann"} containing the nonlinear function,
+#'   self starter function, and parameter names.
+#'
+#' @seealso \code{\link{logistic}}, \code{\link{L.3}}, \code{\link{L.5}}
+#'
+#' @keywords models nonlinear
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.4())
 "L.4" <-
 function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 {
@@ -244,6 +320,28 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 #b4 <- B.4
 #L.4 <- B.4
 
+#' Five-parameter generalized logistic model
+#'
+#' A five-parameter generalized logistic model (asymmetric when \code{f != 1}),
+#' given by
+#' \deqn{f(x) = c + \frac{d - c}{(1 + \exp(b(x - e)))^f}}
+#'
+#' @param fixed numeric vector of length 5. Specifies which parameters are fixed
+#'   and at what value they are fixed. \code{NA} indicates that the corresponding
+#'   parameter is not fixed.
+#' @param names character vector of length 5 giving the names of the parameters
+#'   \code{(b, c, d, e, f)}. Default is \code{c("b", "c", "d", "e", "f")}.
+#' @param ... additional arguments passed to \code{\link{logistic}}.
+#'
+#' @return A list of class \code{"Boltzmann"} containing the nonlinear function,
+#'   self starter function, and parameter names.
+#'
+#' @seealso \code{\link{logistic}}, \code{\link{L.3}}, \code{\link{L.4}}
+#'
+#' @keywords models nonlinear
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.5())
 "L.5" <-
 function(fixed = c(NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f"), ...)
 {

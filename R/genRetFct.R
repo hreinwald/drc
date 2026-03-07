@@ -1,3 +1,5 @@
+#' @title Generate return function
+#' @keywords internal
 "genRetFct" <- function(fct, parmVec, notFixed)
 {
 #    ## Defining the model function adjusted for scaling

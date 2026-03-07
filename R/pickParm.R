@@ -1,4 +1,6 @@
 ## Helper functions for mean functions
+#' @title Pick parameters from model
+#' @keywords internal
 "pickParm" <- function(parmVec, indexVec, parmNo)
 {
     function(parm)

@@ -1,3 +1,5 @@
+#' @title Convert function specification to list
+#' @keywords internal
 "vec2mat" <- function(fct, no)
 {
     parName <- names(formals(fct)[no])

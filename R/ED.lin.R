@@ -1,3 +1,5 @@
+#' @title ED calculation for linear models
+#' @keywords internal
 "ED.lin" <- function(lmObject, respLev)
 {    
     parCoef <- coef(lmObject)

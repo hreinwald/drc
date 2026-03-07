@@ -1,5 +1,74 @@
+#' @title Estimating effective doses
+#' @description Estimates effective concentration or doses for specified response levels.
+#' @param object an object of class 'drc'.
+#' @param ... additional arguments passed to methods.
+#' @keywords models nonlinear
 ED <- function (object, ...) UseMethod("ED", object)
 
+#' @title Estimating effective doses
+#'
+#' @description
+#' \code{ED} estimates effective concentration or doses for one or more specified absolute or
+#' relative response levels.
+#'
+#' @param object an object of class 'drc'.
+#' @param respLev a numeric vector containing the response levels.
+#' @param interval character string specifying the type of confidence intervals to be supplied.
+#'   The default is \code{"none"}. See Details below for more explanation.
+#' @param clevel character string specifying the curve id in case estimates for a specific curve
+#'   or compound are requested. By default estimates are shown for all curves.
+#' @param level numeric. The level for the confidence intervals. The default is 0.95.
+#' @param reference character string. Is the upper limit or the control level the reference?
+#' @param type character string. Whether the specified response levels are absolute or relative (default).
+#' @param lref numeric value specifying the lower limit to serve as reference.
+#' @param uref numeric value specifying the upper limit to serve as reference (e.g., 100\%).
+#' @param bound logical. If TRUE only ED values between 0 and 100\% are allowed. FALSE is useful
+#'   for hormesis models.
+#' @param vcov. function providing the variance-covariance matrix or a variance-covariance matrix.
+#'   \code{\link{vcov}} is the default, but \code{sandwich} is also an option (for obtaining robust
+#'   standard errors).
+#' @param display logical. If TRUE results are displayed. Otherwise they are not (useful in simulations).
+#' @param logBase numeric. The base of the logarithm in case logarithm transformed dose values are used.
+#' @param multcomp logical to switch on output for use with the package \pkg{multcomp} (which needs
+#'   to be activated first). Default is FALSE.
+#' @param intType string specifying the type of interval to use with the predict method in case the
+#'   type of confidence interval chosen is inverse regression.
+#' @param ... additional arguments passed to the ED function in the model.
+#'
+#' @return An invisible matrix containing the estimates and the corresponding estimated standard
+#'   errors and possibly lower and upper confidence limits. Or, alternatively, a list with elements
+#'   that may be plugged directly into \code{parm} in the package \pkg{multcomp} (when \code{multcomp}
+#'   is TRUE).
+#'
+#' @details
+#' There are several options for calculating confidence intervals through the argument \code{interval}.
+#' The option \code{"delta"} results in asymptotical Wald-type confidence intervals (using the delta
+#' method and the normal or t-distribution depending on the type of response). The option \code{"fls"}
+#' produces (possibly skewed) confidence intervals through back-transformation from the logarithm
+#' scale (only meaningful in case the parameter in the model is log(ED50) as for the
+#' \code{\link{llogistic2}} models). The option \code{"tfls"} is for transforming back and forth from
+#' log scale (experimental). The option \code{"inv"} results in confidence intervals obtained through
+#' inverse regression.
+#'
+#' For hormesis models (\code{\link{braincousens}} and \code{\link{cedergreen}}), the additional
+#' arguments \code{lower} and \code{upper} may be supplied. These arguments specify the lower and
+#' upper limits of the bisection method used to find the ED values.
+#'
+#' @seealso \code{\link{EDcomp}} for estimating differences and ratios of ED values,
+#'   \code{\link{compParm}} for comparing other model parameters, and \code{\link{backfit}}.
+#'
+#' @examples
+#' ## Fitting 4-parameter log-logistic model
+#' ryegrass.m1 <- drm(ryegrass, fct = LL.4())
+#'
+#' ## Calculating EC/ED values
+#' ED(ryegrass.m1, c(10, 50, 90))
+#'
+#' ## Also displaying 95% confidence intervals
+#' ED(ryegrass.m1, c(10, 50, 90), interval = "delta")
+#'
+#' @author Christian Ritz
+#' @keywords models nonlinear
 "ED.drc" <- function(object, 
                      respLev, 
                      interval = c("none", "delta", "fls", "tfls", "inv"), 
