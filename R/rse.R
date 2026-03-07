@@ -1,3 +1,5 @@
+#' @title Residual standard error
+#' @keywords internal
 "rse" <- function(object, resvar = FALSE)
 {
     if (!is.null(object$"objList"))

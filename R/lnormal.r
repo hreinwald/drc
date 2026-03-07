@@ -1,3 +1,42 @@
+#' @title Log-normal dose-response model
+#'
+#' @description
+#' \code{lnormal} provides a general framework for specifying the mean function of the
+#' decreasing or increasing log-normal dose-response model.
+#'
+#' @param fixed numeric vector. Specifies which parameters are fixed and at what value they are fixed.
+#'   NAs for parameters that are not fixed.
+#' @param names vector of character strings giving the names of the parameters (should not contain ":").
+#'   The order of the parameters is: b, c, d, e.
+#' @param method character string indicating the self starter function to use.
+#' @param ssfct a self starter function to be used.
+#' @param fctName optional character string used internally by convenience functions.
+#' @param fctText optional character string used internally by convenience functions.
+#' @param loge logical indicating whether or not ED50 or log(ED50) should be a parameter in the model.
+#'   By default ED50 is a model parameter.
+#'
+#' @details
+#' For the case where log(ED50) is a parameter in the model, the mean function is:
+#' \deqn{f(x) = c + (d-c)(\Phi(b(\log(x)-e)))}
+#' and in case ED50 is a parameter:
+#' \deqn{f(x) = c + (d-c)(\Phi(b(\log(x)-\log(e))))}
+#'
+#' For \eqn{c=0} and \eqn{d=1}, the model reduces to the classic probit model.
+#'
+#' @return A list containing the non-linear function, the self starter function
+#'   and the parameter names.
+#'
+#' @references
+#' Finney, D. J. (1971) \emph{Probit analysis}, London: Cambridge University Press.
+#'
+#' Bruce, R. D. and Versteeg, D. J. (1992) A statistical procedure for modeling continuous toxicity data,
+#' \emph{Environ. Toxicol. Chem.}, \bold{11}, 1485--1494.
+#'
+#' @author Christian Ritz
+#'
+#' @seealso The log-logistic model \code{\link{llogistic}} is very similar to the log-normal model.
+#'
+#' @keywords models nonlinear
 "lnormal" <- function(
 fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), 
 method = c("1", "2", "3", "4"), ssfct = NULL,
@@ -261,6 +300,22 @@ fctName, fctText, loge = FALSE)
     invisible(returnList)
 }
 
+#' @title Two-parameter log-normal dose-response model
+#'
+#' @description
+#' \code{LN.2} is a convenience function for the log-normal model with lower limit fixed at 0
+#' and upper limit fixed (default 1), corresponding to the classic probit model.
+#'
+#' @param upper numeric specifying the fixed upper horizontal asymptote. Default is 1.
+#' @param fixed numeric vector of length 2 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{lnormal}}.
+#'
+#' @return A list (see \code{\link{lnormal}}).
+#'
+#' @seealso \code{\link{lnormal}}, \code{\link{LN.3}}, \code{\link{LN.4}}
+#'
+#' @keywords models nonlinear
 "LN.2" <-
 function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 {
@@ -275,6 +330,20 @@ function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
     fctText = lowupFixed("Log-normal", upper), ...) )
 }
 
+#' @title Three-parameter log-normal dose-response model
+#'
+#' @description
+#' \code{LN.3} is a convenience function for the log-normal model with the lower limit fixed at 0.
+#'
+#' @param fixed numeric vector of length 3 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{lnormal}}.
+#'
+#' @return A list (see \code{\link{lnormal}}).
+#'
+#' @seealso \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.4}}
+#'
+#' @keywords models nonlinear
 "LN.3" <-
 function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 {
@@ -289,6 +358,21 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
     fctText = lowFixed("Log-normal"), ...) )
 }
 
+#' @title Three-parameter log-normal model with upper limit fixed
+#'
+#' @description
+#' \code{LN.3u} is a convenience function for the log-normal model with the upper limit fixed (default 1).
+#'
+#' @param upper numeric specifying the fixed upper horizontal asymptote. Default is 1.
+#' @param fixed numeric vector of length 3 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{lnormal}}.
+#'
+#' @return A list (see \code{\link{lnormal}}).
+#'
+#' @seealso \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.3}}, \code{\link{LN.4}}
+#'
+#' @keywords models nonlinear
 "LN.3u" <-
 function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 {
@@ -304,6 +388,20 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
     ...) )
 }
 
+#' @title Four-parameter log-normal dose-response model
+#'
+#' @description
+#' \code{LN.4} is a convenience function for the full four-parameter log-normal model.
+#'
+#' @param fixed numeric vector of length 4 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{lnormal}}.
+#'
+#' @return A list (see \code{\link{lnormal}}).
+#'
+#' @seealso \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.3}}
+#'
+#' @keywords models nonlinear
 "LN.4" <-
 function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 {

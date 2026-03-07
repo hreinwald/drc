@@ -1,3 +1,5 @@
+#' @title Helper function for ED calculations
+#' @keywords internal
 "EDhelper" <- function(parmVec, respl, reference, typeCalc, cond = TRUE)
 {
     ## Works for log-logistic type dose-response models

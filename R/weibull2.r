@@ -1,3 +1,32 @@
+#' The four-parameter Weibull (type 2) model
+#'
+#' Provides a general framework for the four-parameter Weibull type 2 model
+#' given by the equation
+#' \deqn{f(x) = c + (d - c)(1 - \exp(-\exp(b(\log(x) - \log(e)))))}
+#'
+#' @param fixed numeric vector of length 4, specifying fixed parameters (use \code{NA} for
+#'   parameters that should be estimated).
+#' @param names character vector of length 4 giving the names of the parameters
+#'   (default \code{c("b", "c", "d", "e")}).
+#' @param method character string indicating the self starter method to use.
+#'   One of \code{"1"}, \code{"2"}, \code{"3"}, or \code{"4"}.
+#' @param ssfct a self starter function. If \code{NULL} (default), a built-in
+#'   self starter is used based on \code{method}.
+#' @param fctName optional character string used internally for the function name.
+#' @param fctText optional character string used internally for the function description.
+#'
+#' @return A list containing the nonlinear function, self starter function,
+#'   and parameter names. The list has class \code{"Weibull-2"}.
+#'
+#' @author Christian Ritz
+#'
+#' @references Seber, G. A. F. and Wild, C. J. (1989)
+#'   \emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+#'
+#' @seealso \code{\link{weibull1}}, \code{\link{W2.2}}, \code{\link{W2.3}},
+#'   \code{\link{W2.4}}
+#'
+#' @keywords models nonlinear
 "weibull2" <- function(
 fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), 
 method = c("1", "2", "3", "4"), ssfct = NULL,
@@ -226,6 +255,30 @@ if (FALSE)
 }
 
 
+#' Two-parameter Weibull (type 2) model
+#'
+#' A two-parameter Weibull type 2 model with the lower limit fixed at 0 and the
+#' upper limit fixed at a specified value. The model is given by the equation
+#' \deqn{f(x) = \mathrm{upper} \cdot (1 - \exp(-\exp(b(\log(x) - \log(e)))))}
+#' This model is primarily intended for binomial/quantal responses.
+#'
+#' @param upper numeric value giving the fixed upper limit (default 1).
+#' @param fixed numeric vector of length 2, specifying fixed parameters (use \code{NA} for
+#'   parameters that should be estimated).
+#' @param names character vector of length 2 giving the names of the parameters
+#'   (default \code{c("b", "e")}).
+#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#'
+#' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
+#'
+#' @seealso \code{\link{weibull2}}, \code{\link{W2.3}}, \code{\link{W2.4}},
+#'   \code{\link{W1.2}}
+#'
+#' @examples
+#' earthworms.m1 <- drm(number/total ~ dose, weights = total,
+#'   data = earthworms, fct = W2.2(), type = "binomial")
+#'
+#' @keywords models nonlinear
 "W2.2" <- function(
 upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 {
@@ -239,6 +292,26 @@ upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
     fctText = lowupFixed("Weibull (type 2)", upper), ...))
 }
 
+#' Three-parameter Weibull (type 2) model
+#'
+#' A three-parameter Weibull type 2 model with the lower limit fixed at 0.
+#' The model is given by the equation
+#' \deqn{f(x) = d \cdot (1 - \exp(-\exp(b(\log(x) - \log(e)))))}
+#'
+#' @param fixed numeric vector of length 3, specifying fixed parameters (use \code{NA} for
+#'   parameters that should be estimated).
+#' @param names character vector of length 3 giving the names of the parameters
+#'   (default \code{c("b", "d", "e")}).
+#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#'
+#' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
+#'
+#' @seealso \code{\link{weibull2}}, \code{\link{W2.2}}, \code{\link{W2.4}}
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2.3())
+#'
+#' @keywords models nonlinear
 "W2.3" <-
 function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 {
@@ -252,6 +325,24 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
     fctText = lowFixed("Weibull (type 2)"), ...))
 }
 
+#' Three-parameter Weibull (type 2) model with upper limit fixed
+#'
+#' A three-parameter Weibull type 2 model with the upper limit fixed at a
+#' specified value. The model is given by the equation
+#' \deqn{f(x) = c + (\mathrm{upper} - c)(1 - \exp(-\exp(b(\log(x) - \log(e)))))}
+#'
+#' @param upper numeric value giving the fixed upper limit (default 1).
+#' @param fixed numeric vector of length 3, specifying fixed parameters (use \code{NA} for
+#'   parameters that should be estimated).
+#' @param names character vector of length 3 giving the names of the parameters
+#'   (default \code{c("b", "c", "e")}).
+#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#'
+#' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
+#'
+#' @seealso \code{\link{weibull2}}, \code{\link{W2.3}}, \code{\link{W2.4}}
+#'
+#' @keywords models nonlinear
 "W2.3u" <-
 function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 {
@@ -266,6 +357,25 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
     fctText = upFixed("Weibull (type 2)", upper), ...))
 }
 
+#' Four-parameter Weibull (type 2) model
+#'
+#' A four-parameter Weibull type 2 model. The model is given by the equation
+#' \deqn{f(x) = c + (d - c)(1 - \exp(-\exp(b(\log(x) - \log(e)))))}
+#'
+#' @param fixed numeric vector of length 4, specifying fixed parameters (use \code{NA} for
+#'   parameters that should be estimated).
+#' @param names character vector of length 4 giving the names of the parameters
+#'   (default \code{c("b", "c", "d", "e")}).
+#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#'
+#' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
+#'
+#' @seealso \code{\link{weibull2}}, \code{\link{W2.2}}, \code{\link{W2.3}}
+#'
+#' @examples
+#' terbuthylazin.m1 <- drm(rgr ~ dose, data = terbuthylazin, fct = W2.4())
+#'
+#' @keywords models nonlinear
 "W2.4" <-
 function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 {
@@ -279,6 +389,26 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
     fctText = "Weibull (type 2)", ...))
 }
 
+#' Two-parameter asymptotic regression model
+#'
+#' A two-parameter asymptotic regression model where \code{b} is fixed at 1 and
+#' the lower limit is fixed at 0. The model is given by the equation
+#' \deqn{f(x) = d \cdot (1 - \exp(-x / e))}
+#'
+#' @param fixed numeric vector of length 2, specifying fixed parameters (use \code{NA} for
+#'   parameters that should be estimated).
+#' @param names character vector of length 2 giving the names of the parameters
+#'   (default \code{c("d", "e")}).
+#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#'
+#' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
+#'
+#' @seealso \code{\link{AR.3}}, \code{\link{weibull2}}, \code{\link{EXD.2}}
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = AR.2())
+#'
+#' @keywords models nonlinear
 "AR.2" <-
 function(fixed = c(NA, NA), names = c("d", "e"), ...)
 {
@@ -293,6 +423,26 @@ function(fixed = c(NA, NA), names = c("d", "e"), ...)
     fctText = lowFixed("Asymptotic regression"), ...))
 }
 
+#' Three-parameter shifted asymptotic regression model
+#'
+#' A three-parameter asymptotic regression model where \code{b} is fixed at 1.
+#' The model is given by the equation
+#' \deqn{f(x) = c + (d - c)(1 - \exp(-x / e))}
+#'
+#' @param fixed numeric vector of length 3, specifying fixed parameters (use \code{NA} for
+#'   parameters that should be estimated).
+#' @param names character vector of length 3 giving the names of the parameters
+#'   (default \code{c("c", "d", "e")}).
+#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#'
+#' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
+#'
+#' @seealso \code{\link{AR.2}}, \code{\link{weibull2}}, \code{\link{EXD.3}}
+#'
+#' @examples
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = AR.3())
+#'
+#' @keywords models nonlinear
 "AR.3" <-
 function(fixed = c(NA, NA, NA), names = c("c", "d", "e"), ...)
 {

@@ -1,3 +1,5 @@
+#' @title Package attach hook
+#' @keywords internal
 .onAttach <- function(libname, pkgname)
 {
     packageStartupMessage("\n'drc' has been loaded.\n")

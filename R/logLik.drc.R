@@ -1,3 +1,24 @@
+#' @title Extracting the log likelihood
+#'
+#' @description
+#' \code{logLik} extracts the value of the log likelihood function evaluated
+#' at the parameter estimates.
+#'
+#' @param object an object of class 'drc'.
+#' @param ... additional arguments.
+#'
+#' @return The evaluated log likelihood as a numeric value and the
+#'   corresponding degrees of freedom as well as the number of observations
+#'   as attributes.
+#'
+#' @examples
+#' ## Fitting a four-parameter log-logistic model
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#' logLik(ryegrass.m1)
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "logLik.drc" <- function(object, ...)
 {
     ## Retrieving the value of the log likelihood function evaluated at the parameter estimates

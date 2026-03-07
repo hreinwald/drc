@@ -3,6 +3,8 @@ function(dose, resp, multCurves, startVec, robustFct, weights, rmNA, dmf = NULL,
 doseScaling = 1, respScaling = 1, varcov = NULL)
 {
     ## Defining the objective function and its derivative
+#' @title EM algorithm for least squares
+#' @keywords internal
     opfct <- function(parm)
     {
         sum(robustFct(((resp / respScaling) - multCurves((dose / doseScaling), parm)) / weights), 

@@ -1,5 +1,29 @@
 ## Calculating combination indices for x and y axes
 
+#' Calculation of combination index for binary mixtures
+#'
+#' For single mixture data, combination indices for effective doses as well as effects
+#' may be calculated. This is an extended version of \code{\link{CIcomp}}.
+#'
+#' @param mixProp a numeric value between 0 and 1 specifying the mixture proportion/ratio.
+#' @param modelList a list containing 3 model fits using \code{\link{drm}}: the mixture model fit
+#'   first, followed by the 2 pure substance model fits.
+#' @param EDvec a numeric vector of effect levels (percentages between 0 and 100).
+#' @param EDonly logical. If TRUE, only combination indices for effective doses are calculated.
+#'
+#' @return A list with components \code{Effx}, \code{Effy} (unless \code{EDonly = TRUE}),
+#'   \code{CAx}, \code{CAy} (unless \code{EDonly = TRUE}), and \code{EDvec}.
+#'
+#' @references Martin-Betancor, K. and Ritz, C. and Fernandez-Pinas, F. and Leganes, F. and
+#'   Rodea-Palomares, I. (2015) Defining an additivity framework for mixture research in
+#'   inducible whole-cell biosensors, \emph{Scientific Reports} \bold{17200}.
+#'
+#' @author Christian Ritz and Ismael Rodea-Palomares
+#'
+#' @seealso \code{\link{CIcomp}}, \code{\link{plotFACI}}, \code{\link{mixture}}
+#'
+#' @keywords models nonlinear
+#' @concept antagonism mixture synergy
 CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
 {
     ## Checking the input
@@ -126,6 +150,41 @@ CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
     }
 }
 
+#' Classical combination index for effective doses
+#'
+#' Calculates the classical combination index for effective doses in binary mixture experiments.
+#'
+#' @param mixProp a numeric value between 0 and 1 specifying the mixture proportion/ratio.
+#' @param modelList a list containing 3 model fits using \code{\link{drm}}: the mixture model fit
+#'   first, followed by the 2 pure substance model fits.
+#' @param EDvec a numeric vector of effect levels (percentages between 0 and 100).
+#'
+#' @return A matrix with one row per ED value. Columns contain estimated combination indices,
+#'   their standard errors and 95\% confidence intervals, p-value for testing CI=1, estimated
+#'   ED values for the mixture data and assuming concentration addition (CA) with corresponding
+#'   standard errors.
+#'
+#' @references Martin-Betancor, K. and Ritz, C. and Fernandez-Pinas, F. and Leganes, F. and
+#'   Rodea-Palomares, I. (2015) Defining an additivity framework for mixture research in
+#'   inducible whole-cell biosensors, \emph{Scientific Reports} \bold{17200}.
+#'
+#' @author Christian Ritz and Ismael Rodea-Palomares
+#'
+#' @seealso \code{\link{CIcompX}}, \code{\link{plotFACI}}, \code{\link{mixture}}
+#'
+#' @examples
+#' ## Fitting marginal models for the 2 pure substances
+#' acidiq.0 <- drm(rgr ~ dose, data = subset(acidiq, pct == 999 | pct == 0), fct = LL.4())
+#' acidiq.100 <- drm(rgr ~ dose, data = subset(acidiq, pct == 999 | pct == 100), fct = LL.4())
+#'
+#' ## Fitting model for single mixture with ratio 17:83
+#' acidiq.17 <- drm(rgr ~ dose, data = subset(acidiq, pct == 17 | pct == 0), fct = LL.4())
+#'
+#' ## Calculation of combination indices based on ED10, ED20, ED50
+#' CIcomp(0.17, list(acidiq.17, acidiq.0, acidiq.100), c(10, 20, 50))
+#'
+#' @keywords models nonlinear
+#' @concept antagonism mixture synergy
 CIcomp <- function(mixProp, modelList, EDvec)
 {
     resLst <- CIcompX(mixProp, modelList, EDvec, EDonly = FALSE)
@@ -145,6 +204,25 @@ CIcomp <- function(mixProp, modelList, EDvec)
 }
 
 
+#' Plot combination index as a function of fraction affected
+#'
+#' Visualizes the combination index from \code{\link{CIcompX}} as a function of the fraction affected.
+#'
+#' @param effList a list as returned by \code{\link{CIcompX}}.
+#' @param indAxis character string. Either "ED" for effective doses or "EF" for effects.
+#' @param caRef logical. If TRUE (default), a reference line for concentration addition is drawn.
+#' @param showPoints logical. If TRUE, estimated combination indices are plotted as points.
+#' @param add logical. If TRUE, the plot is added to an existing plot.
+#' @param ylim numeric vector of length 2 giving the range for the y axis.
+#' @param ... additional graphical arguments.
+#'
+#' @return Invisibly returns the plot matrix of combination index values.
+#'
+#' @author Christian Ritz and Ismael Rodea-Palomares
+#'
+#' @seealso \code{\link{CIcompX}}, \code{\link{CIcomp}}
+#'
+#' @keywords models nonlinear
 plotFACI <- function(effList, indAxis = c("ED", "EF"), caRef = TRUE, 
                      showPoints = FALSE, add = FALSE, ylim, ...)
 {

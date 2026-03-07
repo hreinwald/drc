@@ -1,3 +1,59 @@
+#' Estimation of ED values using model-averaging
+#'
+#' Estimates and confidence intervals for ED values are estimated using model-averaging.
+#'
+#' Model-averaging of individual estimates is carried out as described by Buckland
+#' \emph{et al.} (1997) and Kang \emph{et al.} (2000) using AIC-based weights. The two
+#' approaches differ w.r.t. the calculation of confidence intervals: Buckland \emph{et al.}
+#' (1997) provide an approximate variance formula under the assumption of perfectly correlated
+#' estimates (so, confidence intervals will tend to be too wide). Kang \emph{et al.} (2000)
+#' use the model weights to calculate confidence limits as weighted means of the confidence
+#' limits for the individual fits.
+#'
+#' @param object an object of class 'drc'.
+#' @param fctList a list of non-linear functions to be compared.
+#' @param respLev a numeric vector containing the response levels.
+#' @param interval character string specifying the type of confidence intervals to be supplied.
+#'   The default is "none". The choices "buckland" and "kang" are explained in the Details section.
+#' @param linreg logical indicating whether or not additionally a simple linear regression model
+#'   should be fitted.
+#' @param clevel character string specifying the curve id in case on estimates for a specific
+#'   curve or compound is requested. By default estimates are shown for all curves.
+#' @param level numeric. The level for the confidence intervals. The default is 0.95.
+#' @param type character string. Whether the specified response levels are absolute or
+#'   relative (default).
+#' @param display logical. If TRUE results are displayed. Otherwise they are not (useful in
+#'   simulations).
+#' @param na.rm logical indicating whether or not NA occurring during model fitting should be
+#'   left out of subsequent calculations.
+#' @param extended logical specifying whether or not an extended output (including fit summaries)
+#'   should be returned.
+#'
+#' @return A matrix with two or more columns, containing the estimates and the corresponding
+#'   estimated standard errors and possibly lower and upper confidence limits.
+#'
+#' @references Buckland, S. T. and Burnham, K. P. and Augustin, N. H. (1997) Model Selection:
+#'   An Integral Part of Inference, \emph{Biometrics} \bold{53}, 603--618.
+#'
+#'   Kang, Seung-Ho and Kodell, Ralph L. and Chen, James J. (2000) Incorporating Model
+#'   Uncertainties along with Data Uncertainties in Microbial Risk Assessment,
+#'   \emph{Regulatory Toxicology and Pharmacology} \bold{32}, 68--72.
+#'
+#' @author Christian Ritz
+#'
+#' @seealso The function \code{\link{mselect}} provides a summary of fit statistics for
+#'   several models fitted to the same data.
+#'
+#' @examples
+#' ## Fitting an example dose-response model
+#' ryegrass.m1 <- drm(rootl~conc, data = ryegrass, fct = LL.4())
+#'
+#' ## Doing the actual model-averaging
+#' maED(ryegrass.m1,
+#' list(LL.5(), LN.4(), W1.4(), W2.4(), FPL.4(-1,1), FPL.4(-2,3), FPL.4(-0.5,0.5)),
+#' c(10, 50, 90))
+#'
+#' @keywords models nonlinear
 "maED" <- function(object, fctList = NULL, respLev, interval = c("none", "buckland", "kang"), linreg = FALSE,
 clevel = NULL, level = 0.95, type = c("relative", "absolute"), display = TRUE, na.rm = FALSE, extended = FALSE)
 {

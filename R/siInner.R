@@ -1,3 +1,5 @@
+#' @title Inner function for selectivity index
+#' @keywords internal
 siInner <- function(indPair, pVec, compMatch, object, indexMat, parmMat, varMat, level, reference, type, sifct, interval, degfree, logBase)
 {
     jInd <- indPair[1]

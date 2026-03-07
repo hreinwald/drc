@@ -1,3 +1,5 @@
+#' @title Self-starter for log-normal model
+#' @keywords internal
 "lnormal.ssf" <- function(method = c("1", "2", "3", "4"), fixed, loge, useFixed = FALSE)
 {
     method <- match.arg(method)

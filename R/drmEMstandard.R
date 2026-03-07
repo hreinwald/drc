@@ -121,6 +121,8 @@ function(dose, resp, multCurves, doseScaling = 1)
 }
 
 
+#' @title Standard EM algorithm
+#' @keywords internal
 "drmLOFstandard" <- function()
 {
     return(list(anovaTest = NULL, gofTest = NULL))

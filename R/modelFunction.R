@@ -1,3 +1,5 @@
+#' @title Create model evaluation function
+#' @keywords internal
 modelFunction <- function(dose, parm2mat, drcFct, cm, assayNoOld, upperPos, retFct, 
                           doseScaling, respScaling, isFinite, pshifts = NULL)
 {

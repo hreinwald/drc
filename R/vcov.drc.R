@@ -1,3 +1,31 @@
+#' @title Calculating variance-covariance matrix for objects of class 'drc'
+#'
+#' @description
+#' \code{vcov} returns the estimated variance-covariance matrix for the
+#' parameters in the non-linear function.
+#'
+#' @param object an object of class 'drc'.
+#' @param ... additional arguments.
+#' @param corr logical. If TRUE a correlation matrix is returned.
+#' @param od logical. If TRUE adjustment for over-dispersion is used. This
+#'   argument only makes a difference for binomial data.
+#' @param pool logical. If TRUE curves are pooled. Otherwise they are not. This
+#'   argument only works for models with independently fitted curves as
+#'   specified in \code{\link{drm}}.
+#' @param unscaled logical. If TRUE the unscaled variance-covariance is
+#'   returned. This argument only makes a difference for continuous data.
+#'
+#' @return A matrix of estimated variances and covariances.
+#'
+#' @examples
+#' ## Fitting a four-parameter log-logistic model
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#' vcov(ryegrass.m1)
+#' vcov(ryegrass.m1, corr = TRUE)
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "vcov.drc" <-
 function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
 {

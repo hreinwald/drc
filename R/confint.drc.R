@@ -1,3 +1,36 @@
+#' @title Confidence Intervals for model parameters
+#'
+#' @description
+#' Computes confidence intervals for one or more parameters in a model of class
+#' 'drc'.
+#'
+#' @param object a model object of class 'drc'.
+#' @param parm a specification of which parameters are to be given confidence
+#'   intervals, either a vector of numbers or a vector of names. If missing,
+#'   all parameters are considered.
+#' @param level the confidence level required.
+#' @param pool logical. If TRUE curves are pooled. Otherwise they are not. This
+#'   argument only works for models with independently fitted curves as
+#'   specified in \code{\link{drm}}.
+#' @param ... additional argument(s) for methods. Not used.
+#'
+#' @return A matrix (or vector) with columns giving lower and upper confidence
+#'   limits for each parameter. These will be labelled as (1-level)/2 and
+#'   1 - (1-level)/2 in \% (by default 2.5\% and 97.5\%).
+#'
+#' @examples
+#' ## Fitting a four-parameter log-logistic model
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#'
+#' ## Confidence intervals for all parameters
+#' confint(ryegrass.m1)
+#'
+#' ## Confidence interval for a single parameter
+#' confint(ryegrass.m1, "e")
+#'
+#' @author Christian Ritz
+#'
+#' @keywords models nonlinear
 "confint.drc" <- function(object, parm, level = 0.95, pool = TRUE, ...)
 #"confint.drc" <- function(object, parm, level = 0.95, type = "t", pool = TRUE, ...)
 {

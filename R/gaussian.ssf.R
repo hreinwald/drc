@@ -1,3 +1,5 @@
+#' @title Self-starter for Gaussian model
+#' @keywords internal
 "gaussian.ssf" <- function(method = c("1", "2", "3", "4"), fixed, logg = FALSE, useFixed = FALSE)
 {
     method <- match.arg(method)

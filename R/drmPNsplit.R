@@ -1,3 +1,5 @@
+#' @title Split parameter names
+#' @keywords internal
 "drmPNsplit" <- 
 function(parmVec, sep) 
 {

@@ -1,3 +1,35 @@
+#' @title Gompertz dose-response or growth curve model
+#'
+#' @description
+#' Provides a very general way of specifying the mean function of the decreasing or increasing
+#' Gompertz dose-response or growth curve models.
+#'
+#' @param fixed numeric vector. Specifies which parameters are fixed and at what value they are fixed.
+#'   NAs for parameters that are not fixed.
+#' @param names vector of character strings giving the names of the parameters (should not contain ":").
+#'   The order of the parameters is: b, c, d, e.
+#' @param method character string indicating the self starter function to use.
+#' @param ssfct a self starter function to be used.
+#' @param fctName optional character string used internally by convenience functions.
+#' @param fctText optional character string used internally by convenience functions.
+#'
+#' @details
+#' The Gompertz model is given by the mean function
+#' \deqn{f(x) = c + (d-c)(\exp(-\exp(b(x-e))))}
+#'
+#' If \eqn{b<0} the mean function is increasing; it is decreasing for \eqn{b>0}.
+#'
+#' @return A list containing the non-linear function, the self starter function
+#'   and the parameter names.
+#'
+#' @references
+#' Seber, G. A. F. and Wild, C. J. (1989) \emph{Nonlinear Regression}, New York: Wiley & Sons (p. 331).
+#'
+#' @author Christian Ritz
+#'
+#' @seealso The Weibull model \code{\link{weibull2}} is closely related to the Gompertz model.
+#'
+#' @keywords models nonlinear
 "gompertz" <- function(
 fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), 
 method = c("1", "2", "3", "4"), ssfct = NULL,
@@ -144,6 +176,21 @@ if (FALSE)
     invisible(returnList)
 }
 
+#' @title Two-parameter Gompertz model
+#'
+#' @description
+#' Convenience function for the Gompertz model with lower limit fixed at 0 and upper limit fixed.
+#'
+#' @param upper numeric specifying the fixed upper horizontal asymptote. Default is 1.
+#' @param fixed numeric vector of length 2 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{gompertz}}.
+#'
+#' @return A list (see \code{\link{gompertz}}).
+#'
+#' @seealso \code{\link{gompertz}}, \code{\link{G.3}}, \code{\link{G.4}}
+#'
+#' @keywords models nonlinear
 "G.2" <-
 function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 {
@@ -158,6 +205,20 @@ function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
     fctText = lowupFixed("Gompertz", upper), ...))
 }
 
+#' @title Three-parameter Gompertz model
+#'
+#' @description
+#' Convenience function for the Gompertz model with the lower limit fixed at 0.
+#'
+#' @param fixed numeric vector of length 3 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{gompertz}}.
+#'
+#' @return A list (see \code{\link{gompertz}}).
+#'
+#' @seealso \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.4}}
+#'
+#' @keywords models nonlinear
 "G.3" <-
 function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 {
@@ -172,6 +233,21 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
     fctText = lowFixed("Gompertz"), ...))
 }
 
+#' @title Three-parameter Gompertz model with upper limit fixed
+#'
+#' @description
+#' Convenience function for the Gompertz model with the upper limit fixed.
+#'
+#' @param upper numeric specifying the fixed upper horizontal asymptote. Default is 1.
+#' @param fixed numeric vector of length 3 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{gompertz}}.
+#'
+#' @return A list (see \code{\link{gompertz}}).
+#'
+#' @seealso \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.3}}, \code{\link{G.4}}
+#'
+#' @keywords models nonlinear
 "G.3u" <-
 function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 {
@@ -186,6 +262,20 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
     fctText = upFixed("Gompertz", upper), ...))
 }
 
+#' @title Four-parameter Gompertz model
+#'
+#' @description
+#' Convenience function for the full four-parameter Gompertz model.
+#'
+#' @param fixed numeric vector of length 4 specifying fixed parameters (NAs for free parameters).
+#' @param names character vector of parameter names.
+#' @param ... additional arguments passed to \code{\link{gompertz}}.
+#'
+#' @return A list (see \code{\link{gompertz}}).
+#'
+#' @seealso \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.3}}
+#'
+#' @keywords models nonlinear
 "G.4" <-
 function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 {

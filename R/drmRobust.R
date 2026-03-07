@@ -1,3 +1,5 @@
+#' @title Robust estimation functions for drm
+#' @keywords internal
 "drmRobust" <- function(robust, fctCall, lenData, lenPar)
 { 
 

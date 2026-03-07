@@ -1,3 +1,38 @@
+#' @title Comparison of parameters
+#'
+#' @description
+#' Compare parameters from different assays, either by means of ratios or differences.
+#'
+#' @param object an object of class 'drc'.
+#' @param strVal a name of parameter to compare.
+#' @param operator a character. If equal to \code{"/"} (default) parameter ratios are compared.
+#'   If equal to \code{"-"} parameter differences are compared.
+#' @param vcov. function providing the variance-covariance matrix. \code{\link{vcov}} is the default,
+#'   but \code{sandwich} is also an option (for obtaining robust standard errors).
+#' @param od logical. If TRUE adjustment for over-dispersion is used.
+#' @param pool logical. If TRUE curves are pooled. Otherwise they are not. This argument only works
+#'   for models with independently fitted curves as specified in \code{\link{drm}}.
+#' @param display logical. If TRUE results are displayed. Otherwise they are not (useful in simulations).
+#'
+#' @return A matrix with columns containing the estimates, estimated standard errors, values of
+#'   t-statistics and p-values for the null hypothesis that the ratio equals 1 or that the difference
+#'   equals 0 (depending on the \code{operator} argument).
+#'
+#' @seealso \code{\link{ED.drc}} for calculating effective doses and \code{\link{EDcomp}} for
+#'   comparing effective doses.
+#'
+#' @examples
+#' spinach.m1 <- drm(SLOPE~DOSE, CURVE, data = spinach,
+#' fct = LL.4(names = c("b", "lower", "upper", "ed50")))
+#'
+#' ## Calculating ratios of parameter estimates for "ed50"
+#' compParm(spinach.m1, "ed50")
+#'
+#' ## Calculating differences between parameter estimates for "ed50"
+#' compParm(spinach.m1, "ed50", "-")
+#'
+#' @author Christian Ritz
+#' @keywords models nonlinear
 "compParm" <-
 function(object, strVal, operator = "/", vcov. = vcov, od = FALSE, pool = TRUE, display = TRUE)
 {

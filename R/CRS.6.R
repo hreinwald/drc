@@ -1,3 +1,32 @@
+#' Generalised Cedergreen-Ritz-Streibig Model for Hormesis
+#'
+#' A six-parameter extension of the Cedergreen-Ritz-Streibig model for
+#' describing hormesis, where the alpha parameter is estimated rather than fixed.
+#'
+#' The model function is:
+#'
+#' \deqn{f(x) = c + \frac{d-c+f \exp(-1/x^g)}{1+\exp(b(\log(x)-\log(e)))}}
+#'
+#' This generalises the five-parameter \code{\link{CRS.5a}} model by estimating
+#' the alpha exponent (parameter \eqn{g}) instead of fixing it.
+#'
+#' @param fixed numeric vector. Specifies which parameters are fixed and at what value
+#'   they are fixed. NAs for parameters that are not fixed.
+#' @param names a vector of character strings giving the names of the parameters
+#'   (should not contain ":").
+#' @param method character string indicating the self starter function to use.
+#' @param ssfct a self starter function to be used (optional).
+#'
+#' @return A list containing the nonlinear model function, the self starter function,
+#'   and the parameter names.
+#'
+#' @author Christian Ritz
+#'
+#' @note This function is for use with \code{\link{drm}}.
+#'
+#' @seealso \code{\link{CRS.5a}}, \code{\link{cedergreen}}
+#'
+#' @keywords models nonlinear
 "CRS.6" <- function(
 fixed = c(NA, NA, NA, NA, NA, NA), 
 names = c("b", "c", "d", "e", "f", "g"),

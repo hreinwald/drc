@@ -1,3 +1,5 @@
+#' @title Convert parameter vectors to matrices
+#' @keywords internal
 "drmConvertParm" <- 
 function(startVec, startMat, factor1, colList)
 {
