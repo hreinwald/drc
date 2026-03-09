@@ -13,6 +13,9 @@ README.Rmd
 # pkgdown generated site
 docs/
 
+# Local test repositories
+local_testing/*
+
 # knitr / RMarkdown cache
 *_cache/
 /cache/
