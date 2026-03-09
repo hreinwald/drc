@@ -602,6 +602,8 @@ ml4b <- CRS.5b
 #' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4c}}, \code{\link{CRS.5a}}
 #'
 #' @keywords models nonlinear
+#' @export
+#' 
 "CRS.5c" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
