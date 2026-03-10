@@ -89,7 +89,7 @@ mselect(model, fctList = list(W1.4(), W2.4(), LL.3()))
 | `G.3()`, `G.4()`    | Gompertz models                          |
 | `LN.2()` – `LN.4()` | Log-normal models                       |
 | `BC.4()`, `BC.5()`  | Brain-Cousens models (hormesis)          |
-| `UCRS.4a()`, `UCRS.5a()` | Cedergreen-Ritz-Streibig models    |
+| `UCRS.4a()`, `UCRS.5a()` | Cedergreen-Ritz-Streibig models (hormesis) |
 | `NEC.2()` – `NEC.4()` | No-effect-concentration models         |
 | `L.3()` – `L.5()`   | Logistic models                          |
 | `baro5()`            | Baro five-parameter model                |
