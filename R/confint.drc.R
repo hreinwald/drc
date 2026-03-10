@@ -67,6 +67,7 @@
 }
 
 ## Defining basic function for providing confidence intervals
+#' @exportS3Method
 "confint.basic" <- function(estMat, level, intType, dfres, formatting = TRUE)
 {
     alphah <- (1 - level)/2 
