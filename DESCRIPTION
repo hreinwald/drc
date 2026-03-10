@@ -4,7 +4,7 @@ Date: 2026-03-09
 Title: Analysis of Dose-Response Data
 Authors@R: c(person("Christian", "Ritz", role = c("aut", "cre"), email = "ritz@bioassay.dk"),
              person(c("Jens", "C."), "Streibig", email = "streibig@bioassay.dk", role = "aut"))
-Depends: R (>= 4.3.0), MASS, stats, drcData
+Depends: R (>= 4.5.0), MASS, stats, drcData
 Imports: car, graphics, gtools, multcomp, plotrix, sandwich, scales, utils, lifecycle
 Encoding: UTF-8
 LazyData: yes
