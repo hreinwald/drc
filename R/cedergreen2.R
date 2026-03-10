@@ -282,70 +282,25 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
     }
     
 
-    # Add edfct and maxfct functions here ... 
-    # >>> REVIEW LATER <<<
-    # My goal would be to define cedergreen_edfct and cedergreen_maxfct as internal helper functions, 
-    # and then assign them to edfct and maxfct respectively. This keeps the main function clean and focused on its primary role.
-    # Defined the helper functions above already but they need to be integrated here properly. For now, I'll just assign them directly.
+    ## Defining the ED function: wrapper closure that delegates to cedergreen_edfct
+    ## The framework calls edfct(parm, respl, reference, type, ...) so we bind
+    ## parmVec, notFixed, and alpha from the enclosing scope.
+    edfct <- function(parm, respl, reference, type, lower = 1e-4, upper = 10000, ...)
+    {
+        cedergreen_edfct(parm, parmVec, notFixed, alpha, respl, reference, type, lower, upper)
+    }
 
-    ## Defining the ED function <<< replace by cedergreen_edfct >>>
-    # edfct <- function(parm, respl, reference, type, lower = 1e-4, upper = 10000, ...)
-    # {
-    # #        if (is.null(upper)) {upper <- 1000}
-    # #        if (missing(upper2)) {upper2 <- 1000}
-    # interval <- c(lower, upper) 
-    # parmVec[notFixed] <- parm
-    # p <- EDhelper(parmVec, respl, reference, type, TRUE)  # FALSE)  Changed 2010-06-02 after e-mail from Claire       
-    # tempVal <- (100-p)/100
-    
-    # helpFct <- function(dose) {parmVec[2]+(parmVec[3]-parmVec[2]+parmVec[5]*exp(-1/(dose^alpha)))/(1+exp(parmVec[1]*(log(dose)-log(parmVec[4]))))}
-    # #        doseVec <- exp(seq(-upper2, upper2, length=1000))
-    # doseVec <- exp(seq(log(interval[1]), log(interval[2]), length=1000))
-    # maxAt <- doseVec[which.max(helpFct(doseVec))]
-    # #        print(maxAt)
-    # #        print(upper)
-    
-    # eqn <- function(dose) {tempVal*(1+exp(parmVec[1]*(log(dose)-log(parmVec[4]))))-(1+parmVec[5]*exp(-1/(dose^alpha))/(parmVec[3]-parmVec[2]))}
-    # EDp <- uniroot(eqn, lower=maxAt, upper=upper)$root
-    
-    # EDdose <- EDp
-    # tempVal1 <- exp(parmVec[1]*(log(EDdose)-log(parmVec[4])))
-    # tempVal2 <- parmVec[3]-parmVec[2]
-    # derParm <- c(tempVal*tempVal1*(log(EDdose)-log(parmVec[4])), -parmVec[5]*exp(-1/(EDdose^alpha))/((tempVal2)^2),
-    #              parmVec[5]*exp(-1/(EDdose^alpha))/((tempVal2)^2), -tempVal*tempVal1*parmVec[1]/parmVec[4],
-    #              -exp(-1/(EDdose^alpha))/tempVal2)
-    # derDose <- tempVal*tempVal1*parmVec[1]/EDdose-parmVec[5]/tempVal2*exp(-1/(EDdose^alpha))/(EDdose^(1+alpha))*alpha 
-    
-    # EDder <- derParm/derDose
-    
-    # return(list(EDp, EDder[notFixed]))
-    # }
+    ## Finding the maximal hormesis: wrapper closure that delegates to cedergreen_maxfct
+    ## The framework calls maxfct(parm, lower, upper) where parm is the non-fixed
+    ## parameter vector. We reconstruct the full named-list and bind alpha.
+    maxfct <- function(parm, lower = 1e-3, upper = 1000)
+    {
+        parmVec[notFixed] <- parm
+        all_params <- list(b = parmVec[1], c = parmVec[2], d = parmVec[3],
+                           e = parmVec[4], f = parmVec[5])
+        cedergreen_maxfct(all_params, alpha, lower, upper)
+    }
 
-    ## Finding the maximal hormesis <<< replace by cedergreen_maxfct >>>
-    # maxfct <- function(parm, lower = 1e-3, upper = 1000)
-    # {
-    # #        if (is.null(upper)) {upper <- 1000}
-    # #        if (is.null(interval)) {interval <- c(1e-3, 1000)}            
-    # #        alpha <- 0.5
-    # parmVec[notFixed] <- parm
-    
-    # optfct <- function(t)
-    # {
-    #   expTerm1 <- parmVec[5]*exp(-1/(t^alpha))
-    #   expTerm2 <- exp(parmVec[1]*(log(t)-log(parmVec[4])))
-      
-    #   return(expTerm1*alpha/(t^(alpha+1))*(1+expTerm2)-(parmVec[3]-parmVec[2]+expTerm1)*expTerm2*parmVec[1]/t)
-    # }
-    
-    # ED1 <- edfct(parm, 1, lower, upper)[[1]]
-    
-    # doseVec <- exp(seq(log(1e-6), log(ED1), length = 100))
-    # #        print((doseVec[optfct(doseVec)>0])[1])
-    
-    # maxDose <- uniroot(optfct, c((doseVec[optfct(doseVec)>0])[1], ED1))$root
-    # return(c(maxDose, fct(maxDose, matrix(parm, 1, length(names)))))
-    # }
-    
     # Return results
     returnList <- list(
         fct    = fct, 
@@ -353,8 +308,8 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
         names  = names, 
         deriv1 = deriv1, # Note: deriv1 is incomplete without xlogx
         deriv2 = NULL,
-        edfct  = cedergreen_edfct,  # Assigning the robust ED function; replaced edfct with cedergreen_edfct
-        maxfct = cedergreen_maxfct, # Assigning the robust maxfct function; replaced maxfct with cedergreen_maxfct
+        edfct  = edfct,
+        maxfct = maxfct,
         name   = ifelse(missing(fctName), as.character(match.call()[[1]]), fctName),
         text   = ifelse(missing(fctText), "Cedergreen-Ritz-Streibig", fctText),     
         noParm = sum(is.na(fixed))
