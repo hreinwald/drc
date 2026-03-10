@@ -42,7 +42,7 @@ likelihood or ANOVA-based (optimal lambda inherited from more general ANOVA mode
 }
 \value{
 An object of class "drc" (returned invisibly). If plotit = TRUE a plot of
-loglik vs lambda is shown indicating a confidence interval (by default 95\\%) about
+loglik vs lambda is shown indicating a confidence interval (by default 95\%) about
 the optimal lambda value.
 }
 \description{

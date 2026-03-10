@@ -16,7 +16,7 @@ first, followed by the 2 pure substance model fits.}
 }
 \value{
 A matrix with one row per ED value. Columns contain estimated combination indices,
-their standard errors and 95\\% confidence intervals, p-value for testing CI=1, estimated
+their standard errors and 95\% confidence intervals, p-value for testing CI=1, estimated
 ED values for the mixture data and assuming concentration addition (CA) with corresponding
 standard errors.
 }

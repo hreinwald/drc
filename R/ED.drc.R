@@ -21,8 +21,8 @@ ED <- function (object, ...) UseMethod("ED", object)
 #' @param reference character string. Is the upper limit or the control level the reference?
 #' @param type character string. Whether the specified response levels are absolute or relative (default).
 #' @param lref numeric value specifying the lower limit to serve as reference.
-#' @param uref numeric value specifying the upper limit to serve as reference (e.g., 100\%).
-#' @param bound logical. If TRUE only ED values between 0 and 100\% are allowed. FALSE is useful
+#' @param uref numeric value specifying the upper limit to serve as reference (e.g., 100%).
+#' @param bound logical. If TRUE only ED values between 0 and 100% are allowed. FALSE is useful
 #'   for hormesis models.
 #' @param vcov. function providing the variance-covariance matrix or a variance-covariance matrix.
 #'   \code{\link{vcov}} is the default, but \code{sandwich} is also an option (for obtaining robust

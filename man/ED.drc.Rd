@@ -42,9 +42,9 @@ or compound are requested. By default estimates are shown for all curves.}
 
 \item{lref}{numeric value specifying the lower limit to serve as reference.}
 
-\item{uref}{numeric value specifying the upper limit to serve as reference (e.g., 100\\%).}
+\item{uref}{numeric value specifying the upper limit to serve as reference (e.g., 100\%).}
 
-\item{bound}{logical. If TRUE only ED values between 0 and 100\\% are allowed. FALSE is useful
+\item{bound}{logical. If TRUE only ED values between 0 and 100\% are allowed. FALSE is useful
 for hormesis models.}
 
 \item{vcov.}{function providing the variance-covariance matrix or a variance-covariance matrix.
