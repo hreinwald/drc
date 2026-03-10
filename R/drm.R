@@ -68,9 +68,11 @@
 #' model <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 #' summary(model)
 #'
-#' @author Christian Ritz and Jens C. Streibig
+#' @author Christian Ritz, Jens C. Streibig and Hannes Reinwald
 #'
 #' @keywords models nonlinear
+#' @export
+#' 
 "drm" <- function(
 formula, curveid, pmodels, weights, data = NULL, subset, fct, 
 type = c("continuous", "binomial", "Poisson", "negbin1", "negbin2", "event", "ssd"), bcVal = NULL, bcAdd = 0, 
