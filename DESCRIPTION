@@ -14,3 +14,7 @@ License: GPL-2
 URL: https://www.r-project.org, https://www.bioassay.dk
 RoxygenNote: 7.3.3
 BugReports: https://github.com/DoseResponse/drc/issues/
+Roxygen: list(markdown = TRUE)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
