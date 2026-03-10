@@ -30,8 +30,8 @@
 "CRS.6" <- function(
 fixed = c(NA, NA, NA, NA, NA, NA), 
 names = c("b", "c", "d", "e", "f", "g"),
-method = c("1", "2", "3", "4"), ssfct = NULL)
-{
+method = c("1", "2", "3", "4"), 
+ssfct = NULL ){
     ## Checking arguments
     numParm <- 6
     if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}

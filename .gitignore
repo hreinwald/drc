@@ -6,11 +6,27 @@
 
 # R package build artifacts
 *.tar.gz
+*.tgz
+*.zip
+*.7z
 *.Rcheck/
+*.Rproj
 README.Rmd
+
+# Caching
+.Rinst
+.Rlibs
+*~
+*.o
+*.so
+*.dll
 
 # pkgdown generated site
 docs/
+man_old/
+
+# Local test repositories
+local_testing/*
 
 # knitr / RMarkdown cache
 *_cache/
