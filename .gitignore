@@ -36,7 +36,7 @@ local_testing/*
 .httr-oauth
 
 # Tests output
-tests/
+tests/testthat/_snaps/
 
 # OS-generated files
 .DS_Store
