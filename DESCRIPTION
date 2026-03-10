@@ -12,5 +12,5 @@ Description: Analysis of dose-response data is made available through a suite of
     flexible and versatile model fitting and after-fitting functions.
 License: GPL-2
 URL: https://www.r-project.org, https://www.bioassay.dk
-RoxygenNote: 6.1.1
+RoxygenNote: 7.3.3
 BugReports: https://github.com/DoseResponse/drc/issues/
