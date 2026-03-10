@@ -410,6 +410,7 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
  
 
 ## predict method for model-robust fit
+#' @exportS3Method
 predict.mrdrc <- function(object, newdata, se.fit = FALSE, interval = c("none", "confidence", "prediction"), 
 level = 0.95, pava = FALSE, ...)
 {
@@ -616,6 +617,7 @@ EDprint <- function(EDmat, ci, ciLabel, display)
 }
 
 ## Calculating ED values for model-robust fits (only works for one curve)
+#' @exportS3Method
 ED.mrdrc <- function(object, respLev, interval = c("none", "approximate", "bootstrap"), level = 0.95, 
 method = c("bisection", "grid"), cgridsize = 20, gridsize = 100, display = TRUE, lower = NULL, upper = NULL, 
 intType = c("confidence", "prediction"), minmax = c("response", "dose"), n = 1000, seedVal = 200810311, ...)
@@ -651,6 +653,7 @@ intType = c("confidence", "prediction"), minmax = c("response", "dose"), n = 100
 }
 
 
+#' @exportS3Method
 plot.mrdrc <- function(x, ..., pava = FALSE)
 {
     object <- x
@@ -668,6 +671,7 @@ plot.mrdrc <- function(x, ..., pava = FALSE)
     plot(drcObject, ...)
 }
 
+#' @exportS3Method
 print.mrdrc <- function(x, ...)
 {
     object <- x
