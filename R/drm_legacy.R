@@ -1,3 +1,17 @@
+#' @title Legacy dose-response model fitting (internal)
+#'
+#' @description
+#' This is the legacy implementation of the dose-response model fitting function.
+#' It is kept only as an internal reference point in case questions or errors
+#' might occur with the current [drm()] implementation.
+#'
+#' @inheritParams drm
+#'
+#' @return An object of (S3) class `"drc"`.
+#'
+#' @seealso [drm()] for the current implementation.
+#'
+#' @keywords internal
 "drm_legacy" <- function(
     formula, curveid, pmodels, weights, data = NULL, subset, fct, 
     type = c("continuous", "binomial", "Poisson", "negbin1", "negbin2", "event", "ssd"), bcVal = NULL, bcAdd = 0, 
