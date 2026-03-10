@@ -23,7 +23,7 @@
 #' is chosen.
 #'
 #' @return An object of class "drc" (returned invisibly). If plotit = TRUE a plot of
-#'   loglik vs lambda is shown indicating a confidence interval (by default 95\%) about
+#'   loglik vs lambda is shown indicating a confidence interval (by default 95%) about
 #'   the optimal lambda value.
 #'
 #' @references

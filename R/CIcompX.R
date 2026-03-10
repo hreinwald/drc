@@ -160,7 +160,7 @@ CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
 #' @param EDvec a numeric vector of effect levels (percentages between 0 and 100).
 #'
 #' @return A matrix with one row per ED value. Columns contain estimated combination indices,
-#'   their standard errors and 95\% confidence intervals, p-value for testing CI=1, estimated
+#'   their standard errors and 95% confidence intervals, p-value for testing CI=1, estimated
 #'   ED values for the mixture data and assuming concentration addition (CA) with corresponding
 #'   standard errors.
 #'
