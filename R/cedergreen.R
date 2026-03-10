@@ -23,6 +23,9 @@
 #'
 #' @return A list containing the calculated effective dose and a vector of its
 #'   partial derivatives with respect to the non-fixed parameters.
+#'   
+#' @author Hannes Reinwald
+#' 
 #' @keywords internal
 #'
 cedergreen_edfct <- function( 
@@ -34,8 +37,8 @@ cedergreen_edfct <- function(
     reference,    # Reference for EDhelper
     type,         # Type for EDhelper
     lower = 1e-4,
-    upper = 10000)
-{
+    upper = 10000
+){
   # 1. Self-contained: Reconstruct the full parameter vector
   all_params[not_fixed] <- parm
   
@@ -111,6 +114,9 @@ cedergreen_edfct <- function(
 #'
 #' @return A numeric vector containing two values: the dose at the maximum
 #'   response, and the maximum response value itself. Returns `c(NA, NA)` on failure.
+#'   
+#' @author Hannes Reinwald
+#'
 #' @keywords internal
 #'
 cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
@@ -119,7 +125,7 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
   response_model <- function(dose, p, alpha) {
     p$c + (p$d - p$c + p$f * exp(-1 / (dose^alpha))) / (1 + exp(p$b * (log(dose) - log(p$e))))
   }
-
+  
   # Use optimize() to directly find the dose that maximizes the response.
   # It is more robust than finding the root of the derivative.
   # We search for the maximum by telling optimize to maximize=TRUE.
@@ -135,11 +141,11 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
     warning("Optimization failed to find a maximum hormesis dose.")
     return(NULL)
   })
-
+  
   if (is.null(opt_result)) {
     return(c(maxDose = NA, maxResponse = NA))
   }
-
+  
   # Return the dose at the maximum and the value of the function at that maximum
   return(c(maxDose = opt_result$maximum, maxResponse = opt_result$objective))
 }
@@ -182,6 +188,8 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'
 #' @seealso \code{\link[drc]{drm}} for model fitting, and \code{\link{cedergreen.ssf}} for the 
 #'   underlying self-starter function.
+#'   
+#' @author Hannes Reinwald
 #'
 #' @export
 #' @examples
@@ -222,143 +230,98 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
     fctName, 
     fctText 
 ){
-    ## Checking arguments and setting up fixed parameter logic
-    numParm <- 5
-    if (!is.character(names) || !(length(names) == numParm)) {stop("Not correct 'names' argument")}
-    if (!(length(fixed) == numParm)) {stop("Not correct 'fixed' argument")}    
-    if (missing(alpha)) {stop("'alpha' argument must be specified")}
-
-    # Determine if fixed parameters are being used. This will be passed to ssfct.
-    useFixed <- !all(is.na(fixed))
+  ## Checking arguments and setting up fixed parameter logic
+  numParm <- 5
+  if (!is.character(names) || !(length(names) == numParm)) {stop("Not correct 'names' argument")}
+  if (!(length(fixed) == numParm)) {stop("Not correct 'fixed' argument")}    
+  if (missing(alpha)) {stop("'alpha' argument must be specified")}
+  
+  # Determine if fixed parameters are being used. This will be passed to ssfct.
+  useFixed <- !all(is.na(fixed))
+  
+  # Match the method argument
+  method   = match.arg(method)
+  notFixed = is.na(fixed)
+  parmVec  = rep(0, numParm)
+  parmVec[!notFixed] <- fixed[!notFixed]
+  
+  ## Defining the non-linear function
+  fct <- function(dose, parm){
+    parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
+    parmMat[, notFixed] <- parm
+    # The Cedergreen-Ritz-Streibig model equation
+    parmMat[,2] + (parmMat[,3] - parmMat[,2] + parmMat[,5] * exp(-1 / (dose^alpha))) / 
+      (1 + exp(parmMat[,1] * (log(dose) - log(parmMat[,4]))))
+  }
+  
+  ## --- Correctly defining the self-starter ---
+  # If a custom self-starter is not provided, use our robust cedergreen.ssf
+  if (is.null(ssfct)) {
+    # This is the correct way to call the external self-starter. 
+    # It passes the method, the fixed vector, alpha, and the useFixed flag.
+    ssfct <- cedergreen.ssf(method = method, fixed = fixed, alpha = alpha, useFixed = useFixed)
+  }
+  
+  ## Defining names for the parameters to be estimated
+  names <- names[notFixed]
+  
+  ## Specifying the derivatives (derivatives code is kept as is)
+  deriv1 <- function(dose, parm)
+  {
+    parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
+    parmMat[, notFixed] <- parm
     
-    # Match the method argument
-    method   = match.arg(method)
-    notFixed = is.na(fixed)
-    parmVec  = rep(0, numParm)
-    parmVec[!notFixed] <- fixed[!notFixed]
+    t0 = exp(-1/(dose^alpha))
+    t1 = parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*t0
+    t2 = exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
+    t3 = 1 + t2                          
+    t4 = (1 + t2)^(-2)
     
-    ## Defining the non-linear function
-    fct <- function(dose, parm){
-        parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
-        parmMat[, notFixed] <- parm
-        # The Cedergreen-Ritz-Streibig model equation
-        parmMat[,2] + (parmMat[,3] - parmMat[,2] + parmMat[,5] * exp(-1 / (dose^alpha))) / 
-                     (1 + exp(parmMat[,1] * (log(dose) - log(parmMat[,4]))))
-    }
-
-    ## --- Correctly defining the self-starter ---
-    # If a custom self-starter is not provided, use our robust cedergreen.ssf
-    if (is.null(ssfct)) {
-        # This is the correct way to call the external self-starter. 
-        # It passes the method, the fixed vector, alpha, and the useFixed flag.
-        ssfct <- cedergreen.ssf(method = method, fixed = fixed, alpha = alpha, useFixed = useFixed)
-    }
-    
-    ## Defining names for the parameters to be estimated
-    names <- names[notFixed]
-
-    ## Specifying the derivatives (derivatives code is kept as is)
-    deriv1 <- function(dose, parm)
-    {
-        parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
-        parmMat[, notFixed] <- parm
-
-        t0 = exp(-1/(dose^alpha))
-        t1 = parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*t0
-        t2 = exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
-        t3 = 1 + t2                          
-        t4 = (1 + t2)^(-2)
-
-        # A helper function 'xlogx' would need to be defined for this to work
-        cbind(
-            -t1*xlogx(dose/parmMat[, 4], parmMat[, 1])*t4, 
-            1 - 1/t3, 
-            1/t3, 
-            1*t2*(parmMat[, 1]/parmMat[, 4])*t4, 
-            t0/t3
-        )[, notFixed]
-    }
-    
-
-    # Add edfct and maxfct functions here ... 
-    # >>> REVIEW LATER <<<
-    # My goal would be to define cedergreen_edfct and cedergreen_maxfct as internal helper functions, 
-    # and then assign them to edfct and maxfct respectively. This keeps the main function clean and focused on its primary role.
-    # Defined the helper functions above already but they need to be integrated here properly. For now, I'll just assign them directly.
-
-    ## Defining the ED function <<< replace by cedergreen_edfct >>>
-    edfct <- function(parm, respl, reference, type, lower = 1e-4, upper = 10000, ...)
-    {
-    #        if (is.null(upper)) {upper <- 1000}
-    #        if (missing(upper2)) {upper2 <- 1000}
-    interval <- c(lower, upper) 
+    # A helper function 'xlogx' would need to be defined for this to work
+    cbind(
+      -t1*xlogx(dose/parmMat[, 4], parmMat[, 1])*t4, 
+      1 - 1/t3, 
+      1/t3, 
+      1*t2*(parmMat[, 1]/parmMat[, 4])*t4, 
+      t0/t3
+    )[, notFixed]
+  }
+  
+  
+  ## Defining the ED function: wrapper closure that delegates to cedergreen_edfct
+  ## The framework calls edfct(parm, respl, reference, type, ...) so we bind
+  ## parmVec, notFixed, and alpha from the enclosing scope.
+  edfct <- function(parm, respl, reference, type, lower = 1e-4, upper = 10000, ...)
+  {
+    cedergreen_edfct(parm, parmVec, notFixed, alpha, respl, reference, type, lower, upper)
+  }
+  
+  ## Finding the maximal hormesis: wrapper closure that delegates to cedergreen_maxfct
+  ## The framework calls maxfct(parm, lower, upper) where parm is the non-fixed
+  ## parameter vector. We reconstruct the full named-list and bind alpha.
+  maxfct <- function(parm, lower = 1e-3, upper = 1000)
+  {
     parmVec[notFixed] <- parm
-    p <- EDhelper(parmVec, respl, reference, type, TRUE)  # FALSE)  Changed 2010-06-02 after e-mail from Claire       
-    tempVal <- (100-p)/100
-    
-    helpFct <- function(dose) {parmVec[2]+(parmVec[3]-parmVec[2]+parmVec[5]*exp(-1/(dose^alpha)))/(1+exp(parmVec[1]*(log(dose)-log(parmVec[4]))))}
-    #        doseVec <- exp(seq(-upper2, upper2, length=1000))
-    doseVec <- exp(seq(log(interval[1]), log(interval[2]), length=1000))
-    maxAt <- doseVec[which.max(helpFct(doseVec))]
-    #        print(maxAt)
-    #        print(upper)
-    
-    eqn <- function(dose) {tempVal*(1+exp(parmVec[1]*(log(dose)-log(parmVec[4]))))-(1+parmVec[5]*exp(-1/(dose^alpha))/(parmVec[3]-parmVec[2]))}
-    EDp <- uniroot(eqn, lower=maxAt, upper=upper)$root
-    
-    EDdose <- EDp
-    tempVal1 <- exp(parmVec[1]*(log(EDdose)-log(parmVec[4])))
-    tempVal2 <- parmVec[3]-parmVec[2]
-    derParm <- c(tempVal*tempVal1*(log(EDdose)-log(parmVec[4])), -parmVec[5]*exp(-1/(EDdose^alpha))/((tempVal2)^2),
-                 parmVec[5]*exp(-1/(EDdose^alpha))/((tempVal2)^2), -tempVal*tempVal1*parmVec[1]/parmVec[4],
-                 -exp(-1/(EDdose^alpha))/tempVal2)
-    derDose <- tempVal*tempVal1*parmVec[1]/EDdose-parmVec[5]/tempVal2*exp(-1/(EDdose^alpha))/(EDdose^(1+alpha))*alpha 
-    
-    EDder <- derParm/derDose
-    
-    return(list(EDp, EDder[notFixed]))
-    }
-
-    ## Finding the maximal hormesis <<< replace by cedergreen_maxfct >>>
-    maxfct <- function(parm, lower = 1e-3, upper = 1000)
-    {
-    #        if (is.null(upper)) {upper <- 1000}
-    #        if (is.null(interval)) {interval <- c(1e-3, 1000)}            
-    #        alpha <- 0.5
-    parmVec[notFixed] <- parm
-    
-    optfct <- function(t)
-    {
-      expTerm1 <- parmVec[5]*exp(-1/(t^alpha))
-      expTerm2 <- exp(parmVec[1]*(log(t)-log(parmVec[4])))
-      
-      return(expTerm1*alpha/(t^(alpha+1))*(1+expTerm2)-(parmVec[3]-parmVec[2]+expTerm1)*expTerm2*parmVec[1]/t)
-    }
-    
-    ED1 <- edfct(parm, 1, lower, upper)[[1]]
-    
-    doseVec <- exp(seq(log(1e-6), log(ED1), length = 100))
-    #        print((doseVec[optfct(doseVec)>0])[1])
-    
-    maxDose <- uniroot(optfct, c((doseVec[optfct(doseVec)>0])[1], ED1))$root
-    return(c(maxDose, fct(maxDose, matrix(parm, 1, length(names)))))
-    }
-
-    # Return results
-    returnList <- list(
-        fct = fct, 
-        ssfct = ssfct, 
-        names = names, 
-        deriv1 = deriv1, # Note: deriv1 is incomplete without xlogx
-        deriv2 = NULL,
-        edfct = edfct, 
-        maxfct = maxfct,
-        name = ifelse(missing(fctName), as.character(match.call()[[1]]), fctName),
-        text = ifelse(missing(fctText), "Cedergreen-Ritz-Streibig", fctText),     
-        noParm = sum(is.na(fixed))
-    )
-    class(returnList) <- "mllogistic"
-    invisible(returnList)
+    all_params <- list(b = parmVec[1], c = parmVec[2], d = parmVec[3],
+                       e = parmVec[4], f = parmVec[5])
+    cedergreen_maxfct(all_params, alpha, lower, upper)
+  }
+  
+  # Return results
+  returnList <- list(
+    fct    = fct, 
+    ssfct  = ssfct, 
+    names  = names, 
+    deriv1 = deriv1, # Note: deriv1 is incomplete without xlogx
+    deriv2 = NULL,
+    edfct  = edfct,
+    maxfct = maxfct,
+    name   = ifelse(missing(fctName), as.character(match.call()[[1]]), fctName),
+    text   = ifelse(missing(fctText), "Cedergreen-Ritz-Streibig", fctText),     
+    noParm = sum(is.na(fixed))
+  )
+  class(returnList) <- "mllogistic"
+  invisible(returnList)
 }
 
 
