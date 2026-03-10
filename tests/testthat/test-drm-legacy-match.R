@@ -127,22 +127,22 @@ test_that("drm() matches drm_legacy() with Poisson type", {
 })
 
 test_that("drm() matches drm_legacy() with negbin1 type", {
-  poisson_data <- data.frame(
+  count_data <- data.frame(
     dose = c(0, 1, 2, 4, 8, 16, 32),
     count = c(50, 48, 40, 25, 10, 3, 1)
   )
-  fit1 <- drm(count ~ dose, data = poisson_data, fct = LL.4(), type = "negbin1")
-  fit2 <- drc:::drm_legacy(count ~ dose, data = poisson_data, fct = LL.4(), type = "negbin1")
+  fit1 <- drm(count ~ dose, data = count_data, fct = LL.4(), type = "negbin1")
+  fit2 <- drc:::drm_legacy(count ~ dose, data = count_data, fct = LL.4(), type = "negbin1")
   compare_drc_fits(fit1, fit2)
 })
 
 test_that("drm() matches drm_legacy() with negbin2 type", {
-  poisson_data <- data.frame(
+  count_data <- data.frame(
     dose = c(0, 1, 2, 4, 8, 16, 32),
     count = c(50, 48, 40, 25, 10, 3, 1)
   )
-  fit1 <- drm(count ~ dose, data = poisson_data, fct = LL.4(), type = "negbin2")
-  fit2 <- drc:::drm_legacy(count ~ dose, data = poisson_data, fct = LL.4(), type = "negbin2")
+  fit1 <- drm(count ~ dose, data = count_data, fct = LL.4(), type = "negbin2")
+  fit2 <- drc:::drm_legacy(count ~ dose, data = count_data, fct = LL.4(), type = "negbin2")
   compare_drc_fits(fit1, fit2)
 })
 
