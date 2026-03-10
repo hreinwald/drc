@@ -214,14 +214,14 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'}
 #' 
 "cedergreen" <- function(
-    fixed = c(NA, NA, NA, NA, NA), 
-    names = c("b", "c", "d", "e", "f"), 
+    fixed  = c(NA, NA, NA, NA, NA), 
+    names  = c("b", "c", "d", "e", "f"), 
     method = c("loglinear", "anke", "method3", "normolle"), 
-    ssfct = NULL, 
+    ssfct  = NULL, 
     alpha, 
     fctName, 
-    fctText)
-{
+    fctText 
+){
     ## Checking arguments and setting up fixed parameter logic
     numParm <- 5
     if (!is.character(names) || !(length(names) == numParm)) {stop("Not correct 'names' argument")}
@@ -364,6 +364,111 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 
 # WRAPPER -------------------------------------------------------------------
 
+#' Wrapper for 5-parameter Cedergreen-Ritz-Streibig Model
+#' 
+#' @author Hannes Reinwald
+#'
+#' @description
+#' A convenience wrapper for the \code{drc::cedergreen} function, preset for a 
+#' 5-parameter model. It provides flexible handling for the alpha parameter.
+#'
+#' @details
+#' This function simplifies the creation of a 5-parameter Cedergreen-Ritz-Streibig 
+#' model by setting sensible defaults for the parameter names. It allows the 
+#' alpha parameter to be specified either by a predefined character shortcut 
+#' ('a', 'b', 'c') or by a direct numeric value.
+#' 
+#' By default the function runs with `alpha=1`, which corresponds to the `CRS.4a` model. 
+#' Setting `alpha=0.5` corresponds to the `CRS.4b` model, and `alpha=0.25` corresponds to the `CRS.4c` model.
+#' 
+#' By default, all parameters are set to be estimated (i.e., \code{fixed} is all \code{NA}), 
+#' but users can specify any parameters to be held constant during estimation. 
+#' The self-starter function is automatically generated based on the specified method and 
+#' fixed parameters, ensuring that initial values are appropriately calculated for the model fitting process.
+#'
+#' The function automatically generates a model name (`fctName`) and description 
+#' (`fctText`) unless they are explicitly provided by the user.
+#'
+#' @param names A character vector of length 5 specifying the names of the model 
+#'   parameters. Default is \code{c("b", "c", "d", "e", "f")}.
+#' @param fixed A numeric vector of length 5. Use \code{NA} for parameters to be 
+#'   estimated and a numeric value for parameters to be fixed. Default is all 
+#'   \code{NA}.
+#' @param alpha_type A character or a numeric value. Can be one of 'a' (alpha=1), 
+#'   'b' (alpha=0.5), 'c' (alpha=0.25), or a specific numeric value for alpha.
+#' @param fctName An optional character string to name the model function. If 
+#'   \code{NULL} (the default), a name is generated automatically.
+#' @param fctText An optional character string describing the model. If 
+#'   \code{NULL} (the default), a description is generated automatically.
+#' @param ... Additional arguments to be passed to \code{drc::cedergreen}, such 
+#'   as \code{data}.
+#'
+#' @return A \code{drc} model object of class \code{cedergreen}. If the underlying 
+#'   \code{drc::cedergreen} call fails, it issues a warning and returns \code{NULL}.
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' # Assumes the 'drc' package is installed
+#' 
+#' # Example 1: Basic usage with alpha_type = "a" (alpha = 1)
+#' crs_model_a <- CRS.5()
+#'
+#' # Example 2: Fix the lower limit 'c' to 0 and use a custom numeric alpha
+#' crs_model_custom <- CRS.5(fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75)
+#'
+#' # Example 3: Provide a custom name and description
+#' crs_model_named <- CRS.5(alpha_type = "b", 
+#'                          fctName = "MyCRSModel", 
+#'                          fctText = "My custom CRS model (alpha=0.5)")
+#' }
+CRS.5 = function(names = c("b", "c", "d", "e", "f"), 
+                 fixed = c(NA, NA, NA, NA, NA), 
+                 alpha_type = "a", # one of 'a', 'b' or 'c' or a numeric value specifiying alpha
+                 fctName = NULL,
+                 fctText = NULL,
+                 ... ){
+  
+  # Input sanity check
+  if (!is.character(names) | !(length(names) == 5)) {
+    stop("Not correct 'names' argument")
+  }
+  
+  # Specify respective alpha values 
+  alpha_value = list(a = 1, b = 0.5, c = 0.25)
+  
+  # Check alpha_type and calculate the numeric alpha value 'a'
+  if(!is.numeric(alpha_type)){
+    # --- STABILITY IMPROVEMENT ---
+    # Check if the provided character is a valid key before trying to access it
+    if (!(alpha_type %in% names(alpha_value))) {
+      stop("Invalid 'alpha_type'. Must be one of 'a', 'b', 'c', or a numeric value.")
+    }
+    a = alpha_value[[alpha_type]]
+  } else {
+    a = alpha_type
+    # Modify alpha_type for unique function naming if a numeric is given
+    alpha_type = paste0(".alpha:", alpha_type)
+  }
+  stopifnot(is.numeric(a)) # This check is now safe
+  
+  # Propper variable handling for optional arguments
+  if(is.null(fctName)) fctName = paste0(as.character(match.call()[[1]]), alpha_type)
+  if(is.null(fctText)) fctText = paste0("Cedergreen-Ritz-Streibig (alpha=", a, ")")
+  
+  # Run cedergreen() within tryCatch for proper error handling
+  res = tryCatch({
+    drc::cedergreen(fixed = fixed, names = names, alpha = a, 
+                    fctName = fctName, fctText = fctText, ...)
+  }, error = function(e) {
+    warning(paste("The cedergreen() model call failed with an error:", conditionMessage(e)))
+    return(NULL)
+  })
+  
+  return(res)
+}
+
+
 #' @title Cedergreen-Ritz-Streibig model with lower limit 0 (alpha=1)
 #'
 #' @description
@@ -374,7 +479,8 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'
 #' @return A list (see \code{\link{cedergreen}}).
 #' 
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")`
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #'
 #' @author Christian Ritz
 #'
@@ -391,24 +497,32 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 "CRS.4a" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
-    ...)
-{
-    ## Checking arguments
-    if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
-    return(
-        cedergreen(
-            fixed = fixed, names = names, alpha = 1, 
-            fctName = as.character(match.call()[[1]]), 
-            fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=1)", 
-            ...
-        )
+    ... ){
+  
+  # Deprecated warning
+  lifecycle::deprecate_warn(
+    when    = "3.3.0",
+    what    = "CRS.4a()",
+    with    = "CRS.5()"
+  )
+  
+  ## Checking arguments
+  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
+  return(
+    cedergreen(
+      fixed = fixed, names = names, alpha = 1, 
+      fctName = as.character(match.call()[[1]]), 
+      fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=1)", 
+      ...
     )
+  )
 }
 
 #' @title Alias for CRS.4a
 #' @description \code{ml3a} is an alias for \code{\link{CRS.4a}}.
 #' @seealso \code{\link{CRS.4a}}
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #' @keywords models nonlinear
 ml3a <- CRS.4a
 
@@ -423,7 +537,8 @@ ml3a <- CRS.4a
 #'
 #' @return A list (see \code{\link{cedergreen}}).
 #' 
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #'
 #' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{CRS.5b}}
 #'
@@ -433,24 +548,32 @@ ml3a <- CRS.4a
 "CRS.4b" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
-    ...)
-{
-    ## Checking arguments
-    if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
-    return(
-        cedergreen(
-            fixed = fixed, names = names, alpha = 0.5, 
-            fctName = as.character(match.call()[[1]]), 
-            fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=)", 
-            ...
-        )
+    ... ){
+  
+  # Deprecated warning
+  lifecycle::deprecate_warn(
+    when    = "3.3.0",
+    what    = "CRS.4b()",
+    with    = "CRS.5()"
+  )
+  
+  ## Checking arguments
+  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
+  return(
+    cedergreen(
+      fixed = fixed, names = names, alpha = 0.5, 
+      fctName = as.character(match.call()[[1]]), 
+      fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=)", 
+      ...
     )
+  )
 }
 
 #' @title Alias for CRS.4b
 #' @description \code{ml3b} is an alias for \code{\link{CRS.4b}}.
 #' @seealso \code{\link{CRS.4b}}
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead." 
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead. 
 #' @keywords models nonlinear
 ml3b <- CRS.4b
 
@@ -464,7 +587,8 @@ ml3b <- CRS.4b
 #'
 #' @return A list (see \code{\link{cedergreen}}).
 #' 
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #'
 #' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{CRS.5c}}
 #'
@@ -474,24 +598,32 @@ ml3b <- CRS.4b
 "CRS.4c" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
-    ...)
-{
-    ## Checking arguments
-    if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
-    return(
-        cedergreen(
-            fixed = fixed, names = names, alpha = 0.25, 
-            fctName = as.character(match.call()[[1]]), 
-            fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.25)", 
-            ...
-        )
+    ... ){
+  
+  # Deprecated warning
+  lifecycle::deprecate_warn(
+    when    = "3.3.0",
+    what    = "CRS.4c()",
+    with    = "CRS.5()"
+  )
+  
+  ## Checking arguments
+  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
+  return(
+    cedergreen(
+      fixed = fixed, names = names, alpha = 0.25, 
+      fctName = as.character(match.call()[[1]]), 
+      fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.25)", 
+      ...
     )
+  )
 }
 
 #' @title Alias for CRS.4c
 #' @description \code{ml3c} is an alias for \code{\link{CRS.4c}}.
 #' @seealso \code{\link{CRS.4c}}
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #' @keywords models nonlinear
 ml3c <- CRS.4c
 
@@ -506,7 +638,8 @@ ml3c <- CRS.4c
 #'
 #' @return A list (see \code{\link{cedergreen}}).
 #' 
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #'
 #' @author Christian Ritz
 #'
@@ -523,24 +656,32 @@ ml3c <- CRS.4c
 "CRS.5a" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
-    ...)
-{
-    ## Checking arguments
-    if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
-    return(
-        cedergreen(
-            fixed = fixed, names = names, alpha = 1, 
-            fctName = as.character(match.call()[[1]]), 
-            fctText = "Cedergreen-Ritz-Streibig (alpha=1)", 
-            ...
-        )
+    ... ){
+  
+  # Deprecated warning
+  lifecycle::deprecate_warn(
+    when    = "3.3.0",
+    what    = "CRS.5a()",
+    with    = "CRS.5()"
+  )
+  
+  ## Checking arguments
+  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
+  return(
+    cedergreen(
+      fixed = fixed, names = names, alpha = 1, 
+      fctName = as.character(match.call()[[1]]), 
+      fctText = "Cedergreen-Ritz-Streibig (alpha=1)", 
+      ...
     )
+  )
 }
 
 #' @title Alias for CRS.5a
 #' @description \code{ml4a} is an alias for \code{\link{CRS.5a}}.
 #' @seealso \code{\link{CRS.5a}}
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #' @keywords models nonlinear
 ml4a <- CRS.5a
 
@@ -555,7 +696,8 @@ ml4a <- CRS.5a
 #'
 #' @return A list (see \code{\link{cedergreen}}).
 #' 
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #'
 #' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4b}}, \code{\link{CRS.5a}}
 #'
@@ -565,24 +707,32 @@ ml4a <- CRS.5a
 "CRS.5b" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
-    ...)
-{
-    ## Checking arguments
-    if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
-    return(
-        cedergreen(
-            fixed = fixed, names = names, alpha = 0.5, 
-            fctName = as.character(match.call()[[1]]), 
-            fctText = "Cedergreen-Ritz-Streibig (alpha=0.5)", 
-            ...
-        )
+    ... ){
+  
+  # Deprecated warning
+  lifecycle::deprecate_warn(
+    when    = "3.3.0",
+    what    = "CRS.5b()",
+    with    = "CRS.5()"
+  )
+  
+  ## Checking arguments
+  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
+  return(
+    cedergreen(
+      fixed = fixed, names = names, alpha = 0.5, 
+      fctName = as.character(match.call()[[1]]), 
+      fctText = "Cedergreen-Ritz-Streibig (alpha=0.5)", 
+      ...
     )
+  )
 }
 
 #' @title Alias for CRS.5b
 #' @description \code{ml4b} is an alias for \code{\link{CRS.5b}}.
 #' @seealso \code{\link{CRS.5b}}
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #' @keywords models nonlinear
 ml4b <- CRS.5b
 
@@ -597,7 +747,8 @@ ml4b <- CRS.5b
 #'
 #' @return A list (see \code{\link{cedergreen}}).
 #' 
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")` 
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #'
 #' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4c}}, \code{\link{CRS.5a}}
 #'
@@ -607,23 +758,31 @@ ml4b <- CRS.5b
 "CRS.5c" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
-    ...)
-{
-    ## Checking arguments
-    if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
-    return(
-        cedergreen(
-            fixed = fixed, names = names, alpha = 0.25, 
-            fctName = as.character(match.call()[[1]]), 
-            fctText = "Cedergreen-Ritz-Streibig (alpha=0.25)", 
-            ...
-        )
+    ... ){
+  
+  # Deprecated warning
+  lifecycle::deprecate_warn(
+    when    = "3.3.0",
+    what    = "CRS.5c()",
+    with    = "CRS.5()"
+  )
+  
+  ## Checking arguments
+  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
+  return(
+    cedergreen(
+      fixed = fixed, names = names, alpha = 0.25, 
+      fctName = as.character(match.call()[[1]]), 
+      fctText = "Cedergreen-Ritz-Streibig (alpha=0.25)", 
+      ...
     )
+  )
 }
 
 #' @title Alias for CRS.5c
 #' @description \code{ml4c} is an alias for \code{\link{CRS.5c}}.
 #' @seealso \code{\link{CRS.5c}}
-#' @deprecate in_version = "3.3-0", details = "Please use `CRS.5` instead."
+#' `r lifecycle::badge("deprecated")`
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #' @keywords models nonlinear
 ml4c <- CRS.5c
