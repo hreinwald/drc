@@ -142,7 +142,7 @@ and imports from: car, graphics, gtools, lifecycle, multcomp, plotrix, sandwich,
 
 ## Bug Reports
 
-Please report issues at <https://github.com/DoseResponse/drc/issues/>.
+Please report issues with this re-factory version at <https://github.com/hreinwald/drc/issues/>.
 
 ## License
 
