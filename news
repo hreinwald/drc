@@ -8,7 +8,7 @@
 
 2026-03-10: Migrated all package documentation to roxygen2-generated Rd files. Regenerated NAMESPACE via roxygen2. Added @exportS3Method tags to S3 methods in confint.drc.R and mrdrm.r. Fixed escaped percent signs in roxygen docs causing Rd parse warnings. Updated package version format from 3.3-0 to 3.3.0. Lowered the minimum R version requirement to 4.0.0.
 
-2026-03-09: Refactored the Cedergreen-Ritz-Streibig hormesis model: extracted edfct and maxfct into standalone helper functions (cedergreen_edfct, cedergreen_maxfct), refactored the self-starter function, and improved documentation. Added new CRS.5 wrapper function and CRS.6 six-parameter model where the alpha exponent is estimated rather than fixed. Added Cedergreen-2 dose-response model implementation (cedergreen2). Deprecated old CRS function names (CRS.4a, CRS.4b, CRS.4c, CRS.5a, CRS.5b, CRS.5c) with lifecycle notices in favor of new wrappers.
+2026-03-09: Refactored the Cedergreen-Ritz-Streibig hormesis model: extracted edfct and maxfct into standalone helper functions (cedergreen_edfct, cedergreen_maxfct), refactored the self-starter function, and improved documentation. Added new CRS.5 wrapper function and CRS.6 six-parameter model where the alpha exponent is estimated rather than fixed. Deprecated old CRS function names (CRS.4a, CRS.4b, CRS.4c, CRS.5a, CRS.5b, CRS.5c) with lifecycle notices in favor of new wrappers.
 
 2026-03-07: Cleaned up drm() function by removing approximately 900 lines of commented-out dead code, debug print statements, and old experimental implementations. Fixed a bug where the stop() call for using separate curves with control measurements was inside the if(!noMessage) block, meaning it would be silently skipped when messages were suppressed. Removed unused variable 'isfi' and redundant variable 'lenData' (identical to 'numObs'). Removed a dead loop over pmodelsList2 that could never execute.
 
@@ -380,3 +380,4 @@ small or large dose or response values. Arguments "lowerc" and "upperc" have bee
 2008-10-02: New function mrdrm() for model-robust modelling included. Accompanying ED and predict methods also added. 
 
 2008-09-30: The lettuce dataset got correct row numbers. 
+
