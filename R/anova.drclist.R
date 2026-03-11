@@ -84,12 +84,17 @@
 
 #        testStat <- dfDiff[1]/dfDiff[2]
         testStat <- ((loglik[1] - loglik[2]) / dfDiff[2]) / (loglik[2] / df2)
-        # A negative F statistic indicates the more complex model does not
-        # improve the fit over the simpler model, so p-value is set to 1.
-        # A non-finite F (e.g. when models have equal df) means the test
-        # is undefined, so p-value is set to NA.
-        if (!is.finite(testStat) || testStat < 0) {
-            pVal <- c(NA, ifelse(testStat < 0, 1, NA))
+        # Handle edge cases for the F-test p-value
+        if (is.nan(testStat)) {
+            # Undefined test statistic (e.g. 0/0), test is meaningless
+            pVal <- c(NA, NA)
+        } else if (testStat < 0) {
+            # Negative F (including -Inf): the simpler model fits better,
+            # so there is no evidence for the more complex model
+            pVal <- c(NA, 1)
+        } else if (is.infinite(testStat)) {
+            # +Inf: test is undefined (e.g. models have equal df)
+            pVal <- c(NA, NA)
         } else {
             pVal <- c(NA, 1 - pf(testStat, dfDiff[2], df2))
         }

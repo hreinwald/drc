@@ -63,12 +63,33 @@ test_that("anova.drc returns p-value of 1 when F statistic is negative", {
   # Should not produce NaN warnings from pf() and p-value should be valid
   result <- anova(m1, m2, details = FALSE)
   pval <- result[2, 5]
+  fstat <- result[2, 4]
   expect_true(!is.nan(pval), info = "p-value should not be NaN")
   # If the F statistic was negative, p-value should be 1
-  fstat <- result[2, 4]
   if (!is.na(fstat) && fstat < 0) {
     expect_equal(pval, 1, info = "Negative F statistic should give p-value of 1")
   }
+  # If the F statistic is a valid positive number, p-value should be between 0 and 1
+  if (!is.na(fstat) && is.finite(fstat) && fstat >= 0) {
+    expect_true(pval >= 0 && pval <= 1,
+      info = "Positive F statistic should give p-value between 0 and 1")
+  }
+})
+
+test_that("anova.drc returns valid p-values for truly nested models", {
+  # LL.3 is nested within LL.4 (LL.3 fixes one parameter)
+  m_full <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  m_reduced <- drm(rootl ~ conc, data = ryegrass, fct = LL.3())
+
+  result <- anova(m_reduced, m_full, details = FALSE)
+  pval <- result[2, 5]
+  fstat <- result[2, 4]
+
+  # For truly nested models, F statistic should be non-negative and p-value valid
+  expect_true(!is.na(pval), info = "p-value should not be NA for nested models")
+  expect_true(!is.nan(pval), info = "p-value should not be NaN for nested models")
+  expect_true(pval >= 0 && pval <= 1,
+    info = "p-value should be between 0 and 1 for nested models")
 })
 
 test_that("mselect with nested = FALSE returns correct column names", {
