@@ -84,7 +84,15 @@
 
 #        testStat <- dfDiff[1]/dfDiff[2]
         testStat <- ((loglik[1] - loglik[2]) / dfDiff[2]) / (loglik[2] / df2)
-        pVal <- c(NA, 1 - pf(testStat, dfDiff[2], df2))
+        # A negative F statistic indicates the more complex model does not
+        # improve the fit over the simpler model, so p-value is set to 1.
+        # A non-finite F (e.g. when models have equal df) means the test
+        # is undefined, so p-value is set to NA.
+        if (!is.finite(testStat) || testStat < 0) {
+            pVal <- c(NA, ifelse(testStat < 0, 1, NA))
+        } else {
+            pVal <- c(NA, 1 - pf(testStat, dfDiff[2], df2))
+        }
         testStat <- c(NA, testStat)
 
         headName <- "ANOVA table\n"

@@ -40,6 +40,37 @@ test_that("mselect Lack of fit values match between nested = TRUE and nested = F
   )
 })
 
+test_that("mselect with nested = TRUE does not produce NaN in Nested F test column", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  fctList <- list(LL.3(), W1.4(), W2.4())
+
+  # Suppress benign warnings from the optimization process (log of negative values
+  # during parameter search), which are unrelated to the F-test computation
+  result <- suppressWarnings(mselect(m1, fctList = fctList, nested = TRUE))
+
+  # The "Nested F test" column should have valid p-values (or NA for first model),
+  # but never NaN
+  ftest_col <- result[, "Nested F test"]
+  expect_true(all(is.na(ftest_col) | is.finite(ftest_col)),
+    info = "Nested F test column should not contain NaN values")
+})
+
+test_that("anova.drc returns p-value of 1 when F statistic is negative", {
+  # Comparing non-nested models with same df can produce negative F statistics
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  m2 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
+
+  # Should not produce NaN warnings from pf() and p-value should be valid
+  result <- anova(m1, m2, details = FALSE)
+  pval <- result[2, 5]
+  expect_true(!is.nan(pval), info = "p-value should not be NaN")
+  # If the F statistic was negative, p-value should be 1
+  fstat <- result[2, 4]
+  if (!is.na(fstat) && fstat < 0) {
+    expect_equal(pval, 1, info = "Negative F statistic should give p-value of 1")
+  }
+})
+
 test_that("mselect with nested = FALSE returns correct column names", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   fctList <- list(LL.3())
