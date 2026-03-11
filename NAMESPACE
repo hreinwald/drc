@@ -49,6 +49,8 @@ weibull2x, W2x.3, W2x.4,
 
 bread.drc, estfun.drc,
 
+ED_robust, maED_robust,
+
 backfit, CIcomp, CIcompX, comped, compParm, drm, drmc, ED, EDcomp, getInitial, getMeanFunctions, isobole, 
 lin.test, MAX, maED, mixture, modelFit, mr.test, mselect, neill.test, noEffect, plotFACI, PR, rdrm, relpot, searchdrc, 
 simDR, yieldLoss)
