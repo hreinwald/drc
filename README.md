@@ -34,7 +34,8 @@ Or install the development version from GitHub:
 devtools::install_github("DoseResponse/drcData")
 
 # Then install the development version of drc
-devtools::install_github("DoseResponse/drc")
+# devtools::install_github("DoseResponse/drc")  # <- installs the unmaintained version 3.2-0 from the DoseResponse Team
+devtools::install_github("hreinwald/drc")       # <- installs the re-factored version 3.3.0 from this GitHub repository
 ```
 
 ## Quick Start
