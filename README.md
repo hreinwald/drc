@@ -19,13 +19,13 @@ The package offers:
 
 ## Installation
 
-Install the stable version from CRAN:
+To install the stable but outdated version from CRAN:
 
 ``` r
 install.packages("drc")
 ```
 
-Or install the development version from GitHub:
+Install the bug-fix development version from GitHub:
 
 ``` r
 # install.packages("devtools")
