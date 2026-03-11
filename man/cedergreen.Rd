@@ -89,3 +89,6 @@ if (requireNamespace("drc", quietly = TRUE)) {
 \code{\link[drc]{drm}} for model fitting, and \code{\link{cedergreen.ssf}} for the
 underlying self-starter function.
 }
+\author{
+Hannes Reinwald
+}

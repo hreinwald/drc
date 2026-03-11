@@ -4,7 +4,7 @@
 \alias{bread.drc}
 \title{Bread for the sandwich estimator}
 \usage{
-bread.drc(x, ...)
+\method{bread}{drc}(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{drc}.}

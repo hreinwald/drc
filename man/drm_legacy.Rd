@@ -103,9 +103,9 @@ An object of (S3) class \code{"drc"}.
 \description{
 This is the legacy implementation of the dose-response model fitting function.
 It is kept only as an internal reference point in case questions or errors
-might occur with the current \code{\link{drm}} implementation.
+might occur with the current \code{\link[=drm]{drm()}} implementation.
 }
 \seealso{
-\code{\link{drm}} for the current implementation.
+\code{\link[=drm]{drm()}} for the current implementation.
 }
 \keyword{internal}

@@ -4,7 +4,7 @@
 \alias{estfun.drc}
 \title{Estimating function for the sandwich estimator}
 \usage{
-estfun.drc(x, ...)
+\method{estfun}{drc}(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{drc}.}
