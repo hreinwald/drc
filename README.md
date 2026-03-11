@@ -89,7 +89,11 @@ mselect(model, fctList = list(W1.4(), W2.4(), LL.3()))
 | `G.3()`, `G.4()`    | Gompertz models                          |
 | `LN.2()` – `LN.4()` | Log-normal models                       |
 | `BC.4()`, `BC.5()`  | Brain-Cousens models (hormesis)          |
-| `UCRS.4a()`, `UCRS.5a()` | Cedergreen-Ritz-Streibig models (hormesis) |
+| `CRS.4a()` – `CRS.4c()` | Cedergreen-Ritz-Streibig 4-parameter models (hormesis) |
+| `CRS.5()`, `CRS.5a()` – `CRS.5c()` | Cedergreen-Ritz-Streibig 5-parameter models (hormesis) |
+| `CRS.6()` | Generalised Cedergreen-Ritz-Streibig model (hormesis) |
+| `UCRS.4a()` – `UCRS.4c()` | U-shaped Cedergreen-Ritz-Streibig 4-parameter models (hormesis) |
+| `UCRS.5a()` – `UCRS.5c()` | U-shaped Cedergreen-Ritz-Streibig 5-parameter models (hormesis) |
 | `NEC.2()` – `NEC.4()` | No-effect-concentration models         |
 | `L.3()` – `L.5()`   | Logistic models                          |
 | `baro5()`            | Baro five-parameter model                |
@@ -126,9 +130,9 @@ The `drm()` function supports multiple response types via the `type` argument:
 ## Dependencies
 
 **drc** depends on:
-- R (≥ 2.0.0), MASS, stats, [drcData](https://github.com/DoseResponse/drcData)
+- R (≥ 4.0.0), MASS, stats, [drcData](https://github.com/DoseResponse/drcData)
 
-and imports from: car, gtools, multcomp, plotrix, sandwich, scales.
+and imports from: car, graphics, gtools, lifecycle, multcomp, plotrix, sandwich, scales, utils.
 
 ## References
 
