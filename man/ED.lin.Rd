@@ -4,7 +4,7 @@
 \alias{ED.lin}
 \title{ED calculation for linear models}
 \usage{
-\method{ED}{lin}(lmObject, respLev)
+\method{ED}{lin}(object, respLev, ...)
 }
 \description{
 ED calculation for linear models
