@@ -469,8 +469,6 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 1, 
@@ -520,8 +518,6 @@ ml3a <- CRS.4a
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.5, 
@@ -570,8 +566,6 @@ ml3b <- CRS.4b
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.25, 
@@ -628,8 +622,6 @@ ml3c <- CRS.4c
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 1, 
@@ -679,8 +671,6 @@ ml4a <- CRS.5a
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.5, 
@@ -730,8 +720,6 @@ ml4b <- CRS.5b
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.25, 
