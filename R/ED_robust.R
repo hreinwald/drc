@@ -84,6 +84,23 @@ get_ed_interval <- function(
 }
 
 
+#' Get the name of a dose-response model
+#'
+#' @param mod A model object returned by [drc::drm()].
+#'
+#' @return A single character string combining the model function name and its
+#'   parameter names, separated by a colon and dashes,
+#'   e.g. `"LL.4:b-c-d-e"`.
+#' @author Hannes Reinwald
+#' @noRd
+drm_name = function(mod){
+  if (!inherits(mod, "drc")) {
+    stop("`mod` must be a `drc` object returned by `drc::drm()`.")
+  }
+  paste0(mod$fct$name,":", paste(mod$fct$names, collapse = "-"))
+}
+
+
 #' Robust Calculation of Effective Doses (ED)
 #'
 #' @description
@@ -189,8 +206,8 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
       # If successful, process the result into a clean data frame
       if(verbose) message("Appending info ...")
       as.data.frame(ed_result) %>%
-        rename(stderr = "Std. Error") %>%
-        mutate(
+        dplyr::rename(stderr = "Std. Error") %>%
+        dplyr::mutate(
           confint_level = CI_level,
           confint_method = interval,
           model = drm_name(mod),
@@ -371,8 +388,8 @@ maED_robust <- function(mod, fct_ls = NULL, respLev = c(10, 20, 50),
       # If successful, process the result into a clean data frame.
       if (verbose) message("Appending info ...")
       as.data.frame(ma_ed_result) %>%
-        rename(stderr = "Std. Error") %>%
-        mutate(
+        dplyr::rename(stderr = "Std. Error") %>%
+        dplyr::mutate(
           confint_level = CI_level,
           confint_method = interval,
           model = model_name,
