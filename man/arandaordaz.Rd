@@ -2,15 +2,9 @@
 % Please edit documentation in R/arandaordaz.R
 \name{arandaordaz}
 \alias{arandaordaz}
-\alias{AR.2}
-\alias{AR.3}
 \title{Asymptotic Regression Model}
 \usage{
 arandaordaz(fixed = c(NA, NA, NA), names = c("a", "b", "c"), fctName, fctText)
-
-AR.2(fixed = c(NA, NA), names = c("d", "e"), ...)
-
-AR.3(fixed = c(NA, NA, NA), names = c("c", "d", "e"), ...)
 }
 \arguments{
 \item{fixed}{numeric vector. Specifies which parameters are fixed and at what value
@@ -27,19 +21,10 @@ they are fixed. NAs for parameters that are not fixed.}
 A list of class \code{drcMean}, containing the mean function, the self starter
 function, the parameter names, and other components such as derivatives and a function
 for calculating ED values.
-
-A list of class \code{drcMean}.
-
-A list of class \code{drcMean}.
 }
 \description{
 The base function for the asymptotic regression model, providing the mean
 function and self starter for a three-parameter model.
-
-\code{AR.2} is the two-parameter asymptotic regression model with the lower limit
-fixed at 0.
-
-\code{AR.3} is the three-parameter asymptotic regression model.
 }
 \details{
 The asymptotic regression model is a three-parameter model with mean function:

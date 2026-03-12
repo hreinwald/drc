@@ -116,29 +116,31 @@ get_ed_interval <- function(
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Load necessary packages for the example
 #' library(drc)
 #' library(dplyr)
 #' library(data.table)
-#' 
+#'
 #' # Use a dataset with hormesis where some ED levels are not reachable
 #' data(lettuce)
-#' 
+#'
 #' # Run a hormesis model (4-parameter log-logistic with a non-zero lower asymptote)
 #' m = drm(weight~conc, data = lettuce, fct = BC.4())
-#' 
+#'
 #' # create plot header
 #' p = modelFit(m)$`p value`[2] %>% round(.,4)
 #' aic = AIC(m) %>% round(.,2)
 #' plot_title = paste0(m$fct$name, " (LoF p = ", p, ", AIC = ", aic, ")")
-#' 
+#'
 #' # plot data
 #' plot(m, type = "all", main = plot_title)
-#' 
+#'
 #' # Get the EC values robustly, including levels that may not be estimable
 #' ED_robust(m, respLev = c(10, 50, 98), CI_level = 0.95)
 #'
 #' # Expected output will show calculations for ED10 and ED50, and a row of NAs for ED98.
+#' }
 #'
 ED_robust <- function(mod, respLev = c(10, 20, 50), 
                       interval = get_ed_interval(mod$fct$name, small_n = TRUE), 
