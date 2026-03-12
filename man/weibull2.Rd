@@ -41,7 +41,7 @@ given by the equation
 }
 \references{
 Seber, G. A. F. and Wild, C. J. (1989)
-\emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+\emph{Nonlinear Regression}, New York: Wiley & Sons (pp. 338--339).
 }
 \seealso{
 \code{\link{weibull1}}, \code{\link{W2.2}}, \code{\link{W2.3}},
