@@ -44,6 +44,7 @@ row of \code{NA} values for that specific response level, ensuring the overall
 analysis can proceed.
 }
 \examples{
+\donttest{
 # Load necessary packages for the example
 library(drc)
 library(dplyr)
@@ -67,6 +68,7 @@ plot(m, type = "all", main = plot_title)
 ED_robust(m, respLev = c(10, 50, 98), CI_level = 0.95)
 
 # Expected output will show calculations for ED10 and ED50, and a row of NAs for ED98.
+}
 
 }
 \author{

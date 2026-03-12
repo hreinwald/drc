@@ -122,31 +122,7 @@ fixed = c(NA, NA, NA), names = c("a", "b", "c"), fctName, fctText)
     invisible(returnList)
 }
 
-#' @rdname arandaordaz
-#'
-#' @title Asymptotic Regression Model
-#'
-#' @description
-#' \code{AR.2} is the two-parameter asymptotic regression model with the lower limit
-#' fixed at 0.
-#'
-#' @param fixed numeric vector. Specifies which parameters are fixed and at what value
-#'   they are fixed. NAs for parameters that are not fixed.
-#' @param names vector of character strings giving the names of the parameters
-#'   (should not contain ":").
-#'
-#' @return A list of class \code{drcMean}.
-#'
-#' @note The function is for use with \code{\link{drm}}.
-#'
-#' @examples
-#' ## Asymptotic regression on methionine data
-#' met.as.m1 <- drm(gain ~ dose, product, data = methionine, fct = AR.3(),
-#' pmodels = list(~1, ~factor(product), ~factor(product)))
-#' plot(met.as.m1, log = "", ylim = c(1450, 1800))
-#' summary(met.as.m1)
-#'
-#' @keywords models nonlinear
+#' @noRd
 "AR.2" <-
 function(fixed = c(NA, NA), names = c("b", "c"))
 {
@@ -161,21 +137,7 @@ function(fixed = c(NA, NA), names = c("b", "c"))
     fctText = "Asymptotic regression with lower limit fixed at 0") )
 }
 
-#' @rdname arandaordaz
-#'
-#' @title Asymptotic Regression Model
-#'
-#' @description
-#' \code{AR.3} is the three-parameter asymptotic regression model.
-#'
-#' @param fixed numeric vector. Specifies which parameters are fixed and at what value
-#'   they are fixed. NAs for parameters that are not fixed.
-#' @param names vector of character strings giving the names of the parameters
-#'   (should not contain ":").
-#'
-#' @return A list of class \code{drcMean}.
-#'
-#' @keywords models nonlinear
+#' @noRd
 "AR.3" <-
 function(fixed = c(NA, NA, NA), names = c("a", "b", "c"))
 {
