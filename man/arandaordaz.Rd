@@ -34,17 +34,6 @@ The asymptotic regression model is a three-parameter model with mean function:
 The parameter \eqn{c} is the lower limit (at \eqn{x=0}), \eqn{d} is the upper limit,
 and \eqn{e>0} determines the steepness of the increase.
 }
-\note{
-The function is for use with \code{\link{drm}}.
-}
-\examples{
-## Asymptotic regression on methionine data
-met.as.m1 <- drm(gain ~ dose, product, data = methionine, fct = AR.3(),
-pmodels = list(~1, ~factor(product), ~factor(product)))
-plot(met.as.m1, log = "", ylim = c(1450, 1800))
-summary(met.as.m1)
-
-}
 \seealso{
 \code{\link{AR.2}}, \code{\link{AR.3}}, \code{\link{EXD.2}}, \code{\link{EXD.3}}
 }
