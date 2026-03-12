@@ -147,4 +147,4 @@ Please report issues with this re-factory version at <https://github.com/hreinwa
 
 ## License
 
-GPL-2
+GPL-2.0
