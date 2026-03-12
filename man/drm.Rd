@@ -121,7 +121,7 @@ summary(model)
 \code{\link{drmc}}, \code{\link{LL.4}}, \code{\link{getMeanFunctions}}
 }
 \author{
-Christian Ritz and Jens C. Streibig
+Christian Ritz, Jens C. Streibig and Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

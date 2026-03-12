@@ -49,11 +49,17 @@ weibull2x, W2x.3, W2x.4,
 
 bread.drc, estfun.drc,
 
-backfit, CIcomp, CIcompX, comped, compParm, drm, drmc, ED, EDcomp, getInitial, getMeanFunctions, isobole, 
+ED_robust, maED_robust,
+
+backfit, CIcomp, CIcompX, comped, compParm, confint.basic, drm, drmc, ED, EDcomp, getInitial, getMeanFunctions, isobole, 
 lin.test, MAX, maED, mixture, modelFit, mr.test, mselect, neill.test, noEffect, plotFACI, PR, rdrm, relpot, searchdrc, 
 simDR, yieldLoss)
 
+import(drcData)
+
 importFrom(car, deltaMethod)
+importFrom(data.table, rbindlist)
+importFrom(dplyr, rename, mutate, "%>%")
 importFrom(gtools, combinations)
 importFrom(lifecycle, deprecated)
 importFrom(multcomp, parm)
@@ -86,10 +92,10 @@ importFrom("utils", "head", "tail")
 S3method(anova, drc)
 S3method(boxcox, drc)
 S3method(coef, drc)
-S3method(confint, basic)
 S3method(confint, drc)
 S3method(cooks.distance, drc)
 S3method(ED, drc)
+S3method(ED, lin)
 S3method(ED, mrdrc)
 S3method(fitted, drc)
 S3method(hatvalues, drc)

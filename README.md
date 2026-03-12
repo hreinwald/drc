@@ -34,8 +34,9 @@ Install the bug-fix development version from GitHub:
 devtools::install_github("DoseResponse/drcData")
 
 # Then install the development version of drc
-# devtools::install_github("DoseResponse/drc")  # <- unmaintained version 3.2-0 
-devtools::install_github("hreinwald/drc")       # <- re-factored version 3.3.0
+# devtools::install_github("DoseResponse/drc")      # <- unmaintained version 3.2-0 
+devtools::install_github("hreinwald/drc")           # <- re-factored development version 3.3.0
+devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
 ```
 
 ## Quick Start

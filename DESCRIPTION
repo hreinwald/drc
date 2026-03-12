@@ -6,7 +6,7 @@ Authors@R: c(person("Christian", "Ritz", role = c("aut", "cre"), email = "ritz@b
              person(c("Jens", "C."), "Streibig", email = "streibig@bioassay.dk", role = "aut"),
              person("Hannes", "Reinwald", email = "hannes.reinwald@bayer.com", role = "aut"))
 Depends: R (>= 4.0.0), MASS, stats, drcData
-Imports: car, graphics, gtools, multcomp, plotrix, sandwich, scales, utils, lifecycle
+Imports: car, data.table, dplyr, graphics, gtools, multcomp, plotrix, sandwich, scales, utils, lifecycle
 Encoding: UTF-8
 LazyData: yes
 Description: Analysis of dose-response data is made available through a suite of
