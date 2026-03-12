@@ -36,7 +36,7 @@ ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = EXD.3())
 }
 \references{
 Seber, G. A. F. and Wild, C. J. (1989)
-\emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+\emph{Nonlinear Regression}, New York: Wiley & Sons (pp. 338--339).
 }
 \seealso{
 \code{\link{EXD.2}}, \code{\link{AR.2}}, \code{\link{AR.3}},

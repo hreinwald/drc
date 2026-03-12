@@ -35,7 +35,7 @@ terbuthylazin.m1 <- drm(rgr ~ dose, data = terbuthylazin, fct = W1.4())
 }
 \references{
 Seber, G. A. F. and Wild, C. J. (1989)
-\emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+\emph{Nonlinear Regression}, New York: Wiley & Sons (pp. 338--339).
 
 Ritz, C. (2009)
 Towards a unified approach to dose-response modeling in ecotoxicology.

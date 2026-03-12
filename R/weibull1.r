@@ -29,7 +29,7 @@
 #'
 #' @references
 #' Seber, G. A. F. and Wild, C. J. (1989)
-#' \emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+#' \emph{Nonlinear Regression}, New York: Wiley & Sons (pp. 338--339).
 #'
 #' @seealso \code{\link{W1.2}}, \code{\link{W1.3}}, \code{\link{W1.4}},
 #'   \code{\link{weibull2}}
@@ -419,7 +419,7 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 #'
 #' @references
 #' Seber, G. A. F. and Wild, C. J. (1989)
-#' \emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+#' \emph{Nonlinear Regression}, New York: Wiley & Sons (pp. 338--339).
 #'
 #' Ritz, C. (2009)
 #' Towards a unified approach to dose-response modeling in ecotoxicology.
@@ -473,7 +473,7 @@ w4 <- W1.4
 #'
 #' @references
 #' Seber, G. A. F. and Wild, C. J. (1989)
-#' \emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+#' \emph{Nonlinear Regression}, New York: Wiley & Sons (pp. 338--339).
 #'
 #' @seealso \code{\link{EXD.3}}, \code{\link{AR.2}}, \code{\link{AR.3}},
 #'   \code{\link{weibull1}}
@@ -520,7 +520,7 @@ function(fixed = c(NA, NA), names = c("d", "e"), ...)
 #'
 #' @references
 #' Seber, G. A. F. and Wild, C. J. (1989)
-#' \emph{Nonlinear Regression}, New York: Wiley \& Sons (pp. 338--339).
+#' \emph{Nonlinear Regression}, New York: Wiley & Sons (pp. 338--339).
 #'
 #' @seealso \code{\link{EXD.2}}, \code{\link{AR.2}}, \code{\link{AR.3}},
 #'   \code{\link{weibull1}}
