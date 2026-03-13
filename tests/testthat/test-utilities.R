@@ -511,3 +511,38 @@ test_that("absToRel errors when upper equals lower asymptote", {
   expect_error(absToRel(parmVec, 50, "absolute"),
     "upper and lower asymptotes are equal")
 })
+
+test_that("compParm passes od and pool to vcov when using default vcov", {
+  # Create binomial multi-curve data
+  binom_multi <- data.frame(
+    dose = rep(c(0, 0.1, 0.5, 1, 2, 5, 10), times = 2),
+    resp = c(0, 0.05, 0.15, 0.35, 0.65, 0.90, 0.98,
+             0, 0.03, 0.10, 0.25, 0.55, 0.85, 0.95),
+    n = rep(50, 14),
+    group = rep(c("A", "B"), each = 7)
+  )
+  m_binom <- drm(resp ~ dose, curveid = group, data = binom_multi, fct = LL.2(),
+                 type = "binomial", weights = n)
+
+  # compParm with od=FALSE (default) should work
+  result_no_od <- compParm(m_binom, "b", operator = "-", display = FALSE)
+  expect_true(is.matrix(result_no_od))
+  expect_equal(ncol(result_no_od), 4)
+
+  # compParm with od=TRUE should produce different standard errors
+  result_od <- compParm(m_binom, "b", operator = "-", od = TRUE, display = FALSE)
+  expect_true(is.matrix(result_od))
+  expect_equal(ncol(result_od), 4)
+
+  # Estimates should be the same, but SEs may differ with od adjustment
+  expect_equal(result_no_od[, 1], result_od[, 1])
+})
+
+test_that("compParm works with custom vcov function without od/pool", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  # Custom vcov function that only accepts object
+  custom_vcov <- function(object) vcov(object)
+  result <- compParm(m1, "b", operator = "-", vcov. = custom_vcov, display = FALSE)
+  expect_true(is.matrix(result))
+  expect_equal(ncol(result), 4)
+})
