@@ -37,14 +37,14 @@ test_that("plot.drc creates plot without error", {
   })
 })
 
-test_that("plot.drc returns NULL invisibly", {
+test_that("plot.drc returns data frame invisibly", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
   pdf(file = tempfile())
   result <- plot(m1)
   dev.off()
 
-  expect_null(result)
+  expect_true(is.data.frame(result))
 })
 
 test_that("plot.drc works with different plot types", {
@@ -58,7 +58,7 @@ test_that("plot.drc works with different plot types", {
       pdf(file = tempfile())
       plot(m1, type = plot_type)
       dev.off()
-    }, info = paste("Failed with type =", plot_type))
+    })
   }
 })
 

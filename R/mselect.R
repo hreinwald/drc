@@ -68,7 +68,7 @@ function(object, fctList = NULL, nested = FALSE, sorted = c("IC", "Res var", "La
     if (contData) 
     {
         tryRV <- try(summary(object)$"resVar", silent = TRUE)
-        if (!inherits("tryRV", "try-error"))
+        if (!inherits(tryRV, "try-error"))
         {
             retMat[1, 4] <- tryRV
         } else {
@@ -120,7 +120,7 @@ function(object, fctList = NULL, nested = FALSE, sorted = c("IC", "Res var", "La
                 if (contData)
                 {
                     tryRV2 <- try(summary(tempObj)$"resVar", silent = TRUE)
-                    if (!inherits("tryRV2", "try-error"))
+                    if (!inherits(tryRV2, "try-error"))
                     {
                         retMat[i + 1, 4] <- tryRV2
                     } else {

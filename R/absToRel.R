@@ -17,7 +17,12 @@
     ## Converting absolute to relative
     if (typeCalc == "absolute") 
     {
-        p <- 100 * ((parmVec[3] - respl) / (parmVec[3] - parmVec[2]))
+        denom <- parmVec[3] - parmVec[2]
+        if (denom == 0)
+        {
+            stop("Cannot convert absolute to relative response: upper and lower asymptotes are equal")
+        }
+        p <- 100 * ((parmVec[3] - respl) / denom)
     } else {  
         p <- respl
     }

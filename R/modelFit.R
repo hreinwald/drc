@@ -86,7 +86,16 @@
             loglik <- c(anovaSS, nlsSS)
 
             testStat <- (nlsSS - anovaSS)/dfDiff[2]/(anovaSS/anovaDF)
-            pVal <- c(NA, pf(testStat, dfDiff[2], anovaDF, lower.tail = FALSE))
+            # Handle edge cases for the F-test p-value
+            if (is.nan(testStat)) {
+                pVal <- c(NA, NA)
+            } else if (testStat < 0) {
+                pVal <- c(NA, 1)
+            } else if (is.infinite(testStat)) {
+                pVal <- c(NA, NA)
+            } else {
+                pVal <- c(NA, pf(testStat, dfDiff[2], anovaDF, lower.tail = FALSE))
+            }
             testStat <- c(NA, testStat)
 
             headName<-"Lack-of-fit test\n"

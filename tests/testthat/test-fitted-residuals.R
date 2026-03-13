@@ -316,3 +316,16 @@ test_that("residuals.drc typeRes argument validation", {
   # Invalid type should error
   expect_error(residuals(m1, typeRes = "invalid"))
 })
+
+test_that("studentised residuals return NA for high-leverage points instead of NaN/Inf", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  resids <- residuals(m1, typeRes = "studentised")
+
+  # Should be numeric and same length as data
+  expect_equal(length(resids), nrow(ryegrass))
+  expect_true(is.numeric(resids))
+
+  # No NaN or Inf values should be present (high-leverage points should be NA)
+  expect_false(any(is.nan(resids)))
+  expect_false(any(is.infinite(resids)))
+})

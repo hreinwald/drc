@@ -70,7 +70,8 @@ test_that("logLik.drc has df attribute", {
   ll <- logLik(m1)
 
   expect_true("df" %in% names(attributes(ll)))
-  expect_equal(attr(ll, "df"), length(coef(m1)))
+  # df includes model parameters plus the error variance parameter
+  expect_equal(attr(ll, "df"), length(coef(m1)) + 1)
 })
 
 test_that("logLik.drc works with different model types", {
@@ -103,7 +104,7 @@ test_that("anova.drc returns valid p-values", {
   result <- anova(m1, m2, details = FALSE)
 
   # Find p-value column
-  p_col <- which(grepl("p-value|Pr\\(", colnames(result), ignore.case = TRUE))
+  p_col <- which(grepl("p.value|p value|Pr\\(", colnames(result), ignore.case = TRUE))
   if (length(p_col) > 0) {
     p_values <- result[, p_col]
     p_values <- p_values[!is.na(p_values)]
@@ -415,4 +416,133 @@ test_that("Model comparison workflow", {
   ll1 <- logLik(m1)
   ll2 <- logLik(m2)
   expect_true(ll2 > ll1)  # More parameters should give better fit
+})
+
+# Tests for comped() input validation
+
+test_that("comped validates est parameter", {
+  expect_error(comped(est = "not numeric", se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+  expect_error(comped(est = c(1), se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+  expect_error(comped(est = c(1, 2, 3), se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+  expect_error(comped(est = NULL, se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+})
+
+test_that("comped validates se parameter", {
+  expect_error(comped(est = c(1, 2), se = "not numeric"),
+    "'se' must be a numeric vector of length 2")
+  expect_error(comped(est = c(1, 2), se = c(-1, 2)),
+    "'se' must contain non-negative values")
+})
+
+test_that("comped validates level parameter", {
+  expect_error(comped(est = c(1, 2), se = c(0.5, 0.5), level = 0),
+    "'level' must be a single numeric value between 0 and 1")
+  expect_error(comped(est = c(1, 2), se = c(0.5, 0.5), level = 1),
+    "'level' must be a single numeric value between 0 and 1")
+  expect_error(comped(est = c(1, 2), se = c(0.5, 0.5), level = 1.5),
+    "'level' must be a single numeric value between 0 and 1")
+})
+
+test_that("comped works correctly with valid inputs", {
+  result <- comped(c(28.396, 65.573), c(1.875, 5.619), log = FALSE, operator = "/")
+  expect_true(is.matrix(result))
+  expect_equal(ncol(result), 4)  # Estimate, Std. Error, Lower, Upper
+})
+
+# Tests for compParm() input validation
+
+test_that("compParm validates strVal parameter", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  expect_error(compParm(m1, strVal = 123),
+    "'strVal' must be a single character string")
+  expect_error(compParm(m1, strVal = c("b", "c")),
+    "'strVal' must be a single character string")
+})
+
+test_that("compParm validates operator parameter", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  expect_error(compParm(m1, strVal = "b", operator = "*"),
+    "'operator' must be either '/' or '-'")
+})
+
+# Tests for Rsq()
+
+test_that("Rsq returns valid R-squared for single curve model", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  result <- capture.output(rsq <- Rsq(m1))
+  expect_true(is.matrix(rsq))
+  expect_equal(nrow(rsq), 1)
+  expect_equal(ncol(rsq), 1)
+  expect_true(rsq[1, 1] >= 0 && rsq[1, 1] <= 1)
+})
+
+test_that("Rsq returns per-curve and total R-squared for multi-curve model", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  result <- capture.output(rsq <- Rsq(m1))
+  expect_true(is.matrix(rsq))
+  expect_equal(nrow(rsq), 3)  # 2 curves + total
+  expect_true(all(rsq[, 1] >= 0 & rsq[, 1] <= 1))
+  expect_equal(rownames(rsq)[3], "Total")
+})
+
+# Tests for absToRel()
+
+test_that("absToRel converts absolute to relative correctly", {
+  parmVec <- c(1, 0, 100)  # b, lower, upper
+  result <- absToRel(parmVec, 50, "absolute")
+  expect_equal(result, 50)
+
+  result2 <- absToRel(parmVec, 75, "absolute")
+  expect_equal(result2, 25)
+})
+
+test_that("absToRel returns input unchanged for non-absolute type", {
+  parmVec <- c(1, 0, 100)
+  result <- absToRel(parmVec, 50, "relative")
+  expect_equal(result, 50)
+})
+
+test_that("absToRel errors when upper equals lower asymptote", {
+  parmVec <- c(1, 50, 50)  # upper == lower
+  expect_error(absToRel(parmVec, 50, "absolute"),
+    "upper and lower asymptotes are equal")
+})
+
+test_that("compParm passes od and pool to vcov when using default vcov", {
+  # Create binomial multi-curve data
+  binom_multi <- data.frame(
+    dose = rep(c(0, 0.1, 0.5, 1, 2, 5, 10), times = 2),
+    resp = c(0, 0.05, 0.15, 0.35, 0.65, 0.90, 0.98,
+             0, 0.03, 0.10, 0.25, 0.55, 0.85, 0.95),
+    n = rep(50, 14),
+    group = rep(c("A", "B"), each = 7)
+  )
+  m_binom <- drm(resp ~ dose, curveid = group, data = binom_multi, fct = LL.2(),
+                 type = "binomial", weights = n)
+
+  # compParm with od=FALSE (default) should work
+  result_no_od <- compParm(m_binom, "b", operator = "-", display = FALSE)
+  expect_true(is.matrix(result_no_od))
+  expect_equal(ncol(result_no_od), 4)
+
+  # compParm with od=TRUE should produce different standard errors
+  result_od <- compParm(m_binom, "b", operator = "-", od = TRUE, display = FALSE)
+  expect_true(is.matrix(result_od))
+  expect_equal(ncol(result_od), 4)
+
+  # Estimates should be the same, but SEs may differ with od adjustment
+  expect_equal(result_no_od[, 1], result_od[, 1])
+})
+
+test_that("compParm works with custom vcov function without od/pool", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  # Custom vcov function that only accepts object
+  custom_vcov <- function(object) vcov(object)
+  result <- compParm(m1, "b", operator = "-", vcov. = custom_vcov, display = FALSE)
+  expect_true(is.matrix(result))
+  expect_equal(ncol(result), 4)
 })
