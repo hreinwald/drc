@@ -12,9 +12,9 @@ LazyData: yes
 Description: Analysis of dose-response data is made available through a suite of
     flexible and versatile model fitting and after-fitting functions.
 License: GPL-2
-URL: https://www.r-project.org, https://www.bioassay.dk
+URL: https://www.r-project.org, https://www.bioassay.dk, https://github.com/hreinwald/drc, https://cran.r-project.org/web/packages/drc/index.html
 RoxygenNote: 7.3.3
-BugReports: https://github.com/DoseResponse/drc/issues/
+BugReports: https://github.com/hreinwald/drc/issues/
 Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat (>= 3.0.0)
