@@ -109,7 +109,8 @@
             # as.character() removes factor encoding  
           
         } else {
-            groupLevels <- rep(1, nrow(newdata))
+            ndRows <- if (is.data.frame(newdata) || is.matrix(newdata)) nrow(newdata) else length(newdata)
+            groupLevels <- rep(1, ndRows)
         }
 #         
 #         
@@ -329,7 +330,11 @@
     if (se.fit) {keepInd <- c(keepInd, 2)}
     if (!identical(interval, "none")) {keepInd <- c(keepInd, 3, 4)}
     
-    return(retMat[, keepInd])  # , drop = FALSE])
+    if (length(keepInd) > 1) {
+        return(retMat[, keepInd, drop = FALSE])
+    } else {
+        return(retMat[, keepInd])
+    }
 }
 
 
