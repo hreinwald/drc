@@ -80,7 +80,11 @@ function(object, od = FALSE, pool = TRUE, ...)
 #    { 
 #        varMat <- varMat*(object$"gofTest"[1]/object$"gofTest"[2])
 #    }
-    estSE <- sqrt(diag(varMat))
+    diagVar <- diag(varMat)
+    estSE <- numeric(length(diagVar))
+    posIdx <- diagVar >= 0
+    estSE[posIdx] <- sqrt(diagVar[posIdx])
+    estSE[!posIdx] <- NaN
 
     ## Calculating estimated standard errors for robust methods
     
