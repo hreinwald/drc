@@ -417,3 +417,54 @@ test_that("Model comparison workflow", {
   ll2 <- logLik(m2)
   expect_true(ll2 > ll1)  # More parameters should give better fit
 })
+
+# Tests for comped() input validation
+
+test_that("comped validates est parameter", {
+  expect_error(comped(est = "not numeric", se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+  expect_error(comped(est = c(1), se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+  expect_error(comped(est = c(1, 2, 3), se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+  expect_error(comped(est = NULL, se = c(1, 2)),
+    "'est' must be a numeric vector of length 2")
+})
+
+test_that("comped validates se parameter", {
+  expect_error(comped(est = c(1, 2), se = "not numeric"),
+    "'se' must be a numeric vector of length 2")
+  expect_error(comped(est = c(1, 2), se = c(-1, 2)),
+    "'se' must contain non-negative values")
+})
+
+test_that("comped validates level parameter", {
+  expect_error(comped(est = c(1, 2), se = c(0.5, 0.5), level = 0),
+    "'level' must be a single numeric value between 0 and 1")
+  expect_error(comped(est = c(1, 2), se = c(0.5, 0.5), level = 1),
+    "'level' must be a single numeric value between 0 and 1")
+  expect_error(comped(est = c(1, 2), se = c(0.5, 0.5), level = 1.5),
+    "'level' must be a single numeric value between 0 and 1")
+})
+
+test_that("comped works correctly with valid inputs", {
+  result <- comped(c(28.396, 65.573), c(1.875, 5.619), log = FALSE, operator = "/")
+  expect_true(is.matrix(result))
+  expect_equal(ncol(result), 4)  # Estimate, Std. Error, Lower, Upper
+})
+
+# Tests for compParm() input validation
+
+test_that("compParm validates strVal parameter", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  expect_error(compParm(m1, strVal = 123),
+    "'strVal' must be a single character string")
+  expect_error(compParm(m1, strVal = c("b", "c")),
+    "'strVal' must be a single character string")
+})
+
+test_that("compParm validates operator parameter", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  expect_error(compParm(m1, strVal = "b", operator = "*"),
+    "'operator' must be either")
+})
