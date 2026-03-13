@@ -70,7 +70,8 @@ test_that("logLik.drc has df attribute", {
   ll <- logLik(m1)
 
   expect_true("df" %in% names(attributes(ll)))
-  expect_equal(attr(ll, "df"), length(coef(m1)))
+  # df includes model parameters plus the error variance parameter
+  expect_equal(attr(ll, "df"), length(coef(m1)) + 1)
 })
 
 test_that("logLik.drc works with different model types", {

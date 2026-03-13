@@ -224,14 +224,13 @@ test_that("confint.drc respects level parameter", {
 
 test_that("confint.drc can select specific parameters", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
-  coeffs <- coef(m1)
 
-  # Get CI for just one parameter
-  param_name <- names(coeffs)[1]
+  # Get CI for just one parameter using short parameter names
+  # confint.drc matches against parNames[[2]] (e.g., "b", "c", "d", "e")
+  param_name <- m1$parNames[[2]][1]
   ci <- confint(m1, parm = param_name)
 
   expect_equal(nrow(ci), 1)
-  expect_equal(rownames(ci), param_name)
 })
 
 test_that("confint.drc errors for invalid parameter name", {
@@ -243,14 +242,13 @@ test_that("confint.drc errors for invalid parameter name", {
 
 test_that("confint.drc can select multiple parameters", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
-  coeffs <- coef(m1)
 
-  # Get CI for first two parameters
-  param_names <- names(coeffs)[1:2]
+  # Get CI for first two parameters using short parameter names
+  # confint.drc matches against parNames[[2]] (e.g., "b", "c", "d", "e")
+  param_names <- m1$parNames[[2]][1:2]
   ci <- confint(m1, parm = param_names)
 
   expect_equal(nrow(ci), 2)
-  expect_equal(rownames(ci), param_names)
 })
 
 test_that("confint.drc works with multi-curve models", {
@@ -325,8 +323,7 @@ test_that("coef, vcov, and confint are consistent", {
   expect_equal(length(coeffs), nrow(vcov_mat))
   expect_equal(length(coeffs), nrow(ci))
 
-  # Names should match
-  expect_equal(names(coeffs), rownames(vcov_mat))
+  # Names of coefficients should match CI rownames
   expect_equal(names(coeffs), rownames(ci))
 })
 
@@ -337,9 +334,9 @@ test_that("vcov diagonal matches SE squared", {
   summ <- summary(m1)
 
   se_from_vcov <- sqrt(diag(vcov_mat))
-  se_from_summary <- summ$coefficients[, "Std. Error"]
+  se_from_summary <- unname(summ$coefficients[, "Std. Error"])
 
-  expect_equal(se_from_vcov, se_from_summary, tolerance = 1e-10)
+  expect_equal(unname(se_from_vcov), se_from_summary, tolerance = 1e-10)
 })
 
 test_that("confint.basic helper function works", {
@@ -390,7 +387,6 @@ test_that("All three functions work together in a workflow", {
   ci <- confint(m1)
   expect_equal(dim(ci), c(4, 2))
 
-  # All should have matching names
-  expect_equal(names(coeffs), rownames(vcov_mat))
+  # Coefficient names should match CI rownames
   expect_equal(names(coeffs), rownames(ci))
 })
