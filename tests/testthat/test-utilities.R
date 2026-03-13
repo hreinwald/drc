@@ -466,5 +466,5 @@ test_that("compParm validates strVal parameter", {
 test_that("compParm validates operator parameter", {
   m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
   expect_error(compParm(m1, strVal = "b", operator = "*"),
-    "'operator' must be either")
+    "'operator' must be either '/' or '-'")
 })
