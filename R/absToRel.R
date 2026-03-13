@@ -18,7 +18,7 @@
     if (typeCalc == "absolute") 
     {
         denom <- parmVec[3] - parmVec[2]
-        if (abs(denom) < .Machine$double.eps)
+        if (denom == 0)
         {
             stop("Cannot convert absolute to relative response: upper and lower asymptotes are equal")
         }
