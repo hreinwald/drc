@@ -327,10 +327,8 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
 #    numCol <- ncol(plotMat)
 
     maxR <- max(resp)
-    options(warn = -1)  # suppressing warning in case maximum of NULL is taken
-    maxPM <- apply(plotMat, 2, max, na.rm = TRUE)
+    maxPM <- suppressWarnings(apply(plotMat, 2, max, na.rm = TRUE))
     if (max(maxPM) > maxR) {maxPM <- maxPM[which.max(maxPM)]} else {maxPM <- maxR}
-    options(warn=0)  
 
     if (missing(ylim)) 
     {

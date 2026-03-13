@@ -85,14 +85,13 @@ function(object, typeRes = c("working", "standardised", "studentised"), trScale 
         {
             Hdiag[i] <- Xmat[i, ] %*% Xprod %*% t(Xmat[i, , drop = FALSE])
         }
-#        print(length(Hdiag))
-#        print(dim(object$"predres"))
         scaleEst0 <- summary(object)$"resVar"
         scaleEst <- ifelse(is.na(scaleEst0), 1, scaleEst0)  
         # to handle response types that are not continuous/quantitative
         
-#        return(object$"predres"[, 2] / sqrt(scaleEst * (1 - Hdiag)))
-        return(rawResiduals / sqrt(scaleEst * (1 - Hdiag)))
+        denom <- scaleEst * (1 - Hdiag)
+        denom[denom <= 0] <- NA  # avoid division by zero for high-leverage points
+        return(rawResiduals / sqrt(denom))
     }
     
     if (identical(typeRes, "working"))

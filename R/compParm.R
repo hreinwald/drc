@@ -65,7 +65,11 @@ function(object, strVal, operator = "/", vcov. = vcov, od = FALSE, pool = TRUE, 
 #        varMat <- vcov(object, od = od, pool = pool)
 #    }
     parm <- as.vector(coef(object))
-    varMat <- vcov.(object)
+    if (identical(vcov., vcov)) {
+        varMat <- vcov.(object, od = od, pool = pool)
+    } else {
+        varMat <- vcov.(object)
+    }
     
     ## Defining comparison function and its derivative
     if (identical(operator, "/"))
