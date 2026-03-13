@@ -113,12 +113,18 @@ test_that("anova.drc returns valid p-values", {
   }
 })
 
-test_that("anova.drc with single model shows lack-of-fit test", {
+test_that("anova.drc with single model directs to modelFit", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
-  result <- anova(m1, test = "Chi")
+  expect_error(anova(m1, test = "Chi"), "modelFit")
+})
 
-  expect_true(is.data.frame(result) || is.matrix(result))
+test_that("modelFit performs lack-of-fit test for single model", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  result <- modelFit(m1)
+
+  expect_true(is.data.frame(result) || inherits(result, "anova"))
 })
 
 # Tests for df.residual()
