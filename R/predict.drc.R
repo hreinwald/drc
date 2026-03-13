@@ -109,8 +109,8 @@
             # as.character() removes factor encoding  
           
         } else {
-            ndRows <- if (is.data.frame(newdata) || is.matrix(newdata)) nrow(newdata) else length(newdata)
-            groupLevels <- rep(1, ndRows)
+            nRows <- if (is.data.frame(newdata) || is.matrix(newdata)) nrow(newdata) else length(newdata)
+            groupLevels <- rep(1, nRows)
         }
 #         
 #         
