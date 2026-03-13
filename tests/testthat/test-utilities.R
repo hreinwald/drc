@@ -104,7 +104,7 @@ test_that("anova.drc returns valid p-values", {
   result <- anova(m1, m2, details = FALSE)
 
   # Find p-value column
-  p_col <- which(grepl("p-value|Pr\\(", colnames(result), ignore.case = TRUE))
+  p_col <- which(grepl("p.value|p value|Pr\\(", colnames(result), ignore.case = TRUE))
   if (length(p_col) > 0) {
     p_values <- result[, p_col]
     p_values <- p_values[!is.na(p_values)]
