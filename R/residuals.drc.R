@@ -101,10 +101,3 @@ function(object, typeRes = c("working", "standardised", "studentised"), trScale 
         return(rawResiduals)
     }
 }
-
-"scaleEst" <- function(object)
-{
-
-
-
-}
