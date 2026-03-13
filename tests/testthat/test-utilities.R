@@ -468,3 +468,46 @@ test_that("compParm validates operator parameter", {
   expect_error(compParm(m1, strVal = "b", operator = "*"),
     "'operator' must be either '/' or '-'")
 })
+
+# Tests for Rsq()
+
+test_that("Rsq returns valid R-squared for single curve model", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  result <- capture.output(rsq <- Rsq(m1))
+  expect_true(is.matrix(rsq))
+  expect_equal(nrow(rsq), 1)
+  expect_equal(ncol(rsq), 1)
+  expect_true(rsq[1, 1] >= 0 && rsq[1, 1] <= 1)
+})
+
+test_that("Rsq returns per-curve and total R-squared for multi-curve model", {
+  m1 <- drm(resp ~ dose, group, data = multi_data, fct = LL.4())
+  result <- capture.output(rsq <- Rsq(m1))
+  expect_true(is.matrix(rsq))
+  expect_equal(nrow(rsq), 3)  # 2 curves + total
+  expect_true(all(rsq[, 1] >= 0 & rsq[, 1] <= 1))
+  expect_equal(rownames(rsq)[3], "Total")
+})
+
+# Tests for absToRel()
+
+test_that("absToRel converts absolute to relative correctly", {
+  parmVec <- c(1, 0, 100)  # b, lower, upper
+  result <- absToRel(parmVec, 50, "absolute")
+  expect_equal(result, 50)
+
+  result2 <- absToRel(parmVec, 75, "absolute")
+  expect_equal(result2, 25)
+})
+
+test_that("absToRel returns input unchanged for non-absolute type", {
+  parmVec <- c(1, 0, 100)
+  result <- absToRel(parmVec, 50, "relative")
+  expect_equal(result, 50)
+})
+
+test_that("absToRel errors when upper equals lower asymptote", {
+  parmVec <- c(1, 50, 50)  # upper == lower
+  expect_error(absToRel(parmVec, 50, "absolute"),
+    "upper and lower asymptotes are equal")
+})
