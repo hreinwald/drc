@@ -30,10 +30,6 @@ Install the bug-fix development version from GitHub:
 ``` r
 # install.packages("devtools")
 
-# Install the companion data package first
-devtools::install_github("DoseResponse/drcData")
-
-# Then install the development version of drc
 # devtools::install_github("DoseResponse/drc")      # <- unmaintained version 3.2-0 
 devtools::install_github("hreinwald/drc")           # <- re-factored development version 3.3.0
 devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
@@ -132,7 +128,7 @@ The `drm()` function supports multiple response types via the `type` argument:
 ## Dependencies
 
 **drc** depends on:
-- R (≥ 4.0.0), MASS, stats, [drcData](https://github.com/DoseResponse/drcData)
+- R (≥ 4.0.0), MASS, stats
 
 and imports from: car, graphics, gtools, lifecycle, multcomp, plotrix, sandwich, scales, utils.
 

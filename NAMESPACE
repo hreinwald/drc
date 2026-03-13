@@ -55,8 +55,6 @@ backfit, CIcomp, CIcompX, comped, compParm, confint.basic, drm, drmc, ED, EDcomp
 lin.test, MAX, maED, mixture, modelFit, mr.test, mselect, neill.test, noEffect, plotFACI, PR, rdrm, relpot, searchdrc, 
 simDR, yieldLoss)
 
-import(drcData)
-
 importFrom(car, deltaMethod)
 importFrom(data.table, rbindlist)
 importFrom(dplyr, rename, mutate, "%>%")
