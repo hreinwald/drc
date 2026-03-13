@@ -82,9 +82,9 @@ function(object, od = FALSE, pool = TRUE, ...)
 #    }
     diagVar <- diag(varMat)
     estSE <- numeric(length(diagVar))
-    posIdx <- diagVar >= 0
-    estSE[posIdx] <- sqrt(diagVar[posIdx])
-    estSE[!posIdx] <- NaN
+    validVar <- diagVar >= 0
+    estSE[validVar] <- sqrt(diagVar[validVar])
+    estSE[!validVar] <- NaN
 
     ## Calculating estimated standard errors for robust methods
     
