@@ -30,7 +30,7 @@
 }
 
 \source{ 
-  Morgan, B. J. T. (1992) \emph{Analysis of Quantal Response Data}, London: Chapman \& Hall/CRC (Table 3.9, p. 117).
+  Morgan, B. J. T. (1992) \emph{Analysis of Quantal Response Data}, London: Chapman & Hall/CRC (Table 3.9, p. 117).
 }
 
 \references{

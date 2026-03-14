@@ -25,8 +25,9 @@ A four-parameter Weibull type 2 model with lag time, where \code{b} is
 fixed at 1. This is a convenience wrapper around \code{\link{weibull2x}}.
 }
 \examples{
+\donttest{
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4())
-
+}
 }
 \seealso{
 \code{\link{weibull2x}}, \code{\link{W2x.3}}, \code{\link{W2.4}}

@@ -119,6 +119,7 @@ cedergreen_edfct <- function(
 #'
 #' @keywords internal
 #'
+#' @importFrom stats optimize
 cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 {
   # Define the dose-response model using named parameters for clarity

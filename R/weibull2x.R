@@ -136,7 +136,9 @@ fctName, fctText)
 #' @seealso \code{\link{weibull2x}}, \code{\link{W2x.4}}, \code{\link{W2.3}}
 #'
 #' @examples
+#' \dontrun{
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.3())
+#' }
 #'
 #' @keywords models nonlinear
 "W2x.3" <-
