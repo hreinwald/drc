@@ -34,5 +34,5 @@ Data were retrieved from PLoS ONE repository.
 Zhu YC, Yao J, Adamczyk J and Luttrell R, Synergistic toxicity and physiological impact of imidacloprid alone and binary mixtures with seven representative pesticides on honey bee (Apis mellifera). PLoS ONE 12: e0176837 (2017). https://doi.org/10.1371/journal.pone.0176837
   }
 
-\examples{}
 \keyword{datasets}
+

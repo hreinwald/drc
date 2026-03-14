@@ -26,8 +26,9 @@ fixed at 1 and \code{c} is fixed at 0. This is a convenience wrapper
 around \code{\link{weibull2x}}.
 }
 \examples{
+\dontrun{
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.3())
-
+}
 }
 \seealso{
 \code{\link{weibull2x}}, \code{\link{W2x.4}}, \code{\link{W2.3}}

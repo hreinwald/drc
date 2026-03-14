@@ -9,6 +9,10 @@ CRS.4a(names = c("b", "c", "d", "e", "f"), fixed = c(NA, 0, NA, NA, NA), ...)
 \arguments{
 \item{names}{a vector of character strings giving the names of the parameters.}
 
+\item{fixed}{a numeric vector specifying which parameters are fixed and at
+what value. \code{NA} indicates a parameter to be estimated. The default
+fixes the lower limit (\code{c}) at 0 and estimates all other parameters.}
+
 \item{...}{additional arguments passed to \code{\link{cedergreen}}.}
 }
 \value{

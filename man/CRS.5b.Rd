@@ -9,6 +9,9 @@ CRS.5b(names = c("b", "c", "d", "e", "f"), fixed = c(NA, NA, NA, NA, NA), ...)
 \arguments{
 \item{names}{a vector of character strings giving the names of the parameters.}
 
+\item{fixed}{a numeric vector specifying which parameters are fixed and at
+what value. \code{NA} indicates a parameter to be estimated.}
+
 \item{...}{additional arguments passed to \code{\link{cedergreen}}.}
 }
 \value{

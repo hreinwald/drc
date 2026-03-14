@@ -26,6 +26,9 @@ Common options include "delta", "tfls", or "buckland".}
 \item{CI_level}{A numeric value between 0 and 1 indicating the confidence
 level for the intervals (e.g., 0.95 for a 95\% CI).}
 
+\item{verbose}{Logical. If \code{TRUE}, additional diagnostic information is
+printed during computation. Default is \code{FALSE}.}
+
 \item{...}{Additional arguments to be passed directly to \code{drc::ED}.}
 }
 \value{

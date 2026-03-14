@@ -9,6 +9,15 @@ ml3c(names = c("b", "c", "d", "e", "f"), fixed = c(NA, 0, NA, NA, NA), ...)
 \description{
 \code{ml3c} is an alias for \code{\link{CRS.4c}}.
 }
+\arguments{
+\item{names}{a vector of character strings giving the names of the parameters.}
+
+\item{fixed}{a numeric vector specifying which parameters are fixed and at
+what value. \code{NA} indicates a parameter to be estimated. The default
+fixes the lower limit (\code{c}) at 0.}
+
+\item{...}{additional arguments passed to \code{\link{cedergreen}}.}
+}
 \seealso{
 \code{\link{CRS.4c}}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
