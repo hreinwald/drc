@@ -192,7 +192,6 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'   
 #' @author Hannes Reinwald
 #'
-#' @export
 #' @examples
 #' \donttest{
 #' # This example requires the 'drc' package to be installed.
@@ -221,7 +220,8 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'   summary(model_fit_fixed)
 #' }
 #'}
-#' 
+#'
+#' @export
 "cedergreen" <- function(
     fixed  = c(NA, NA, NA, NA, NA), 
     names  = c("b", "c", "d", "e", "f"), 
@@ -370,7 +370,6 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #' @return A \code{drc} model object of class \code{cedergreen}. If the underlying 
 #'   \code{drc::cedergreen} call fails, it issues a warning and returns \code{NULL}.
 #'
-#' @export
 #' @examples
 #' \dontrun{
 #' # Assumes the 'drc' package is installed
@@ -386,6 +385,8 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'                          fctName = "MyCRSModel", 
 #'                          fctText = "My custom CRS model (alpha=0.5)")
 #' }
+#' 
+#' @export
 CRS.5 = function(names = c("b", "c", "d", "e", "f"), 
                  fixed = c(NA, NA, NA, NA, NA), 
                  alpha_type = "a", # one of 'a', 'b' or 'c' or a numeric value specifiying alpha
@@ -499,7 +500,6 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
 "CRS.4a" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
@@ -523,12 +523,39 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
 }
 
 
-#' @title Alias for CRS.4a
-#' @description \code{ml3a} is an alias for \code{\link{CRS.4a}}.
-#' @seealso \code{\link{CRS.4a}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#' @title Alias for CRS.4a (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is a deprecated alias for [CRS.4a()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
+#'
+#' @inherit CRS.4a params return
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.4a()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml3a() is a deprecated alias for CRS.4a(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm1 <- drm( lettuce[, c(2, 1)], fct = ml3a() )
+#' summary(lettuce.crsm1)
+#' ED(lettuce.crsm1, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA)) )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
+#' @export
 ml3a <- CRS.4a
 
 
@@ -594,7 +621,6 @@ ml3a <- CRS.4a
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
 "CRS.4b" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
@@ -617,12 +643,39 @@ ml3a <- CRS.4a
   )
 }
 
-#' @title Alias for CRS.4b
-#' @description \code{ml3b} is an alias for \code{\link{CRS.4b}}.
-#' @seealso \code{\link{CRS.4b}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead. 
+#' @title Alias for CRS.4b (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is a deprecated alias for [CRS.4b()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
+#'
+#' @inherit CRS.4b params return
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.4b()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml3b() is a deprecated alias for CRS.4b(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm2 <- drm( lettuce[, c(2, 1)], fct = ml3b() )
+#' summary(lettuce.crsm2)
+#' ED(lettuce.crsm2, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA)) )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
+#' @export
 ml3b <- CRS.4b
 
 
@@ -688,7 +741,6 @@ ml3b <- CRS.4b
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
 "CRS.4c" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
@@ -711,12 +763,39 @@ ml3b <- CRS.4b
   )
 }
 
-#' @title Alias for CRS.4c
-#' @description \code{ml3c} is an alias for \code{\link{CRS.4c}}.
-#' @seealso \code{\link{CRS.4c}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#' @title Alias for CRS.4c (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is a deprecated alias for [CRS.4c()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
+#'
+#' @inherit CRS.4c params return
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.4c()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml3c() is a deprecated alias for CRS.4c(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = ml3c() )
+#' summary(lettuce.crsm3)
+#' ED(lettuce.crsm3, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA)) )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
+#' @export
 ml3c <- CRS.4c
 
 
@@ -783,7 +862,6 @@ ml3c <- CRS.4c
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
 "CRS.5a" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
@@ -806,12 +884,40 @@ ml3c <- CRS.4c
   )
 }
 
-#' @title Alias for CRS.5a
-#' @description \code{ml4a} is an alias for \code{\link{CRS.5a}}.
-#' @seealso \code{\link{CRS.5a}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+
+#' @title Alias for CRS.5a (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is a deprecated alias for [CRS.5a()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
+#'
+#' @inherit CRS.5a params return
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.5a()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml4a() is a deprecated alias for CRS.5a(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m1 <- drm( lettuce[, c(2, 1)], fct = ml4a() )
+#' summary(lettuce.m1)
+#' ED(lettuce.m1, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "a") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
+#' @export
 ml4a <- CRS.5a
 
 
@@ -876,7 +982,6 @@ ml4a <- CRS.5a
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
 "CRS.5b" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
@@ -899,12 +1004,40 @@ ml4a <- CRS.5a
   )
 }
 
-#' @title Alias for CRS.5b
-#' @description \code{ml4b} is an alias for \code{\link{CRS.5b}}.
-#' @seealso \code{\link{CRS.5b}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+
+#' @title Alias for CRS.5b (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is a deprecated alias for [CRS.5b()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
+#'
+#' @inherit CRS.5b params return
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.5b()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml4b() is a deprecated alias for CRS.5b(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m2 <- drm( lettuce[, c(2, 1)], fct = ml4b() )
+#' summary(lettuce.m2)
+#' ED(lettuce.m2, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "b") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
+#' @export
 ml4b <- CRS.5b
 
 
@@ -969,7 +1102,6 @@ ml4b <- CRS.5b
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
 "CRS.5c" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
@@ -992,10 +1124,37 @@ ml4b <- CRS.5b
   )
 }
 
-#' @title Alias for CRS.5c
-#' @description \code{ml4c} is an alias for \code{\link{CRS.5c}}.
-#' @seealso \code{\link{CRS.5c}}
+#' @title Alias for CRS.5c (Deprecated)
+#'
+#' @description
 #' `r lifecycle::badge("deprecated")`
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#'
+#' This function is a deprecated alias for [CRS.5c()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
+#'
+#' @inherit CRS.5c params return
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.5c()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml4c() is a deprecated alias for CRS.5c(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m3 <- drm( lettuce[, c(2, 1)], fct = ml4c() )
+#' summary(lettuce.m3)
+#' ED(lettuce.m3, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
+#' @export
 ml4c <- CRS.5c

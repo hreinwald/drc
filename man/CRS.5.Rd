@@ -73,6 +73,7 @@ crs_model_named <- CRS.5(alpha_type = "b",
                          fctName = "MyCRSModel", 
                          fctText = "My custom CRS model (alpha=0.5)")
 }
+
 }
 \author{
 Hannes Reinwald

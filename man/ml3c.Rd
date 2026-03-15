@@ -2,26 +2,67 @@
 % Please edit documentation in R/cedergreen.R
 \name{ml3c}
 \alias{ml3c}
-\title{Alias for CRS.4c}
+\title{Alias for CRS.4c (Deprecated)}
 \usage{
 ml3c(names = c("b", "c", "d", "e", "f"), fixed = c(NA, 0, NA, NA, NA), ...)
 }
-\description{
-\code{ml3c} is an alias for \code{\link{CRS.4c}}.
-}
 \arguments{
-\item{names}{a vector of character strings giving the names of the parameters.}
+\item{names}{A character vector of length 5 specifying the names of the model
+parameters in the following order:
+\describe{
+\item{\code{b}}{Hill slope (steepness of the dose-response curve).}
+\item{\code{c}}{Lower asymptote (fixed at 0 via the \code{fixed} argument).}
+\item{\code{d}}{Upper asymptote.}
+\item{\code{e}}{Effective dose producing a response midway between \code{c} and \code{d}
+(ED50).}
+\item{\code{f}}{Hormesis parameter controlling the magnitude of the stimulatory
+effect at low doses.}
+}
+Defaults to \code{c("b", "c", "d", "e", "f")}.}
 
-\item{fixed}{a numeric vector specifying which parameters are fixed and at
-what value. \code{NA} indicates a parameter to be estimated. The default
-fixes the lower limit (\code{c}) at 0.}
+\item{fixed}{A numeric vector of length 5 specifying fixed (non-estimated)
+parameter values. Use \code{NA} for parameters that should be estimated freely.
+Defaults to \code{c(NA, 0, NA, NA, NA)}, which fixes the lower asymptote \code{c}
+at 0.}
 
-\item{...}{additional arguments passed to \code{\link{cedergreen}}.}
+\item{...}{Additional arguments passed to \code{\link[=cedergreen]{cedergreen()}}.}
+}
+\value{
+A list of class \code{"drcMean"} as returned by \code{\link[=cedergreen]{cedergreen()}}, containing
+the model definition including the mean function, its gradient, parameter
+names, and fixed values. This object is intended for use as the \code{fct}
+argument in \code{\link[=drm]{drm()}}.
+}
+\description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is a deprecated alias for \code{\link[=CRS.4c]{CRS.4c()}}, itself deprecated as of
+version 3.3.0. Please use \code{\link[=CRS.5]{CRS.5()}} instead, which provides a more general
+and flexible interface.
+}
+\examples{
+# NOTE: ml3c() is a deprecated alias for CRS.4c(). Use CRS.5() instead.
+# The example below is retained for backward compatibility illustration only.
+
+lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = ml3c() )
+summary(lettuce.crsm3)
+ED(lettuce.crsm3, c(50))
+
+# Recommended replacement:
+lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA)) )
+summary(lettuce.crs5)
+ED(lettuce.crs5, c(50))
+
 }
 \seealso{
-\code{\link{CRS.4c}}
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-This function is deprecated as of version 3.3.0. Please use \code{\link[=CRS.5]{CRS.5()}} instead.
+\itemize{
+\item \code{\link[=CRS.5]{CRS.5()}} — the recommended replacement for this deprecated function.
+\item \code{\link[=CRS.4c]{CRS.4c()}} — the function this alias points to.
+\item \code{\link[=cedergreen]{cedergreen()}} — the underlying model constructor.
+}
+}
+\author{
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}
