@@ -190,16 +190,16 @@ cat("NEC.3:", AIC(nec3.fit), "\n")
 cat("NEC.4:", AIC(nec4.fit), "\n")
 
 # Plot all three models together
-plot(nec3.fit, type = "none", log = "",
-     main = "Comparison of NEC Models",
+my_plot = function(mod, col = "black", lwd = 2, pch = 16) {
+  plot(mod, type = "all", 
+     main = mod$fct$name,
+     col = col, lwd = lwd, pch = pch,
      xlab = "Ferulic acid concentration (mM)",
      ylab = "Root length (cm)")
-points(ryegrass$conc, ryegrass$rootl, pch = 16)
-lines(nec2.fit, col = "blue", lwd = 2)
-lines(nec3.fit, col = "red", lwd = 2)
-lines(nec4.fit, col = "green", lwd = 2)
-legend("topright", legend = c("NEC.2", "NEC.3", "NEC.4"),
-       col = c("blue", "red", "green"), lwd = 2)
+}
+my_plot(nec2.fit)
+my_plot(nec3.fit, col = "darkblue", lwd = 2)
+my_plot(nec4.fit, col = "darkred", lwd = 2)
 ```
 
 ## Design Pattern in the drc Package

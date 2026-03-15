@@ -251,8 +251,12 @@ We'll compare the initial LL.4 model with several alternatives:
 ```{r model-selection}
 # Use mselect() to compare multiple models
 # This fits each model and compares using AIC
-model_comparison <- mselect(ryegrass.LL4,
-                            fctList = list(LN.4(), W1.4(), W2.4(), BC.4(), LL.5(), EXD.3()))
+model_comparison <- suppressWarnings(
+ mselect(
+   ryegrass.LL4,
+   fctList = list(LN.4(), W1.4(), W2.4(), BC.4(), LL.5(), EXD.3())
+   )
+ )
 model_comparison
 ```
 
@@ -663,12 +667,14 @@ Is your dose-response curve monotonic?
 
 ```{r comprehensive-comparison}
 # Compare a wide range of monotonic models for ryegrass data
-comprehensive <- mselect(ryegrass.LL4,
+comprehensive <- suppressWarnings(
+   mselect(ryegrass.LL4, nested = TRUE,
                         fctList = list(LL.3(), LL.5(),
                                       W1.3(), W1.4(),
                                       W2.3(), W2.4(),
                                       LN.3(), LN.4(),
-                                      EXD.3()))
+                                      EXD.3())) 
+)
 comprehensive
 ```
 
