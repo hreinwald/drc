@@ -48,7 +48,7 @@ ED(finney71.m1, c(10, 20, 50), interval = "delta", reference = "control")
 #summary(fitl.glm)  # p-value almost agree for the b parameter
 #
 #xp <- dose.p(fitl.glm, p=c(0.50, 0.90, 0.95))  # from MASS
-#xp.ci <- xp + attr(xp, "SE") %*% matrix(qnorm(1 - 0.05/2)*c(-1,1), nrow=1)
+#xp.ci <- xp + attr(xp, "SE") \%*\% matrix(qnorm(1 - 0.05/2)*c(-1,1), nrow=1)
 #zp.est <- exp(cbind(xp.ci[,1],xp,xp.ci[,2]))
 #dimnames(zp.est)[[2]] <- c("zp.lcl","zp","zp.ucl")
 #zp.est  # not far from above results with 'ED'
