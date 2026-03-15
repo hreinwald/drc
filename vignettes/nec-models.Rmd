@@ -330,13 +330,11 @@ The current design:
 When unsure which variant to use, start with NEC.3 (most common) and compare with other variants:
 
 ```{r tips-model-selection, eval=FALSE}
-# Fit multiple models
-m2 <- drm(response ~ dose, data = mydata, fct = NEC.2())
+# Fit an initial model, then compare with alternative NEC variants
 m3 <- drm(response ~ dose, data = mydata, fct = NEC.3())
-m4 <- drm(response ~ dose, data = mydata, fct = NEC.4())
 
-# Compare using model selection
-mselect(m2, m3, m4, list = TRUE)
+# Compare using model selection (mselect takes one fitted model + a list of alternatives)
+mselect(m3, fctList = list(NEC.2(), NEC.4()))
 ```
 
 ### 2. Checking Parameter Identifiability
