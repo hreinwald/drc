@@ -2,29 +2,72 @@
 % Please edit documentation in R/cedergreen.R
 \name{CRS.5b}
 \alias{CRS.5b}
-\title{Cedergreen-Ritz-Streibig five-parameter model (alpha=0.5)}
+\title{Cedergreen-Ritz-Streibig Five-Parameter Model with Alpha = 0.5
+(Deprecated)}
 \usage{
 CRS.5b(names = c("b", "c", "d", "e", "f"), fixed = c(NA, NA, NA, NA, NA), ...)
 }
 \arguments{
-\item{names}{a vector of character strings giving the names of the parameters.}
+\item{names}{A character vector of length 5 specifying the names of the model
+parameters in the following order:
+\describe{
+\item{\code{b}}{Hill slope (steepness of the dose-response curve).}
+\item{\code{c}}{Lower asymptote (freely estimated).}
+\item{\code{d}}{Upper asymptote.}
+\item{\code{e}}{Effective dose producing a response midway between \code{c} and \code{d}
+(ED50).}
+\item{\code{f}}{Hormesis parameter controlling the magnitude of the stimulatory
+effect at low doses.}
+}
+Defaults to \code{c("b", "c", "d", "e", "f")}.}
 
-\item{fixed}{a numeric vector specifying which parameters are fixed and at
-what value. \code{NA} indicates a parameter to be estimated.}
+\item{fixed}{A numeric vector of length 5 specifying fixed (non-estimated)
+parameter values. Use \code{NA} for parameters that should be estimated freely.
+Defaults to \code{c(NA, NA, NA, NA, NA)}, meaning all five parameters are
+freely estimated.}
 
-\item{...}{additional arguments passed to \code{\link{cedergreen}}.}
+\item{...}{Additional arguments passed to \code{\link[=cedergreen]{cedergreen()}}.}
 }
 \value{
-A list (see \code{\link{cedergreen}}).
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-This function is deprecated as of version 3.3.0. Please use \code{\link[=CRS.5]{CRS.5()}} instead.
+A list of class \code{"drcMean"} as returned by \code{\link[=cedergreen]{cedergreen()}}, containing
+the model definition including the mean function, its gradient, parameter
+names, and fixed values. This object is intended for use as the \code{fct}
+argument in \code{\link[=drm]{drm()}}.
 }
 \description{
-Five-parameter CRS hormesis model with alpha=0.5.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is deprecated as of version 3.3.0. Please use \code{\link[=CRS.5]{CRS.5()}} instead,
+which provides a more general and flexible interface.
+
+A five-parameter Cedergreen-Ritz-Streibig (CRS) hormesis model where the alpha
+parameter controlling the steepness of the hormetic component is fixed at 0.5.
+All five parameters \code{b}, \code{c}, \code{d}, \code{e}, and \code{f} are freely estimated.
+}
+\examples{
+# NOTE: CRS.5b() is deprecated. Use CRS.5() instead.
+# The example below is retained for backward compatibility illustration only.
+
+lettuce.m2 <- drm( lettuce[, c(2, 1)], fct = CRS.5b() )
+summary(lettuce.m2)
+ED(lettuce.m2, c(50))
+
+# Recommended replacement:
+lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "b") )
+summary(lettuce.crs5)
+ED(lettuce.crs5, c(50))
+
 }
 \seealso{
-\code{\link{cedergreen}}, \code{\link{CRS.4b}}, \code{\link{CRS.5a}}
+\itemize{
+\item \code{\link[=CRS.5]{CRS.5()}} — the recommended replacement for this deprecated function.
+\item \code{\link[=cedergreen]{cedergreen()}} — the underlying model constructor.
+\item \code{\link[=CRS.4b]{CRS.4b()}} — the four-parameter CRS model with lower limit fixed at 0 and alpha = 0.5.
+\item \code{\link[=CRS.5a]{CRS.5a()}} — the five-parameter CRS model with alpha = 1.
+}
+}
+\author{
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}
