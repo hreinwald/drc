@@ -1,0 +1,40 @@
+url: https://github.com/hreinwald/drc
+
+template:
+  bootstrap: 5
+
+home:
+  links:
+  - text: Report an issue
+    href: https://github.com/hreinwald/drc/issues
+
+reference:
+- title: Core Functions
+  desc: Main functions for dose-response analysis
+  contents:
+  - drm
+  - ED
+  - EDcomp
+  - compParm
+  - mselect
+
+- title: Model Functions
+  desc: Available dose-response model families
+  contents:
+  - starts_with("LL.")
+  - starts_with("W1.")
+  - starts_with("W2.")
+  - starts_with("G.")
+  - starts_with("LN.")
+  - starts_with("BC.")
+  - starts_with("CRS.")
+  - starts_with("UCRS.")
+  - starts_with("NEC.")
+  - starts_with("L.")
+
+- title: Diagnostics and Utilities
+  desc: Model diagnostics and helper functions
+  contents:
+  - modelFit
+  - Rsq
+  - rdrm
