@@ -41,6 +41,17 @@
   \emph{Basic and Applied Ecology}, \bold{8}, 258--268.
 }
 
-%\examples{}
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(RScompetition)
+
+## Plotting biomass as a function of sensitive biotype density
+plot(biomass ~ x, data = RScompetition, xlab = "Density of sensitive biotype",
+ylab = "Biomass (g/plant)")
+}
+}
 
 \keyword{datasets}

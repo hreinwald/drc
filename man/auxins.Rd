@@ -53,6 +53,20 @@
   in Nonlinear Regression with Applications to Bioassay.
   \emph{Biometrics}, \bold{45}, 349--362.
 }
+\examples{
+\dontrun{
+library(drc)
 
+## Displaying the data
+head(auxins)
+
+## Fitting a four-parameter log-logistic model with different curves per herbicide
+auxins.m1 <- drm(dryweight ~ dose, herbicide, data = auxins, fct = LL.4())
+summary(auxins.m1)
+
+## Plotting the fitted curves
+plot(auxins.m1, xlab = "Dose", ylab = "Dry weight")
+}
+}
 
 \keyword{datasets}

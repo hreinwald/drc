@@ -19,4 +19,19 @@
   }
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(ryegrass2)
+
+## Fitting a four-parameter log-logistic model with separate curves per day
+ryegrass2.m1 <- drm(biomass ~ dose, day, data = ryegrass2, fct = LL.4())
+summary(ryegrass2.m1)
+
+## Plotting the fitted curves
+plot(ryegrass2.m1, xlab = "Dose", ylab = "Biomass")
+}
+}
 \keyword{datasets}

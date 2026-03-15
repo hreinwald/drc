@@ -21,4 +21,20 @@
   }
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(arbovirus)
+
+## Fitting a two-parameter log-logistic model for binomial response
+arbovirus.m1 <- drm(dead/total ~ dose, trt, weights = total,
+data = arbovirus, fct = LL.2(), type = "binomial")
+summary(arbovirus.m1)
+
+## Plotting the fitted curves
+plot(arbovirus.m1, xlab = "Dose", ylab = "Proportion dead")
+}
+}
 \keyword{datasets}

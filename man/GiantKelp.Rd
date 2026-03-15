@@ -27,4 +27,19 @@ organisms.
 }
 
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(GiantKelp)
+
+## Fitting a four-parameter log-logistic model
+GiantKelp.m1 <- drm(tubeLength ~ dose, data = GiantKelp, fct = LL.4())
+summary(GiantKelp.m1)
+
+## Plotting the fitted curve
+plot(GiantKelp.m1, xlab = "Copper concentration", ylab = "Tube length (mm)")
+}
+}
 \keyword{datasets}

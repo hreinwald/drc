@@ -18,4 +18,19 @@
     }
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(lemna)
+
+## Fitting a four-parameter log-logistic model
+lemna.m1 <- drm(frond.num ~ conc, data = lemna, fct = LL.4())
+summary(lemna.m1)
+
+## Plotting the fitted curve
+plot(lemna.m1, xlab = "Concentration", ylab = "Frond number")
+}
+}
 \keyword{datasets}

@@ -24,6 +24,20 @@
 Beland, F. A. and Dooley, K. L. and Hansen, E. B. and Sheldon, W. G. (1995). Six-month toxicity comparison of the antituberculosis drugs aconiazide and isoniazid in fischer 344 rats. Journal of the American College of Toxicology, \bold{14(4)}:328--342.
 }
 
+\examples{
+\dontrun{
+library(drc)
 
+## Displaying the data
+head(aconiazide)
+
+## Fitting a four-parameter log-logistic model
+aconiazide.m1 <- drm(weightChange ~ dose, data = aconiazide, fct = LL.4())
+summary(aconiazide.m1)
+
+## Plotting the fitted curve
+plot(aconiazide.m1, xlab = "Dose", ylab = "Weight change (g)")
+}
+}
 
 \keyword{datasets}

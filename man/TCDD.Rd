@@ -33,6 +33,21 @@ Applied Pharmacology, \bold{46(2)}:279--303.
 
 %\references{}
 
+\examples{
+\dontrun{
+library(drc)
 
+## Displaying the data
+head(TCDD)
+
+## Fitting a two-parameter log-logistic model for binomial response
+TCDD.m1 <- drm(incidence/total ~ conc, weights = total,
+data = TCDD, fct = LL.2(), type = "binomial")
+summary(TCDD.m1)
+
+## Plotting the fitted curve
+plot(TCDD.m1, xlab = "Concentration of TCDD (ng/kg)", ylab = "Tumor incidence")
+}
+}
 
 \keyword{datasets}

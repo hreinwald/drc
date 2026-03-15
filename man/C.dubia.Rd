@@ -26,4 +26,19 @@ using generalized linear models. Environmental Toxicology and Chemistry, \bold{1
 }
 
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(C.dubia)
+
+## Fitting a three-parameter log-logistic model
+C.dubia.m1 <- drm(number ~ conc, data = C.dubia, fct = LL.3())
+summary(C.dubia.m1)
+
+## Plotting fitted curve together with the original data
+plot(C.dubia.m1, xlab = "Concentration (\%)", ylab = "Number of offspring")
+}
+}
 \keyword{datasets}

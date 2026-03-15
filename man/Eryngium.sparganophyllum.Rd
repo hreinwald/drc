@@ -28,4 +28,20 @@
 Wolkis, D., Blackwell, S., Kaninaualiʻi Villanueva, S. (2020). Conservation seed physiology of the ciénega endemic, Eryngium sparganophyllum (Apiaceae). Conservation Physiology, 8, coaa017. https://doi.org/10.1093/conphys/coaa017
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(Eryngium.sparganophyllum)
+
+## Fitting an event-time model for germination
+Eryngium.m1 <- drm(Germinated ~ Start + End, data = Eryngium.sparganophyllum,
+fct = LL.3(), type = "event")
+summary(Eryngium.m1)
+
+## Plotting the fitted germination curve
+plot(Eryngium.m1, xlab = "Time (days)", ylab = "Proportion germinated", log = "")
+}
+}
 \keyword{datasets}

@@ -33,6 +33,23 @@ Sprague-Dawley rats (gavage studies). National Toxicology Program technical repo
 
 %\references{}
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(liver.tumor)
+
+## Fitting a two-parameter log-logistic model for binomial response
+liver.tumor.m1 <- drm(incidence/total ~ conc, weights = total,
+data = liver.tumor, fct = LL.2(), type = "binomial")
+summary(liver.tumor.m1)
+
+## Plotting the fitted curve
+plot(liver.tumor.m1, xlab = "Concentration of TCDD (ng/kg)",
+ylab = "Tumor incidence")
+}
+}
 
 
 \keyword{datasets}

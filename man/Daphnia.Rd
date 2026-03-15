@@ -36,5 +36,22 @@ Data were kindly provided by N. Cedergreen.
 Noergaard KB and Cedergreen N, Pesticide cocktails can interact synergistically on aquatic crustaceans. Environ Sci Pollut Res 17: 957-967 (2010). https://doi.org/10.1007/s11356-009-0284-4
   }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(Daphnia)
+
+## Fitting a two-parameter log-logistic model for binomial response
+Daphnia.m1 <- drm(immob48/total ~ dose, weights = total,
+data = Daphnia, fct = LL.2(), type = "binomial")
+summary(Daphnia.m1)
+
+## Plotting the fitted curve
+plot(Daphnia.m1, xlab = "Total dose (mu g/L)", ylab = "Proportion immobile")
+}
+}
+
 \keyword{datasets}
 

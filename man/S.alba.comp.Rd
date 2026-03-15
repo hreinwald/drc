@@ -39,4 +39,20 @@
 }
 
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(S.alba.comp)
+
+## Fitting a four-parameter log-logistic model with common upper and lower limits
+S.alba.comp.m1 <- drm(drymatter ~ dose, herbicide, data = S.alba.comp, fct = LL.4(),
+pmodels = list(~herbicide, ~1, ~1, ~herbicide))
+summary(S.alba.comp.m1)
+
+## Plotting the fitted curves
+plot(S.alba.comp.m1, xlab = "Dose (g/ha)", ylab = "Dry matter (g/pot)")
+}
+}
 \keyword{datasets}

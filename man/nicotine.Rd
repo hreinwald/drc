@@ -19,4 +19,20 @@
   }
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(nicotine)
+
+## Fitting a two-parameter log-logistic model for binomial response
+nicotine.m1 <- drm(num.dead/total ~ conc, weights = total,
+data = nicotine, fct = LL.2(), type = "binomial")
+summary(nicotine.m1)
+
+## Plotting the fitted curve
+plot(nicotine.m1, xlab = "Concentration", ylab = "Proportion dead")
+}
+}
 \keyword{datasets}
