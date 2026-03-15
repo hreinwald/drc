@@ -29,6 +29,7 @@ around \code{\link{weibull2x}}.
 \dontrun{
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.3())
 }
+
 }
 \seealso{
 \code{\link{weibull2x}}, \code{\link{W2x.4}}, \code{\link{W2.3}}
