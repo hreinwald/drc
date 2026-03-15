@@ -67,6 +67,29 @@
 }
 
 ## Defining basic function for providing confidence intervals
+#' Basic Confidence Interval Calculation
+#'
+#' @description
+#' An internal helper function that constructs a confidence interval matrix
+#' from a matrix of estimates and standard errors.
+#'
+#' @param estMat a numeric matrix with two columns: the first column contains
+#'   parameter estimates and the second column contains standard errors.
+#' @param level the confidence level required (e.g., 0.95 for 95\% intervals).
+#' @param intType a character string specifying the type of model. One of
+#'   \code{"binomial"}, \code{"continuous"}, \code{"event"}, \code{"Poisson"},
+#'   \code{"negbin1"}, or \code{"negbin2"}. Determines whether a normal or
+#'   t-distribution quantile is used.
+#' @param dfres the residual degrees of freedom (used when \code{intType} is
+#'   \code{"continuous"}).
+#' @param formatting logical. If \code{TRUE} (default), row and column names are
+#'   added to the returned matrix.
+#'
+#' @return A numeric matrix with two columns giving the lower and upper confidence
+#'   limits for each parameter.
+#'
+#' @keywords internal
+#'
 #' @export
 "confint.basic" <- function(estMat, level, intType, dfres, formatting = TRUE)
 {

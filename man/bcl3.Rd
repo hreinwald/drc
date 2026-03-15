@@ -9,6 +9,14 @@ bcl3(fixed = c(NA, NA, NA, NA), names = c("b", "d", "e", "f"), ...)
 \description{
 \code{bcl3} is an alias for \code{\link{BC.4}}.
 }
+\arguments{
+\item{fixed}{a numeric vector specifying which parameters are fixed and at
+what value. \code{NA} indicates a parameter to be estimated.}
+
+\item{names}{a vector of character strings giving the names of the parameters.}
+
+\item{...}{additional arguments passed to \code{\link{braincousens}}.}
+}
 \seealso{
 \code{\link{BC.4}}
 }

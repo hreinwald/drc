@@ -1,3 +1,4 @@
+#' @importFrom stats dnbinom
 "drmEMnegbin" <- 
 function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1, dist.type = 1)
 {

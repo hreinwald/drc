@@ -29,7 +29,7 @@
   Meister, R. and van den Brink, P. (2000)
   \emph{The Analysis of Laboratory Toxicity Experiments},  
   Chapter 4 in \emph{Statistics in Ecotoxicology}, Editor: T. Sparks, 
-  New York: John Wiley \& Sons, (pp. 114--116). 
+  New York: John Wiley & Sons, (pp. 114--116). 
 }
 
 %\references{}

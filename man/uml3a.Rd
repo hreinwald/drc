@@ -9,6 +9,11 @@ uml3a(names = c("b", "d", "e", "f"), ...)
 \description{
 \code{uml3a} is an alias for \code{\link{UCRS.4a}}.
 }
+\arguments{
+\item{names}{a vector of character strings giving the names of the parameters.}
+
+\item{...}{additional arguments passed to \code{\link{ucedergreen}}.}
+}
 \seealso{
 \code{\link{UCRS.4a}}
 }
