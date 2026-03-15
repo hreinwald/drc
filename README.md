@@ -93,6 +93,18 @@ EDcomp(model_multi, percVec = c(50), interval = "delta")
 mselect(model, fctList = list(W1.4(), W2.4(), LL.3()))
 ```
 
+## Vignettes
+
+The package includes detailed vignettes to help you understand specific topics:
+
+``` r
+# View available vignettes
+vignette(package = "drc")
+
+# Access the NEC models vignette
+vignette("nec-models", package = "drc")
+```
+
 ## Available Models
 
 | Function  | Description                                     |
