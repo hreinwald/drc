@@ -36,5 +36,5 @@ Data were kindly provided by N. Cedergreen.
 Noergaard KB and Cedergreen N, Pesticide cocktails can interact synergistically on aquatic crustaceans. Environ Sci Pollut Res 17: 957-967 (2010). https://doi.org/10.1007/s11356-009-0284-4
   }
 
-\examples{}
 \keyword{datasets}
+
