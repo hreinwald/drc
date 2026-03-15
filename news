@@ -1,22 +1,118 @@
 ## Changes in 'drc' 
 
-2026-03-11: Fixed mselect() to always compute Lack of fit p-values for all models, not only when nested=TRUE. Fixed a bug in anova.drclist where negative or non-finite F statistics produced NaN p-values; negative F statistics now return p-value of 1 and non-finite F statistics return NA. Added comprehensive anova tests.
+2026-03-15: Created comprehensive vignettes: dose-response-workflow.Rmd providing a complete tutorial
+on dose-response analysis, and nec-models.Rmd documenting No Effect Concentration modeling with
+NEC.2/NEC.3/NEC.4 function variants. Added vignette access information to README. Fixed vignette build
+by removing vignettes from .Rbuildignore and correcting incorrect mselect() usage in examples.
 
-2026-03-11: Added Hannes Reinwald as author in the DESCRIPTION file. Updated README with revised installation instructions and bug report link.
+2026-03-15: Completed comprehensive roxygen2 documentation audit: added missing @param tags, removed
+dontrun/donttest wrappers to enable automated example testing, and fixed broken examples across
+documentation files. Fixed Rd comment warning by escaping the %*% operator in documentation.
 
-2026-03-10: Added drm_legacy() as an internal reference function preserving the original drm() implementation. Added testthat infrastructure with tests verifying drm() output matches drm_legacy() output across continuous, binomial, Poisson, and negative binomial data types.
+2026-03-15: Enhanced dataset documentation: improved descriptions and fixed typos in dataset .Rd files,
+added examples sections to dataset .Rd files that were missing them.
 
-2026-03-10: Migrated all package documentation to roxygen2-generated Rd files. Regenerated NAMESPACE via roxygen2. Added @exportS3Method tags to S3 methods in confint.drc.R and mrdrm.r. Fixed escaped percent signs in roxygen docs causing Rd parse warnings. Updated package version format from 3.3-0 to 3.3.0. Lowered the minimum R version requirement to 4.0.0.
+2026-03-15: Set up pkgdown website infrastructure: added _pkgdown.yml with Bootstrap 5 configuration,
+created build_pkgdown.R script for build automation, documented pkgdown build process in README,
+and generated pkgdown documentation site.
 
-2026-03-09: Refactored the Cedergreen-Ritz-Streibig hormesis model: extracted edfct and maxfct into standalone helper functions (cedergreen_edfct, cedergreen_maxfct), refactored the self-starter function, and improved documentation. Added new CRS.5 wrapper function and CRS.6 six-parameter model where the alpha exponent is estimated rather than fixed. Deprecated old CRS function names (CRS.4a, CRS.4b, CRS.4c, CRS.5a, CRS.5b, CRS.5c) with lifecycle notices in favor of new wrappers.
+2026-03-15: Improved confint.drc robustness: added stop() fallback to switch() in confint.basic() to
+handle unknown intType values gracefully instead of returning silent NULL. Removed @export from
+confint.basic() as internal helpers should not be part of the public API. Enhanced roxygen2
+documentation for CRS.5, convenience functions, and ED_robust with improved argument descriptions.
 
-2026-03-07: Cleaned up drm() function by removing approximately 900 lines of commented-out dead code, debug print statements, and old experimental implementations. Fixed a bug where the stop() call for using separate curves with control measurements was inside the if(!noMessage) block, meaning it would be silently skipped when messages were suppressed. Removed unused variable 'isfi' and redundant variable 'lenData' (identical to 'numObs'). Removed a dead loop over pmodelsList2 that could never execute.
+2026-03-15: Updated DESCRIPTION: added Hannes Reinwald as maintainer and co-author, updated package
+version to 3.3.0.01.
 
-2026-03-07: Added roxygen2 documentation headers to all R source files across the package. Fixed typos in source code and manual pages: 'insted' corrected to 'instead' in gaussian.r and lgaussian.R, duplicate parameter name 'e1' corrected to 'e2' in ursa.r, 'contain' corrected to 'contents' in EDcomp.R, 'mising' corrected to 'missing' and 'reponses' corrected to 'responses' in drm.Rd, and 'reponse' corrected to 'response' in CRS.5a.Rd.
+2026-03-14: Fixed all devtools::check() errors and warnings: added roxygen2 @keywords and lifecycle
+deprecation notices for deprecated CRS functions, expanded dataset documentation files with examples,
+added missing dataset aliases, and fixed Weibull model documentation.
 
-2026-03-06: Updated DESCRIPTION file: added Encoding field (UTF-8), fixed Authors@R to use proper person() format, removed deprecated Maintainer and LazyLoad fields, added missing Imports (graphics, utils), and updated URLs from HTTP to HTTPS.
+2026-03-13: Removed external drcData package dependency. Example datasets are now bundled directly in
+the package data/ directory. Added .Rd documentation files for all bundled datasets.
 
-2026-03-06: Comprehensive repository cleanup and code quality improvements. Removed obsolete configuration files (.travis.yml, drc.Rproj, _pkgdown.yml, README.Rmd) and redundant reference files (_gitignore, _Rbuildignore). Removed the /tests directory containing outdated development artifacts with no testing value. Updated .gitignore and .Rbuildignore with standard R/RStudio settings. Rewrote README.md with comprehensive documentation including quick-start examples, available models, key functions, and supported data types. Removed debug print() statements in drmEMstandard.R and findbe.r. Removed dead code block (commented-out experimental code wrapped in if (FALSE)) in drmEMstandard.R and llogistic.ssf.R. Fixed a bug in noEffect.R where the Poisson null model incorrectly referenced 'resp' instead of using the response vector from the fitted object. Replaced unsafe eval(parse(text=...)) calls with match.fun() and do.call() in rdrm.r. Improved options() handling in searchdrc.R by saving and restoring the original warn setting using on.exit(add=TRUE).
+2026-03-13: Fixed multiple source code bugs: fixed division-by-zero in Rsq() and absToRel(), removed
+dead scaleEst() stub function, fixed inherits() bug in mselect.R, added edge case handling in
+modelFit.R, added input validation for comped() and compParm(). Fixed 5 additional source bugs:
+unsafe global state modification via options(warn), incorrect compParm od/pool handling, and residuals
+division by zero.
+
+2026-03-13: Fixed NaN warning in summary.drc for robust median estimation. Improved predict.drc and
+vcov.drc to resolve 23 test failures. Renamed internal variables for clarity: ndRows to nRows in
+predict.drc, posIdx to validVar in summary.drc.
+
+2026-03-12: Added comprehensive test suite with tests covering ED calculations, predictions, plotting,
+residuals, model selection, and utility functions. Added test coverage documentation.
+
+2026-03-12: Renamed all 33 R source files from lowercase .r to uppercase .R extensions for
+consistency. Updated all .Rd documentation files to reference the new file names. Fixed duplicate
+aliases and unstated dependencies in examples.
+
+2026-03-12: Fixed package dependency warnings: added data.table and dplyr to Imports, updated
+NAMESPACE with required imports. Fixed S3 method consistency issues and changed confint.basic
+roxygen tag from @exportS3Method to @export. Fixed escaped LaTeX special characters in roxygen2
+documentation and Rd files.
+
+2026-03-12: Enhanced package startup message with citations and developer credits. Added drm_name()
+helper function to ED_robust.R. Added GNU General Public License version 2 file and updated license
+version from GPL-2 to GPL-2.0 in DESCRIPTION.
+
+2026-03-11: Added robust estimation methods in new ED_robust.R module: ED_robust() for calculating ED
+values using robust median-based estimation, maED_robust() for model-averaged robust ED estimation,
+and get_ed_interval() for recommending appropriate confidence interval methods based on model type.
+Removed deprecated developmental cedergreen2 function.
+
+2026-03-11: Fixed mselect() to always compute Lack of fit p-values for all models, not only when
+nested=TRUE. Fixed a bug in anova.drclist where negative or non-finite F statistics produced NaN
+p-values; negative F statistics now return p-value of 1 and non-finite F statistics return NA. Added
+comprehensive anova tests.
+
+2026-03-11: Added Hannes Reinwald as author in the DESCRIPTION file. Updated README with revised
+installation instructions and bug report link.
+
+2026-03-10: Added drm_legacy() as an internal reference function preserving the original drm()
+implementation. Added testthat infrastructure with tests verifying drm() output matches drm_legacy()
+output across continuous, binomial, Poisson, and negative binomial data types.
+
+2026-03-10: Migrated all package documentation to roxygen2-generated Rd files. Regenerated NAMESPACE
+via roxygen2. Added @exportS3Method tags to S3 methods in confint.drc.R and mrdrm.r. Fixed escaped
+percent signs in roxygen docs causing Rd parse warnings. Updated package version format from 3.3-0
+to 3.3.0. Lowered the minimum R version requirement to 4.0.0.
+
+2026-03-09: Refactored the Cedergreen-Ritz-Streibig hormesis model: extracted edfct and maxfct into
+standalone helper functions (cedergreen_edfct, cedergreen_maxfct), refactored the self-starter
+function, and improved documentation. Added new CRS.5 wrapper function and CRS.6 six-parameter model
+where the alpha exponent is estimated rather than fixed. Deprecated old CRS function names (CRS.4a,
+CRS.4b, CRS.4c, CRS.5a, CRS.5b, CRS.5c) with lifecycle notices in favor of new wrappers.
+
+2026-03-07: Cleaned up drm() function by removing approximately 900 lines of commented-out dead code,
+debug print statements, and old experimental implementations. Fixed a bug where the stop() call for
+using separate curves with control measurements was inside the if(!noMessage) block, meaning it would
+be silently skipped when messages were suppressed. Removed unused variable 'isfi' and redundant
+variable 'lenData' (identical to 'numObs'). Removed a dead loop over pmodelsList2 that could never
+execute.
+
+2026-03-07: Added roxygen2 documentation headers to all R source files across the package. Fixed typos
+in source code and manual pages: 'insted' corrected to 'instead' in gaussian.r and lgaussian.R,
+duplicate parameter name 'e1' corrected to 'e2' in ursa.r, 'contain' corrected to 'contents' in
+EDcomp.R, 'mising' corrected to 'missing' and 'reponses' corrected to 'responses' in drm.Rd, and
+'reponse' corrected to 'response' in CRS.5a.Rd.
+
+2026-03-06: Updated DESCRIPTION file: added Encoding field (UTF-8), fixed Authors@R to use proper
+person() format, removed deprecated Maintainer and LazyLoad fields, added missing Imports (graphics,
+utils), and updated URLs from HTTP to HTTPS.
+
+2026-03-06: Comprehensive repository cleanup and code quality improvements. Removed obsolete
+configuration files (.travis.yml, drc.Rproj, _pkgdown.yml, README.Rmd) and redundant reference files
+(_gitignore, _Rbuildignore). Removed the /tests directory containing outdated development artifacts
+with no testing value. Updated .gitignore and .Rbuildignore with standard R/RStudio settings. Rewrote
+README.md with comprehensive documentation including quick-start examples, available models, key
+functions, and supported data types. Removed debug print() statements in drmEMstandard.R and findbe.r.
+Removed dead code block (commented-out experimental code wrapped in if (FALSE)) in drmEMstandard.R and
+llogistic.ssf.R. Fixed a bug in noEffect.R where the Poisson null model incorrectly referenced 'resp'
+instead of using the response vector from the fitted object. Replaced unsafe eval(parse(text=...))
+calls with match.fun() and do.call() in rdrm.r. Improved options() handling in searchdrc.R by saving
+and restoring the original warn setting using on.exit(add=TRUE).
 
 2017-12-19: Updating the event-time part of "drc", in particular in drm() (improved code provided by Andrea Onofri).
 
@@ -182,12 +278,15 @@ noEffect() function included for testing the dose-response model against a simpl
 
 2011-09-02: Constrained estimation uses the actual limits provided (bug report by Andrew Kniss).
 
-2011-08-31: The functions genLoewe(), genLoewe2(), genBliss(), genBliss2(), and ursa() have been improved w.r.t. starting values. The model specification has also been simplified.
+2011-08-31: The functions genLoewe(), genLoewe2(), genBliss(), genBliss2(), and ursa() have been improved
+w.r.t. starting values. The model specification has also been simplified.
 
 2011-08-24: genBliss() and genBliss2() has been updated (after suggestions from Hugo Ceulemans). Functions iceLoewe1() and iceLoewe2.1() have
 benn added.
 
-2011-08-23: Error in ED calculation for the logistic models (e.g., L.4()) has been fixed (after a report from Daniel Gerhard). The error was caused by an update of the function deltaMethod() in alr3 has been fixed.
+2011-08-23: Error in ED calculation for the logistic models (e.g., L.4()) has been fixed (after a report
+from Daniel Gerhard). The error was caused by an update of the function deltaMethod() in alr3 has been
+fixed.
 
 2011-07-04: Small changes for the anova method. Adding df for event time and Poisson models.
 
@@ -224,7 +323,9 @@ the isoboles (after a report from Andreas Betz).
 
 2010-12-10: The model genursa() for fitting the generalized URSA model has been included (after an idea by Hugo Ceulemans).
 
-2010-12-09: The model function genBliss(), genBliss2(), and genLoewe2() for fitting generalized Bliss independence and Loewe additivity with different maxima has been included (after an idea by Hugo Ceulemans). 
+2010-12-09: The model function genBliss(), genBliss2(), and genLoewe2() for fitting generalized Bliss
+independence and Loewe additivity with different maxima has been included (after an idea by Hugo
+Ceulemans). 
 
 2010-11-23: The model function genLoewe() for fitting generalized Loewe additivity has been included (after an idea by Hugo Ceulemans). 
 
@@ -248,7 +349,9 @@ the isoboles (after a report from Andreas Betz).
 
 2010-06-02: ED values are now correct for cedergreen() models (after a bug report by Claire Della Vedova). 
 
-2010-05-31: Small bug in plot.drc() related to "xt" and "xtlab" arguments has been fixed (after a comment by Anja Coors). A small bug in comped() has also been fixed (after a question from Jochen Zubrod). 
+2010-05-31: Small bug in plot.drc() related to "xt" and "xtlab" arguments has been fixed (after a
+comment by Anja Coors). A small bug in comped() has also been fixed (after a question from Jochen
+Zubrod). 
 
 2010-05-06: The argument "clevel" has been added to ED(). The function maED() has been extended and now also handles model fits 
 involving several curves (after a suggestion from Andre Kleensang). 
