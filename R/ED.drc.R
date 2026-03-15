@@ -103,14 +103,12 @@ ED <- function (object, ...) UseMethod("ED", object)
     parmMat <- object[["parmMat"]]
 
     curveNames <- colnames(parmMat)  # colnames(object$"parmMat")
-    options(warn = -1)  # switching off warnings caused by coercion in the if statement
-    if (any(is.na(as.numeric(curveNames))))
+    if (any(suppressWarnings(is.na(as.numeric(curveNames)))))
     {
         curveOrder <- order(curveNames)
     } else { # if names are numbers then skip re-ordering
         curveOrder <- 1:length(curveNames)
     }
-    options(warn = 0)  # normalizing behaviour of warnings
     
     strParm0 <- curveNames[curveOrder]
     indexMat <- indexMat[, curveOrder, drop = FALSE]

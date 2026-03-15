@@ -13,7 +13,9 @@ Useful links:
 \itemize{
   \item \url{https://www.r-project.org}
   \item \url{https://www.bioassay.dk}
-  \item Report bugs at \url{https://github.com/DoseResponse/drc/issues/}
+  \item \url{https://github.com/hreinwald/drc}
+  \item \url{https://cran.r-project.org/web/packages/drc/index.html}
+  \item Report bugs at \url{https://github.com/hreinwald/drc/issues/}
 }
 
 }

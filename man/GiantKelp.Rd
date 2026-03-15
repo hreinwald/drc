@@ -1,0 +1,43 @@
+\name{GiantKelp}
+
+\alias{GiantKelp}
+
+\docType{data}
+
+\title{Measurements of germination tubes for Giant Kelp}
+
+\description{
+   Giant kelp, \emph{Macrocystis pyrifera}, was exposed to 8 different concentrations of copper and the response measured was the length of the germination tube.
+}
+
+\usage{data(GiantKelp)}
+
+\format{
+  A data frame with 39 observations of the following 2 variables.
+  \describe{
+    \item{\code{dose}}{a numeric vector}
+    \item{\code{tubeLength}}{a numeric vector giving the length of the germination tube (mm)}
+    }
+}
+
+\source{
+G. A. Chapman, D. L. Denton, and J. M. Lazorchak (1995). Short-term methods for estimating
+the chronic toxicity of effluents and receiving waters to west coast marine and estuarine
+organisms. 
+}
+
+
+\examples{
+library(drc)
+
+## Displaying the data
+head(GiantKelp)
+
+## Fitting a four-parameter log-logistic model
+GiantKelp.m1 <- drm(tubeLength ~ dose, data = GiantKelp, fct = LL.4())
+summary(GiantKelp.m1)
+
+## Plotting the fitted curve
+plot(GiantKelp.m1, xlab = "Copper concentration", ylab = "Tube length (mm)")
+}
+\keyword{datasets}

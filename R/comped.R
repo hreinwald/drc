@@ -29,6 +29,21 @@
 "comped" <- function(est, se, log = TRUE, interval = TRUE, operator = c("-", "/"), level = 0.95, df = NULL)
 {
     operator <- match.arg(operator)
+
+    ## Input validation
+    if (!is.numeric(est) || length(est) != 2) {
+        stop("'est' must be a numeric vector of length 2")
+    }
+    if (!is.numeric(se) || length(se) != 2) {
+        stop("'se' must be a numeric vector of length 2")
+    }
+    if (any(se < 0, na.rm = TRUE)) {
+        stop("'se' must contain non-negative values")
+    }
+    if (!is.numeric(level) || length(level) != 1 || level <= 0 || level >= 1) {
+        stop("'level' must be a single numeric value between 0 and 1")
+    }
+
     if (identical(operator, "-")) 
     {
         opText <- "difference"

@@ -36,9 +36,17 @@
 "compParm" <-
 function(object, strVal, operator = "/", vcov. = vcov, od = FALSE, pool = TRUE, display = TRUE)
 {
+    ## Input validation
+    if (!is.character(strVal) || length(strVal) != 1) {
+        stop("'strVal' must be a single character string")
+    }
+    if (!identical(operator, "/") && !identical(operator, "-")) {
+        stop("'operator' must be either '/' or '-'")
+    }
+
 #    if (inherits(object, "mixdrc")) {sep <- ".{1}"} else {sep <- ":{1}"}
     sep <- ":{1}"
-    presentVec <- grep(paste("^", strVal, sep, sep = ""), object$"parNames"[[1]])  # strParm)           
+    presentVec <- grep(paste("^", strVal, sep, sep = ""), object$"parNames"[[1]])  # strParm)
 
     lenPV <- length(presentVec)
     if (lenPV < 2) 
@@ -57,7 +65,11 @@ function(object, strVal, operator = "/", vcov. = vcov, od = FALSE, pool = TRUE, 
 #        varMat <- vcov(object, od = od, pool = pool)
 #    }
     parm <- as.vector(coef(object))
-    varMat <- vcov.(object)
+    if (identical(vcov., vcov)) {
+        varMat <- vcov.(object, od = od, pool = pool)
+    } else {
+        varMat <- vcov.(object)
+    }
     
     ## Defining comparison function and its derivative
     if (identical(operator, "/"))

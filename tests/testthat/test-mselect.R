@@ -111,3 +111,36 @@ test_that("mselect with nested = TRUE returns Nested F test column", {
   result <- mselect(m1, fctList = fctList, nested = TRUE)
   expect_true("Nested F test" %in% colnames(result))
 })
+
+test_that("mselect Res var column contains numeric values, not try-error objects", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  fctList <- list(LL.3(), W1.4())
+
+  result <- mselect(m1, fctList = fctList, nested = FALSE)
+
+  # The "Res var" column should contain numeric values, never try-error objects
+  # This tests the fix for inherits("tryRV", "try-error") bug where the string
+  # literal was checked instead of the variable
+  resvar_col <- result[, "Res var"]
+  expect_true(is.numeric(resvar_col),
+    info = "Res var column should be numeric")
+  expect_true(all(resvar_col > 0, na.rm = TRUE),
+    info = "Res var values should be positive for continuous data")
+})
+
+test_that("modelFit does not produce NaN p-values", {
+  # Test that modelFit returns valid p-values even in edge cases
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  result <- modelFit(m1)
+  pval <- result[2, 5]
+
+  # p-value should not be NaN
+  expect_true(!is.nan(pval),
+    info = "modelFit p-value should not be NaN")
+  # p-value should be between 0 and 1 (or NA)
+  if (!is.na(pval)) {
+    expect_true(pval >= 0 && pval <= 1,
+      info = "modelFit p-value should be between 0 and 1")
+  }
+})

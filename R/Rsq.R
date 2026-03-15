@@ -24,14 +24,18 @@
     totnum <- sum(residuals(object)^2)
     totden <- sum((response - mean(response))^2)
 
+    ## Handle zero denominator (constant response) to avoid NaN
+    rsqVals <- ifelse(denominator == 0, NA_real_, 1 - numerator / denominator)
+    totRsq <- ifelse(totden == 0, NA_real_, 1 - totnum / totden)
+
     if (lenUC==1)
     {
         hText <- "\nR-square value\n"
-        rsq <- matrix(c(1 - numerator/denominator), 1, 1)
+        rsq <- matrix(rsqVals, 1, 1)
         rownames(rsq) <- "" 
     } else {
         hText <- "\nR-square values\n"
-        rsq <- matrix(c(1 - numerator/denominator, 1-totnum/totden), lenUC+1, 1)
+        rsq <- matrix(c(rsqVals, totRsq), lenUC+1, 1)
         rownames(rsq) <- c(as.character(uniCurve), "Total") 
     }
     colnames(rsq) <- ""

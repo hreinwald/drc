@@ -1,21 +1,24 @@
 Package: drc
-Version: 3.3.0
+Version: 3.3.0.01
 Date: 2026-03-09
 Title: Analysis of Dose-Response Data
 Authors@R: c(person("Christian", "Ritz", role = c("aut", "cre"), email = "ritz@bioassay.dk"),
              person(c("Jens", "C."), "Streibig", email = "streibig@bioassay.dk", role = "aut"),
-             person("Hannes", "Reinwald", email = "hannes.reinwald@bayer.com", role = "aut"))
-Depends: R (>= 4.0.0), MASS, stats, drcData
+             person("Hannes", "Reinwald", email = "hannes.reinwald@bayer.com", role = c("aut")))
+Depends: R (>= 4.0.0), MASS, stats
 Imports: car, data.table, dplyr, graphics, gtools, multcomp, plotrix, sandwich, scales, utils, lifecycle
 Encoding: UTF-8
 LazyData: yes
 Description: Analysis of dose-response data is made available through a suite of
     flexible and versatile model fitting and after-fitting functions.
-License: GPL-2
-URL: https://www.r-project.org, https://www.bioassay.dk
+License: GPL-2 | file LICENSE
+URL: https://www.r-project.org, https://www.bioassay.dk, https://github.com/hreinwald/drc, https://cran.r-project.org/web/packages/drc/index.html
 RoxygenNote: 7.3.3
-BugReports: https://github.com/DoseResponse/drc/issues/
+BugReports: https://github.com/hreinwald/drc/issues/
 Roxygen: list(markdown = TRUE)
-Suggests: 
-    testthat (>= 3.0.0)
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 Config/testthat/edition: 3

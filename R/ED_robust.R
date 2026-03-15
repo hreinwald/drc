@@ -22,33 +22,10 @@
 #' @keywords internal
 #' 
 #' @examples
-#' \dontrun{
-#' # Assuming 'ryegrass_model' is a drc object created with LL.4()
-#' # library(drc)
-#' # ryegrass_model <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
-#'
-#' # 1. Pass the model object directly
-#' get_ed_interval(ryegrass_model)
-#' #> [1] "tfls"
-#'
-#' # 2. Pass the model name as a string
-#' get_ed_interval("LL.4")
-#' #> [1] "tfls"
-#'
-#' # 3. Example with a Weibull model
-#' get_ed_interval("W1.4")
-#' #> [1] "delta"
-#'
-#' # 4. Example with a large sample size assumption
-#' get_ed_interval(ryegrass_model, small_n = FALSE)
-#' #> [1] "fls"
-#'
-#' # 5. Example of a model that falls through to the default
-#' #    (e.g., a hypothetical linear model 'LIN.1')
-#' get_ed_interval("LIN.1")
-#' #> Defaulting to 'tfls' for model type: LIN.1
-#' #> [1] "tfls"
-#' }
+#' ryegrass_model <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#' drc:::get_ed_interval(ryegrass_model)
+#' drc:::get_ed_interval("LL.4")
+#' drc:::get_ed_interval("W1.4")
 #'
 get_ed_interval <- function(
     model,
@@ -120,6 +97,9 @@ drm_name = function(mod){
 #'   Common options include "delta", "tfls", or "buckland".
 #' @param CI_level A numeric value between 0 and 1 indicating the confidence 
 #'   level for the intervals (e.g., 0.95 for a 95% CI).
+#' @param verbose A logical value. If `TRUE`, the function will print status 
+#'   messages about the calculation progress and any errors encountered for each 
+#'   response level. Default is `FALSE`.
 #' @param ... Additional arguments to be passed directly to `drc::ED`.
 #'
 #' @return 
@@ -133,31 +113,9 @@ drm_name = function(mod){
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' # Load necessary packages for the example
-#' library(drc)
-#' library(dplyr)
-#' library(data.table)
-#'
-#' # Use a dataset with hormesis where some ED levels are not reachable
 #' data(lettuce)
-#'
-#' # Run a hormesis model (4-parameter log-logistic with a non-zero lower asymptote)
-#' m = drm(weight~conc, data = lettuce, fct = BC.4())
-#'
-#' # create plot header
-#' p = modelFit(m)$`p value`[2] %>% round(.,4)
-#' aic = AIC(m) %>% round(.,2)
-#' plot_title = paste0(m$fct$name, " (LoF p = ", p, ", AIC = ", aic, ")")
-#'
-#' # plot data
-#' plot(m, type = "all", main = plot_title)
-#'
-#' # Get the EC values robustly, including levels that may not be estimable
-#' ED_robust(m, respLev = c(10, 50, 98), CI_level = 0.95)
-#'
-#' # Expected output will show calculations for ED10 and ED50, and a row of NAs for ED98.
-#' }
+#' m <- drm(weight ~ conc, data = lettuce, fct = BC.4())
+#' ED_robust(m, respLev = c(10, 50), CI_level = 0.95)
 #'
 ED_robust <- function(mod, respLev = c(10, 20, 50), 
                       interval = get_ed_interval(mod$fct$name, small_n = TRUE), 
@@ -284,56 +242,10 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
 #' @importFrom data.table rbindlist
 #'
 #' @examples
-#' \dontrun{
-#' # Load necessary packages
-#' library(drc)
-#' library(dplyr)
-#' library(data.table)
-#' 
-#' # Use a sample dataset from the drc package
-#' data(spinach)
-#' base_model <- drm(SLOPE ~ DOSE, data = spinach, fct = LL.4())
-#' 
-#' # 1. Fit a base model (e.g., four-parameter log-logistic)
-#' # Use a dataset with hormesis where some ED levels might not be reachable
 #' data(lettuce)
-#' #' Run a hormesis model (4-parameter log-logistic with a non-zero lower asymptote)
-#' base_model = drm(weight~conc, data = lettuce, fct = BC.5())
-#' plot(base_model, type = "all", main = base_model$fct$name)
-#' 
-#' # 2. Define a named list of alternative models for averaging
-#' model_list <- list(LL.4(), W1.4(), W2.4(), CRS.4c())
-#' names(model_list) <- c("LL.4", "W1.4", "W2.4", "CRS.5c")
-#' 
-#' # 3. Inspect the model comparison
-#' model_comparison = mselect(base_model, model_list, nested = TRUE)
-#' head(model_comparison)
-#' 
-#' # 3. Calculate model-averaged ED values for multiple response levels
-#' # This includes a level (EC99) that might be difficult to estimate.
-#' model_names = c("W2.4", "CRS.5c")
-#' ma_eds <- maED_robust(base_model, 
-#'                       fct_ls = model_list[model_names], 
-#'                       respLev = c(10, 50, 99),
-#'                       verbose = TRUE)
-#' # Print the results
-#' # Note how EC99 results in NAs without stopping the calculation for EC10/EC50.
-#' print(ma_eds)
-#' 
-#' # Plot model average EC50 value 
-#' ec50 = ma_eds[ma_eds$EC == 50,"Estimate"]
-#' plot(base_model, type = "all", main = base_model$fct$name)
-#' abline(v = ec50, col = "darkred", lty = 2, lwd = 2)
-#' 
-#' # Example with a different confidence level and more models
-#' # Note how the previous error disappears when using differen EC intervals.
-#' ma_eds_90ci <- maED_robust(base_model, 
-#'                            fct_ls = model_list, 
-#'                            respLev = c(10, 20, 50),
-#'                            verbose = TRUE,
-#'                            CI_level = 0.90)
-#' print(ma_eds_90ci)
-#' }
+#' base_model <- drm(weight ~ conc, data = lettuce, fct = BC.5())
+#' model_list <- list(W2.4 = W2.4())
+#' maED_robust(base_model, fct_ls = model_list, respLev = c(10, 50))
 #' 
 maED_robust <- function(mod, fct_ls = NULL, respLev = c(10, 20, 50), 
                         interval = "buckland", 

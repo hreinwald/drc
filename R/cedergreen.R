@@ -119,6 +119,7 @@ cedergreen_edfct <- function(
 #'
 #' @keywords internal
 #'
+#' @importFrom stats optimize
 cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 {
   # Define the dose-response model using named parameters for clarity
@@ -191,36 +192,15 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'   
 #' @author Hannes Reinwald
 #'
-#' @export
 #' @examples
-#' \donttest{
-#' # This example requires the 'drc' package to be installed.
-#' if (requireNamespace("drc", quietly = TRUE)) {
-#' 
-#'   library(drc)
-#' 
-#'   # Sample data exhibiting a hormetic effect (initial stimulation)
-#'   dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
-#'   response <- c(100, 102, 95, 80, 40, 25, 20)
-#'   my_data <- data.frame(dose = dose, response = response)
-#' 
-#'   # 1. Basic model fit, specifying the mandatory 'alpha' parameter
-#'   # The self-starter will find initial values for all 5 parameters.
-#'   model_fit <- drm(response ~ dose, data = my_data,
-#'                    fct = cedergreen(alpha = 0.5))
-#'   
-#'   summary(model_fit)
-#'   plot(model_fit, main = "Cedergreen Model Fit")
-#' 
-#'   # 2. Model fit with a fixed lower limit (c = 20)
-#'   # The self-starter will now only find initial values for b, d, e, and f.
-#'   model_fit_fixed <- drm(response ~ dose, data = my_data,
-#'                          fct = cedergreen(alpha = 0.5, fixed = c(NA, 20, NA, NA, NA)))
-#'         
-#'   summary(model_fit_fixed)
-#' }
-#'}
-#' 
+#' dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
+#' response <- c(100, 102, 95, 80, 40, 25, 20)
+#' my_data <- data.frame(dose = dose, response = response)
+#' model_fit <- drm(response ~ dose, data = my_data,
+#'                  fct = cedergreen(alpha = 0.5))
+#' summary(model_fit)
+#'
+#' @export
 "cedergreen" <- function(
     fixed  = c(NA, NA, NA, NA, NA), 
     names  = c("b", "c", "d", "e", "f"), 
@@ -369,22 +349,16 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #' @return A \code{drc} model object of class \code{cedergreen}. If the underlying 
 #'   \code{drc::cedergreen} call fails, it issues a warning and returns \code{NULL}.
 #'
-#' @export
 #' @examples
-#' \dontrun{
-#' # Assumes the 'drc' package is installed
-#' 
-#' # Example 1: Basic usage with alpha_type = "a" (alpha = 1)
+#' # Create a CRS.5 model specification
 #' crs_model_a <- CRS.5()
 #'
-#' # Example 2: Fix the lower limit 'c' to 0 and use a custom numeric alpha
-#' crs_model_custom <- CRS.5(fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75)
-#'
-#' # Example 3: Provide a custom name and description
-#' crs_model_named <- CRS.5(alpha_type = "b", 
-#'                          fctName = "MyCRSModel", 
-#'                          fctText = "My custom CRS model (alpha=0.5)")
-#' }
+#' # Fix the lower limit to 0 and use a custom numeric alpha
+#' crs_model_custom <- CRS.5(
+#'   fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75
+#' )
+#' 
+#' @export
 CRS.5 = function(names = c("b", "c", "d", "e", "f"), 
                  fixed = c(NA, NA, NA, NA, NA), 
                  alpha_type = "a", # one of 'a', 'b' or 'c' or a numeric value specifiying alpha
@@ -432,31 +406,73 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
 }
 
 
-#' @title Cedergreen-Ritz-Streibig model with lower limit 0 (alpha=1)
+# DEPRECATED -----------------------------------------------------------
+
+## 4 Parametric --------------------------------------------------------
+
+#' @title Cedergreen-Ritz-Streibig Model with Lower Limit Fixed at 0 and Alpha = 1
+#' (Deprecated)
 #'
 #' @description
-#' Four-parameter CRS hormesis model with the lower limit fixed at 0 and alpha=1.
-#'
-#' @param names a vector of character strings giving the names of the parameters.
-#' @param ... additional arguments passed to \code{\link{cedergreen}}.
-#'
-#' @return A list (see \code{\link{cedergreen}}).
-#' 
 #' `r lifecycle::badge("deprecated")`
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
 #'
-#' @author Christian Ritz
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead,
+#' which provides a more general and flexible interface.
 #'
-#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.5a}}, \code{\link{UCRS.4a}}
+#' A four-parameter Cedergreen-Ritz-Streibig (CRS) hormesis model where the lower
+#' asymptote (`c`) is fixed at 0 and the alpha parameter controlling the steepness
+#' of the hormetic component is fixed at 1. The four free parameters are `b`, `d`,
+#' `e`, and `f`.
+#'
+#' @param names A character vector of length 5 specifying the names of the model
+#'   parameters in the following order:
+#'   \describe{
+#'     \item{`b`}{Hill slope (steepness of the dose-response curve).}
+#'     \item{`c`}{Lower asymptote (fixed at 0 via the `fixed` argument).}
+#'     \item{`d`}{Upper asymptote.}
+#'     \item{`e`}{Effective dose producing a response midway between `c` and `d`
+#'       (ED50).}
+#'     \item{`f`}{Hormesis parameter controlling the magnitude of the stimulatory
+#'       effect at low doses.}
+#'   }
+#'   Defaults to `c("b", "c", "d", "e", "f")`.
+#'
+#' @param fixed A numeric vector of length 5 specifying fixed (non-estimated)
+#'   parameter values. Use `NA` for parameters that should be estimated freely.
+#'   Defaults to `c(NA, 0, NA, NA, NA)`, which fixes the lower asymptote `c`
+#'   at 0.
+#'
+#' @param ... Additional arguments passed to [cedergreen()].
+#'
+#' @return A list of class `"drcMean"` as returned by [cedergreen()], containing
+#'   the model definition including the mean function, its gradient, parameter
+#'   names, and fixed values. This object is intended for use as the `fct`
+#'   argument in [drm()].
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [cedergreen()] — the underlying model constructor.
+#' * [CRS.5a()] — the five-parameter CRS model with alpha = 1.
+#' * [UCRS.4a()] — the unconstrained four-parameter CRS model with alpha = 1.
 #'
 #' @examples
-#' lettuce.crsm1 <- drm(lettuce[,c(2,1)], fct = CRS.4a())
+#' # NOTE: CRS.4a() is deprecated. Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm1 <- drm( lettuce[, c(2, 1)], fct = CRS.4a() )
 #' summary(lettuce.crsm1)
 #' ED(lettuce.crsm1, c(50))
 #'
+#' # Recommended replacement:
+#' fct_spec <- CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
 #' @export
-#' 
 "CRS.4a" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
@@ -469,8 +485,6 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 1, 
@@ -481,33 +495,107 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
   )
 }
 
-#' @title Alias for CRS.4a
-#' @description \code{ml3a} is an alias for \code{\link{CRS.4a}}.
-#' @seealso \code{\link{CRS.4a}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
-#' @keywords models nonlinear
-ml3a <- CRS.4a
 
-
-#' @title Cedergreen-Ritz-Streibig model with lower limit 0 (alpha=0.5)
+#' @title Alias for CRS.4a (Deprecated)
 #'
 #' @description
-#' Four-parameter CRS hormesis model with the lower limit fixed at 0 and alpha=0.5.
+#' `r lifecycle::badge("deprecated")`
 #'
-#' @param names a vector of character strings giving the names of the parameters.
-#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#' This function is a deprecated alias for [CRS.4a()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
 #'
-#' @return A list (see \code{\link{cedergreen}}).
-#' 
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#' @inherit CRS.4a params return
 #'
-#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{CRS.5b}}
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.4a()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml3a() is a deprecated alias for CRS.4a(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm1 <- drm( lettuce[, c(2, 1)], fct = ml3a() )
+#' summary(lettuce.crsm1)
+#' ED(lettuce.crsm1, c(50))
+#'
+#' # Recommended replacement:
+#' fct_spec <- CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
+ml3a <- CRS.4a
+
+
+#' @title Cedergreen-Ritz-Streibig Model with Lower Limit Fixed at 0 and Alpha = 0.5
+#' (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead,
+#' which provides a more general and flexible interface.
+#'
+#' A four-parameter Cedergreen-Ritz-Streibig (CRS) hormesis model where the lower
+#' asymptote (`c`) is fixed at 0 and the alpha parameter controlling the steepness
+#' of the hormetic component is fixed at 0.5. The four free parameters are `b`, `d`,
+#' `e`, and `f`.
+#'
+#' @param names A character vector of length 5 specifying the names of the model
+#'   parameters in the following order:
+#'   \describe{
+#'     \item{`b`}{Hill slope (steepness of the dose-response curve).}
+#'     \item{`c`}{Lower asymptote (fixed at 0 via the `fixed` argument).}
+#'     \item{`d`}{Upper asymptote.}
+#'     \item{`e`}{Effective dose producing a response midway between `c` and `d`
+#'       (ED50).}
+#'     \item{`f`}{Hormesis parameter controlling the magnitude of the stimulatory
+#'       effect at low doses.}
+#'   }
+#'   Defaults to `c("b", "c", "d", "e", "f")`.
+#'
+#' @param fixed A numeric vector of length 5 specifying fixed (non-estimated)
+#'   parameter values. Use `NA` for parameters that should be estimated freely.
+#'   Defaults to `c(NA, 0, NA, NA, NA)`, which fixes the lower asymptote `c`
+#'   at 0.
+#'
+#' @param ... Additional arguments passed to [cedergreen()].
+#'
+#' @return A list of class `"drcMean"` as returned by [cedergreen()], containing
+#'   the model definition including the mean function, its gradient, parameter
+#'   names, and fixed values. This object is intended for use as the `fct`
+#'   argument in [drm()].
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [cedergreen()] — the underlying model constructor.
+#' * [CRS.4a()] — the four-parameter CRS model with lower limit fixed at 0 and alpha = 1.
+#' * [CRS.5b()] — the five-parameter CRS model with alpha = 0.5.
+#'
+#' @examples
+#' # NOTE: CRS.4b() is deprecated. Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm2 <- drm( lettuce[, c(2, 1)], fct = CRS.4b() )
+#' summary(lettuce.crsm2)
+#' ED(lettuce.crsm2, c(50))
+#'
+#' # Recommended replacement:
+#' fct_spec <- CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
+#' @keywords models nonlinear
+#' @export
 "CRS.4b" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
@@ -520,8 +608,6 @@ ml3a <- CRS.4a
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.5, 
@@ -532,32 +618,106 @@ ml3a <- CRS.4a
   )
 }
 
-#' @title Alias for CRS.4b
-#' @description \code{ml3b} is an alias for \code{\link{CRS.4b}}.
-#' @seealso \code{\link{CRS.4b}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead. 
-#' @keywords models nonlinear
-ml3b <- CRS.4b
-
-#' @title Cedergreen-Ritz-Streibig model with lower limit 0 (alpha=0.25)
+#' @title Alias for CRS.4b (Deprecated)
 #'
 #' @description
-#' Four-parameter CRS hormesis model with the lower limit fixed at 0 and alpha=0.25.
+#' `r lifecycle::badge("deprecated")`
 #'
-#' @param names a vector of character strings giving the names of the parameters.
-#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#' This function is a deprecated alias for [CRS.4b()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
 #'
-#' @return A list (see \code{\link{cedergreen}}).
-#' 
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#' @inherit CRS.4b params return
 #'
-#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{CRS.5c}}
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.4b()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml3b() is a deprecated alias for CRS.4b(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm2 <- drm( lettuce[, c(2, 1)], fct = ml3b() )
+#' summary(lettuce.crsm2)
+#' ED(lettuce.crsm2, c(50))
+#'
+#' # Recommended replacement:
+#' fct_spec <- CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
+ml3b <- CRS.4b
+
+
+#' @title Cedergreen-Ritz-Streibig Model with Lower Limit Fixed at 0 and Alpha = 0.25
+#' (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead,
+#' which provides a more general and flexible interface.
+#'
+#' A four-parameter Cedergreen-Ritz-Streibig (CRS) hormesis model where the lower
+#' asymptote (`c`) is fixed at 0 and the alpha parameter controlling the steepness
+#' of the hormetic component is fixed at 0.25. The four free parameters are `b`, `d`,
+#' `e`, and `f`.
+#'
+#' @param names A character vector of length 5 specifying the names of the model
+#'   parameters in the following order:
+#'   \describe{
+#'     \item{`b`}{Hill slope (steepness of the dose-response curve).}
+#'     \item{`c`}{Lower asymptote (fixed at 0 via the `fixed` argument).}
+#'     \item{`d`}{Upper asymptote.}
+#'     \item{`e`}{Effective dose producing a response midway between `c` and `d`
+#'       (ED50).}
+#'     \item{`f`}{Hormesis parameter controlling the magnitude of the stimulatory
+#'       effect at low doses.}
+#'   }
+#'   Defaults to `c("b", "c", "d", "e", "f")`.
+#'
+#' @param fixed A numeric vector of length 5 specifying fixed (non-estimated)
+#'   parameter values. Use `NA` for parameters that should be estimated freely.
+#'   Defaults to `c(NA, 0, NA, NA, NA)`, which fixes the lower asymptote `c`
+#'   at 0.
+#'
+#' @param ... Additional arguments passed to [cedergreen()].
+#'
+#' @return A list of class `"drcMean"` as returned by [cedergreen()], containing
+#'   the model definition including the mean function, its gradient, parameter
+#'   names, and fixed values. This object is intended for use as the `fct`
+#'   argument in [drm()].
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [cedergreen()] — the underlying model constructor.
+#' * [CRS.4a()] — the four-parameter CRS model with lower limit fixed at 0 and alpha = 1.
+#' * [CRS.5c()] — the five-parameter CRS model with alpha = 0.25.
+#'
+#' @examples
+#' # NOTE: CRS.4c() is deprecated. Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = CRS.4c() )
+#' summary(lettuce.crsm3)
+#' ED(lettuce.crsm3, c(50))
+#'
+#' # Recommended replacement:
+#' fct_spec <- CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
+#' @keywords models nonlinear
+#' @export
 "CRS.4c" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, 0, NA, NA, NA), # fixed c = 0
@@ -570,8 +730,6 @@ ml3b <- CRS.4b
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.25, 
@@ -582,40 +740,106 @@ ml3b <- CRS.4b
   )
 }
 
-#' @title Alias for CRS.4c
-#' @description \code{ml3c} is an alias for \code{\link{CRS.4c}}.
-#' @seealso \code{\link{CRS.4c}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
-#' @keywords models nonlinear
-ml3c <- CRS.4c
-
-
-#' @title Cedergreen-Ritz-Streibig five-parameter model (alpha=1)
+#' @title Alias for CRS.4c (Deprecated)
 #'
 #' @description
-#' Five-parameter CRS hormesis model with alpha=1.
+#' `r lifecycle::badge("deprecated")`
 #'
-#' @param names a vector of character strings giving the names of the parameters.
-#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#' This function is a deprecated alias for [CRS.4c()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
 #'
-#' @return A list (see \code{\link{cedergreen}}).
-#' 
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#' @inherit CRS.4c params return
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #'
-#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4a}}, \code{\link{UCRS.5a}}
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.4c()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
 #'
 #' @examples
-#' lettuce.m1 <- drm(lettuce[,c(2,1)], fct = CRS.5a())
-#' summary(lettuce.m1)
-#' ED(lettuce.m1, c(50))
+#' # NOTE: ml3c() is a deprecated alias for CRS.4c(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = ml3c() )
+#' summary(lettuce.crsm3)
+#' ED(lettuce.crsm3, c(50))
+#'
+#' # Recommended replacement:
+#' fct_spec <- CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
+ml3c <- CRS.4c
+
+
+## 5 Parametric --------------------------------------------------------
+
+#' @title Cedergreen-Ritz-Streibig Five-Parameter Model with Alpha = 1
+#' (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead,
+#' which provides a more general and flexible interface.
+#'
+#' A five-parameter Cedergreen-Ritz-Streibig (CRS) hormesis model where the alpha
+#' parameter controlling the steepness of the hormetic component is fixed at 1.
+#' All five parameters `b`, `c`, `d`, `e`, and `f` are freely estimated.
+#'
+#' @param names A character vector of length 5 specifying the names of the model
+#'   parameters in the following order:
+#'   \describe{
+#'     \item{`b`}{Hill slope (steepness of the dose-response curve).}
+#'     \item{`c`}{Lower asymptote (freely estimated).}
+#'     \item{`d`}{Upper asymptote.}
+#'     \item{`e`}{Effective dose producing a response midway between `c` and `d`
+#'       (ED50).}
+#'     \item{`f`}{Hormesis parameter controlling the magnitude of the stimulatory
+#'       effect at low doses.}
+#'   }
+#'   Defaults to `c("b", "c", "d", "e", "f")`.
+#'
+#' @param fixed A numeric vector of length 5 specifying fixed (non-estimated)
+#'   parameter values. Use `NA` for parameters that should be estimated freely.
+#'   Defaults to `c(NA, NA, NA, NA, NA)`, meaning all five parameters are
+#'   freely estimated.
+#'
+#' @param ... Additional arguments passed to [cedergreen()].
+#'
+#' @return A list of class `"drcMean"` as returned by [cedergreen()], containing
+#'   the model definition including the mean function, its gradient, parameter
+#'   names, and fixed values. This object is intended for use as the `fct`
+#'   argument in [drm()].
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [cedergreen()] — the underlying model constructor.
+#' * [CRS.4a()] — the four-parameter CRS model with lower limit fixed at 0 and alpha = 1.
+#' * [UCRS.5a()] — the unconstrained five-parameter CRS model with alpha = 1.
+#'
+#' @examples
+#' # NOTE: CRS.5a() is deprecated. Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m1 <- drm( lettuce[, c(2, 1)], fct = CRS.5a() )
+#' summary(lettuce.m1)
+#' ED(lettuce.m1, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "a") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
+#' @keywords models nonlinear
+#' @export
 "CRS.5a" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
@@ -628,8 +852,6 @@ ml3c <- CRS.4c
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 1, 
@@ -640,33 +862,104 @@ ml3c <- CRS.4c
   )
 }
 
-#' @title Alias for CRS.5a
-#' @description \code{ml4a} is an alias for \code{\link{CRS.5a}}.
-#' @seealso \code{\link{CRS.5a}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
-#' @keywords models nonlinear
-ml4a <- CRS.5a
 
-
-#' @title Cedergreen-Ritz-Streibig five-parameter model (alpha=0.5)
+#' @title Alias for CRS.5a (Deprecated)
 #'
 #' @description
-#' Five-parameter CRS hormesis model with alpha=0.5.
+#' `r lifecycle::badge("deprecated")`
 #'
-#' @param names a vector of character strings giving the names of the parameters.
-#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#' This function is a deprecated alias for [CRS.5a()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
 #'
-#' @return A list (see \code{\link{cedergreen}}).
-#' 
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#' @inherit CRS.5a params return
 #'
-#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4b}}, \code{\link{CRS.5a}}
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.5a()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml4a() is a deprecated alias for CRS.5a(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m1 <- drm( lettuce[, c(2, 1)], fct = ml4a() )
+#' summary(lettuce.m1)
+#' ED(lettuce.m1, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "a") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
+ml4a <- CRS.5a
+
+
+#' @title Cedergreen-Ritz-Streibig Five-Parameter Model with Alpha = 0.5
+#' (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead,
+#' which provides a more general and flexible interface.
+#'
+#' A five-parameter Cedergreen-Ritz-Streibig (CRS) hormesis model where the alpha
+#' parameter controlling the steepness of the hormetic component is fixed at 0.5.
+#' All five parameters `b`, `c`, `d`, `e`, and `f` are freely estimated.
+#'
+#' @param names A character vector of length 5 specifying the names of the model
+#'   parameters in the following order:
+#'   \describe{
+#'     \item{`b`}{Hill slope (steepness of the dose-response curve).}
+#'     \item{`c`}{Lower asymptote (freely estimated).}
+#'     \item{`d`}{Upper asymptote.}
+#'     \item{`e`}{Effective dose producing a response midway between `c` and `d`
+#'       (ED50).}
+#'     \item{`f`}{Hormesis parameter controlling the magnitude of the stimulatory
+#'       effect at low doses.}
+#'   }
+#'   Defaults to `c("b", "c", "d", "e", "f")`.
+#'
+#' @param fixed A numeric vector of length 5 specifying fixed (non-estimated)
+#'   parameter values. Use `NA` for parameters that should be estimated freely.
+#'   Defaults to `c(NA, NA, NA, NA, NA)`, meaning all five parameters are
+#'   freely estimated.
+#'
+#' @param ... Additional arguments passed to [cedergreen()].
+#'
+#' @return A list of class `"drcMean"` as returned by [cedergreen()], containing
+#'   the model definition including the mean function, its gradient, parameter
+#'   names, and fixed values. This object is intended for use as the `fct`
+#'   argument in [drm()].
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [cedergreen()] — the underlying model constructor.
+#' * [CRS.4b()] — the four-parameter CRS model with lower limit fixed at 0 and alpha = 0.5.
+#' * [CRS.5a()] — the five-parameter CRS model with alpha = 1.
+#'
+#' @examples
+#' # NOTE: CRS.5b() is deprecated. Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m2 <- drm( lettuce[, c(2, 1)], fct = CRS.5b() )
+#' summary(lettuce.m2)
+#' ED(lettuce.m2, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "b") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
+#' @keywords models nonlinear
+#' @export
 "CRS.5b" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
@@ -679,8 +972,6 @@ ml4a <- CRS.5a
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.5, 
@@ -691,33 +982,104 @@ ml4a <- CRS.5a
   )
 }
 
-#' @title Alias for CRS.5b
-#' @description \code{ml4b} is an alias for \code{\link{CRS.5b}}.
-#' @seealso \code{\link{CRS.5b}}
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
-#' @keywords models nonlinear
-ml4b <- CRS.5b
 
-
-#' @title Cedergreen-Ritz-Streibig five-parameter model (alpha=0.25)
+#' @title Alias for CRS.5b (Deprecated)
 #'
 #' @description
-#' Five-parameter CRS hormesis model with alpha=0.25.
+#' `r lifecycle::badge("deprecated")`
 #'
-#' @param names a vector of character strings giving the names of the parameters.
-#' @param ... additional arguments passed to \code{\link{cedergreen}}.
+#' This function is a deprecated alias for [CRS.5b()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
 #'
-#' @return A list (see \code{\link{cedergreen}}).
-#' 
-#' `r lifecycle::badge("deprecated")` 
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#' @inherit CRS.5b params return
 #'
-#' @seealso \code{\link{cedergreen}}, \code{\link{CRS.4c}}, \code{\link{CRS.5a}}
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.5b()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml4b() is a deprecated alias for CRS.5b(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m2 <- drm( lettuce[, c(2, 1)], fct = ml4b() )
+#' summary(lettuce.m2)
+#' ED(lettuce.m2, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "b") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
 #'
 #' @keywords models nonlinear
 #' @export
-#' 
+ml4b <- CRS.5b
+
+
+#' @title Cedergreen-Ritz-Streibig Five-Parameter Model with Alpha = 0.25
+#' (Deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead,
+#' which provides a more general and flexible interface.
+#'
+#' A five-parameter Cedergreen-Ritz-Streibig (CRS) hormesis model where the alpha
+#' parameter controlling the steepness of the hormetic component is fixed at 0.25.
+#' All five parameters `b`, `c`, `d`, `e`, and `f` are freely estimated.
+#'
+#' @param names A character vector of length 5 specifying the names of the model
+#'   parameters in the following order:
+#'   \describe{
+#'     \item{`b`}{Hill slope (steepness of the dose-response curve).}
+#'     \item{`c`}{Lower asymptote (freely estimated).}
+#'     \item{`d`}{Upper asymptote.}
+#'     \item{`e`}{Effective dose producing a response midway between `c` and `d`
+#'       (ED50).}
+#'     \item{`f`}{Hormesis parameter controlling the magnitude of the stimulatory
+#'       effect at low doses.}
+#'   }
+#'   Defaults to `c("b", "c", "d", "e", "f")`.
+#'
+#' @param fixed A numeric vector of length 5 specifying fixed (non-estimated)
+#'   parameter values. Use `NA` for parameters that should be estimated freely.
+#'   Defaults to `c(NA, NA, NA, NA, NA)`, meaning all five parameters are
+#'   freely estimated.
+#'
+#' @param ... Additional arguments passed to [cedergreen()].
+#'
+#' @return A list of class `"drcMean"` as returned by [cedergreen()], containing
+#'   the model definition including the mean function, its gradient, parameter
+#'   names, and fixed values. This object is intended for use as the `fct`
+#'   argument in [drm()].
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [cedergreen()] — the underlying model constructor.
+#' * [CRS.4c()] — the four-parameter CRS model with lower limit fixed at 0 and alpha = 0.25.
+#' * [CRS.5b()] — the five-parameter CRS model with alpha = 0.5.
+#'
+#' @examples
+#' # NOTE: CRS.5c() is deprecated. Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m3 <- drm( lettuce[, c(2, 1)], fct = CRS.5c() )
+#' summary(lettuce.m3)
+#' ED(lettuce.m3, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
+#' @keywords models nonlinear
+#' @export
 "CRS.5c" <- function(
     names = c("b", "c", "d", "e", "f"), 
     fixed = c(NA, NA, NA, NA, NA),
@@ -730,8 +1092,6 @@ ml4b <- CRS.5b
     with    = "CRS.5()"
   )
   
-  ## Checking arguments
-  if (!is.character(names) | !(length(names)==4)) {stop("Not correct 'names' argument")}
   return(
     cedergreen(
       fixed = fixed, names = names, alpha = 0.25, 
@@ -742,10 +1102,37 @@ ml4b <- CRS.5b
   )
 }
 
-#' @title Alias for CRS.5c
-#' @description \code{ml4c} is an alias for \code{\link{CRS.5c}}.
-#' @seealso \code{\link{CRS.5c}}
+#' @title Alias for CRS.5c (Deprecated)
+#'
+#' @description
 #' `r lifecycle::badge("deprecated")`
-#' This function is deprecated as of version 3.3.0. Please use [CRS.5()] instead.
+#'
+#' This function is a deprecated alias for [CRS.5c()], itself deprecated as of
+#' version 3.3.0. Please use [CRS.5()] instead, which provides a more general
+#' and flexible interface.
+#'
+#' @inherit CRS.5c params return
+#'
+#' @author Christian Ritz, Hannes Reinwald
+#'
+#' @seealso
+#' * [CRS.5()] — the recommended replacement for this deprecated function.
+#' * [CRS.5c()] — the function this alias points to.
+#' * [cedergreen()] — the underlying model constructor.
+#'
+#' @examples
+#' # NOTE: ml4c() is a deprecated alias for CRS.5c(). Use CRS.5() instead.
+#' # The example below is retained for backward compatibility illustration only.
+#'
+#' lettuce.m3 <- drm( lettuce[, c(2, 1)], fct = ml4c() )
+#' summary(lettuce.m3)
+#' ED(lettuce.m3, c(50))
+#'
+#' # Recommended replacement:
+#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c") )
+#' summary(lettuce.crs5)
+#' ED(lettuce.crs5, c(50))
+#'
 #' @keywords models nonlinear
+#' @export
 ml4c <- CRS.5c

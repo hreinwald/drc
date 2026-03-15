@@ -30,14 +30,26 @@ Install the bug-fix development version from GitHub:
 ``` r
 # install.packages("devtools")
 
-# Install the companion data package first
-devtools::install_github("DoseResponse/drcData")
-
-# Then install the development version of drc
 # devtools::install_github("DoseResponse/drc")      # <- unmaintained version 3.2-0 
 devtools::install_github("hreinwald/drc")           # <- re-factored development version 3.3.0
 devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
 ```
+
+### Building the Documentation Website
+
+To build the pkgdown documentation website locally:
+
+``` r
+# Option 1: Use the provided helper script (recommended)
+source("build_pkgdown.R")
+
+# Option 2: Manual build
+# If you get an error about docs/ not being a pkgdown site, first clean it:
+pkgdown::clean_site(force = TRUE)
+pkgdown::build_site()
+```
+
+The helper script `build_pkgdown.R` automatically handles the case where a `docs/` directory exists but wasn't created by pkgdown.
 
 ## Quick Start
 
@@ -79,6 +91,18 @@ EDcomp(model_multi, percVec = c(50), interval = "delta")
 ``` r
 # Compare different dose-response model families
 mselect(model, fctList = list(W1.4(), W2.4(), LL.3()))
+```
+
+## Vignettes
+
+The package includes detailed vignettes to help you understand specific topics:
+
+``` r
+# View available vignettes
+vignette(package = "drc")
+
+# Access the NEC models vignette
+vignette("nec-models", package = "drc")
 ```
 
 ## Available Models
@@ -132,7 +156,7 @@ The `drm()` function supports multiple response types via the `type` argument:
 ## Dependencies
 
 **drc** depends on:
-- R (≥ 4.0.0), MASS, stats, [drcData](https://github.com/DoseResponse/drcData)
+- R (≥ 4.0.0), MASS, stats
 
 and imports from: car, graphics, gtools, lifecycle, multcomp, plotrix, sandwich, scales, utils.
 
@@ -147,4 +171,4 @@ Please report issues with this re-factory version at <https://github.com/hreinwa
 
 ## License
 
-GPL-2
+GPL-2.0

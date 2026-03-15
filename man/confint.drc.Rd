@@ -2,33 +2,37 @@
 % Please edit documentation in R/confint.drc.R
 \name{confint.drc}
 \alias{confint.drc}
-\title{Confidence Intervals for model parameters}
+\title{Confidence Intervals for Model Parameters}
 \usage{
 \method{confint}{drc}(object, parm, level = 0.95, pool = TRUE, ...)
 }
 \arguments{
-\item{object}{a model object of class 'drc'.}
+\item{object}{A fitted model object of class \code{"drc"}.}
 
-\item{parm}{a specification of which parameters are to be given confidence
-intervals, either a vector of numbers or a vector of names. If missing,
-all parameters are considered.}
+\item{parm}{A specification of which parameters are to be given confidence
+intervals, either a vector of indices or a vector of parameter name strings.
+If missing, all parameters are considered.}
 
-\item{level}{the confidence level required.}
+\item{level}{The confidence level required. Defaults to \code{0.95}.}
 
-\item{pool}{logical. If TRUE curves are pooled. Otherwise they are not. This
-argument only works for models with independently fitted curves as
-specified in \code{\link{drm}}.}
+\item{pool}{Logical. If \code{TRUE} (default), curves are pooled. Otherwise they
+are not. This argument only works for models with independently fitted
+curves as specified in \code{\link[=drm]{drm()}}.}
 
-\item{...}{additional argument(s) for methods. Not used.}
+\item{...}{Additional arguments for methods. Currently not used.}
 }
 \value{
-A matrix (or vector) with columns giving lower and upper confidence
-limits for each parameter. These will be labelled as (1-level)/2 and
-1 - (1-level)/2 in \% (by default 2.5\% and 97.5\%).
+A numeric matrix with two columns giving the lower and upper
+confidence limits for each parameter. Columns are labelled as
+\eqn{\frac{(1 - \text{level})}{2} \times 100\%} and
+\eqn{\left(1 - \frac{(1 - \text{level})}{2}\right) \times 100\%}
+(by default \code{2.5 \%} and \code{97.5 \%}).
 }
 \description{
-Computes confidence intervals for one or more parameters in a model of class
-'drc'.
+Computes confidence intervals for one or more parameters in a fitted
+dose-response model of class \code{"drc"}. Confidence intervals are constructed
+using either a t-distribution (for continuous response models) or a standard
+normal distribution (for all other response types).
 }
 \examples{
 ## Fitting a four-parameter log-logistic model
@@ -41,8 +45,15 @@ confint(ryegrass.m1)
 confint(ryegrass.m1, "e")
 
 }
+\seealso{
+\itemize{
+\item \code{\link[=drm]{drm()}} — for fitting dose-response models.
+\item \code{\link[=confint.basic]{confint.basic()}} — the internal helper used to construct the intervals.
+\item \code{\link[=summary.drc]{summary.drc()}} — for a full summary of model coefficients.
+}
+}
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

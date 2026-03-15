@@ -90,7 +90,10 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
         {
             vcMat <- (object$"estMethod")$"vcovfct"(object)
             diage <- sqrt(diag(vcMat))
-            vcMat / (outer(diage, diage))
+            corrMat <- vcMat / (outer(diage, diage))
+            ## Clamp to [-1, 1] to handle floating-point precision issues
+            corrMat[] <- pmin(pmax(corrMat, -1), 1)
+            corrMat
         }
         if (!is.null(object$"objList"))
         {
@@ -99,7 +102,7 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
         } else {
             corrFct(object)
         }       
-    }    
+    }
 }
 
 "vcCont" <- function(object)
