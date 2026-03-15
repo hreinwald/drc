@@ -7,7 +7,7 @@
 \title{Offsprings resulting from a toxicity test}
 
 \description{
-Results from a toxicity test with seven different concentrations of waste water. Results were reported as number ofsprings of a water flea, C. dubia.
+Results from a chronic reproduction toxicity test with seven different concentrations of waste water. The response was the number of offspring produced by the water flea \emph{Ceriodaphnia dubia}.
 }
 
 \usage{data(C.dubia)}
@@ -26,4 +26,19 @@ using generalized linear models. Environmental Toxicology and Chemistry, \bold{1
 }
 
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(C.dubia)
+
+## Fitting a three-parameter log-logistic model
+C.dubia.m1 <- drm(number ~ conc, data = C.dubia, fct = LL.3())
+summary(C.dubia.m1)
+
+## Plotting fitted curve together with the original data
+plot(C.dubia.m1, xlab = "Concentration (\%)", ylab = "Number of offspring")
+}
+}
 \keyword{datasets}

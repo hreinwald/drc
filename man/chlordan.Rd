@@ -6,7 +6,7 @@
 
 \title{Chlordan}
 
-\description{chlordan data.}
+\description{Data from a chronic toxicity test measuring the reproduction of \emph{Daphnia} exposed to different concentrations of chlordane at two time points. The response measured was the number of offspring (repro) per replicate.}
 
 \usage{data(chlordan)}
 
@@ -20,4 +20,19 @@
   }
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(chlordan)
+
+## Fitting a three-parameter log-logistic model
+chlordan.m1 <- drm(repro ~ conc, data = chlordan, fct = LL.3())
+summary(chlordan.m1)
+
+## Plotting the fitted curve
+plot(chlordan.m1, xlab = "Concentration", ylab = "Reproduction")
+}
+}
 \keyword{datasets}

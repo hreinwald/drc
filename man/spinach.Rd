@@ -34,8 +34,18 @@
 }
 
 \examples{
-## Displaying the first rows in the dataset
-head(spinach)  # displaying first 6 rows in the data set
+\dontrun{
+library(drc)
 
+## Displaying the first rows in the dataset
+head(spinach)
+
+## Fitting a four-parameter log-logistic model with separate curves per herbicide
+spinach.m1 <- drm(SLOPE ~ DOSE, HERBICIDE, data = spinach, fct = LL.4())
+summary(spinach.m1)
+
+## Plotting the fitted curves
+plot(spinach.m1, xlab = "Dose (muMol)", ylab = "Oxygen consumption (slope)")
+}
 }
 \keyword{datasets}

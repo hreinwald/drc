@@ -7,7 +7,7 @@
 \title{Example from Finney (1971)}
 
 \description{
-  For each of six concentration of an insecticid the number of insects affected (out of the number of insects)
+  For each of six concentrations of an insecticide the number of insects affected (out of the total number of insects)
   was recorded.
 }
 

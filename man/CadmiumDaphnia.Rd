@@ -7,7 +7,7 @@
 \title{Cadmium Daphnia Data}
 
 \description{
-  Cadmium Daphnia Data.
+  Data from an acute toxicity test exposing \emph{Daphnia} to cadmium over time. The endpoint measured was mortality (number of dead organisms) at each dose and time point.
 }
 
 \usage{data(CadmiumDaphnia)}
@@ -24,4 +24,21 @@
   }
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(CadmiumDaphnia)
+
+## Fitting a two-parameter log-logistic model for binomial response at a single time point
+CadmiumDaphnia.sub <- CadmiumDaphnia[CadmiumDaphnia$Time == 7, ]
+CadmiumDaphnia.m1 <- drm(Dead/Total ~ as.numeric(as.character(Dose)), weights = Total,
+data = CadmiumDaphnia.sub, fct = LL.2(), type = "binomial")
+summary(CadmiumDaphnia.m1)
+
+## Plotting the fitted curve
+plot(CadmiumDaphnia.m1, xlab = "Cadmium dose", ylab = "Proportion dead")
+}
+}
 \keyword{datasets}

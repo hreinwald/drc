@@ -6,7 +6,7 @@
 
 \title{chlorac}
 
-\description{chlorac data.}
+\description{Data from an acute toxicity test where organisms were exposed to different concentrations of chloroacetaldehyde. The number of dead subjects out of a total were recorded for each concentration.}
 
 \usage{data(chlorac)}
 
@@ -19,5 +19,21 @@
   }
 }
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(chlorac)
+
+## Fitting a two-parameter log-logistic model for binomial response
+chlorac.m1 <- drm(num.dead/total ~ conc, weights = total,
+data = chlorac, fct = LL.2(), type = "binomial")
+summary(chlorac.m1)
+
+## Plotting the fitted curve
+plot(chlorac.m1, xlab = "Concentration", ylab = "Proportion dead")
+}
+}
 
 \keyword{datasets}

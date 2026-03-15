@@ -31,4 +31,20 @@ Analysis, \bold{33(2)}:220-231.
 
 %\references{}
 
+\examples{
+\dontrun{
+library(drc)
+
+## Displaying the data
+head(echovirus)
+
+## Fitting a two-parameter log-logistic model for binomial response
+echovirus.m1 <- drm(infected/total ~ dose, weights = total,
+data = echovirus, fct = LL.2(), type = "binomial")
+summary(echovirus.m1)
+
+## Plotting the fitted curve
+plot(echovirus.m1, xlab = "Dose (pfu)", ylab = "Proportion infected")
+}
+}
 \keyword{datasets}
