@@ -120,6 +120,9 @@ drm_name = function(mod){
 #'   Common options include "delta", "tfls", or "buckland".
 #' @param CI_level A numeric value between 0 and 1 indicating the confidence 
 #'   level for the intervals (e.g., 0.95 for a 95% CI).
+#' @param verbose A logical value. If `TRUE`, the function will print status 
+#'   messages about the calculation progress and any errors encountered for each 
+#'   response level. Default is `FALSE`.
 #' @param ... Additional arguments to be passed directly to `drc::ED`.
 #'
 #' @return 
