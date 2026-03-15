@@ -30,7 +30,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## displaying first 6 rows of the data set
@@ -44,6 +43,5 @@ summary(terbuthylazin.m1)
 ##  with Box-Cox transformation
 terbuthylazin.m2 <- boxcox(terbuthylazin.m1, method = "anova")
 summary(terbuthylazin.m2)
-}
 }
 \keyword{datasets}

@@ -31,7 +31,6 @@
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Model with ED50 as a parameter
@@ -61,6 +60,5 @@ data = finney71, fct = LL2.2(), type = "binomial")
 ## Confidence intervals based on back-transformation
 ##  complete agreement with results based on 'glm'
 ED(finney71.m2, c(10, 20, 50), interval = "fls", reference = "control")
-}
 }
 \keyword{datasets}

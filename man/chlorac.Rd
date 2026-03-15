@@ -20,7 +20,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -33,7 +32,6 @@ summary(chlorac.m1)
 
 ## Plotting the fitted curve
 plot(chlorac.m1, xlab = "Concentration", ylab = "Proportion dead")
-}
 }
 
 \keyword{datasets}

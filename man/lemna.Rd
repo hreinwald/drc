@@ -19,7 +19,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -31,6 +30,5 @@ summary(lemna.m1)
 
 ## Plotting the fitted curve
 plot(lemna.m1, xlab = "Concentration", ylab = "Frond number")
-}
 }
 \keyword{datasets}

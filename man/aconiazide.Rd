@@ -25,7 +25,6 @@ Beland, F. A. and Dooley, K. L. and Hansen, E. B. and Sheldon, W. G. (1995). Six
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -37,7 +36,6 @@ summary(aconiazide.m1)
 
 ## Plotting the fitted curve
 plot(aconiazide.m1, xlab = "Dose", ylab = "Weight change (g)")
-}
 }
 
 \keyword{datasets}

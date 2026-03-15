@@ -21,7 +21,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -33,6 +32,5 @@ summary(chlordan.m1)
 
 ## Plotting the fitted curve
 plot(chlordan.m1, xlab = "Concentration", ylab = "Reproduction")
-}
 }
 \keyword{datasets}

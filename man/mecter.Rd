@@ -38,7 +38,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Fitting the model with freely varying ED50 values
@@ -78,6 +77,5 @@ anova(mecter.voe, mecter.free)  # accepted
 
 ## Plotting isobole based on the Voelund model
 isobole(mecter.free, mecter.voe, exchange = 0.02)  # good fit
-}
 }
 \keyword{datasets}

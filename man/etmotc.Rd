@@ -44,7 +44,6 @@
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 etmotc.m1<-drm(rgr1~dose1, data=etmotc[1:15,], fct=LL.4())
@@ -61,6 +60,5 @@ etmotc.m3<-drm(rgr1~dose1, data=etmotc[1:15,], fct=W2.3())
 plot(etmotc.m3, add = TRUE)
 modelFit(etmotc.m3)
 summary(etmotc.m3)
-}
 }
 \keyword{datasets}

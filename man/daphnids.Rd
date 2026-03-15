@@ -34,7 +34,6 @@
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Fitting a model with different parameters
@@ -52,6 +51,5 @@ summary(daphnids.m1)
 daphnids.m2 <- drm(no/total~dose, time, weights = total, 
 data = daphnids, fct = LL.2(), type = "binomial", 
 pmodels = list(~1, ~time))
-}
 }
 \keyword{datasets}

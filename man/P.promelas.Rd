@@ -35,7 +35,6 @@
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Model with ED50 on log scale as parameter
@@ -51,6 +50,5 @@ ED(p.prom.m1, c(10,20,50), interval="delta")
 p.prom.m2<-drm(dryweight~conc, data=P.promelas, fct=LN.3(loge=TRUE))
 summary(p.prom.m2)
 ED(p.prom.m2, c(10,20,50), interval="fls")
-}
 }
 \keyword{datasets}

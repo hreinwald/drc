@@ -6,13 +6,13 @@
 \usage{
 uml4a(names = c("b", "c", "d", "e", "f"), ...)
 }
-\description{
-\code{uml4a} is an alias for \code{\link{UCRS.5a}}.
-}
 \arguments{
 \item{names}{a vector of character strings giving the names of the parameters.}
 
 \item{...}{additional arguments passed to \code{\link{ucedergreen}}.}
+}
+\description{
+\code{uml4a} is an alias for \code{\link{UCRS.5a}}.
 }
 \seealso{
 \code{\link{UCRS.5a}}

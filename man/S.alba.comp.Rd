@@ -40,7 +40,6 @@
 
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -53,6 +52,5 @@ summary(S.alba.comp.m1)
 
 ## Plotting the fitted curves
 plot(S.alba.comp.m1, xlab = "Dose (g/ha)", ylab = "Dry matter (g/pot)")
-}
 }
 \keyword{datasets}

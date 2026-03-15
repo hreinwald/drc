@@ -30,7 +30,6 @@ M. W. Wheeler, R. M. Park, and A. J. Bailer (2006). Comparing median lethal conc
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -45,7 +44,6 @@ summary(fluoranthene.m1)
 ## Plotting the fitted curves
 plot(fluoranthene.m1, xlab = "Fluoranthene concentration",
 ylab = "Proportion dead")
-}
 }
 
 

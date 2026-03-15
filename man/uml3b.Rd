@@ -6,13 +6,13 @@
 \usage{
 uml3b(names = c("b", "d", "e", "f"), ...)
 }
-\description{
-\code{uml3b} is an alias for \code{\link{UCRS.4b}}.
-}
 \arguments{
 \item{names}{a vector of character strings giving the names of the parameters.}
 
 \item{...}{additional arguments passed to \code{\link{ucedergreen}}.}
+}
+\description{
+\code{uml3b} is an alias for \code{\link{UCRS.4b}}.
 }
 \seealso{
 \code{\link{UCRS.4b}}

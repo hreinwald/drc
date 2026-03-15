@@ -40,7 +40,6 @@
 %}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Fitting model with constraint on one parameter 
@@ -52,6 +51,5 @@ plot(met.ar.m1, xlim=c(0,0.3), ylim=c(1450, 1800))
 abline(h=1700, lty=1)
 
 summary(met.ar.m1)
-}
 }
 \keyword{datasets}

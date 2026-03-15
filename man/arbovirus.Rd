@@ -22,7 +22,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -35,6 +34,5 @@ summary(arbovirus.m1)
 
 ## Plotting the fitted curves
 plot(arbovirus.m1, xlab = "Dose", ylab = "Proportion dead")
-}
 }
 \keyword{datasets}

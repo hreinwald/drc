@@ -34,7 +34,6 @@ Applied Pharmacology, \bold{46(2)}:279--303.
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -47,7 +46,6 @@ summary(TCDD.m1)
 
 ## Plotting the fitted curve
 plot(TCDD.m1, xlab = "Concentration of TCDD (ng/kg)", ylab = "Tumor incidence")
-}
 }
 
 \keyword{datasets}

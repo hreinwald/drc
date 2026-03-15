@@ -15,27 +15,18 @@
 
 
 \examples{
-\dontrun{
 data(Cyp17)
-# transforming the vector of observed expression 
+
+## Display the structure of the data
+head(Cyp17)
+
+## Log-transform the expression values
 Cyp17$logexpression <- log(Cyp17$expression) + 5
 
-# assuming a 4-parameter log-logistic model
-# upper asymptote fixed at 2.59
-# random run effects on the lower asymptote and the ED50
-Cyp17.LL4.mixed <- medrm(logexpression ~ dose, 
-                         random = c + e ~ 1 | run, 
-                         fct = LL.4(fixed = c(NA,NA,-2.41 + 5,NA)), 
-                         data = Cyp17, 
-                         start=c(-0.5, -4 + 5, 700)) 
-  
-plot(Cyp17.LL4.mixed, logx=TRUE) + 
-    theme_classic()
-plot(Cyp17.LL4.mixed, logx=TRUE, ranef=TRUE) + 
-    theme_classic()
-    
-summary(Cyp17.LL4.mixed)
-}
+## Fit a four-parameter log-logistic model (ignoring run effects)
+Cyp17.m1 <- drm(logexpression ~ dose, data = Cyp17, fct = LL.4())
+summary(Cyp17.m1)
+plot(Cyp17.m1, main = "Cyp17 dose-response")
 }
 
 

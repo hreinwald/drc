@@ -29,7 +29,6 @@ Wolkis, D., Blackwell, S., Kaninaualiʻi Villanueva, S. (2020). Conservation see
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -42,6 +41,5 @@ summary(Eryngium.m1)
 
 ## Plotting the fitted germination curve
 plot(Eryngium.m1, xlab = "Time (days)", ylab = "Proportion germinated", log = "")
-}
 }
 \keyword{datasets}

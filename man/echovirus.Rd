@@ -32,7 +32,6 @@ Analysis, \bold{33(2)}:220-231.
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -45,6 +44,5 @@ summary(echovirus.m1)
 
 ## Plotting the fitted curve
 plot(echovirus.m1, xlab = "Dose (pfu)", ylab = "Proportion infected")
-}
 }
 \keyword{datasets}

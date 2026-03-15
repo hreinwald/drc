@@ -19,7 +19,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -31,7 +30,6 @@ summary(barley.m1)
 
 ## Plotting the fitted curve
 plot(barley.m1, xlab = "Dose", ylab = "Weight")
-}
 }
 
 \keyword{datasets}

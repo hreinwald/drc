@@ -74,56 +74,10 @@ if the \code{tryCatch} block catches an error, the function returns a structured
 row of \code{NA}s for that response level, ensuring a consistent output format.
 }
 \examples{
-\dontrun{
-# Load necessary packages
-library(drc)
-library(dplyr)
-library(data.table)
-
-# Use a sample dataset from the drc package
-data(spinach)
-base_model <- drm(SLOPE ~ DOSE, data = spinach, fct = LL.4())
-
-# 1. Fit a base model (e.g., four-parameter log-logistic)
-# Use a dataset with hormesis where some ED levels might not be reachable
 data(lettuce)
-#' Run a hormesis model (4-parameter log-logistic with a non-zero lower asymptote)
-base_model = drm(weight~conc, data = lettuce, fct = BC.5())
-plot(base_model, type = "all", main = base_model$fct$name)
-
-# 2. Define a named list of alternative models for averaging
-model_list <- list(LL.4(), W1.4(), W2.4(), CRS.4c())
-names(model_list) <- c("LL.4", "W1.4", "W2.4", "CRS.5c")
-
-# 3. Inspect the model comparison
-model_comparison = mselect(base_model, model_list, nested = TRUE)
-head(model_comparison)
-
-# 3. Calculate model-averaged ED values for multiple response levels
-# This includes a level (EC99) that might be difficult to estimate.
-model_names = c("W2.4", "CRS.5c")
-ma_eds <- maED_robust(base_model, 
-                      fct_ls = model_list[model_names], 
-                      respLev = c(10, 50, 99),
-                      verbose = TRUE)
-# Print the results
-# Note how EC99 results in NAs without stopping the calculation for EC10/EC50.
-print(ma_eds)
-
-# Plot model average EC50 value 
-ec50 = ma_eds[ma_eds$EC == 50,"Estimate"]
-plot(base_model, type = "all", main = base_model$fct$name)
-abline(v = ec50, col = "darkred", lty = 2, lwd = 2)
-
-# Example with a different confidence level and more models
-# Note how the previous error disappears when using differen EC intervals.
-ma_eds_90ci <- maED_robust(base_model, 
-                           fct_ls = model_list, 
-                           respLev = c(10, 20, 50),
-                           verbose = TRUE,
-                           CI_level = 0.90)
-print(ma_eds_90ci)
-}
+base_model <- drm(weight ~ conc, data = lettuce, fct = BC.5())
+model_list <- list(W2.4 = W2.4())
+maED_robust(base_model, fct_ls = model_list, respLev = c(10, 50))
 
 }
 \seealso{

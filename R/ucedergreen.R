@@ -190,6 +190,8 @@ function(names = c("b", "d", "e", "f"), ...)
 
 #' @title Alias for UCRS.4a
 #' @description \code{uml3a} is an alias for \code{\link{UCRS.4a}}.
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{ucedergreen}}.
 #' @seealso \code{\link{UCRS.4a}}
 #' @keywords models nonlinear
 uml3a <- UCRS.4a
@@ -218,6 +220,8 @@ function(names = c("b", "d", "e", "f"), ...)
 
 #' @title Alias for UCRS.4b
 #' @description \code{uml3b} is an alias for \code{\link{UCRS.4b}}.
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{ucedergreen}}.
 #' @seealso \code{\link{UCRS.4b}}
 #' @keywords models nonlinear
 uml3b <- UCRS.4b
@@ -246,6 +250,8 @@ function(names = c("b", "d", "e", "f"), ...)
 
 #' @title Alias for UCRS.4c
 #' @description \code{uml3c} is an alias for \code{\link{UCRS.4c}}.
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{ucedergreen}}.
 #' @seealso \code{\link{UCRS.4c}}
 #' @keywords models nonlinear
 uml3c <- UCRS.4c
@@ -274,6 +280,8 @@ function(names = c("b", "c", "d", "e", "f"), ...)
 
 #' @title Alias for UCRS.5a
 #' @description \code{uml4a} is an alias for \code{\link{UCRS.5a}}.
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{ucedergreen}}.
 #' @seealso \code{\link{UCRS.5a}}
 #' @keywords models nonlinear
 uml4a <- UCRS.5a
@@ -302,6 +310,8 @@ function(names = c("b", "c", "d", "e", "f"), ...)
 
 #' @title Alias for UCRS.5b
 #' @description \code{uml4b} is an alias for \code{\link{UCRS.5b}}.
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{ucedergreen}}.
 #' @seealso \code{\link{UCRS.5b}}
 #' @keywords models nonlinear
 uml4b <- UCRS.5b
@@ -330,6 +340,8 @@ function(names = c("b", "c", "d", "e", "f"), ...)
 
 #' @title Alias for UCRS.5c
 #' @description \code{uml4c} is an alias for \code{\link{UCRS.5c}}.
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{ucedergreen}}.
 #' @seealso \code{\link{UCRS.5c}}
 #' @keywords models nonlinear
 uml4c <- UCRS.5c

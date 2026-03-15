@@ -54,7 +54,6 @@
   \emph{Biometrics}, \bold{45}, 349--362.
 }
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -66,7 +65,6 @@ summary(auxins.m1)
 
 ## Plotting the fitted curves
 plot(auxins.m1, xlab = "Dose", ylab = "Dry weight")
-}
 }
 
 \keyword{datasets}

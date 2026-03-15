@@ -33,7 +33,6 @@ Defining an additivity framework for mixture research in inducible whole-cell bi
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## One example from the paper by Martin-Betancor et al (2015)
@@ -67,7 +66,6 @@ c(-5, -10, -20, -30, -40, -50, -60, -70, -80, -90, -99, 99, 90, 80, 70, 60, 50, 
 
 ## Reproducing the FA-cI plot shown in Figure 5d
 plotFACI(CuZn.effects, "ED", ylim = c(0.8, 1.6), showPoints = TRUE)
-}
 }
 
 \keyword{datasets}

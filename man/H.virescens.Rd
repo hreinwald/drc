@@ -35,7 +35,6 @@
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Fitting dose-response model (log-logistic with common slope)
@@ -53,7 +52,6 @@ logLik(Hv.m2)
 
 ## Estimated ED values (matching those given in MASS)
 ED(Hv.m1, c(25, 50, 75))
-}
 
 }
 \keyword{datasets}
