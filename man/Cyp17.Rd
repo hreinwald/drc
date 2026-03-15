@@ -2,7 +2,7 @@
 \alias{Cyp17}
 \docType{data}
 \title{Cyp17 expression data}
-\description{Observed expression measured at several dose levels for multiple runs.}
+\description{Observed Cyp17 gene expression measured at several dose levels across multiple experimental runs. CYP17 is a key enzyme in steroid hormone biosynthesis, and changes in its expression can indicate endocrine-disrupting effects.}
 \usage{data(Cyp17)}
 \format{
   A data frame with 63 observations on the following 3 variables.

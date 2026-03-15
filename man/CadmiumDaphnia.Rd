@@ -7,7 +7,7 @@
 \title{Cadmium Daphnia Data}
 
 \description{
-  Cadmium Daphnia Data.
+  Data from an acute toxicity test exposing \emph{Daphnia} to cadmium over time. The endpoint measured was mortality (number of dead organisms) at each dose and time point.
 }
 
 \usage{data(CadmiumDaphnia)}

@@ -6,7 +6,7 @@
 
 \title{Chlordan}
 
-\description{chlordan data.}
+\description{Data from a chronic toxicity test measuring the reproduction of \emph{Daphnia} exposed to different concentrations of chlordane at two time points. The response measured was the number of offspring (repro) per replicate.}
 
 \usage{data(chlordan)}
 

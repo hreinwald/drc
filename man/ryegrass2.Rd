@@ -6,7 +6,7 @@
 
 \title{Ryegrass}
 
-\description{ryegrass2 data.}
+\description{Data from a dose-response experiment with ryegrass (\emph{Lolium} sp.). Biomass was measured at different dose levels and at two time points.}
 
 \usage{data(ryegrass2)}
 

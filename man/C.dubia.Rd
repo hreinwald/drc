@@ -7,7 +7,7 @@
 \title{Offsprings resulting from a toxicity test}
 
 \description{
-Results from a toxicity test with seven different concentrations of waste water. Results were reported as number ofsprings of a water flea, C. dubia.
+Results from a chronic reproduction toxicity test with seven different concentrations of waste water. The response was the number of offspring produced by the water flea \emph{Ceriodaphnia dubia}.
 }
 
 \usage{data(C.dubia)}

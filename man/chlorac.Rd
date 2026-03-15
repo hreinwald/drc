@@ -6,7 +6,7 @@
 
 \title{chlorac}
 
-\description{chlorac data.}
+\description{Data from an acute toxicity test where organisms were exposed to different concentrations of chloroacetaldehyde. The number of dead subjects out of a total were recorded for each concentration.}
 
 \usage{data(chlorac)}
 

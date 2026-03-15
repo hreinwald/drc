@@ -6,7 +6,7 @@
 
 \title{Barley}
 
-\description{Barley data.}
+\description{Data from a dose-response experiment measuring the weight of barley (\emph{Hordeum vulgare}) at different dose levels of a substance.}
 
 \usage{data(barley)}
 

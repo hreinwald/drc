@@ -6,7 +6,7 @@
 
 \title{arbovirus}
 
-\description{arbovirus data.}
+\description{Data from a dose-response experiment with an arbovirus involving two treatment groups (FP and SP). For each dose level, the total number of subjects and the numbers of dead and defective subjects were recorded.}
 
 \usage{data(arbovirus)}
 

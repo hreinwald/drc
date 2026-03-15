@@ -6,7 +6,7 @@
 
 \title{Lemna}
 
-\description{ Data are from .}
+\description{Data from a dose-response experiment with the aquatic plant \emph{Lemna minor} (duckweed). The response measured was the frond number (count) at different concentrations of a test substance.}
 
 \usage{data(lemna)}
 

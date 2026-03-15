@@ -6,7 +6,7 @@
 
 \title{nicotine}
 
-\description{nicotine data.}
+\description{Data from an acute toxicity test with nicotine. For each of several concentrations, the total number of subjects and the number of dead subjects were recorded.}
 
 \usage{data(nicotine)}
 

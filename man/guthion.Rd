@@ -6,7 +6,7 @@
 
 \title{guthion}
 
-\description{guthion data.}
+\description{Data from an acute toxicity test with the insecticide guthion (azinphos-methyl). For each dose level in two treatment groups, the numbers of alive, moribund, and dead subjects were recorded.}
 
 \usage{data(guthion)}
 

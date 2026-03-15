@@ -6,7 +6,7 @@
 
 \title{Red fescue}
 
-\description{red.fescue data.}
+\description{Data from a dose-response experiment with red fescue (\emph{Festuca rubra}). Biomass was measured at different dose levels and at two time points (day 0 and day 16).}
 
 \usage{data(red.fescue)}
 

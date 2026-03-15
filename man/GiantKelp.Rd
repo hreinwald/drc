@@ -7,7 +7,7 @@
 \title{Measurements of germination tubes for Giant Kelp}
 
 \description{
-   Giant kelp, Mactocystis pyrifera, was exposed to 8 different concentrations of copper and the respponse measured was the length of the germination tube.
+   Giant kelp, \emph{Macrocystis pyrifera}, was exposed to 8 different concentrations of copper and the response measured was the length of the germination tube.
 }
 
 \usage{data(GiantKelp)}

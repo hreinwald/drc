@@ -6,7 +6,7 @@
 
 \title{Acute inhalation}
 
-\description{acute.inh data.}
+\description{Data from an acute inhalation toxicity test. For each of several dose levels, the total number of subjects and the number of dead subjects were recorded.}
 
 \usage{data(acute.inh)}
 
