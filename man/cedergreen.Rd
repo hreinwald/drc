@@ -56,33 +56,12 @@ If \eqn{f=0}, the model simplifies to the standard four-parameter log-logistic m
 The parameter \eqn{\alpha} is a shape parameter that must be specified by the user.
 }
 \examples{
-\donttest{
-# This example requires the 'drc' package to be installed.
-if (requireNamespace("drc", quietly = TRUE)) {
-
-  library(drc)
-
-  # Sample data exhibiting a hormetic effect (initial stimulation)
-  dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
-  response <- c(100, 102, 95, 80, 40, 25, 20)
-  my_data <- data.frame(dose = dose, response = response)
-
-  # 1. Basic model fit, specifying the mandatory 'alpha' parameter
-  # The self-starter will find initial values for all 5 parameters.
-  model_fit <- drm(response ~ dose, data = my_data,
-                   fct = cedergreen(alpha = 0.5))
-  
-  summary(model_fit)
-  plot(model_fit, main = "Cedergreen Model Fit")
-
-  # 2. Model fit with a fixed lower limit (c = 20)
-  # The self-starter will now only find initial values for b, d, e, and f.
-  model_fit_fixed <- drm(response ~ dose, data = my_data,
-                         fct = cedergreen(alpha = 0.5, fixed = c(NA, 20, NA, NA, NA)))
-        
-  summary(model_fit_fixed)
-}
-}
+dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
+response <- c(100, 102, 95, 80, 40, 25, 20)
+my_data <- data.frame(dose = dose, response = response)
+model_fit <- drm(response ~ dose, data = my_data,
+                 fct = cedergreen(alpha = 0.5))
+summary(model_fit)
 
 }
 \seealso{

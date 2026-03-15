@@ -32,7 +32,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Fitting the baro5 model
@@ -61,6 +60,5 @@ plot(pressureVector, derivativeVector, type = "l")
 ## Finding the minimum
 pressureVector[which.min(derivativeVector)]
 
-}
 }
 \keyword{datasets}

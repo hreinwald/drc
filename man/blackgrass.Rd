@@ -28,7 +28,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -36,6 +35,5 @@ head(blackgrass)
 
 ## Summarizing seedling emergence across treatments
 aggregate(Accum.Ger ~ Temp + Bio, data = blackgrass, FUN = max)
-}
 }
 \keyword{datasets}

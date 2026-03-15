@@ -20,7 +20,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -33,7 +32,6 @@ summary(acute.inh.m1)
 
 ## Plotting the fitted curve
 plot(acute.inh.m1, xlab = "Dose", ylab = "Proportion dead")
-}
 }
 
 

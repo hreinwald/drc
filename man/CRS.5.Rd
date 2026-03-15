@@ -59,20 +59,13 @@ The function automatically generates a model name (\code{fctName}) and descripti
 (\code{fctText}) unless they are explicitly provided by the user.
 }
 \examples{
-\dontrun{
-# Assumes the 'drc' package is installed
-
-# Example 1: Basic usage with alpha_type = "a" (alpha = 1)
+# Create a CRS.5 model specification
 crs_model_a <- CRS.5()
 
-# Example 2: Fix the lower limit 'c' to 0 and use a custom numeric alpha
-crs_model_custom <- CRS.5(fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75)
-
-# Example 3: Provide a custom name and description
-crs_model_named <- CRS.5(alpha_type = "b", 
-                         fctName = "MyCRSModel", 
-                         fctText = "My custom CRS model (alpha=0.5)")
-}
+# Fix the lower limit to 0 and use a custom numeric alpha
+crs_model_custom <- CRS.5(
+  fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75
+)
 
 }
 \author{

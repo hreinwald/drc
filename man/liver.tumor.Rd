@@ -34,7 +34,6 @@ Sprague-Dawley rats (gavage studies). National Toxicology Program technical repo
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -48,7 +47,6 @@ summary(liver.tumor.m1)
 ## Plotting the fitted curve
 plot(liver.tumor.m1, xlab = "Concentration of TCDD (ng/kg)",
 ylab = "Tumor incidence")
-}
 }
 
 

@@ -28,7 +28,6 @@ organisms.
 
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -40,6 +39,5 @@ summary(GiantKelp.m1)
 
 ## Plotting the fitted curve
 plot(GiantKelp.m1, xlab = "Copper concentration", ylab = "Tube length (mm)")
-}
 }
 \keyword{datasets}

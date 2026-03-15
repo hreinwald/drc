@@ -23,7 +23,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -36,6 +35,5 @@ summary(guthion.m1)
 
 ## Plotting the fitted curves
 plot(guthion.m1, xlab = "Dose", ylab = "Proportion dead")
-}
 }
 \keyword{datasets}

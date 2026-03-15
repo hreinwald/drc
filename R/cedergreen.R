@@ -193,33 +193,12 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #' @author Hannes Reinwald
 #'
 #' @examples
-#' \donttest{
-#' # This example requires the 'drc' package to be installed.
-#' if (requireNamespace("drc", quietly = TRUE)) {
-#' 
-#'   library(drc)
-#' 
-#'   # Sample data exhibiting a hormetic effect (initial stimulation)
-#'   dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
-#'   response <- c(100, 102, 95, 80, 40, 25, 20)
-#'   my_data <- data.frame(dose = dose, response = response)
-#' 
-#'   # 1. Basic model fit, specifying the mandatory 'alpha' parameter
-#'   # The self-starter will find initial values for all 5 parameters.
-#'   model_fit <- drm(response ~ dose, data = my_data,
-#'                    fct = cedergreen(alpha = 0.5))
-#'   
-#'   summary(model_fit)
-#'   plot(model_fit, main = "Cedergreen Model Fit")
-#' 
-#'   # 2. Model fit with a fixed lower limit (c = 20)
-#'   # The self-starter will now only find initial values for b, d, e, and f.
-#'   model_fit_fixed <- drm(response ~ dose, data = my_data,
-#'                          fct = cedergreen(alpha = 0.5, fixed = c(NA, 20, NA, NA, NA)))
-#'         
-#'   summary(model_fit_fixed)
-#' }
-#'}
+#' dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
+#' response <- c(100, 102, 95, 80, 40, 25, 20)
+#' my_data <- data.frame(dose = dose, response = response)
+#' model_fit <- drm(response ~ dose, data = my_data,
+#'                  fct = cedergreen(alpha = 0.5))
+#' summary(model_fit)
 #'
 #' @export
 "cedergreen" <- function(
@@ -371,20 +350,13 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #'   \code{drc::cedergreen} call fails, it issues a warning and returns \code{NULL}.
 #'
 #' @examples
-#' \dontrun{
-#' # Assumes the 'drc' package is installed
-#' 
-#' # Example 1: Basic usage with alpha_type = "a" (alpha = 1)
+#' # Create a CRS.5 model specification
 #' crs_model_a <- CRS.5()
 #'
-#' # Example 2: Fix the lower limit 'c' to 0 and use a custom numeric alpha
-#' crs_model_custom <- CRS.5(fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75)
-#'
-#' # Example 3: Provide a custom name and description
-#' crs_model_named <- CRS.5(alpha_type = "b", 
-#'                          fctName = "MyCRSModel", 
-#'                          fctText = "My custom CRS model (alpha=0.5)")
-#' }
+#' # Fix the lower limit to 0 and use a custom numeric alpha
+#' crs_model_custom <- CRS.5(
+#'   fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75
+#' )
 #' 
 #' @export
 CRS.5 = function(names = c("b", "c", "d", "e", "f"), 
@@ -494,7 +466,8 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
 #' ED(lettuce.crsm1, c(50))
 #'
 #' # Recommended replacement:
-#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA)) )
+#' fct_spec <- CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
 #' summary(lettuce.crs5)
 #' ED(lettuce.crs5, c(50))
 #'
@@ -550,7 +523,8 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
 #' ED(lettuce.crsm1, c(50))
 #'
 #' # Recommended replacement:
-#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA)) )
+#' fct_spec <- CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
 #' summary(lettuce.crs5)
 #' ED(lettuce.crs5, c(50))
 #'
@@ -615,7 +589,8 @@ ml3a <- CRS.4a
 #' ED(lettuce.crsm2, c(50))
 #'
 #' # Recommended replacement:
-#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA)) )
+#' fct_spec <- CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
 #' summary(lettuce.crs5)
 #' ED(lettuce.crs5, c(50))
 #'
@@ -670,7 +645,8 @@ ml3a <- CRS.4a
 #' ED(lettuce.crsm2, c(50))
 #'
 #' # Recommended replacement:
-#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA)) )
+#' fct_spec <- CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
 #' summary(lettuce.crs5)
 #' ED(lettuce.crs5, c(50))
 #'
@@ -735,7 +711,8 @@ ml3b <- CRS.4b
 #' ED(lettuce.crsm3, c(50))
 #'
 #' # Recommended replacement:
-#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA)) )
+#' fct_spec <- CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
 #' summary(lettuce.crs5)
 #' ED(lettuce.crs5, c(50))
 #'
@@ -790,7 +767,8 @@ ml3b <- CRS.4b
 #' ED(lettuce.crsm3, c(50))
 #'
 #' # Recommended replacement:
-#' lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA)) )
+#' fct_spec <- CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA))
+#' lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
 #' summary(lettuce.crs5)
 #' ED(lettuce.crs5, c(50))
 #'

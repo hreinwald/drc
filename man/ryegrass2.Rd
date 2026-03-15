@@ -20,7 +20,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -32,6 +31,5 @@ summary(ryegrass2.m1)
 
 ## Plotting the fitted curves
 plot(ryegrass2.m1, xlab = "Dose", ylab = "Biomass")
-}
 }
 \keyword{datasets}

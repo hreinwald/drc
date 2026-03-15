@@ -26,52 +26,13 @@
 
 
 \examples{
-\dontrun{
 data(ctb)
 ctb$day <- as.factor(ctb$day)
-ctb$dayplate <- as.factor(with(ctb, paste(day, plate, sep="/")))
 
-ggplot(ctb, aes(x=log(conc), y=fluorescence, colour=day, group=day:plate)) + 
-  geom_point()
-
-# starting values for fixed effects
-fix <- coefficients(drm(fluorescence ~ conc, fct=LL.4(), data=ctb))
-
-# starting values for random day effects
-rday <- drm(fluorescence ~ conc, curveid=day, fct=LL.4(), data=ctb)
-cmatday <- matrix(coefficients(rday), ncol=4)
-mday <- apply(cmatday, 2, mean)
-names(mday) <- letters[2:5]
-rmatday <- t(apply(cmatday, 1, function(x) x-mday))
-rownames(rmatday) <- levels(ctb$day)
-colnames(rmatday) <- letters[2:5]
-
-start <- list(fixed=fix, random=list(day=rmatday[,3, drop=FALSE]))
-
-
-## set of nonlinear mixed models
-ctb.LL4.mixed <- medrm(fluorescence  ~ conc, fct=LL.4(), 
-                       data=ctb, random=d  ~ 1 | day/plate, start=start)
-ctb.LN4.mixed <- medrm(fluorescence  ~ conc, fct=LN.4(), 
-                       data=ctb, random=d  ~ 1 | day/plate, start=start)
-ctb.W14.mixed <- medrm(fluorescence  ~ conc, fct=W1.4(), 
-                       data=ctb, random=d  ~ 1 | day/plate, start=start)
-ctb.W24.mixed <- medrm(fluorescence  ~ conc, fct=W2.4(), 
-                       data=ctb, random=d  ~ 1 | day/plate, start=start)
-ctb.FPL4b.mixed <- medrm(fluorescence ~ conc, fct=FPL.4(-1, 1), 
-                         data=ctb, random=d ~ 1 | day/plate, start=start)
-ctb.FPL4c.mixed <- medrm(fluorescence ~ conc, fct=FPL.4(-1, 2), 
-                         data=ctb, random=d  ~ 1 | day/plate, start=start)
-ctb.FPL4d.mixed <- medrm(fluorescence ~ conc, fct=FPL.4(-0.5, 3), 
-                         data=ctb, random=d  ~ 1 | day/plate, start=start)
-
-## information criteria
-AIC(ctb.LL4.mixed, ctb.LN4.mixed, ctb.W14.mixed,
-    ctb.W24.mixed, ctb.FPL4b.mixed,
-    ctb.FPL4c.mixed, ctb.FPL4d.mixed)
-
-
-}
+## Fit a four-parameter log-logistic model
+ctb.m1 <- drm(fluorescence ~ conc, data = ctb, fct = LL.4())
+summary(ctb.m1)
+plot(ctb.m1, main = "CTB dose-response")
 }
 
 

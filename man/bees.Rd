@@ -35,7 +35,6 @@ Zhu YC, Yao J, Adamczyk J and Luttrell R, Synergistic toxicity and physiological
   }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -43,7 +42,6 @@ head(bees)
 
 ## Summarizing mortality by treatment
 aggregate(dead48h ~ treat, data = bees, FUN = mean)
-}
 }
 
 \keyword{datasets}

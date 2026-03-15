@@ -34,7 +34,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the first rows in the dataset
@@ -46,6 +45,5 @@ summary(spinach.m1)
 
 ## Plotting the fitted curves
 plot(spinach.m1, xlab = "Dose (muMol)", ylab = "Oxygen consumption (slope)")
-}
 }
 \keyword{datasets}

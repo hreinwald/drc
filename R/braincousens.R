@@ -339,6 +339,9 @@ fixed = c(NA, NA, NA, NA), names = c("b", "d", "e", "f"), ...)
 
 #' @title Alias for BC.4
 #' @description \code{bcl3} is an alias for \code{\link{BC.4}}.
+#' @param fixed numeric vector of length 4 specifying fixed parameters (NAs for free parameters).
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{braincousens}}.
 #' @seealso \code{\link{BC.4}}
 #' @keywords models nonlinear
 bcl3 <- BC.4
@@ -377,6 +380,9 @@ fixed = c(NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f"), ...)
 
 #' @title Alias for BC.5
 #' @description \code{bcl4} is an alias for \code{\link{BC.5}}.
+#' @param fixed numeric vector of length 5 specifying fixed parameters (NAs for free parameters).
+#' @param names a vector of character strings giving the names of the parameters.
+#' @param ... additional arguments passed to \code{\link{braincousens}}.
 #' @seealso \code{\link{BC.5}}
 #' @keywords models nonlinear
 bcl4 <- BC.5

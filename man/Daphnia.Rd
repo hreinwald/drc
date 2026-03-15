@@ -37,7 +37,6 @@ Noergaard KB and Cedergreen N, Pesticide cocktails can interact synergistically 
   }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -50,7 +49,6 @@ summary(Daphnia.m1)
 
 ## Plotting the fitted curve
 plot(Daphnia.m1, xlab = "Total dose (mu g/L)", ylab = "Proportion immobile")
-}
 }
 
 \keyword{datasets}

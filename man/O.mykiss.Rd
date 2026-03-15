@@ -38,7 +38,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 head(O.mykiss)
@@ -56,6 +55,5 @@ summary(O.mykiss.m2)
 ## Plotting the fit
 plot(O.mykiss.m1, type = "all", xlim = c(0, 500), ylim = c(0,4),
 xlab = "Concentration (mg/l)", ylab = "Weight (g)", broken = TRUE)
-}
 }
 \keyword{datasets}

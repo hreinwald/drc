@@ -6,6 +6,13 @@
 \usage{
 bcl3(fixed = c(NA, NA, NA, NA), names = c("b", "d", "e", "f"), ...)
 }
+\arguments{
+\item{fixed}{numeric vector of length 4 specifying fixed parameters (NAs for free parameters).}
+
+\item{names}{a vector of character strings giving the names of the parameters.}
+
+\item{...}{additional arguments passed to \code{\link{braincousens}}.}
+}
 \description{
 \code{bcl3} is an alias for \code{\link{BC.4}}.
 }

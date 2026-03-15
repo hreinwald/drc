@@ -27,7 +27,6 @@ using generalized linear models. Environmental Toxicology and Chemistry, \bold{1
 
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -39,6 +38,5 @@ summary(C.dubia.m1)
 
 ## Plotting fitted curve together with the original data
 plot(C.dubia.m1, xlab = "Concentration (\%)", ylab = "Number of offspring")
-}
 }
 \keyword{datasets}

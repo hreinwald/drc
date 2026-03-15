@@ -35,7 +35,6 @@
 
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Fitting a log-logistic model with
@@ -51,6 +50,5 @@ summary(S.alba.LL.4.2)
 
 ## Plotting fitted regression curves together with the data
 plot(S.alba.LL.4.2)
-}
 }
 \keyword{datasets}

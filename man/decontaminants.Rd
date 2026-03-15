@@ -37,7 +37,6 @@ Morgan, B. J. T. and Smith, D. M. (1992) A Note on Wadley's Problem with Overdis
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Wadley's problem using a three-parameter log-logistic model
@@ -54,6 +53,5 @@ decon.LL.3.2 <- drm(count~conc, group, data = decontaminants, fct=LL.3(),
 type = "Poisson", pmodels = list(~group-1, ~1, ~group-1))
 
 summary(decon.LL.3.2)
-}
 }
 \keyword{datasets}

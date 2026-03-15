@@ -54,7 +54,8 @@ summary(lettuce.crsm1)
 ED(lettuce.crsm1, c(50))
 
 # Recommended replacement:
-lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA)) )
+fct_spec <- CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA))
+lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
 summary(lettuce.crs5)
 ED(lettuce.crs5, c(50))
 

@@ -38,7 +38,6 @@
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 M.bahia.m1 <- drm(dryweight~conc, data=M.bahia, fct=LN.3())
@@ -64,6 +63,5 @@ M.bahia.m3 <- boxcox(update(M.bahia.m1, fct = LN.4()), method = "anova")
 #plot(fitted(M.bahia.m3), residuals(M.bahia.m3))
 plot(M.bahia.m3, add=TRUE, type="none", broken=TRUE, lty=3, col=2)
 ED(M.bahia.m3, c(10,20,50), ci="fls")
-}
 }
 \keyword{datasets}

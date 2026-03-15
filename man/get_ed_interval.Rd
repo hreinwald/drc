@@ -35,33 +35,10 @@ This function determines the recommended confidence interval calculation method
 ('type' argument in drc::ED) based on the model family of a 'drc' object.
 }
 \examples{
-\dontrun{
-# Assuming 'ryegrass_model' is a drc object created with LL.4()
-# library(drc)
-# ryegrass_model <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
-
-# 1. Pass the model object directly
-get_ed_interval(ryegrass_model)
-#> [1] "tfls"
-
-# 2. Pass the model name as a string
-get_ed_interval("LL.4")
-#> [1] "tfls"
-
-# 3. Example with a Weibull model
-get_ed_interval("W1.4")
-#> [1] "delta"
-
-# 4. Example with a large sample size assumption
-get_ed_interval(ryegrass_model, small_n = FALSE)
-#> [1] "fls"
-
-# 5. Example of a model that falls through to the default
-#    (e.g., a hypothetical linear model 'LIN.1')
-get_ed_interval("LIN.1")
-#> Defaulting to 'tfls' for model type: LIN.1
-#> [1] "tfls"
-}
+ryegrass_model <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+drc:::get_ed_interval(ryegrass_model)
+drc:::get_ed_interval("LL.4")
+drc:::get_ed_interval("W1.4")
 
 }
 \author{

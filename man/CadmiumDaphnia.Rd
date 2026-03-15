@@ -25,7 +25,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data
@@ -39,6 +38,5 @@ summary(CadmiumDaphnia.m1)
 
 ## Plotting the fitted curve
 plot(CadmiumDaphnia.m1, xlab = "Cadmium dose", ylab = "Proportion dead")
-}
 }
 \keyword{datasets}

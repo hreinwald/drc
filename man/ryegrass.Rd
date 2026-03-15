@@ -35,7 +35,6 @@
 }
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Displaying the data set
@@ -77,7 +76,6 @@ text(3,7.5, "Weibull-2", pos=4, cex=1.2)
 arrows(2.5, 0.9, 5.7, 0.9, 0.15, lwd=2)
 text(3,0.9, "Weibull-1", pos=2, cex=1.2)
 
-}
 }
 \keyword{datasets}
 

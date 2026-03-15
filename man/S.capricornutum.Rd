@@ -34,7 +34,6 @@
 %\references{}
 
 \examples{
-\dontrun{
 library(drc)
 
 ## Fitting 3-parameter log-normal model
@@ -59,6 +58,5 @@ s.cap.m3 <- drm(count ~ conc, data = S.capricornutum, fct = LN.3(loge=TRUE))
 s.cap.m4 <- boxcox(s.cap.m3, method = "anova")
 summary(s.cap.m4)
 ED(s.cap.m4, c(10, 20, 50), interval = "fls")
-}
 }
 \keyword{datasets}
