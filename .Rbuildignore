@@ -17,3 +17,4 @@
 ^vignettes$
 ^local_testing$
 ^\.vscode$
+^build_pkgdown\.R$

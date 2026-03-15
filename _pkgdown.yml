@@ -1,4 +1,5 @@
 url: https://github.com/hreinwald/drc
+destination: docs
 
 template:
   bootstrap: 5

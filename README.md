@@ -35,6 +35,22 @@ devtools::install_github("hreinwald/drc")           # <- re-factored development
 devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
 ```
 
+### Building the Documentation Website
+
+To build the pkgdown documentation website locally:
+
+``` r
+# Option 1: Use the provided helper script (recommended)
+source("build_pkgdown.R")
+
+# Option 2: Manual build
+# If you get an error about docs/ not being a pkgdown site, first clean it:
+pkgdown::clean_site(force = TRUE)
+pkgdown::build_site()
+```
+
+The helper script `build_pkgdown.R` automatically handles the case where a `docs/` directory exists but wasn't created by pkgdown.
+
 ## Quick Start
 
 ### Fitting a basic dose-response model
