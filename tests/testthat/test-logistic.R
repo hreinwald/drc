@@ -195,7 +195,7 @@ test_that("logistic derivx handles multiple rows", {
 test_that("edfct returns ED50 correctly for symmetric logistic (f=1)", {
   mod <- logistic()
   # b=-1, c=0, d=100, e=5, f=1
-  # ED50 = e + log((100/50)^(1/1) - 1) / b = 5 + log(2-1)/(-1) = 5 + 0/(-1) = 5
+  # ED50 = e + log((100/50)^(1/1) - 1) / b = 5 + log(1)/(-1) = 5 + 0 = 5
   result <- mod$edfct(c(-1, 0, 100, 5, 1), 50)
   
   expect_equal(result[[1]], 5, tolerance = 1e-10)
@@ -207,12 +207,12 @@ test_that("edfct returns correct ED values for various p", {
   mod <- logistic()
   parms <- c(-1, 0, 100, 5, 1)
   
-  # ED10: e + log((100/10)^1 - 1)/(-1) = 5 + log(9)/(-1) = 5 - ln(9) ≈ 2.803
+  # ED10: e + log((100/10)^1 - 1) / b = 5 + log(9) / (-1)
   result10 <- mod$edfct(parms, 10)
   expected10 <- 5 + log((100/10)^1 - 1) / (-1)
   expect_equal(result10[[1]], expected10, tolerance = 1e-10)
   
-  # ED90: e + log((100/90)^1 - 1)/(-1) = 5 + log(1/9)/(-1) = 5 + ln(9) ≈ 7.197
+  # ED90: e + log((100/90)^1 - 1) / b = 5 + log(1/9) / (-1)
   result90 <- mod$edfct(parms, 90)
   expected90 <- 5 + log((100/90)^1 - 1) / (-1)
   expect_equal(result90[[1]], expected90, tolerance = 1e-10)
