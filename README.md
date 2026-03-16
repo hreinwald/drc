@@ -6,8 +6,9 @@
 <a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 
 <a href="https://cran.r-project.org/package=drc"><img src="https://www.r-pkg.org/badges/version/drc"></a>
-<a href="https://cran.r-project.org/package=drc"><img src="https://cranlogs.r-pkg.org/badges/grand-total/drc"></a>
+[![Downloads](https://cranlogs.r-pkg.org/badges/drc)](https://cranlogs.r-pkg.org/)
 <a href="https://github.com/hreinwald/drc/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/hreinwald/drc"></a>
+<!-- <a href="https://cran.r-project.org/package=drc"><img src="https://cranlogs.r-pkg.org/badges/grand-total/drc"></a> --> <!-- Ignore this for now -->
 
 # drc — Dose-Response Curve Analysis in R
 
