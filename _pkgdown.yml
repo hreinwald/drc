@@ -18,13 +18,16 @@ reference:
   - EDcomp
   - compParm
   - mselect
+  - drmc
 
 - title: Model Functions
   desc: Available dose-response model families
   contents:
   - starts_with("LL.")
+  - starts_with("LL2.")
   - starts_with("W1.")
   - starts_with("W2.")
+  - starts_with("W2x.")
   - starts_with("G.")
   - starts_with("LN.")
   - starts_with("BC.")
@@ -32,10 +35,159 @@ reference:
   - starts_with("UCRS.")
   - starts_with("NEC.")
   - starts_with("L.")
+  - starts_with("AR.")
+  - starts_with("EXD.")
+  - starts_with("MM.")
+  - FPL.4
+  - starts_with("ml3")
+  - starts_with("ml4")
+  - starts_with("uml3")
+  - starts_with("uml4")
+  - bcl3
+  - bcl4
+  - baro5
+  - braincousens
+  - cedergreen
+  - ucedergreen
+  - fplogistic
+  - gammadr
+  - gaussian
+  - gompertz
+  - gompertzd
+  - lgaussian
+  - llogistic
+  - llogistic2
+  - lnormal
+  - logistic
+  - threephase
+  - twophase
+  - weibull1
+  - weibull2
+  - weibull2x
+  - yieldLoss
+  - arandaordaz
 
-- title: Diagnostics and Utilities
+- title: Effective Dose Estimation
+  desc: Functions for estimating effective doses and comparisons
+  contents:
+  - ED.drc
+  - ED_robust
+  - CIcomp
+  - CIcompX
+  - comped
+  - maED
+  - maED_robust
+  - isobole
+  - NEC
+  - MAX
+  - PR
+  - relpot
+
+- title: Diagnostics and Model Selection
   desc: Model diagnostics and helper functions
   contents:
   - modelFit
   - Rsq
   - rdrm
+  - anova.drc
+  - lin.test
+  - mr.test
+  - neill.test
+  - noEffect
+  - backfit
+  - boxcox.drc
+  - searchdrc
+  - simDR
+  - simFct
+  - plotFACI
+  - getInitial
+  - getMeanFunctions
+
+- title: S3 Methods
+  desc: Methods for drc model objects
+  contents:
+  - coef.drc
+  - confint.drc
+  - cooks.distance.drc
+  - estfun.drc
+  - fitted.drc
+  - hatvalues.drc
+  - logLik.drc
+  - plot.drc
+  - predict.drc
+  - print.drc
+  - print.summary.drc
+  - residuals.drc
+  - summary.drc
+  - update.drc
+  - vcov.drc
+  - bread.drc
+
+- title: Datasets
+  desc: Example datasets for dose-response analysis
+  contents:
+  - acidiq
+  - aconiazide
+  - acute.inh
+  - algae
+  - arbovirus
+  - auxins
+  - barley
+  - bees
+  - blackgrass
+  - broccoli
+  - C.dubia
+  - CadmiumDaphnia
+  - carbendazim
+  - chickweed
+  - chlorac
+  - chlordan
+  - ctb
+  - Cyp17
+  - Daphnia
+  - daphnids
+  - decontaminants
+  - deguelin
+  - earthworms
+  - echovirus
+  - Eryngium.sparganophyllum
+  - etmotc
+  - finney71
+  - fluoranthene
+  - germination
+  - GiantKelp
+  - glymet
+  - guthion
+  - H.virescens
+  - heartrate
+  - leaflength
+  - lemna
+  - lepidium
+  - lettuce
+  - liver.tumor
+  - M.bahia
+  - mdra
+  - mecter
+  - metals
+  - methionine
+  - mixture
+  - multi2
+  - nasturtium
+  - nfa
+  - nicotine
+  - O.mykiss
+  - P.promelas
+  - RScompetition
+  - red.fescue
+  - ryegrass
+  - ryegrass2
+  - S.alba
+  - S.alba.comp
+  - S.capricornutum
+  - secalonic
+  - selenium
+  - spinach
+  - TCDD
+  - terbuthylazin
+  - ursa
+  - vinclozolin
