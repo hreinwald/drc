@@ -44,7 +44,7 @@ CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
     pred1 <- predict(modelList[[2]], data.frame(ese1Vec[, 1]), se.fit = TRUE)
     pred2 <- predict(modelList[[3]], data.frame(ese2Vec[, 1]), se.fit = TRUE) 
     
-    predMat<- as.matrix(cbind(pred12[, 1], pred1[, 1], pred2[, 1], 
+    predMat <- as.matrix(cbind(pred12[, 1], pred1[, 1], pred2[, 1], 
                                pred12[, 2], pred1[, 2], pred2[, 2]))
     rownames(predMat) <- as.character(EDvec)
     colnames(predMat) <- c("E.mix", "E1", "E2", "SE.mix", "SE1", "SE2")
