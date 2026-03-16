@@ -101,7 +101,7 @@ ED <- function(object, ...) UseMethod("ED", object)
 #' @author Christian Ritz
 #' @keywords models nonlinear
 #' @export
-ED.drc <- function(
+"ED.drc" <- function(
     object,
     respLev   = c(10,20,50),
     interval  = c("none", "delta", "fls", "tfls", "inv"),
