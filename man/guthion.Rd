@@ -34,6 +34,6 @@ data = guthion, fct = LL.2(), type = "binomial")
 summary(guthion.m1)
 
 ## Plotting the fitted curves
-plot(guthion.m1, xlab = "Dose", ylab = "Proportion dead")
+plot(guthion.m1, xlab = "Dose", ylab = "Proportion dead", ylim = c(0, 1))
 }
 \keyword{datasets}

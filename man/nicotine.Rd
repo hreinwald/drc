@@ -31,6 +31,6 @@ data = nicotine, fct = LL.2(), type = "binomial")
 summary(nicotine.m1)
 
 ## Plotting the fitted curve
-plot(nicotine.m1, xlab = "Concentration", ylab = "Proportion dead")
+plot(nicotine.m1, xlab = "Concentration", ylab = "Proportion dead", ylim = c(0, 1))
 }
 \keyword{datasets}
