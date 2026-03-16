@@ -389,6 +389,11 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
     fctText = "Weibull (type 2)", ...))
 }
 
+## NOTE: AR.2() and AR.3() are also defined in arandaordaz.R
+## These weibull2-based versions are the PRIMARY implementations used by the package.
+## They override the arandaordaz-based versions when the package loads (alphabetical order).
+## These implementations provide asymptotic regression by fixing the shape parameter b=1.
+
 #' Two-parameter asymptotic regression model
 #'
 #' A two-parameter asymptotic regression model where \code{b} is fixed at 1 and

@@ -122,6 +122,11 @@ fixed = c(NA, NA, NA), names = c("a", "b", "c"), fctName, fctText)
     invisible(returnList)
 }
 
+## NOTE: AR.2() and AR.3() are also defined in weibull2.R
+## The weibull2.R versions are the primary implementations used by the package.
+## These arandaordaz-based versions are kept for completeness but will be
+## overridden by the weibull2-based implementations when the package loads.
+
 #' @noRd
 "AR.2" <-
 function(fixed = c(NA, NA), names = c("b", "c"))
@@ -131,9 +136,9 @@ function(fixed = c(NA, NA), names = c("b", "c"))
     if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
     if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
 
-    return( asymreg(fixed = c(0, fixed[1:2]), 
-    names = c("a", names[1:2]), 
-    fctName = as.character(match.call()[[1]]), 
+    return( arandaordaz(fixed = c(0, fixed[1:2]),
+    names = c("a", names[1:2]),
+    fctName = as.character(match.call()[[1]]),
     fctText = "Asymptotic regression with lower limit fixed at 0") )
 }
 
@@ -146,6 +151,6 @@ function(fixed = c(NA, NA, NA), names = c("a", "b", "c"))
     if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
     if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
 
-    return( asymreg(fixed, names, 
+    return( arandaordaz(fixed, names,
     fctName = as.character(match.call()[[1]])) )
 }
