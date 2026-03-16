@@ -48,10 +48,10 @@ absolute or relative (default).}
 \item{lref}{numeric value specifying the lower limit to serve as reference.}
 
 \item{uref}{numeric value specifying the upper limit to serve as reference
-(e.g., 100\\%).}
+(e.g., 100\%).}
 
 \item{bound}{logical. Default is \code{TRUE}, in which case only ED values
-between 0 and 100\\% are allowed. Set to \code{FALSE} for hormesis models.}
+between 0 and 100\% are allowed. Set to \code{FALSE} for hormesis models.}
 
 \item{vcov.}{function providing the variance-covariance matrix, or a
 variance-covariance matrix directly. \code{\link{vcov}} is the default,
