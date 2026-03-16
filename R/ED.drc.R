@@ -227,6 +227,7 @@ ED <- function(object, ...) UseMethod("ED", object)
   ## --- Compute ED estimates and standard errors for each curve ----------------
   
   invMatList <- vector("list", length(indexVec))
+  rowIndex <- 0L
   
   for (i in indexVec) {
     parmChosen <- parmMat[, i]
@@ -236,17 +237,16 @@ ED <- function(object, ...) UseMethod("ED", object)
     if (is.null(clevel) || strParm0[i] %in% clevel) {
       
       for (j in seq_len(lenPV)) {
-        # Compute row index from loop counters, avoiding a separate manual counter.
-        rowIdx <- (i - 1L) * lenPV + j
+        rowIndex <- rowIndex + 1L
         
         EDeval <- EDlist(parmChosen, respLev[j], reference = reference, type = type, ...)
         EDval  <- EDeval[[1]]
         dEDval <- EDeval[[2]]
         
-        dEdMat[rowIdx, parmInd] <- dEDval
+        dEdMat[(i - 1L) * lenPV + j, parmInd] <- dEDval
         
-        oriMat[rowIdx, 1] <- EDval
-        oriMat[rowIdx, 2] <- sqrt(dEDval %*% varCov %*% dEDval)
+        oriMat[rowIndex, 1] <- EDval
+        oriMat[rowIndex, 2] <- sqrt(dEDval %*% varCov %*% dEDval)
         
         # Apply log-base transformation to the ED value and its derivative if
         # a log-transformed dose axis is in use.
@@ -255,10 +255,10 @@ ED <- function(object, ...) UseMethod("ED", object)
           dEDval <- EDval * log(logBase) * dEDval
         }
         
-        edMat[rowIdx, 1] <- EDval
-        edMat[rowIdx, 2] <- sqrt(dEDval %*% varCov %*% dEDval)
+        edMat[rowIndex, 1] <- EDval
+        edMat[rowIndex, 2] <- sqrt(dEDval %*% varCov %*% dEDval)
         
-        dimNames[rowIdx] <- paste0(strParm[i], respLev[j])
+        dimNames[rowIndex] <- paste0(strParm[i], respLev[j])
       }
       
       # Inverse regression intervals are computed per-curve, outside the inner
@@ -278,8 +278,9 @@ ED <- function(object, ...) UseMethod("ED", object)
       
     } else {
       # Remove pre-allocated rows corresponding to excluded curves.
-      rowsToRemove <- ((i - 1L) * lenPV + 1L):(i * lenPV)
+      rowsToRemove <- (rowIndex + 1L):(rowIndex + lenPV)
       edMat    <- edMat[-rowsToRemove, , drop = FALSE]
+      oriMat   <- oriMat[-rowsToRemove, , drop = FALSE]
       dimNames <- dimNames[-rowsToRemove]
     }
   }
