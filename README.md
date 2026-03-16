@@ -1,13 +1,13 @@
-
+[![GitHub dev version](https://img.shields.io/github/r-package/v/hreinwald/drc)](https://github.com/hreinwald/drc)
 <a href="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml/badge.svg"></a>
 <a href="https://app.codecov.io/gh/hreinwald/drc"><img src="https://codecov.io/gh/hreinwald/drc/branch/dev/graph/badge.svg"></a>
-<a href="https://cran.r-project.org/package=drc"><img src="https://www.r-pkg.org/badges/version/drc"></a>
-<a href="https://cran.r-project.org/package=drc"><img src="https://cranlogs.r-pkg.org/badges/grand-total/drc"></a>
-<a href="https://github.com/hreinwald/drc/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/hreinwald/drc"></a>
-<a href="https://cran.r-project.org/"><img src="https://img.shields.io/badge/R%3E%3D4.0.0-6699ff.svg"></a>
 <a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg"></a>
 <a href="https://github.com/hreinwald/drc/commits/dev"><img src="https://img.shields.io/github/last-commit/hreinwald/drc"></a>
 <a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+
+<a href="https://cran.r-project.org/package=drc"><img src="https://www.r-pkg.org/badges/version/drc"></a>
+<a href="https://cran.r-project.org/package=drc"><img src="https://cranlogs.r-pkg.org/badges/grand-total/drc"></a>
+<a href="https://github.com/hreinwald/drc/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/hreinwald/drc"></a>
 
 # drc — Dose-Response Curve Analysis in R
 
