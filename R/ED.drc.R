@@ -38,9 +38,9 @@ ED <- function(object, ...) UseMethod("ED", object)
 #'   absolute or relative (default).
 #' @param lref numeric value specifying the lower limit to serve as reference.
 #' @param uref numeric value specifying the upper limit to serve as reference
-#'   (e.g., 100\%).
+#'   (e.g., 100%).
 #' @param bound logical. Default is \code{TRUE}, in which case only ED values
-#'   between 0 and 100\% are allowed. Set to \code{FALSE} for hormesis models.
+#'   between 0 and 100% are allowed. Set to \code{FALSE} for hormesis models.
 #' @param vcov. function providing the variance-covariance matrix, or a
 #'   variance-covariance matrix directly. \code{\link{vcov}} is the default,
 #'   but \code{sandwich} is also an option for obtaining robust standard errors.
