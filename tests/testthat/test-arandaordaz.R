@@ -183,16 +183,14 @@ test_that("arandaordaz ssfct works with fixed parameters", {
 test_that("arandaordaz ssfct warns on invalid log argument", {
   ar <- arandaordaz()
   # Create data that will trigger warning
-  # Need y values that cause innerVal <= 0
-  # innerVal = -((y - aPar) / (bPar - aPar) - 1)
-  # aPar = min(y) * 0.95, bPar = max(y) * 1.05
-  # For y = min(y), innerVal = -(0.95/1 - 1) = -(-0.05) = 0.05
-  # For y = max(y), innerVal = -(1/1.05 - 1) = -(-0.0476) ≈ 0.0476
-  # Need y values outside this range to trigger warning
-  # If y > bPar, then (y - aPar)/(bPar - aPar) > 1, so innerVal < 0
+  # The warning triggers when innerVal = -((y - aPar) / (bPar - aPar) - 1) <= 0
+  # With negative y values, the LOWER_SHRINK and UPPER_EXPAND factors
+  # work in reverse: aPar = min(y) * 0.95 becomes less negative (larger),
+  # and bPar = max(y) * 1.05 becomes more negative (smaller),
+  # causing some y values to exceed the bPar threshold.
   dataf <- data.frame(
     x = c(0, 1, 2, 3, 4),
-    y = c(1, 2, 3, 4, 10)  # Last value much higher
+    y = c(-10, -8, -6, -4, -2)
   )
   expect_warning(
     ar$ssfct(dataf),
