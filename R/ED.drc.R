@@ -243,7 +243,7 @@ ED <- function(object, ...) UseMethod("ED", object)
         EDval  <- EDeval[[1]]
         dEDval <- EDeval[[2]]
         
-        dEdMat[(i - 1L) * lenPV + j, parmInd] <- dEDval
+        dEdMat[rowIndex, parmInd] <- dEDval
         
         oriMat[rowIndex, 1] <- EDval
         oriMat[rowIndex, 2] <- sqrt(dEDval %*% varCov %*% dEDval)
