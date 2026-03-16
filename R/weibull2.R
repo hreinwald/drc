@@ -76,38 +76,6 @@ fctName, fctText)
 
 
     ## Defining the self starter function
-if (FALSE)
-{
-    ssfct <- function(dataFra)
-    {
-        dose2 <- dataFra[,1]
-        resp3 <- dataFra[,2]
-
-        startVal <- rep(0, numParm)
-        startVal[3] <- max(resp3)  # +0.001  # the upper bound
-        startVal[2] <- min(resp3)  # -0.001  # the lower bound
-#        startVal[!notFixed] <- fixed[!notFixed] 
-
-        if (length(unique(dose2))==1) {return((c(NA, NA, startVal[3], NA))[notFixed])}  
-        # only estimate of upper limit if a single unique dose value 
-
-        indexT2 <- (dose2>0)
-        if (!any(indexT2)) {return((rep(NA, numParm))[notFixed])}  # for negative dose value
-        dose3 <- dose2[indexT2]
-        resp3 <- resp3[indexT2]
-
-        loglogTrans <- log(-log((startVal[3] - resp3 + 0.001)/(startVal[3]-startVal[2])))  # 0.001 to avoid 0 as argument to log
-        
-        loglogFit <- lm(loglogTrans~log(dose3))
-        startVal[4] <- exp(-coef(loglogFit)[1]/coef(loglogFit)[2])  # the e parameter
-        startVal[1] <- coef(loglogFit)[2]  # the b parameter
-
-        ## Avoiding 0 as start value for lower limit (convergence will fail)
-        if ( startVal[2] < 1e-12 ) {startVal[2] <- startVal[3]/10}
-
-        return(startVal[notFixed])
-    }
-}    
     if (!is.null(ssfct))
     {
         ssfct <- ssfct  # in case it is explicitly provided
