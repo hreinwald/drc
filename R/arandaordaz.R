@@ -122,30 +122,3 @@ fixed = c(NA, NA, NA), names = c("a", "b", "c"), fctName, fctText)
     invisible(returnList)
 }
 
-#' @noRd
-"AR.2" <-
-function(fixed = c(NA, NA), names = c("b", "c"))
-{
-    ## Checking arguments
-    numParm <- 2
-    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
-    if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
-
-    return( asymreg(fixed = c(0, fixed[1:2]), 
-    names = c("a", names[1:2]), 
-    fctName = as.character(match.call()[[1]]), 
-    fctText = "Asymptotic regression with lower limit fixed at 0") )
-}
-
-#' @noRd
-"AR.3" <-
-function(fixed = c(NA, NA, NA), names = c("a", "b", "c"))
-{
-    ## Checking arguments
-    numParm <- 3
-    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
-    if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
-
-    return( asymreg(fixed, names, 
-    fctName = as.character(match.call()[[1]])) )
-}
