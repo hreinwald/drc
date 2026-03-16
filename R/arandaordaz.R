@@ -55,18 +55,22 @@ arandaordaz <- function(
   
   ## --- Input validation
   numParm <- 3
-  
-  if (!is.numeric(fixed)) {
-    stop("'fixed' must be a numeric vector")
-  }
+
   if (length(fixed) != numParm) {
     stop("'fixed' must have length ", numParm)
+  }
+  if (!is.numeric(fixed) && !all(is.na(fixed))) {
+    stop("'fixed' must be a numeric vector")
   }
   if (!is.character(names) || length(names) != numParm) {
     stop("'names' must be a character vector of length ", numParm)
   }
-  
-  ## --- Handling 'fixed' argument 
+
+  ## --- Handling 'fixed' argument
+  # Convert to numeric if all NA (default c(NA, NA, NA) is logical)
+  if (all(is.na(fixed))) {
+    fixed <- as.numeric(fixed)
+  }
   notFixed <- is.na(fixed)
   parmVec  <- rep(0, numParm)
   parmVec[!notFixed] <- fixed[!notFixed]
