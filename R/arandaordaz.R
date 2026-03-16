@@ -59,7 +59,7 @@ arandaordaz <- function(
   if (length(fixed) != numParm) {
     stop("'fixed' must have length ", numParm)
   }
-  if (!is.numeric(fixed) && !all(is.na(fixed))) {
+  if (is.list(fixed) || (!is.numeric(fixed) && !all(is.na(fixed)))) {
     stop("'fixed' must be a numeric vector")
   }
   if (!is.character(names) || length(names) != numParm) {
