@@ -43,12 +43,14 @@ library(drc)
 head(Daphnia)
 
 ## Fitting a two-parameter log-logistic model for binomial response
-Daphnia.m1 <- drm(immob48/total ~ dose, weights = total,
+## using mix.frac to model each mixture ray individually
+Daphnia.m1 <- drm(immob48/total ~ dose, mix.frac, weights = total,
 data = Daphnia, fct = LL.2(), type = "binomial")
 summary(Daphnia.m1)
 
-## Plotting the fitted curve
-plot(Daphnia.m1, xlab = "Total dose (mu g/L)", ylab = "Proportion immobile")
+## Plotting the fitted curves for each mixture fraction
+plot(Daphnia.m1, xlab = "Total dose (mu g/L)", ylab = "Proportion immobile",
+ylim = c(0, 1), legendPos = c(3, 0.9))
 }
 
 \keyword{datasets}
