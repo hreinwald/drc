@@ -33,6 +33,8 @@ local_testing/*
 
 # Tests output
 tests/testthat/_snaps/
+Rplots.pdf
+tests/testthat/Rplots.pdf
 
 # OS-generated files
 .DS_Store
