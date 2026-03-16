@@ -145,15 +145,17 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
                     level = CI_level, display = FALSE, ... )
       
       # Additional check: Is the estimate positive or NA?
-      if (is.na(res[1, "Estimate"]) || res[1, "Estimate"] <= 0){ return(NULL) }
-      
-      # If successful and positive, return the result
-      if(verbose) message("Successfully calculated ED for response level: ", ec, "%")
-      res # Return the result to be processed into a data frame
+      if (is.na(res[1, "Estimate"]) || res[1, "Estimate"] <= 0) {
+        NULL
+      } else {
+        # If successful and positive, return the result
+        if(verbose) message("Successfully calculated ED for response level: ", ec, "%")
+        res # Return the result to be processed into a data frame
+      }
     }, error = function(e) {
       # If an error occurs (like the uniroot error), return NULL
       if(verbose) message("Error calculating ED for response level: ", ec, "% - ", e$message)
-      return(NULL)
+      NULL
     }) # end of tryCatch
     
     
@@ -280,17 +282,17 @@ maED_robust <- function(mod, fct_ls = NULL, respLev = c(10, 20, 50),
       
       # Additional check: Is the estimate positive and not NA?
       if (is.na(res[1, "Estimate"]) || res[1, "Estimate"] <= 0) {
-        return(NULL)
+        NULL
+      } else {
+        # If successful and positive, return the result.
+        if (verbose) message("Successfully calculated maED for response level: ", ec, "%")
+        res # Return the result to be processed into a data frame.
       }
-      
-      # If successful and positive, return the result.
-      if (verbose) message("Successfully calculated maED for response level: ", ec, "%")
-      res # Return the result to be processed into a data frame.
       
     }, error = function(e) {
       # If an error occurs, return NULL.
       if (verbose) message("Error calculating maED for response level: ", ec, "% - ", e$message)
-      return(NULL)
+      NULL
     }) # end of tryCatch
     
     # If ma_ed_result is NULL (due to error or non-positive estimate), return the NA row.

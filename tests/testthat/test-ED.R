@@ -104,6 +104,43 @@ test_that("ED.drc errors when model has no edfct function", {
   expect_error(ED(m1, 50, display = FALSE), "ED values cannot be calculated")
 })
 
+# Tests for input validation error branches in ED.drc
+
+test_that("ED.drc errors when object is not of class drc", {
+  expect_error(drc:::ED.drc("not_a_model", 50), "'object' must be of class 'drc'")
+  expect_error(drc:::ED.drc(42, 50), "'object' must be of class 'drc'")
+})
+
+test_that("ED.drc errors when respLev is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, "abc"), "'respLev' must be a non-empty numeric vector")
+  expect_error(drc:::ED.drc(m1, numeric(0)), "'respLev' must be a non-empty numeric vector")
+})
+
+test_that("ED.drc errors when level is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, level = "a"), "'level' must be a single numeric value strictly between 0 and 1")
+  expect_error(drc:::ED.drc(m1, 50, level = 0), "'level' must be a single numeric value strictly between 0 and 1")
+  expect_error(drc:::ED.drc(m1, 50, level = 1), "'level' must be a single numeric value strictly between 0 and 1")
+  expect_error(drc:::ED.drc(m1, 50, level = c(0.9, 0.95)), "'level' must be a single numeric value strictly between 0 and 1")
+})
+
+test_that("ED.drc errors when bound is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, bound = "yes"), "'bound' must be a single logical value")
+  expect_error(drc:::ED.drc(m1, 50, bound = c(TRUE, FALSE)), "'bound' must be a single logical value")
+})
+
+test_that("ED.drc errors when display is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, display = "yes"), "'display' must be a single logical value")
+})
+
+test_that("ED.drc errors when multcomp is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, multcomp = "yes"), "'multcomp' must be a single logical value")
+})
+
 # Tests for multi-curve models
 
 test_that("ED.drc works with multi-curve models", {
