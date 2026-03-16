@@ -1,20 +1,30 @@
 [![GitHub dev version](https://img.shields.io/github/r-package/v/hreinwald/drc)](https://github.com/hreinwald/drc)
+[![Documentation](https://img.shields.io/badge/docs-website-blue)](https://hreinwald.github.io/drc/)
 <a href="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml/badge.svg"></a>
 <a href="https://app.codecov.io/gh/hreinwald/drc"><img src="https://codecov.io/gh/hreinwald/drc/branch/dev/graph/badge.svg"></a>
 <a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg"></a>
-<a href="https://github.com/hreinwald/drc/commits/dev"><img src="https://img.shields.io/github/last-commit/hreinwald/drc"></a>
-<a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 
 <a href="https://cran.r-project.org/package=drc"><img src="https://www.r-pkg.org/badges/version/drc"></a>
 [![Downloads](https://cranlogs.r-pkg.org/badges/drc)](https://cranlogs.r-pkg.org/)
 <a href="https://github.com/hreinwald/drc/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/hreinwald/drc"></a>
 <!-- <a href="https://cran.r-project.org/package=drc"><img src="https://cranlogs.r-pkg.org/badges/grand-total/drc"></a> --> <!-- Ignore this for now -->
 
+<a href="https://github.com/hreinwald/drc/commits/dev"><img src="https://img.shields.io/github/last-commit/hreinwald/drc"></a>
+<a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+
 # drc — Dose-Response Curve Analysis in R
+
+## Note ⚠️
+
+This repository contains a refactored development version of the [*drc*](https://github.com/DoseResponse/drc) R package.
+
+The goal of this project is to modernize the codebase, improve maintainability, and provide a clearer development structure while preserving the core functionality of the original package.
+
+This repository focuses on structural refactoring and development improvements. Behavior and interfaces may change as the codebase is modernized.
 
 ## Overview
 
-The **drc** package provides a comprehensive framework for fitting, analyzing, and visualizing dose-response curves in R. It is widely used in bioassay, toxicology, pharmacology, and agricultural research to model the relationship between a dose (e.g., concentration of a substance) and a biological response.
+The **drc** package provides a comprehensive framework for fitting, analyzing, and visualizing dose-response curves in R. It is widely used in bioassay, toxicology, pharmacology, and agricultural research to model the relationship between an exposure (e.g., concentration of a substance) or dose and a biological response.
 
 The package offers:
 
@@ -25,6 +35,8 @@ The package offers:
 - **Multi-curve analysis**: fit and compare dose-response curves across groups, compute relative potency and selectivity indices via `EDcomp()`.
 - **Robust inference**: sandwich variance estimators for heteroscedasticity-consistent standard errors.
 - **Simulation tools**: generate random dose-response data for power analysis and method comparison.
+
+For more details visit: 📚 **[Full github documentation](https://hreinwald.github.io/drc/)**  
 
 ## Installation
 
