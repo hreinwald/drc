@@ -191,8 +191,9 @@ test_that("edfct returns correct derivative length with fixed params", {
 test_that("inversion function correctly inverts the mean function", {
   result <- arandaordaz()
   parm <- c(0, 10, 0.5)
+  # inv(y) = -log((y - a) / (b - a)) / c
   inv_val <- result$inversion(5, parm)
-  expected <- log(0.5) / (-0.5)
+  expected <- -log((5 - 0) / (10 - 0)) / 0.5
   expect_equal(inv_val, expected)
 })
 
@@ -210,6 +211,6 @@ test_that("inversion works with fixed parameters", {
   result <- arandaordaz(fixed = c(0, NA, NA))
   parm <- c(10, 0.5)
   inv_val <- result$inversion(5, parm)
-  expected <- log(0.5) / (-0.5)
+  expected <- -log((5 - 0) / (10 - 0)) / 0.5
   expect_equal(inv_val, expected)
 })
