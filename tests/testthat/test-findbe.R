@@ -123,7 +123,7 @@ test_that("findbe2 Anke: mixed responses triggers belowVec trim (line 62)", {
   expect_length(result, 2)
 })
 
-test_that("findbe2 Anke: NaN eVal when no doses between max and min (line 69-71)", {
+test_that("findbe2 Anke: NaN eVal fallback when no doses between max and min (line 69-71)", {
   fn <- drc:::findbe2(bfct_helper, efct_helper, "Anke")
 
   # Adjacent dose levels with all responses above/below midResp
@@ -195,7 +195,7 @@ test_that("findbe2 Anke: sign correction triggers with sgnb=-1 (line 92-98)", {
   expect_length(result, 2)
 })
 
-test_that("findbe2 Anke: NA bVal triggers fallback (line 99-102)", {
+test_that("findbe2 Anke: NaN bVal triggers fallback to regSlope (line 99-102)", {
   fn <- drc:::findbe2(bfct_helper, efct_helper, "Anke")
 
   # y values outside [cVal, dVal] make all ytrans = NaN
