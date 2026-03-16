@@ -18,6 +18,7 @@ BugReports: https://github.com/hreinwald/drc/issues/
 Roxygen: list(markdown = TRUE)
 Suggests:
     testthat (>= 3.0.0),
+    covr,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
