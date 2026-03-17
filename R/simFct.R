@@ -152,8 +152,8 @@ minmax = "response", lower = NULL, upper = NULL, seedVal = 200810201)
                 edMat[, , i] <- NA 
                 mixVec[i] <- NA
             } else {
-                tempED <- ED(tempModel, edVal, display = FALSE, ci = "delta")[, c(1, 3, 4)]
-                if (inherits(tempModel, "try-error"))
+                tempED <- try(ED(tempModel, edVal, display = FALSE, interval = "delta")[, c(1, 3, 4)], silent = TRUE)
+                if (inherits(tempED, "try-error"))
                 {
                     edMat[, , i] <- NA
                     mixVec[i] <- NA
