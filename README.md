@@ -36,7 +36,9 @@ The package offers:
 - **Robust inference**: sandwich variance estimators for heteroscedasticity-consistent standard errors.
 - **Simulation tools**: generate random dose-response data for power analysis and method comparison.
 
-For more details visit: 📚 **[Full github documentation](https://hreinwald.github.io/drc/)**  
+For more details visit:
+
+📚 **[Full github documentation](https://hreinwald.github.io/drc/)**  
 
 ## Installation
 
