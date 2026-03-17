@@ -100,7 +100,6 @@ test_that("neill.test errors with too many groups", {
 
 test_that("neill.test errors with too few groups", {
   # 1 group for 4-param model -> numDF = 1 - 4 = -3
-
   expect_error(
     neill.test(ryegrass_m1, grouping = rep(1, 24)),
     "Too few groups"
