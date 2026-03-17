@@ -156,7 +156,9 @@ test_that("multi2 deriv1 computes correct gradient values (numerical check)", {
     params_up <- params
     params_up[i] <- params_up[i] + eps
     f_up <- cc + (dd - cc) * (1 - exp(-params_up[1] - params_up[2] * dose - params_up[3] * dose^2))
-    # Need to recompute with modified c or d properly
+    # Parameters c (index 4) and d (index 5) appear outside the exponential term
+    # in the model f(x) = c + (d-c)*(1 - exp(...)), so perturbing them requires
+    # recomputing the full expression with the perturbed value in both places.
     if (i == 4) {
       f_up <- params_up[4] + (dd - params_up[4]) * (1 - exp(-b1 - b2 * dose - b3 * dose^2))
     }
