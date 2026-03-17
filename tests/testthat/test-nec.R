@@ -53,7 +53,7 @@ test_that("NEC.4() fct handles multiple rows in parm", {
   dose <- c(7, 1)  # first above threshold, second below
   response <- result$fct(dose, parm)
   # Row 1: b=1, c=0, d=100, e=5 -> dose=7 > 5: 0 + 100*exp(-1*2) = 100*exp(-2)
-  # Row 2: b=2, c=10, d=50, e=3 -> dose=1 < 3: 10 + (50-10)*exp(0) = 50
+  # Row 2: b=2, c=10, d=50, e=3 -> dose=1 <= 3: response = d = 50
   expected <- c(100 * exp(-2), 50)
   expect_equal(response, expected)
 })
@@ -86,8 +86,8 @@ test_that("NEC.4() with custom names works", {
 })
 
 test_that("NEC.4() errors on invalid names", {
-  expect_error(NEC.4(names = c("a", "b")), "Not correct names argument")
-  expect_error(NEC.4(names = 1:4), "Not correct names argument")
+  expect_error(NEC.4(names = c("a", "b")), "Not correct 'names' argument")
+  expect_error(NEC.4(names = 1:4), "Not correct 'names' argument")
 })
 
 test_that("NEC.4() errors on invalid fixed", {
@@ -204,7 +204,7 @@ test_that("NEC.2() errors on invalid fixed length", {
 # --- Base NEC function (called through NEC.4/NEC.3/NEC.2) ---
 
 test_that("NEC base function errors on invalid names", {
-  expect_error(NEC.4(names = c("a", "b", "c")), "Not correct names argument")
+  expect_error(NEC.4(names = c("a", "b", "c")), "Not correct 'names' argument")
 })
 
 test_that("NEC base function errors on invalid fixed length", {

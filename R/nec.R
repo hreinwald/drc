@@ -169,7 +169,7 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 {
     ## Checking arguments
     numParm <- 4
-    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct names argument")}
+    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
     if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
 
     return( NEC(fixed = fixed, names = names,
