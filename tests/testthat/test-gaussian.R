@@ -96,7 +96,7 @@ test_that("gaussian works with custom ssfct", {
 test_that("gaussian fct evaluates correctly", {
   result <- gaussian()
 
-  # Test with known parameters: c + (d-c) * exp(-0.5 * (sqrt(((dose-e)/b)^2))^f)
+  # Test with known parameters: c + (d-c) * exp(-0.5 * abs((dose-e)/b)^f)
   dose <- c(0, 5, 10)
   # b=2, c=0, d=1, e=5, f=2
   parm <- matrix(c(2, 0, 1, 5, 2), nrow = 1)
