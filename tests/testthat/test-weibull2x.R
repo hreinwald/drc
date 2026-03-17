@@ -208,9 +208,9 @@ test_that("W2x.3 has b=1 and c=0 fixed", {
   expect_equal(w2x3$fixed, c(1, 0, NA, NA, NA))
 })
 
-test_that("W2x.3 text indicates lower limit fixed", {
+test_that("W2x.3 text indicates lower limit fixed at 0", {
   w2x3 <- W2x.3()
-  expect_true(grepl("lower limit at 0", w2x3$text))
+  expect_equal(w2x3$text, "Weibull (type 2) with lower limit at 0")
 })
 
 test_that("W2x.3 errors on invalid names", {
@@ -243,9 +243,9 @@ test_that("W2x.4 has b=1 fixed", {
   expect_equal(w2x4$fixed, c(1, NA, NA, NA, NA))
 })
 
-test_that("W2x.4 text indicates lower limit fixed", {
+test_that("W2x.4 text is standard Weibull type 2", {
   w2x4 <- W2x.4()
-  expect_true(grepl("lower limit at 0", w2x4$text))
+  expect_equal(w2x4$text, "Weibull (type 2)")
 })
 
 test_that("W2x.4 errors on invalid names", {

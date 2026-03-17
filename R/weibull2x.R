@@ -186,5 +186,5 @@ function(fixed = c(NA, NA, NA, NA), names = c("c", "d", "e", "t0"), ...)
 
     return(weibull2x(fixed = c(1, fixed[1:4]), names = c("b", names[1:4]),
     fctName = as.character(match.call()[[1]]), 
-    fctText = lowFixed("Weibull (type 2)"), ...))
+    fctText = "Weibull (type 2)", ...))
 }
