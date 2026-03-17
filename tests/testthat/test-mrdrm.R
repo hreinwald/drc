@@ -181,10 +181,12 @@ test_that("leaveOneOut with fixedEnd = TRUE modifies boundary values", {
   resp <- m1_cont$data[, 2]
   result_nofix <- drc:::leaveOneOut(m1_cont, m2_cont, dose, dataSet, resp, fixedEnd = FALSE)
   result_fix <- drc:::leaveOneOut(m1_cont, m2_cont, dose, dataSet, resp, fixedEnd = TRUE)
-  # With fixedEnd, boundary pred2 values are set to observed means
+  # Source code sets pred2Vec[1] and pred2Vec[lenUd] where lenUd = length(unique(dose))
+  # This matches exactly the indexing used in leaveOneOut()
   uniDose <- sort(unique(dose))
+  lenUd <- length(uniDose)
   expect_equal(result_fix$pred2[1], mean(resp[dose == uniDose[1]]))
-  expect_equal(result_fix$pred2[length(uniDose)], mean(resp[dose == uniDose[length(uniDose)]]))
+  expect_equal(result_fix$pred2[lenUd], mean(resp[dose == uniDose[lenUd]]))
 })
 
 # ---- pressWeights ----
@@ -330,7 +332,9 @@ test_that("mrdrm forces ls critFct and none weights for continuous data", {
   # Even if user passes different values, continuous data overrides
   mr <- drc:::mrdrm(m1_cont, m2_cont, critFct = "ll", ls.weights = "par")
   expect_s3_class(mr, "mrdrc")
-  # The function overrides critFct to "ls" and ls.weights to "none" for continuous data
+  # The override to "ls"/"none" means no weights are stored (ls.weights = NULL with GCV)
+  # and residual variance (gof[4]) is computed (only happens with "ls" criterion)
+  expect_false(is.na(mr$gof["rv"]))
 })
 
 # ---- predict.mrdrc ----
