@@ -70,6 +70,7 @@ test_that("lgaussian uses default ssfct when ssfct is NULL", {
 })
 
 test_that("lgaussian method argument works for self-starter", {
+  # method selects different self-starter strategies in gaussian.ssf()
   for (m in c("1", "2", "3", "4")) {
     lg <- lgaussian(method = m)
     expect_true(is.function(lg$ssfct))
