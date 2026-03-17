@@ -75,7 +75,7 @@ test_that("isobole with xaxis='0' auto-labels are '0' and '100'", {
 # ===========================================================================
 # 6.  object2 = CA model (concentration addition, lambda = 1)
 # ===========================================================================
-test_that("isobole draws CA isobole line (hewlett branch, ca name)", {
+test_that("isobole draws CA isobole line", {
   m_free <- fit_mecter_free()
   m_ca   <- mixture(m_free, model = "CA")
   pdf(file = tempfile(fileext = ".pdf"))
