@@ -126,7 +126,7 @@ method = c("1", "2", "3", "4"), ssfct = NULL)
     list(fct = fct, ssfct = ssfct, names = names, deriv1 = deriv1, deriv2 = deriv2, 
     edfct=edfct, sifct=sifct,
     name = "baro5",
-    text = "Baroflex", 
+    text = "Baroreflex", 
     noParm = sum(is.na(fixed)))
 
     class(returnList) <- "baro5"

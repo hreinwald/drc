@@ -43,7 +43,7 @@ test_that("baro5 returns correct structure with default args", {
 
   # Name and text
   expect_equal(b$name, "baro5")
-  expect_equal(b$text, "Baroflex")
+  expect_equal(b$text, "Baroreflex")
 
   # NULL fields
   expect_null(b$deriv1)
