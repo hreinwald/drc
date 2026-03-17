@@ -115,7 +115,8 @@ test_that("ursa fct computes correct values for normal doses", {
   expect_length(res, 1)
   expect_true(is.finite(res))
   # Response should be between c (0) and d (100)
-  expect_true(res > 0 && res < 100)
+  expect_gt(res, 0)
+  expect_lt(res, 100)
 })
 
 test_that("ursa fct handles multiple observations", {
@@ -162,7 +163,8 @@ test_that("ursa fct covers both branches of bisec if/else", {
 
   res <- result$fct(dose, parm)
   expect_true(is.finite(res))
-  expect_true(res > 0 && res < 100)
+  expect_gt(res, 0)
+  expect_lt(res, 100)
 })
 
 # ========================================================================
@@ -179,14 +181,16 @@ test_that("ursa fct handles one drug zero, other nonzero", {
 
   res <- result$fct(dose_d2zero, parm)
   expect_true(is.finite(res))
-  expect_true(res > 0 && res < 100)
+  expect_gt(res, 0)
+  expect_lt(res, 100)
 
   # Drug 1 is zero → dose[,1] is 0 → parmVec[5] = e1/0 = Inf
   dose_d1zero <- matrix(c(0, 1), ncol = 2, byrow = TRUE)
 
   res2 <- result$fct(dose_d1zero, parm)
   expect_true(is.finite(res2))
-  expect_true(res2 > 0 && res2 < 100)
+  expect_gt(res2, 0)
+  expect_lt(res2, 100)
 })
 
 # ========================================================================
