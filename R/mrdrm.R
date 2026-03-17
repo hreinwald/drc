@@ -154,8 +154,6 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
         unitDose <- dosePredict(dose)
 
         object2 <- loess(resp ~ unitDose, degree = 1)          
-    } else {
-        dosePredict <- function(dose) {dose}  # identity map
     }
 
        
@@ -742,17 +740,21 @@ print.mrdrc <- function(x, ...)
     ## Defining apply() functions
     rowFct1 <- function(yVec)
     {
-        m1 <- try(drm(yVec ~ doseVec, weights = weightsVec, fct = drcObj$fct, type = respType, 
-        start = coef(drcObj)), silent = TRUE)
-         
-        if (inherits(m1, "try-error"))
+        result <- try({
+            m1 <- drm(yVec ~ doseVec, weights = weightsVec, fct = drcObj$fct, type = respType, 
+            start = coef(drcObj))
+             
+            m2 <- loess(yVec ~ doseVec, degree = 1)
+            mr <- mrdrm(m1, m2)
+             
+            as.vector(ED(mr, respLev, display = FALSE))
+        }, silent = TRUE)
+        
+        if (inherits(result, "try-error"))
         {
             return(rep(NA, lenED))
-        }      
-        m2 <- loess(yVec ~ doseVec, degree = 1)
-        mr <- mrdrm(m1, m2)
-         
-        as.vector(ED(mr, respLev, display = FALSE))
+        }
+        result
     }
     rowFct2 <- function(edVec)
     {
