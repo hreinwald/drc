@@ -51,7 +51,7 @@ xlab = expression(lambda), ylab = "log-Likelihood", ...)
     method <- match.arg(method)
     
     ## Identifying the conditional or fixed-lambda approach
-    if (identical(length(lambda), 1))
+    if (identical(length(lambda), 1L))
     {
         method <- "fixed"
     } 
