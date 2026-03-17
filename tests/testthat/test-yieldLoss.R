@@ -16,8 +16,6 @@ test_that("yieldLoss returns correct structure with interval='none'", {
   expect_type(result, "list")
   expect_named(result, c("A", "I"))
 
-  # A and I should be matrices
-
   expect_true(is.matrix(result$A))
   expect_true(is.matrix(result$I))
 
@@ -120,8 +118,7 @@ test_that("yieldLoss uses qnorm for non-continuous model types with interval='as
 # =============================================================================
 
 test_that("genFixedFct works with allComp=TRUE", {
-  # fixed has some NAs (free) and some fixed values
-  # MM.3 has fixed = c(-1, NA, NA, NA, 1) for b, c, d, e, f
+  # fixed vector with some NAs (free parameters) and some fixed values
   fixed <- c(-1, NA, NA, NA, 1)
   fct <- drc:::genFixedFct(fixed)
 
