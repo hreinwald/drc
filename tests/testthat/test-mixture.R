@@ -208,7 +208,7 @@ test_that("mixture with custom control parameter", {
 # ==============================================================================
 
 test_that("hewlett returns correct structure with default parameters", {
-  h <- hewlett()
+  h <- drc:::hewlett()
   expect_s3_class(h, "Hewlett")
   expect_equal(h$name, "hewlett")
   expect_equal(h$text, "Hewlett mixture")
@@ -224,22 +224,22 @@ test_that("hewlett returns correct structure with default parameters", {
 })
 
 test_that("hewlett returns correct structure with fixed parameters", {
-  h <- hewlett(fixed = c(NA, 0, 1, NA, NA, 1))
+  h <- drc:::hewlett(fixed = c(NA, 0, 1, NA, NA, 1))
   expect_equal(h$noParm, 3)
   expect_equal(h$names, c("b", "e", "f"))
 })
 
 test_that("hewlett errors on incorrect names argument", {
-  expect_error(hewlett(names = c("a")), "Not correct 'names' argument")
-  expect_error(hewlett(names = c(1, 2, 3, 4, 5, 6)), "Not correct 'names' argument")
+  expect_error(drc:::hewlett(names = c("a")), "Not correct 'names' argument")
+  expect_error(drc:::hewlett(names = c(1, 2, 3, 4, 5, 6)), "Not correct 'names' argument")
 })
 
 test_that("hewlett errors on incorrect fixed argument", {
-  expect_error(hewlett(fixed = c(NA, NA)), "Not correct 'fixed' argument")
+  expect_error(drc:::hewlett(fixed = c(NA, NA)), "Not correct 'fixed' argument")
 })
 
 test_that("hewlett fct computes correct values for normal doses", {
-  h <- hewlett()
+  h <- drc:::hewlett()
   dose <- c(0.1, 1, 10, 100)
   parm <- matrix(c(-2, 0, 1, 10, 10, 1), nrow = length(dose), ncol = 6, byrow = TRUE)
   result <- h$fct(dose, parm)
@@ -250,7 +250,7 @@ test_that("hewlett fct computes correct values for normal doses", {
 })
 
 test_that("hewlett fct handles zero dose correctly", {
-  h <- hewlett()
+  h <- drc:::hewlett()
   dose <- c(0, 1, 10)
   # b < 0 case: zero dose returns c parameter (lower limit)
   parm_neg <- matrix(c(-2, 0.1, 1, 10, 10, 1), nrow = 3, ncol = 6, byrow = TRUE)
@@ -264,7 +264,7 @@ test_that("hewlett fct handles zero dose correctly", {
 })
 
 test_that("hewlett default ssfct returns valid starting values", {
-  h <- hewlett()
+  h <- drc:::hewlett()
   df <- data.frame(dose = c(0.01, 0.1, 1, 10, 100),
                    resp = c(1, 0.95, 0.5, 0.1, 0.01))
   ss <- h$ssfct(df)
@@ -274,20 +274,20 @@ test_that("hewlett default ssfct returns valid starting values", {
 
 test_that("hewlett with custom ssfct", {
   custom_ss <- function(dframe) rep(1, 6)
-  h <- hewlett(ssfct = custom_ss)
+  h <- drc:::hewlett(ssfct = custom_ss)
   df <- data.frame(dose = 1:5, resp = 5:1)
   result <- h$ssfct(df)
   expect_equal(result, rep(1, 6))
 })
 
 test_that("hewlett scaleFct returns correct scaling", {
-  h <- hewlett()
+  h <- drc:::hewlett()
   sf <- h$scaleFct(10, 100)
   expect_equal(sf, c(1, 100, 100, 10, 10, 1))
 })
 
 test_that("hewlett scaleFct respects fixed parameters", {
-  h <- hewlett(fixed = c(NA, 0, 1, NA, NA, NA))
+  h <- drc:::hewlett(fixed = c(NA, 0, 1, NA, NA, NA))
   sf <- h$scaleFct(10, 100)
   expect_equal(sf, c(1, 10, 10, 1))
 })
@@ -297,7 +297,7 @@ test_that("hewlett scaleFct respects fixed parameters", {
 # ==============================================================================
 
 test_that("voelund returns correct structure with default parameters", {
-  v <- voelund()
+  v <- drc:::voelund()
   expect_s3_class(v, "Voelund")
   expect_equal(v$name, "voelund")
   expect_equal(v$text, "Voelund mixture")
@@ -312,22 +312,22 @@ test_that("voelund returns correct structure with default parameters", {
 })
 
 test_that("voelund returns correct structure with fixed parameters", {
-  v <- voelund(fixed = c(NA, 0, 1, NA, NA, NA, NA))
+  v <- drc:::voelund(fixed = c(NA, 0, 1, NA, NA, NA, NA))
   expect_equal(v$noParm, 5)
   expect_equal(v$names, c("b", "e", "f", "g", "h"))
 })
 
 test_that("voelund errors on incorrect names argument", {
-  expect_error(voelund(names = c("a")), "Not correct 'names' argument")
-  expect_error(voelund(names = c(1, 2, 3, 4, 5, 6, 7)), "Not correct 'names' argument")
+  expect_error(drc:::voelund(names = c("a")), "Not correct 'names' argument")
+  expect_error(drc:::voelund(names = c(1, 2, 3, 4, 5, 6, 7)), "Not correct 'names' argument")
 })
 
 test_that("voelund errors on incorrect fixed argument", {
-  expect_error(voelund(fixed = c(NA, NA)), "Not correct 'fixed' argument")
+  expect_error(drc:::voelund(fixed = c(NA, NA)), "Not correct 'fixed' argument")
 })
 
 test_that("voelund fct computes correct values for normal doses", {
-  v <- voelund()
+  v <- drc:::voelund()
   dose <- c(0.1, 1, 10, 100)
   parm <- matrix(c(-2, 0, 1, 10, 10, 1, 1), nrow = 4, ncol = 7, byrow = TRUE)
   result <- v$fct(dose, parm)
@@ -336,7 +336,7 @@ test_that("voelund fct computes correct values for normal doses", {
 })
 
 test_that("voelund fct handles zero dose correctly", {
-  v <- voelund()
+  v <- drc:::voelund()
   dose <- c(0, 1, 10)
   parm <- matrix(c(-2, 0, 1, 10, 10, 1, 1), nrow = 3, ncol = 7, byrow = TRUE)
   result <- v$fct(dose, parm)
@@ -345,7 +345,7 @@ test_that("voelund fct handles zero dose correctly", {
 })
 
 test_that("voelund fct handles infinite e parameter", {
-  v <- voelund()
+  v <- drc:::voelund()
   dose <- c(0.1, 1, 10)
   parm <- matrix(c(-2, 0, 1, 10, 10, 1, 1), nrow = 3, ncol = 7, byrow = TRUE)
   parm[2, 4] <- Inf  # e parameter = Inf for row 2
@@ -357,7 +357,7 @@ test_that("voelund fct handles infinite e parameter", {
 })
 
 test_that("voelund fct handles infinite f parameter", {
-  v <- voelund()
+  v <- drc:::voelund()
   dose <- c(0.1, 1, 10)
   parm <- matrix(c(-2, 0, 1, 10, 10, 1, 1), nrow = 3, ncol = 7, byrow = TRUE)
   parm[2, 5] <- Inf  # f parameter = Inf for row 2
@@ -369,7 +369,7 @@ test_that("voelund fct handles infinite f parameter", {
 })
 
 test_that("voelund default ssfct returns valid starting values", {
-  v <- voelund()
+  v <- drc:::voelund()
   df <- data.frame(dose = c(0.01, 0.1, 1, 10, 100),
                    resp = c(1, 0.95, 0.5, 0.1, 0.01))
   ss <- v$ssfct(df)
@@ -379,20 +379,20 @@ test_that("voelund default ssfct returns valid starting values", {
 
 test_that("voelund with custom ssfct", {
   custom_ss <- function(dframe) rep(1, 7)
-  v <- voelund(ssfct = custom_ss)
+  v <- drc:::voelund(ssfct = custom_ss)
   df <- data.frame(dose = 1:5, resp = 5:1)
   result <- v$ssfct(df)
   expect_equal(result, rep(1, 7))
 })
 
 test_that("voelund scaleFct returns correct scaling", {
-  v <- voelund()
+  v <- drc:::voelund()
   sf <- v$scaleFct(10, 100)
   expect_equal(sf, c(1, 100, 100, 10, 10, 1, 1))
 })
 
 test_that("voelund scaleFct respects fixed parameters", {
-  v <- voelund(fixed = c(NA, 0, NA, NA, NA, NA, NA))
+  v <- drc:::voelund(fixed = c(NA, 0, NA, NA, NA, NA, NA))
   sf <- v$scaleFct(10, 100)
   expect_equal(sf, c(1, 100, 10, 10, 1, 1))
 })
