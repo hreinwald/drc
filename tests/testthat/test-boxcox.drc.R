@@ -103,8 +103,7 @@ test_that("boxcox.drc works with method='anova' multi-curve", {
 
 test_that("boxcox.drc anova method errors without replicates", {
   # Create a dataset with no replicates (each dose has exactly 1 obs)
-  # Assign to global env so update() can find it
-  no_rep_data <<- data.frame(
+  no_rep_data <- data.frame(
     dose = c(0, 1, 2, 5, 10, 20),
     resp = c(100, 90, 70, 40, 10, 3)
   )
@@ -114,7 +113,6 @@ test_that("boxcox.drc anova method errors without replicates", {
     boxcox(m1, method = "anova"),
     "ANOVA-based TBS approach requires replicates for each dose value"
   )
-  rm(no_rep_data, envir = .GlobalEnv)
 })
 
 # --- Return value structure ---
