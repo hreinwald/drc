@@ -119,29 +119,6 @@
         diffDF <- xderiv2Fct(diffDF.0, indMat, x$data[, 5])
          
         rval <- (x$data[, 3] / diffF) * diffDF  
-        
-        if (FALSE)
-        { 
-        dataList <- x[["data"]]
-        xderiv1 <- x[["fct"]]$"deriv1"(dataList[, 1], t(x[["parmMat"]][, as.character(dataList[, 4])]))
-        print(xderiv1)
-        xderiv2 <- xderiv2Fct(xderiv1, indMat, data[, 4])
-#        print(xderiv2)
-        resp <- c(0, dataList[, 3])
-        fittedVal <- c(0, predict(dataList[, 2]))
-#        print(resp)
-#        print(fittedVal)
-#        fittedVal[length(fittedVal)] <- 1
-#        fittedVal2 <- c(fittedVal[-1], 1)  # assuming data ordered according to time
-#        rval0 <- diff(resp) / diff(fittedVal)
-#        print(rval0)
-##        lagDeriv1 <- apply(x$deriv1, 2, function(x){diff(x)})
-#        lagDeriv1 <- apply(xderiv2, 2, function(x){diff(x)})
-#        rval <- lagDeriv1 * rval0
-#        rval <- xderiv2 * rval0    
-#        rval
-        rval <- xderiv2 * (diff(resp) / diff(fittedVal))
-        }
     }
 #    ## Summing up according to specified clusters (the variable "cvar")
 #    if (!is.null(cvar))
