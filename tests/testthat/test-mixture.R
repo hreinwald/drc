@@ -19,6 +19,11 @@ acidiq.free2 <- drm(rgr ~ dose, pct, data = acidiq,
                     fct = LL.2(),
                     pmodels = list(~1, ~factor(pct) - 1))
 
+# LL.5 free model (5-parameter log-logistic, used for error tests)
+acidiq.free5 <- drm(rgr ~ dose, pct, data = acidiq,
+                    fct = LL.5(),
+                    pmodels = list(~1, ~1, ~1, ~1, ~factor(pct) - 1))
+
 # ==============================================================================
 # Tests for mixture() - CA model
 # ==============================================================================
@@ -45,9 +50,6 @@ test_that("mixture CA works with LL.2 model", {
 })
 
 test_that("mixture CA errors with LL.5 model", {
-  acidiq.free5 <- drm(rgr ~ dose, pct, data = acidiq,
-                      fct = LL.5(),
-                      pmodels = list(~1, ~1, ~1, ~1, ~factor(pct) - 1))
   expect_error(mixture(acidiq.free5, model = "CA"), "Does not work for LL.5")
 })
 
@@ -98,9 +100,6 @@ test_that("mixture Hewlett works with LL.2 model", {
 })
 
 test_that("mixture Hewlett errors with LL.5 model", {
-  acidiq.free5 <- drm(rgr ~ dose, pct, data = acidiq,
-                      fct = LL.5(),
-                      pmodels = list(~1, ~1, ~1, ~1, ~factor(pct) - 1))
   expect_error(mixture(acidiq.free5, model = "Hewlett"), "Does not work for LL.5")
 })
 
@@ -137,9 +136,6 @@ test_that("mixture Voelund works with LL.2 model", {
 })
 
 test_that("mixture Voelund errors with LL.5 model", {
-  acidiq.free5 <- drm(rgr ~ dose, pct, data = acidiq,
-                      fct = LL.5(),
-                      pmodels = list(~1, ~1, ~1, ~1, ~factor(pct) - 1))
   expect_error(mixture(acidiq.free5, model = "Voelund"), "Does not work for LL.5")
 })
 
