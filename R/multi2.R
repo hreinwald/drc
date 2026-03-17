@@ -117,7 +117,9 @@ ssfct = NULL, fctName, fctText)
     edfct <- function(parm, respl, reference, type, ...)
     {
         parmVec[notFixed] <- parm
-        p <- absToRel(parmVec, respl, type)
+        ## Reorder parmVec so that c (lower asymptote) is at index 2 and d (upper asymptote) 
+        ## is at index 3, as expected by absToRel()
+        p <- absToRel(parmVec[c(1, 4, 5, 2, 3)], respl, type)
     
         ## Reversing p
         if (identical(type, "absolute"))
