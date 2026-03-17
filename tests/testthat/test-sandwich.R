@@ -267,8 +267,8 @@ test_that("estfun.drc returns correct values structure for continuous", {
 
   # Sum of estimating functions should be close to zero at MLE
   col_sums <- colSums(ef)
-  # Not necessarily exactly zero, but they should be numeric
   expect_true(all(is.numeric(col_sums)))
+  expect_true(all(abs(col_sums) < 1))
 })
 
 test_that("bread.drc is consistent with vcov for continuous", {
