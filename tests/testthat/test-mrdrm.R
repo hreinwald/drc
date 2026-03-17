@@ -711,6 +711,25 @@ test_that("EDboot works for binomial data", {
   expect_equal(nrow(result), 1)
 })
 
+test_that("EDboot handles bootstrap iterations that fail (try-error path)", {
+  # Use high-noise continuous data where some bootstrap samples cause fitting failures
+  set.seed(42)
+  dose_vals <- c(rep(0, 5), rep(1, 5), rep(5, 5), rep(10, 5), rep(30, 5))
+  resp_vals <- c(10 + rnorm(5, 0, 3), 8 + rnorm(5, 0, 3), 5 + rnorm(5, 0, 3),
+                 2 + rnorm(5, 0, 3), 0.5 + rnorm(5, 0, 3))
+  m1_noisy <- drm(resp_vals ~ dose_vals, fct = LL.4())
+  m2_noisy <- loess(resp_vals ~ dose_vals, degree = 1)
+  mr_noisy <- drc:::mrdrm(m1_noisy, m2_noisy)
+  # With large residual variance, some bootstrap samples will be degenerate
+  # The try() wrapper should catch these errors and return NAs
+  suppressWarnings({
+    result <- drc:::EDboot(20, mr_noisy, 50, 12345, 0.95)
+  })
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 1)
+  expect_equal(ncol(result), 2)
+})
+
 test_that("ED.mrdrc bootstrap for multiple ED values", {
   mr <- drc:::mrdrm(m1_cont, m2_cont)
   ed <- ED(mr, c(10, 50), interval = "bootstrap", n = 5, display = FALSE)
