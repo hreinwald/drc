@@ -38,8 +38,14 @@ library(drc)
 
 ## Fitting a model with different parameters
 ## for different curves
-daphnids.m1 <- drm(no/total~dose, time, weights = total, 
-data = daphnids, fct = LL.2(), type = "binomial")
+daphnids.m1 <- drm( data = daphnids, no/total~dose, 
+                    curveid = time, weights = total, 
+                    fct = LL.2(), type = "binomial" )
+
+## plot models
+plot(daphnids.m1, ylim = c(0, 1),
+     xlab = "Dose (µg/L)", ylab = "Proportion of daphnids affected", 
+     main = "Model with different parameters for different curves")
 
 ## Goodness-of-fit test
 modelFit(daphnids.m1)
@@ -48,8 +54,19 @@ modelFit(daphnids.m1)
 summary(daphnids.m1)
 
 ## Fitting a model with a common intercept parameter
-daphnids.m2 <- drm(no/total~dose, time, weights = total, 
-data = daphnids, fct = LL.2(), type = "binomial", 
-pmodels = list(~1, ~time))
+daphnids.m2 <- drm(no/total~dose, curveid = time, weights = total, 
+                   data = daphnids, fct = LL.2(), type = "binomial", 
+                   pmodels = list(~1, ~time))
+
+## plot models
+plot(daphnids.m2, ylim = c(0, 1),
+     xlab = "Dose (µg/L)", ylab = "Proportion of daphnids affected", 
+     main = "Models with common intercept parameter")
+
+## Goodness-of-fit test
+modelFit(daphnids.m2)
+
+## Summary of the data
+summary(daphnids.m2)
 }
 \keyword{datasets}
