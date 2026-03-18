@@ -228,8 +228,7 @@ test_that("summary.drc with robust='tukey' (Tukey's biweight)", {
 
 test_that("summary.drc with robust='winsor' (metric Winsorizing)", {
   data(ryegrass)
-  # Winsorizing may fail to converge with some datasets; use W1.4 which is
-  # more robust to convergence issues
+  # Winsorizing may fail to converge with some datasets
   m_robust <- tryCatch(
     drm(rootl ~ conc, data = ryegrass, fct = LL.4(), robust = "winsor"),
     error = function(e) NULL
