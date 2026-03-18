@@ -79,7 +79,7 @@
     {
         tempMat <- edMat1[, , i]
         colnames(tempMat) <- 1:6
-        rownames(tempMat) <- 5:9
+        rownames(tempMat) <- 5:length(conc)
         
         cat("ED value considered:", edVec[i], "\n")
         cat("Conc. no.\\Replicates:", "\n")
