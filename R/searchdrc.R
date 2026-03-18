@@ -94,12 +94,13 @@ searchdrc <- function(object, which, range, len = 50, verbose = FALSE)
   sv       <- object$start
   parNames <- object$parNames[[2]]
   
-  matchPattern <- paste0("^", gsub("([.\\^$*+?\\[\\]{}()|])", "\\\\\\1", which), ":")
-  matchIndices <- seq_along(parNames)[regexpr(matchPattern, parNames) > 0]
+  escapedWhich <- gsub("([.\\^$*+?\\[\\]{}()|])", "\\\\\\1", which, perl = TRUE)
+  matchPattern <- paste0("^", escapedWhich, "(:|$)")
+  matchIndices <- seq_along(parNames)[regexpr(matchPattern, parNames, perl = TRUE) > 0]
   
   if (length(matchIndices) == 0) {
     stop(paste0(
-      "No parameter matching '", which, "' was found. ",
+      "No such parameter '", which, "' was found. ",
       "Available parameter names (without curve suffix) are: ",
       paste(unique(sub(":.*$", "", parNames)), collapse = ", "), "."
     ), call. = FALSE)
@@ -150,10 +151,11 @@ searchdrc <- function(object, which, range, len = 50, verbose = FALSE)
     return(modelFit)
   }
   
-  stop(paste0(
+  warning(paste0(
     "Convergence failed. No starting value for parameter '", which,
     "' in the range [", range[1], ", ", range[2], "] across ",
     len, " attempt(s) led to a successful fit. ",
     "Consider expanding the range or increasing 'len'."
   ), call. = FALSE)
+  return(invisible(NULL))
 }

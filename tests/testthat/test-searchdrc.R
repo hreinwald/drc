@@ -16,6 +16,8 @@ test_that("searchdrc errors on invalid parameter name", {
 
 test_that("searchdrc warns when convergence fails", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  # Force convergence failure by corrupting the model call
+  m1$call$fct <- quote(LL.2())
 
   expect_warning(
     result <- searchdrc(m1, which = "b", range = c(1e10, 1e11), len = 2),
