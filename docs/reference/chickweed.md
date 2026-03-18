@@ -138,10 +138,10 @@ ED(chickweed.m1, c(10, 50, 90))
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error
-#> e:1:10 176.3700     3.4930
-#> e:1:50 196.0531     2.5057
-#> e:1:90 217.9328     4.2730
+#>      Estimate Std. Error
+#> e:10 176.3700     3.4930
+#> e:50 196.0531     2.5057
+#> e:90 217.9328     4.2730
 
 ## Plotting data and fitted regression curve
 plot(chickweed.m1, xlab = "Time (hours)", ylab = "Proportion germinated", 

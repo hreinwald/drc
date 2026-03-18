@@ -71,8 +71,7 @@ drmc(
 
 - otrace:
 
-  logical. If `TRUE` the output from
-  [`optim`](https://rdrr.io/r/stats/optim.html) is displayed.
+  logical. If `TRUE` error messages from the optimisation are displayed.
 
 - warnVal:
 

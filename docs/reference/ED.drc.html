@@ -198,40 +198,40 @@ values, <code><a href="compParm.html">compParm</a></code> for comparing other mo
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimate Std. Error</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:10  1.46371    0.18677</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:50  3.05795    0.18573</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:90  6.38864    0.84510</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Estimate Std. Error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:10  1.46371    0.18677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:50  3.05795    0.18573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:90  6.38864    0.84510</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Displaying 95% confidence intervals using the delta method</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="ED.html">ED</a></span><span class="op">(</span><span class="va">ryegrass.m1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"delta"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimate Std. Error   Lower   Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:10  1.46371    0.18677 1.07411 1.85330</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:50  3.05795    0.18573 2.67053 3.44538</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:90  6.38864    0.84510 4.62580 8.15148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Estimate Std. Error   Lower   Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:10  1.46371    0.18677 1.07411 1.85330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:50  3.05795    0.18573 2.67053 3.44538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:90  6.38864    0.84510 4.62580 8.15148</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Displaying 95% confidence intervals using back-transformation</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="ED.html">ED</a></span><span class="op">(</span><span class="va">ryegrass.m1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"fls"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Estimate     Lower     Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:10    4.3219    2.9274    6.3809</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:50   21.2840   14.4476   31.3553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:90  595.0468  102.0842 3468.5164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Estimate     Lower     Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:10    4.3219    2.9274    6.3809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:50   21.2840   14.4476   31.3553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:90  595.0468  102.0842 3468.5164</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Displaying 95% confidence intervals using inverse regression</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="ED.html">ED</a></span><span class="op">(</span><span class="va">ryegrass.m1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"inv"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimate  Lower  Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:10   1.4637 1.1423 1.8225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:50   3.0580 2.7490 3.4017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:90   6.3886 5.1514 8.1965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Estimate  Lower  Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:10   1.4637 1.1423 1.8225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:50   3.0580 2.7490 3.4017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:90   6.3886 5.1514 8.1965</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

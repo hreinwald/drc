@@ -97,35 +97,52 @@ Christian Ritz, Hannes Reinwald
 lettuce.crsm2 <- drm( lettuce[, c(2, 1)], fct = CRS.4b() )
 summary(lettuce.crsm2)
 #> 
-#> Model fitted: Cedergreen-Ritz-Streibig with lower limit 0 (alpha=.5) (4 parms)
+#> Model fitted: Cedergreen-Ritz-Streibig with lower limit 0 (alpha=) (4 parms)
 #> 
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 0.576206   0.090347  6.3777 8.060e-05 ***
-#> d:(Intercept) 1.013816   0.097630 10.3842 1.124e-06 ***
-#> e:(Intercept) 0.921496   2.937965  0.3137    0.7602    
-#> f:(Intercept) 3.635793   6.503370  0.5591    0.5884    
+#> b:(Intercept) 0.569426   0.068538  8.3081 8.444e-06 ***
+#> d:(Intercept) 1.008915   0.094919 10.6292 9.061e-07 ***
+#> e:(Intercept) 0.642290   1.533937  0.4187    0.6843    
+#> f:(Intercept) 4.446933   5.821389  0.7639    0.4626    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.1351142 (10 degrees of freedom)
+#>  0.1345066 (10 degrees of freedom)
 ED(lettuce.crsm2, c(50))
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error
-#> e:1:50  26.3389     8.9005
+#>      Estimate Std. Error
+#> e:50  26.1252     8.6286
 
 # Recommended replacement:
 fct_spec <- CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA))
-#> Error in CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA)): could not find function "CRS.5"
 lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
-#> Error: object 'fct_spec' not found
 summary(lettuce.crs5)
-#> Error: object 'lettuce.crs5' not found
+#> 
+#> Model fitted: Cedergreen-Ritz-Streibig (alpha=0.5) (4 parms)
+#> 
+#> Parameter estimates:
+#> 
+#>               Estimate Std. Error t-value   p-value    
+#> b:(Intercept) 0.569426   0.068538  8.3081 8.444e-06 ***
+#> d:(Intercept) 1.008915   0.094919 10.6292 9.061e-07 ***
+#> e:(Intercept) 0.642290   1.533937  0.4187    0.6843    
+#> f:(Intercept) 4.446933   5.821389  0.7639    0.4626    
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Residual standard error:
+#> 
+#>  0.1345066 (10 degrees of freedom)
 ED(lettuce.crs5, c(50))
-#> Error: object 'lettuce.crs5' not found
+#> 
+#> Estimated effective doses
+#> 
+#>      Estimate Std. Error
+#> e:50  26.1252     8.6286
 ```

@@ -267,15 +267,15 @@ ed_values <- ED(ryegrass.LL4, respLev = c(10, 20, 50), interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:10  1.46371    0.18677 1.07411 1.85330
-#> e:1:20  1.92109    0.17774 1.55032 2.29186
-#> e:1:50  3.05795    0.18573 2.67053 3.44538
+#>      Estimate Std. Error   Lower   Upper
+#> e:10  1.46371    0.18677 1.07411 1.85330
+#> e:20  1.92109    0.17774 1.55032 2.29186
+#> e:50  3.05795    0.18573 2.67053 3.44538
 ed_values
-#>        Estimate Std. Error    Lower    Upper
-#> e:1:10 1.463706  0.1867704 1.074109 1.853302
-#> e:1:20 1.921091  0.1777432 1.550325 2.291857
-#> e:1:50 3.057955  0.1857313 2.670526 3.445384
+#>      Estimate Std. Error    Lower    Upper
+#> e:10 1.463706  0.1867704 1.074109 1.853302
+#> e:20 1.921091  0.1777432 1.550325 2.291857
+#> e:50 3.057955  0.1857313 2.670526 3.445384
 ```
 
 **Understanding ED Values:** - **EC10**: Concentration causing 10%
@@ -298,8 +298,8 @@ ED(ryegrass.LL4, respLev = 50, interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:50  3.05795    0.18573 2.67053 3.44538
+#>      Estimate Std. Error   Lower   Upper
+#> e:50  3.05795    0.18573 2.67053 3.44538
 
 cat("\nFieller method:\n")
 #> 
@@ -308,8 +308,8 @@ ED(ryegrass.LL4, respLev = 50, interval = "fls")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate  Lower  Upper
-#> e:1:50   21.284 14.448 31.355
+#>      Estimate  Lower  Upper
+#> e:50   21.284 14.448 31.355
 ```
 
 The Fieller method is often preferred for ED50 estimation as it accounts
@@ -343,13 +343,13 @@ model_comparison <- suppressWarnings(
  )
 model_comparison
 #>          logLik       IC Lack of fit   Res var
-#> W2.4  -15.91352 41.82703           0 0.2646283
-#> LL.4  -16.15514 42.31029           0 0.2700107
-#> LN.4  -16.29214 42.58429           0 0.2731110
-#> LL.5  -15.87828 43.75656           0 0.2777393
-#> BC.4  -17.05120 44.10241           0 0.2909448
-#> W1.4  -17.46720 44.93439           0 0.3012075
-#> EXD.3 -28.22358 64.44717           0 0.7030127
+#> W2.4  -15.91352 41.82703 0.945071314 0.2646283
+#> LL.4  -16.15514 42.31029 0.866483043 0.2700107
+#> LN.4  -16.29214 42.58429 0.818641010 0.2731110
+#> LL.5  -15.87828 43.75656 0.853847582 0.2777393
+#> BC.4  -17.05120 44.10241 0.565407254 0.2909448
+#> W1.4  -17.46720 44.93439 0.450567622 0.3012075
+#> EXD.3 -28.22358 64.44717 0.000886637 0.7030127
 ```
 
 **Understanding the Output:**
@@ -395,15 +395,15 @@ ed_best <- ED(ryegrass.best, respLev = c(10, 20, 50), interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:10  1.40598    0.25357 0.87705 1.93491
-#> e:1:20  1.92374    0.23477 1.43403 2.41346
-#> e:1:50  3.08896    0.17331 2.72744 3.45048
+#>      Estimate Std. Error   Lower   Upper
+#> e:10  1.40598    0.25357 0.87705 1.93491
+#> e:20  1.92374    0.23477 1.43403 2.41346
+#> e:50  3.08896    0.17331 2.72744 3.45048
 ed_best
-#>        Estimate Std. Error     Lower    Upper
-#> e:1:10 1.405979  0.2535663 0.8770491 1.934909
-#> e:1:20 1.923744  0.2347672 1.4340283 2.413460
-#> e:1:50 3.088964  0.1733114 2.7274422 3.450485
+#>      Estimate Std. Error     Lower    Upper
+#> e:10 1.405979  0.2535663 0.8770491 1.934909
+#> e:20 1.923744  0.2347672 1.4340283 2.413460
+#> e:50 3.088964  0.1733114 2.7274422 3.450485
 ```
 
 ### Visual Comparison of Models
@@ -439,8 +439,8 @@ ED(ryegrass.LL4, respLev = 50, interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:50  3.05795    0.18573 2.67053 3.44538
+#>      Estimate Std. Error   Lower   Upper
+#> e:50  3.05795    0.18573 2.67053 3.44538
 
 cat("\nEC50 from W1.4 model:\n")
 #> 
@@ -449,8 +449,8 @@ ED(ryegrass.best, respLev = 50, interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:50  3.08896    0.17331 2.72744 3.45048
+#>      Estimate Std. Error   Lower   Upper
+#> e:50  3.08896    0.17331 2.72744 3.45048
 ```
 
 **Important Notes:** - Different models may yield different ED
@@ -481,8 +481,8 @@ ma_results <- maED(ryegrass.LL4,
 #> LL.5 3.023549 0.16025686
 
 ma_results
-#>        Estimate Std. Error    Lower    Upper
-#> e:1:50 3.029528  0.1969989 2.643417 3.415639
+#>      Estimate Std. Error    Lower    Upper
+#> e:50 3.029528  0.1969989 2.643417 3.415639
 ```
 
 **Understanding Model Averaging:**
@@ -503,15 +503,15 @@ ED(ryegrass.best, respLev = 50, interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:50  3.08896    0.17331 2.72744 3.45048
+#>      Estimate Std. Error   Lower   Upper
+#> e:50  3.08896    0.17331 2.72744 3.45048
 
 cat("\nModel-averaged EC50 (top 3 models):\n")
 #> 
 #> Model-averaged EC50 (top 3 models):
 print(ma_results)
-#>        Estimate Std. Error    Lower    Upper
-#> e:1:50 3.029528  0.1969989 2.643417 3.415639
+#>      Estimate Std. Error    Lower    Upper
+#> e:50 3.029528  0.1969989 2.643417 3.415639
 ```
 
 **When to Use Model Averaging:** - Multiple models have similar AIC
@@ -657,8 +657,8 @@ ED(ryegrass.LL4, respLev = 50, interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:50  3.05795    0.18573 2.67053 3.44538
+#>      Estimate Std. Error   Lower   Upper
+#> e:50  3.05795    0.18573 2.67053 3.44538
 
 cat("\nEC50 with LL.3 (lower asymptote = 0):\n")
 #> 
@@ -667,8 +667,8 @@ ED(ryegrass.LL3, respLev = 50, interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:50  3.26336    0.19641 2.85491 3.67181
+#>      Estimate Std. Error   Lower   Upper
+#> e:50  3.26336    0.19641 2.85491 3.67181
 ```
 
 **Important Note:** The choice of asymptote constraints can

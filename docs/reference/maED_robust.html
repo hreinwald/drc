@@ -168,7 +168,14 @@ row of <code>NA</code>s for that response level, ensuring a consistent output fo
 <span class="r-in"><span><span class="va">base_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="drm.html">drm</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">lettuce</span>, fct <span class="op">=</span> <span class="fu"><a href="BC.5.html">BC.5</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>W2.4 <span class="op">=</span> <span class="fu"><a href="W2.4.html">W2.4</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">maED_robust</span><span class="op">(</span><span class="va">base_model</span>, fct_ls <span class="op">=</span> <span class="va">model_list</span>, respLev <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in maED_robust(base_model, fct_ls = model_list, respLev = c(10,     50)):</span> could not find function "maED_robust"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Estimate    stderr      Lower    Upper confint_level confint_method</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt;     &lt;num&gt;      &lt;num&gt;    &lt;num&gt;         &lt;num&gt;         &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  3.561851  1.610667   0.405001  6.71870          0.95       buckland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 11.952400 11.849870 -11.272918 35.17772          0.95       buckland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        model    EC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;char&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: BC.5/W2.4    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: BC.5/W2.4    50</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
