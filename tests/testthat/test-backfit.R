@@ -43,7 +43,9 @@ test_that("backfit produces reasonable values for mid-range doses", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- suppressWarnings(backfit(m1))
 
-  # For mid-range doses, backfit should be somewhat close to original dose
+  # For mid-range doses (within the dynamic range of the curve),
+
+  # backfit values should approximate the original dose within a tolerance
   mid_idx <- which(result[, "dose"] == 3.75)
   expect_true(abs(result[mid_idx, "Estimate"] - 3.75) < 2)
 })
