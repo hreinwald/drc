@@ -76,7 +76,7 @@ test_that("simDR output includes concentrations and ED information", {
   expect_true(any(grepl("Concentrations used:", output)))
   expect_true(any(grepl("ED value considered: 10", output)))
   expect_true(any(grepl("ED value considered: 50", output)))
-  expect_true(any(grepl("Conc. no.\\\\Replicates:", output)))
+  expect_true(any(grepl("Conc. no.\\Replicates:", output, fixed = TRUE)))
 })
 
 test_that("simDR returns result invisibly", {
