@@ -4,12 +4,35 @@
 #' given by the equation
 #' \deqn{f(x) = c + (d - c)(1 - \exp(-\exp(b(\log(x) - \log(e)))))}
 #'
+#' @details
+#' The \code{method} argument determines how starting values for the parameters
+#' \code{b} and \code{e} are estimated (the starting values for \code{c} and
+#' \code{d} are always based on the range of the response values). Four methods
+#' are available:
+#' \describe{
+#'   \item{\code{"1"} (default)}{Linear regression on transformed data. Applies a
+#'     complementary log-log transformation to the response and a log
+#'     transformation to the dose, then fits a linear regression to estimate
+#'     starting values for \code{b} and \code{e}.}
+#'   \item{\code{"2"}}{Anke's procedure. Estimates \code{e} by finding the dose
+#'     at which the response crosses the midpoint between \code{c} and \code{d},
+#'     then estimates \code{b} as the median of back-calculated values.}
+#'   \item{\code{"3"}}{Stepwise approach. Identifies where the mean response
+#'     crosses the midpoint between \code{c} and \code{d} and uses the
+#'     corresponding dose as the starting value for \code{e}. The starting value
+#'     for \code{b} is based on the sign of the slope at that point.}
+#'   \item{\code{"4"}}{Normolle's procedure. Uses the mean of the dose range as
+#'     an initial estimate for \code{e}, then estimates \code{b} and \code{e}
+#'     using median-based back-calculations.}
+#' }
+#'
 #' @param fixed numeric vector of length 4, specifying fixed parameters (use \code{NA} for
 #'   parameters that should be estimated).
 #' @param names character vector of length 4 giving the names of the parameters
 #'   (default \code{c("b", "c", "d", "e")}).
-#' @param method character string indicating the self starter method to use.
-#'   One of \code{"1"}, \code{"2"}, \code{"3"}, or \code{"4"}.
+#' @param method character string indicating the self starter method to use for
+#'   obtaining starting values. One of \code{"1"} (default), \code{"2"},
+#'   \code{"3"}, or \code{"4"}. See Details.
 #' @param ssfct a self starter function. If \code{NULL} (default), a built-in
 #'   self starter is used based on \code{method}.
 #' @param fctName optional character string used internally for the function name.
@@ -235,7 +258,11 @@ fctName, fctText)
 #'   parameters that should be estimated).
 #' @param names character vector of length 2 giving the names of the parameters
 #'   (default \code{c("b", "e")}).
-#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#' @param ... additional arguments passed to \code{\link{weibull2}}, most
+#'   notably \code{method} (a character string: \code{"1"} (default),
+#'   \code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+#'   method for obtaining starting values. See \code{\link{weibull2}} for
+#'   details.
 #'
 #' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
 #'
@@ -270,7 +297,11 @@ upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 #'   parameters that should be estimated).
 #' @param names character vector of length 3 giving the names of the parameters
 #'   (default \code{c("b", "d", "e")}).
-#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#' @param ... additional arguments passed to \code{\link{weibull2}}, most
+#'   notably \code{method} (a character string: \code{"1"} (default),
+#'   \code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+#'   method for obtaining starting values. See \code{\link{weibull2}} for
+#'   details.
 #'
 #' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
 #'
@@ -304,7 +335,11 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #'   parameters that should be estimated).
 #' @param names character vector of length 3 giving the names of the parameters
 #'   (default \code{c("b", "c", "e")}).
-#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#' @param ... additional arguments passed to \code{\link{weibull2}}, most
+#'   notably \code{method} (a character string: \code{"1"} (default),
+#'   \code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+#'   method for obtaining starting values. See \code{\link{weibull2}} for
+#'   details.
 #'
 #' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
 #'
@@ -334,7 +369,11 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 #'   parameters that should be estimated).
 #' @param names character vector of length 4 giving the names of the parameters
 #'   (default \code{c("b", "c", "d", "e")}).
-#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#' @param ... additional arguments passed to \code{\link{weibull2}}, most
+#'   notably \code{method} (a character string: \code{"1"} (default),
+#'   \code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+#'   method for obtaining starting values. See \code{\link{weibull2}} for
+#'   details.
 #'
 #' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
 #'
@@ -367,7 +406,11 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 #'   parameters that should be estimated).
 #' @param names character vector of length 2 giving the names of the parameters
 #'   (default \code{c("d", "e")}).
-#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#' @param ... additional arguments passed to \code{\link{weibull2}}, most
+#'   notably \code{method} (a character string: \code{"1"} (default),
+#'   \code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+#'   method for obtaining starting values. See \code{\link{weibull2}} for
+#'   details.
 #'
 #' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
 #'
@@ -401,7 +444,11 @@ function(fixed = c(NA, NA), names = c("d", "e"), ...)
 #'   parameters that should be estimated).
 #' @param names character vector of length 3 giving the names of the parameters
 #'   (default \code{c("c", "d", "e")}).
-#' @param ... additional arguments passed to \code{\link{weibull2}}.
+#' @param ... additional arguments passed to \code{\link{weibull2}}, most
+#'   notably \code{method} (a character string: \code{"1"} (default),
+#'   \code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+#'   method for obtaining starting values. See \code{\link{weibull2}} for
+#'   details.
 #'
 #' @return A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.
 #'
