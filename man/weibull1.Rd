@@ -21,7 +21,8 @@ fixed and at what value. Use \code{NA} for parameters that are not fixed.}
 parameters \code{b}, \code{c}, \code{d}, and \code{e}.}
 
 \item{method}{character string indicating the self starter function to use
-(\code{"1"}, \code{"2"}, \code{"3"}, or \code{"4"}).}
+for obtaining starting values (\code{"1"} (default), \code{"2"},
+\code{"3"}, or \code{"4"}). See Details.}
 
 \item{ssfct}{a self starter function to be used. If \code{NULL} (default),
 the built-in self starter is used.}
@@ -44,6 +45,27 @@ The four-parameter Weibull type 1 model is given by the expression
 \deqn{f(x) = c + (d - c) \exp(-\exp(b(\log(x) - \log(e))))}
 
 The model is sometimes also called the Gompertz model.
+
+The \code{method} argument determines how starting values for the parameters
+\code{b} and \code{e} are estimated (the starting values for \code{c} and
+\code{d} are always based on the range of the response values). Four methods
+are available:
+\describe{
+\item{\code{"1"} (default)}{Linear regression on transformed data. Applies a
+log-log transformation to the response and a log transformation to the
+dose, then fits a linear regression to estimate starting values for
+\code{b} and \code{e}.}
+\item{\code{"2"}}{Anke's procedure. Estimates \code{e} by finding the dose
+at which the response crosses the midpoint between \code{c} and \code{d},
+then estimates \code{b} as the median of back-calculated values.}
+\item{\code{"3"}}{Stepwise approach. Identifies where the mean response
+crosses the midpoint between \code{c} and \code{d} and uses the
+corresponding dose as the starting value for \code{e}. The starting value
+for \code{b} is based on the sign of the slope at that point.}
+\item{\code{"4"}}{Normolle's procedure. Uses the mean of the dose range as
+an initial estimate for \code{e}, then estimates \code{b} and \code{e}
+using median-based back-calculations.}
+}
 }
 \references{
 Seber, G. A. F. and Wild, C. J. (1989)

@@ -16,7 +16,11 @@ fixed and at what value. Use \code{NA} for parameters that are not fixed.}
 \item{names}{character vector of length 4 giving the names of the
 parameters. The default is \code{c("b", "c", "d", "e")}.}
 
-\item{\dots}{additional arguments passed to \code{\link{weibull1}}.}
+\item{\dots}{additional arguments passed to \code{\link{weibull1}}, most
+notably \code{method} (a character string: \code{"1"} (default),
+\code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+method for obtaining starting values. See \code{\link{weibull1}} for
+details.}
 }
 \value{
 A list of class \code{Weibull-1} containing the nonlinear function,
