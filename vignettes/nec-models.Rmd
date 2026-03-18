@@ -1,9 +1,10 @@
 ---
 title: "Understanding NEC Models in the drc Package"
-author: "drc Package Authors"
+author: "Hannes Reinwald"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
+  %\VignetteTitle{Understanding NEC Models in the drc Package}
   %\VignetteIndexEntry{Understanding NEC Models in the drc Package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}

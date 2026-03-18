@@ -1,9 +1,10 @@
 ---
 title: "A Practical Workflow for Dose-Response Analysis"
-author: "drc Package Authors"
+author: "Hannes Reinwald"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
+  %\VignetteTitle{A Practical Workflow for Dose-Response Analysis}
   %\VignetteIndexEntry{A Practical Workflow for Dose-Response Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
