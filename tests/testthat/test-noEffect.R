@@ -15,7 +15,6 @@ test_that("noEffect returns correct values for continuous model", {
   result <- noEffect(m1)
 
   # Chi-square test statistic should be positive
-
   expect_true(result["Chi-square test"] > 0)
   # Degrees of freedom should be positive integer
   expect_true(result["Df"] > 0)
