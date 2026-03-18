@@ -45,8 +45,6 @@ method = c("1", "2", "3", "4"), ssfct = NULL)
     notFixed <- is.na(fixed)
     parmVec <- rep(0, numParm)
     parmVec[!notFixed] <- fixed[!notFixed]
-    parmVec1 <- parmVec
-    parmVec2 <- parmVec
 
     ## Defining the non-linear function
     fct <- function(dose, parm)
@@ -87,35 +85,6 @@ method = c("1", "2", "3", "4"), ssfct = NULL)
 #    anovaYes <- TRUE
 
     ## Defining self starter function
-if (FALSE)
-{    
-    ssfct <- function(dataFra)
-    {
-        dose2 <- dataFra[,1]
-        resp3 <- dataFra[,2]
-
-        startVal <- rep(0, numParm)
-
-        startVal[4] <- max(resp3)+0.001  # the d parameter
-        startVal[3] <- min(resp3)-0.001  # the c parameter
-#        startVal[!notFixed] <- fixed[!notFixed] 
-        
-        if (length(unique(dose2))==1) {return((c(NA, NA, NA, startVal[4], NA))[notFixed])}  # only estimate of upper limit if a single unique dose value 
-
-        indexT2 <- (dose2>0)
-        if (!any(indexT2)) {return((rep(NA, numParm))[notFixed])}  # for negative dose value
-        dose3 <- dose2[indexT2]
-        resp3 <- resp3[indexT2]
-
-        logitTrans <- log((startVal[4]-resp3)/(resp3-startVal[3]+0.001))  # 0.001 to avoid 0 in the denominator
-        logitFit <- lm(logitTrans~log(dose3))
-        startVal[5] <- exp((-coef(logitFit)[1]/coef(logitFit)[2]))  # the e parameter
-        startVal[1] <- coef(logitFit)[2]  # the b parameter
-        startVal[2] <- startVal[1]
-
-        return(startVal[notFixed])
-    }
-}
     if (!is.null(ssfct))
     {
         ssfct <- ssfct
@@ -157,7 +126,7 @@ if (FALSE)
     list(fct = fct, ssfct = ssfct, names = names, deriv1 = deriv1, deriv2 = deriv2, 
     edfct=edfct, sifct=sifct,
     name = "baro5",
-    text = "Baroflex", 
+    text = "Baroreflex", 
     noParm = sum(is.na(fixed)))
 
     class(returnList) <- "baro5"
