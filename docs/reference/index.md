@@ -1,0 +1,536 @@
+# Package index
+
+## Core Functions
+
+Main functions for dose-response analysis
+
+- [`drm()`](https://hreinwald.github.io/drc/reference/drm.md) : Fitting
+  dose-response models
+- [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) : Estimating
+  effective doses
+- [`EDcomp()`](https://hreinwald.github.io/drc/reference/EDcomp.md) :
+  Comparison of relative potencies between dose-response curves
+- [`compParm()`](https://hreinwald.github.io/drc/reference/compParm.md)
+  : Comparison of parameters
+- [`mselect()`](https://hreinwald.github.io/drc/reference/mselect.md) :
+  Dose-response model selection
+- [`drmc()`](https://hreinwald.github.io/drc/reference/drmc.md) : Sets
+  control arguments
+
+## Model Functions
+
+Available dose-response model families
+
+- [`LL.2()`](https://hreinwald.github.io/drc/reference/LL.2.md)
+  [`l2()`](https://hreinwald.github.io/drc/reference/LL.2.md) :
+  Two-parameter log-logistic function
+- [`LL.3()`](https://hreinwald.github.io/drc/reference/LL.3.md)
+  [`l3()`](https://hreinwald.github.io/drc/reference/LL.3.md) :
+  Three-parameter log-logistic function
+- [`LL.3u()`](https://hreinwald.github.io/drc/reference/LL.3u.md)
+  [`l3u()`](https://hreinwald.github.io/drc/reference/LL.3u.md) :
+  Three-parameter log-logistic function with upper limit fixed
+- [`LL.4()`](https://hreinwald.github.io/drc/reference/LL.4.md)
+  [`l4()`](https://hreinwald.github.io/drc/reference/LL.4.md) :
+  Four-parameter log-logistic function
+- [`LL.5()`](https://hreinwald.github.io/drc/reference/LL.5.md)
+  [`l5()`](https://hreinwald.github.io/drc/reference/LL.5.md) :
+  Five-parameter log-logistic function
+- [`LL2.2()`](https://hreinwald.github.io/drc/reference/LL2.2.md) :
+  Two-Parameter Log-Logistic Model with log(ED50) as Parameter
+- [`LL2.3()`](https://hreinwald.github.io/drc/reference/LL2.3.md) :
+  Three-Parameter Log-Logistic Model with log(ED50) and Lower Limit at 0
+- [`LL2.3u()`](https://hreinwald.github.io/drc/reference/LL2.3u.md) :
+  Three-Parameter Log-Logistic Model with log(ED50) and Fixed Upper
+  Limit
+- [`LL2.4()`](https://hreinwald.github.io/drc/reference/LL2.4.md) :
+  Four-Parameter Log-Logistic Model with log(ED50) as Parameter
+- [`LL2.5()`](https://hreinwald.github.io/drc/reference/LL2.5.md) :
+  Five-Parameter Generalised Log-Logistic Model with log(ED50) as
+  Parameter
+- [`W1.2()`](https://hreinwald.github.io/drc/reference/W1.2.md)
+  [`w2()`](https://hreinwald.github.io/drc/reference/W1.2.md) :
+  Two-parameter Weibull type 1 model
+- [`W1.3()`](https://hreinwald.github.io/drc/reference/W1.3.md)
+  [`w3()`](https://hreinwald.github.io/drc/reference/W1.3.md) :
+  Three-parameter Weibull type 1 model
+- [`W1.3u()`](https://hreinwald.github.io/drc/reference/W1.3u.md) :
+  Three-parameter Weibull type 1 model with upper limit fixed
+- [`W1.4()`](https://hreinwald.github.io/drc/reference/W1.4.md)
+  [`w4()`](https://hreinwald.github.io/drc/reference/W1.4.md) :
+  Four-parameter Weibull type 1 model
+- [`W2.2()`](https://hreinwald.github.io/drc/reference/W2.2.md) :
+  Two-parameter Weibull (type 2) model
+- [`W2.3()`](https://hreinwald.github.io/drc/reference/W2.3.md) :
+  Three-parameter Weibull (type 2) model
+- [`W2.3u()`](https://hreinwald.github.io/drc/reference/W2.3u.md) :
+  Three-parameter Weibull (type 2) model with upper limit fixed
+- [`W2.4()`](https://hreinwald.github.io/drc/reference/W2.4.md) :
+  Four-parameter Weibull (type 2) model
+- [`W2x.3()`](https://hreinwald.github.io/drc/reference/W2x.3.md) :
+  Three-parameter Weibull type 2 model with lag time
+- [`W2x.4()`](https://hreinwald.github.io/drc/reference/W2x.4.md) :
+  Four-parameter Weibull type 2 model with lag time
+- [`G.2()`](https://hreinwald.github.io/drc/reference/G.2.md) :
+  Two-parameter Gompertz model
+- [`G.3()`](https://hreinwald.github.io/drc/reference/G.3.md) :
+  Three-parameter Gompertz model
+- [`G.3u()`](https://hreinwald.github.io/drc/reference/G.3u.md) :
+  Three-parameter Gompertz model with upper limit fixed
+- [`G.4()`](https://hreinwald.github.io/drc/reference/G.4.md) :
+  Four-parameter Gompertz model
+- [`G.aparine`](https://hreinwald.github.io/drc/reference/G.aparine.md)
+  : Herbicide applied to Galium aparine
+- [`GiantKelp`](https://hreinwald.github.io/drc/reference/GiantKelp.md)
+  : Measurements of germination tubes for Giant Kelp
+- [`LN.2()`](https://hreinwald.github.io/drc/reference/LN.2.md) :
+  Two-parameter log-normal dose-response model
+- [`LN.3()`](https://hreinwald.github.io/drc/reference/LN.3.md) :
+  Three-parameter log-normal dose-response model
+- [`LN.3u()`](https://hreinwald.github.io/drc/reference/LN.3u.md) :
+  Three-parameter log-normal model with upper limit fixed
+- [`LN.4()`](https://hreinwald.github.io/drc/reference/LN.4.md) :
+  Four-parameter log-normal dose-response model
+- [`BC.4()`](https://hreinwald.github.io/drc/reference/BC.4.md) :
+  Four-parameter Brain-Cousens hormesis model
+- [`BC.5()`](https://hreinwald.github.io/drc/reference/BC.5.md) :
+  Five-parameter Brain-Cousens hormesis model
+- [`CRS.4a()`](https://hreinwald.github.io/drc/reference/CRS.4a.md)
+  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  Fixed at 0 and Alpha = 1 (Deprecated)
+- [`CRS.4b()`](https://hreinwald.github.io/drc/reference/CRS.4b.md)
+  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  Fixed at 0 and Alpha = 0.5 (Deprecated)
+- [`CRS.4c()`](https://hreinwald.github.io/drc/reference/CRS.4c.md)
+  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  Fixed at 0 and Alpha = 0.25 (Deprecated)
+- [`CRS.5()`](https://hreinwald.github.io/drc/reference/CRS.5.md) :
+  Wrapper for 5-parameter Cedergreen-Ritz-Streibig Model
+- [`CRS.5a()`](https://hreinwald.github.io/drc/reference/CRS.5a.md)
+  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
+  with Alpha = 1 (Deprecated)
+- [`CRS.5b()`](https://hreinwald.github.io/drc/reference/CRS.5b.md)
+  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
+  with Alpha = 0.5 (Deprecated)
+- [`CRS.5c()`](https://hreinwald.github.io/drc/reference/CRS.5c.md)
+  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
+  with Alpha = 0.25 (Deprecated)
+- [`CRS.6()`](https://hreinwald.github.io/drc/reference/CRS.6.md) :
+  Generalised Cedergreen-Ritz-Streibig Model for Hormesis
+- [`UCRS.4a()`](https://hreinwald.github.io/drc/reference/UCRS.4a.md) :
+  U-shaped CRS model with lower limit 0 (alpha=1)
+- [`UCRS.4b()`](https://hreinwald.github.io/drc/reference/UCRS.4b.md) :
+  U-shaped CRS model with lower limit 0 (alpha=0.5)
+- [`UCRS.4c()`](https://hreinwald.github.io/drc/reference/UCRS.4c.md) :
+  U-shaped CRS model with lower limit 0 (alpha=0.25)
+- [`UCRS.5a()`](https://hreinwald.github.io/drc/reference/UCRS.5a.md) :
+  U-shaped CRS five-parameter model (alpha=1)
+- [`UCRS.5b()`](https://hreinwald.github.io/drc/reference/UCRS.5b.md) :
+  U-shaped CRS five-parameter model (alpha=0.5)
+- [`UCRS.5c()`](https://hreinwald.github.io/drc/reference/UCRS.5c.md) :
+  U-shaped CRS five-parameter model (alpha=0.25)
+- [`NEC.2()`](https://hreinwald.github.io/drc/reference/NEC.2.md) :
+  Two-parameter NEC model
+- [`NEC.3()`](https://hreinwald.github.io/drc/reference/NEC.3.md) :
+  Three-parameter NEC model
+- [`NEC.4()`](https://hreinwald.github.io/drc/reference/NEC.4.md) :
+  Four-parameter NEC model
+- [`L.3()`](https://hreinwald.github.io/drc/reference/L.3.md) :
+  Three-parameter logistic model
+- [`L.4()`](https://hreinwald.github.io/drc/reference/L.4.md) :
+  Four-parameter logistic model
+- [`L.5()`](https://hreinwald.github.io/drc/reference/L.5.md) :
+  Five-parameter generalized logistic model
+- [`AR.2()`](https://hreinwald.github.io/drc/reference/AR.2.md) :
+  Two-parameter asymptotic regression model
+- [`AR.3()`](https://hreinwald.github.io/drc/reference/AR.3.md) :
+  Three-parameter shifted asymptotic regression model
+- [`EXD.2()`](https://hreinwald.github.io/drc/reference/EXD.2.md) :
+  Two-parameter exponential decay model
+- [`EXD.3()`](https://hreinwald.github.io/drc/reference/EXD.3.md) :
+  Three-parameter exponential decay model
+- [`MM.2()`](https://hreinwald.github.io/drc/reference/MM.2.md) :
+  Two-parameter Michaelis-Menten function
+- [`MM.3()`](https://hreinwald.github.io/drc/reference/MM.3.md) :
+  Three-parameter Michaelis-Menten function
+- [`FPL.4()`](https://hreinwald.github.io/drc/reference/FPL.4.md) :
+  Four-parameter fractional polynomial-logistic model
+- [`ml3a()`](https://hreinwald.github.io/drc/reference/ml3a.md)
+  **\[deprecated\]** : Alias for CRS.4a (Deprecated)
+- [`ml3b()`](https://hreinwald.github.io/drc/reference/ml3b.md)
+  **\[deprecated\]** : Alias for CRS.4b (Deprecated)
+- [`ml3c()`](https://hreinwald.github.io/drc/reference/ml3c.md)
+  **\[deprecated\]** : Alias for CRS.4c (Deprecated)
+- [`ml4a()`](https://hreinwald.github.io/drc/reference/ml4a.md)
+  **\[deprecated\]** : Alias for CRS.5a (Deprecated)
+- [`ml4b()`](https://hreinwald.github.io/drc/reference/ml4b.md)
+  **\[deprecated\]** : Alias for CRS.5b (Deprecated)
+- [`ml4c()`](https://hreinwald.github.io/drc/reference/ml4c.md)
+  **\[deprecated\]** : Alias for CRS.5c (Deprecated)
+- [`uml3a()`](https://hreinwald.github.io/drc/reference/uml3a.md) :
+  Alias for UCRS.4a
+- [`uml3b()`](https://hreinwald.github.io/drc/reference/uml3b.md) :
+  Alias for UCRS.4b
+- [`uml3c()`](https://hreinwald.github.io/drc/reference/uml3c.md) :
+  Alias for UCRS.4c
+- [`uml4a()`](https://hreinwald.github.io/drc/reference/uml4a.md) :
+  Alias for UCRS.5a
+- [`uml4b()`](https://hreinwald.github.io/drc/reference/uml4b.md) :
+  Alias for UCRS.5b
+- [`uml4c()`](https://hreinwald.github.io/drc/reference/uml4c.md) :
+  Alias for UCRS.5c
+- [`bcl3()`](https://hreinwald.github.io/drc/reference/bcl3.md) : Alias
+  for BC.4
+- [`bcl4()`](https://hreinwald.github.io/drc/reference/bcl4.md) : Alias
+  for BC.5
+- [`baro5()`](https://hreinwald.github.io/drc/reference/baro5.md) : The
+  Baroreflex Five-Parameter Dose-Response Model
+- [`braincousens()`](https://hreinwald.github.io/drc/reference/braincousens.md)
+  : The Brain-Cousens hormesis models
+- [`cedergreen()`](https://hreinwald.github.io/drc/reference/cedergreen.md)
+  : Cedergreen-Ritz-Streibig Model
+- [`ucedergreen()`](https://hreinwald.github.io/drc/reference/ucedergreen.md)
+  : U-shaped Cedergreen-Ritz-Streibig model
+- [`fplogistic()`](https://hreinwald.github.io/drc/reference/fplogistic.md)
+  : Fractional polynomial-logistic dose-response model
+- [`gammadr()`](https://hreinwald.github.io/drc/reference/gammadr.md) :
+  Gamma Dose-Response Model
+- [`gaussian()`](https://hreinwald.github.io/drc/reference/gaussian.md)
+  : Normal (Gaussian) biphasic dose-response model
+- [`gompertz()`](https://hreinwald.github.io/drc/reference/gompertz.md)
+  : Gompertz dose-response or growth curve model
+- [`gompertzd()`](https://hreinwald.github.io/drc/reference/gompertzd.md)
+  : Derivative of the Gompertz function
+- [`lgaussian()`](https://hreinwald.github.io/drc/reference/lgaussian.md)
+  : Log-normal (log-Gaussian) biphasic dose-response model
+- [`llogistic()`](https://hreinwald.github.io/drc/reference/llogistic.md)
+  : The log-logistic function
+- [`llogistic2()`](https://hreinwald.github.io/drc/reference/llogistic2.md)
+  : Five-Parameter Log-Logistic Model with log(ED50) as Parameter
+- [`lnormal()`](https://hreinwald.github.io/drc/reference/lnormal.md) :
+  Log-normal dose-response model
+- [`logistic()`](https://hreinwald.github.io/drc/reference/logistic.md)
+  : The general asymmetric five-parameter logistic model
+- [`threephase()`](https://hreinwald.github.io/drc/reference/threephase.md)
+  : Three-Phase Dose-Response Model
+- [`twophase()`](https://hreinwald.github.io/drc/reference/twophase.md)
+  : Two-Phase Dose-Response Model
+- [`weibull1()`](https://hreinwald.github.io/drc/reference/weibull1.md)
+  : The four-parameter Weibull type 1 model
+- [`weibull2()`](https://hreinwald.github.io/drc/reference/weibull2.md)
+  : The four-parameter Weibull (type 2) model
+- [`weibull2x()`](https://hreinwald.github.io/drc/reference/weibull2x.md)
+  : Five-parameter Weibull type 2 model with lag time
+- [`yieldLoss()`](https://hreinwald.github.io/drc/reference/yieldLoss.md)
+  : Calculating yield loss parameters
+- [`arandaordaz()`](https://hreinwald.github.io/drc/reference/arandaordaz.md)
+  : Asymptotic Regression Model
+
+## Effective Dose Estimation
+
+Functions for estimating effective doses and comparisons
+
+- [`ED(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/ED.drc.md)
+  : Estimating effective doses
+- [`ED_robust()`](https://hreinwald.github.io/drc/reference/ED_robust.md)
+  : Robust Calculation of Effective Doses (ED)
+- [`CIcomp()`](https://hreinwald.github.io/drc/reference/CIcomp.md) :
+  Classical combination index for effective doses
+- [`CIcompX()`](https://hreinwald.github.io/drc/reference/CIcompX.md) :
+  Calculation of combination index for binary mixtures
+- [`comped()`](https://hreinwald.github.io/drc/reference/comped.md) :
+  Comparison of effective dose values
+- [`maED()`](https://hreinwald.github.io/drc/reference/maED.md) :
+  Estimation of ED values using model-averaging
+- [`maED_robust()`](https://hreinwald.github.io/drc/reference/maED_robust.md)
+  : Robust Calculation of Model-Averaged Effective Doses
+- [`isobole()`](https://hreinwald.github.io/drc/reference/isobole.md) :
+  Creating isobolograms
+- [`NEC()`](https://hreinwald.github.io/drc/reference/NEC.md) : No
+  Effect Concentration (NEC) dose-response model
+- [`MAX()`](https://hreinwald.github.io/drc/reference/MAX.md) : Maximum
+  mean response
+- [`PR()`](https://hreinwald.github.io/drc/reference/PR.md) : Expected
+  or predicted response
+- [`relpot()`](https://hreinwald.github.io/drc/reference/relpot.md) :
+  Relative potency function
+
+## Diagnostics and Model Selection
+
+Model diagnostics and helper functions
+
+- [`modelFit()`](https://hreinwald.github.io/drc/reference/modelFit.md)
+  : Assessing the model fit
+- [`Rsq()`](https://hreinwald.github.io/drc/reference/Rsq.md) :
+  R-squared for dose-response models
+- [`rdrm()`](https://hreinwald.github.io/drc/reference/rdrm.md) :
+  Simulating a dose-response curve
+- [`anova(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/anova.drc.md)
+  : ANOVA for dose-response model fits
+- [`lin.test()`](https://hreinwald.github.io/drc/reference/lin.test.md)
+  : Lack-of-fit test for the mean structure based on cumulated residuals
+- [`mr.test()`](https://hreinwald.github.io/drc/reference/mr.test.md) :
+  Mizon-Richard test for dose-response models
+- [`neill.test()`](https://hreinwald.github.io/drc/reference/neill.test.md)
+  : Neill's lack-of-fit test for dose-response models
+- [`noEffect()`](https://hreinwald.github.io/drc/reference/noEffect.md)
+  : Testing if there is a dose effect at all
+- [`backfit()`](https://hreinwald.github.io/drc/reference/backfit.md) :
+  Calculation of backfit values from a fitted dose-response model
+- [`boxcox(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/boxcox.drc.md)
+  : Transform-both-sides Box-Cox transformation
+- [`searchdrc()`](https://hreinwald.github.io/drc/reference/searchdrc.md)
+  : Searching through a range of initial parameter values to obtain
+  convergence
+- [`simDR()`](https://hreinwald.github.io/drc/reference/simDR.md) :
+  Simulating ED values under various scenarios
+- [`simFct()`](https://hreinwald.github.io/drc/reference/simFct.md) :
+  Simulation of dose-response data and ED estimation
+- [`plotFACI()`](https://hreinwald.github.io/drc/reference/plotFACI.md)
+  : Plot combination index as a function of fraction affected
+- [`getInitial()`](https://hreinwald.github.io/drc/reference/getInitial.md)
+  : Showing starting values used
+- [`getMeanFunctions()`](https://hreinwald.github.io/drc/reference/getMeanFunctions.md)
+  : Display available dose-response models
+
+## S3 Methods
+
+Methods for drc model objects
+
+- [`coef(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/coef.drc.md)
+  : Extract Model Coefficients
+- [`confint(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/confint.drc.md)
+  : Confidence Intervals for Model Parameters
+- [`cooks.distance(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/cooks.distance.drc.md)
+  : Cook's distance for nonlinear dose-response models
+- [`estfun(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/estfun.drc.md)
+  : Estimating function for the sandwich estimator
+- [`fitted(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/fitted.drc.md)
+  : Extract fitted values from model
+- [`hatvalues(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/hatvalues.drc.md)
+  : Model diagnostics for nonlinear dose-response models
+- [`logLik(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/logLik.drc.md)
+  : Extracting the log likelihood
+- [`plot(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/plot.drc.md)
+  : Plotting fitted dose-response curves
+- [`predict(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/predict.drc.md)
+  : Prediction
+- [`print(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/print.drc.md)
+  : Printing key features
+- [`print(`*`<summary.drc>`*`)`](https://hreinwald.github.io/drc/reference/print.summary.drc.md)
+  : Printing summary of non-linear model fits
+- [`residuals(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/residuals.drc.md)
+  : Extracting residuals from the fitted dose-response model
+- [`summary(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/summary.drc.md)
+  : Summarising non-linear model fits
+- [`update(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/update.drc.md)
+  : Updating and re-fitting a model
+- [`vcov(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/vcov.drc.md)
+  : Calculating variance-covariance matrix for objects of class 'drc'
+- [`bread(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/bread.drc.md)
+  : Bread for the sandwich estimator
+
+## Datasets
+
+Example datasets for dose-response analysis
+
+- [`acidiq`](https://hreinwald.github.io/drc/reference/acidiq.md) :
+  Acifluorfen and diquat tested on Lemna minor.
+
+- [`aconiazide`](https://hreinwald.github.io/drc/reference/aconiazide.md)
+  : Weight change in rats after exposure to a medical drug
+
+- [`acute.inh`](https://hreinwald.github.io/drc/reference/acute.inh.md)
+  : Acute inhalation
+
+- [`algae`](https://hreinwald.github.io/drc/reference/algae.md) : Volume
+  of algae as function of increasing concentrations of a herbicide
+
+- [`arbovirus`](https://hreinwald.github.io/drc/reference/arbovirus.md)
+  : arbovirus
+
+- [`auxins`](https://hreinwald.github.io/drc/reference/auxins.md) :
+  Effect of technical grade and commercially formulated auxin herbicides
+
+- [`barley`](https://hreinwald.github.io/drc/reference/barley.md) :
+  Barley
+
+- [`bees`](https://hreinwald.github.io/drc/reference/bees.md) : bees
+
+- [`blackgrass`](https://hreinwald.github.io/drc/reference/blackgrass.md)
+  : Seedling Emergence of Blackgrass (Alopecurus myosuroides)
+
+- [`broccoli`](https://hreinwald.github.io/drc/reference/broccoli.md) :
+
+  The Effects of Drought Stress on Leaf Development in a *Brassica
+  oleracea* population
+
+- [`C.dubia`](https://hreinwald.github.io/drc/reference/C.dubia.md) :
+  Offsprings resulting from a toxicity test
+
+- [`CadmiumDaphnia`](https://hreinwald.github.io/drc/reference/CadmiumDaphnia.md)
+  : Cadmium Daphnia Data
+
+- [`carbendazim`](https://hreinwald.github.io/drc/reference/carbendazim.md)
+  : Damage of lymphocyte cells
+
+- [`chickweed`](https://hreinwald.github.io/drc/reference/chickweed.md)
+  :
+
+  Germination of common chickweed (*Stellaria media*)
+
+- [`chlorac`](https://hreinwald.github.io/drc/reference/chlorac.md) :
+  chlorac
+
+- [`chlordan`](https://hreinwald.github.io/drc/reference/chlordan.md) :
+  Chlordan
+
+- [`ctb`](https://hreinwald.github.io/drc/reference/ctb.md) :
+  CellTiter-Blue Cell Viability Assay Data
+
+- [`Cyp17`](https://hreinwald.github.io/drc/reference/Cyp17.md) : Cyp17
+  expression data
+
+- [`Daphnia`](https://hreinwald.github.io/drc/reference/Daphnia.md) :
+  Daphnia
+
+- [`daphnids`](https://hreinwald.github.io/drc/reference/daphnids.md) :
+  Daphnia test
+
+- [`decontaminants`](https://hreinwald.github.io/drc/reference/decontaminants.md)
+  : Performance of decontaminants used in the culturing of a
+  micro-organism
+
+- [`deguelin`](https://hreinwald.github.io/drc/reference/deguelin.md) :
+  Deguelin applied to chrysanthemum aphis
+
+- [`earthworms`](https://hreinwald.github.io/drc/reference/earthworms.md)
+  : Earthworm toxicity test
+
+- [`echovirus`](https://hreinwald.github.io/drc/reference/echovirus.md)
+  :
+
+  Infections as response to exposure with *Echovirus 12*
+
+- [`Eryngium.sparganophyllum`](https://hreinwald.github.io/drc/reference/Eryngium.sparganophyllum.md)
+  : Germination of Eryngium sparganophyllum
+
+- [`etmotc`](https://hreinwald.github.io/drc/reference/etmotc.md) :
+  Effect of erythromycin on mixed sewage microorganisms
+
+- [`finney71`](https://hreinwald.github.io/drc/reference/finney71.md) :
+  Example from Finney (1971)
+
+- [`fluoranthene`](https://hreinwald.github.io/drc/reference/fluoranthene.md)
+  : Death of fathead minnow larvae after exposure to fluoranthene
+
+- [`germination`](https://hreinwald.github.io/drc/reference/germination.md)
+  : Germination of three crops
+
+- [`GiantKelp`](https://hreinwald.github.io/drc/reference/GiantKelp.md)
+  : Measurements of germination tubes for Giant Kelp
+
+- [`glymet`](https://hreinwald.github.io/drc/reference/glymet.md) :
+  Glyphosate and metsulfuron-methyl tested on algae.
+
+- [`guthion`](https://hreinwald.github.io/drc/reference/guthion.md) :
+  guthion
+
+- [`H.virescens`](https://hreinwald.github.io/drc/reference/H.virescens.md)
+  : Mortality of tobacco budworms
+
+- [`heartrate`](https://hreinwald.github.io/drc/reference/heartrate.md)
+  : Heart rate baroreflexes for rabbits
+
+- [`leaflength`](https://hreinwald.github.io/drc/reference/leaflength.md)
+  : Leaf length of barley
+
+- [`lemna`](https://hreinwald.github.io/drc/reference/lemna.md) : Lemna
+
+- [`lepidium`](https://hreinwald.github.io/drc/reference/lepidium.md) :
+  Dose-response profile of degradation of agrochemical using lepidium
+
+- [`lettuce`](https://hreinwald.github.io/drc/reference/lettuce.md) :
+  Hormesis in lettuce plants
+
+- [`liver.tumor`](https://hreinwald.github.io/drc/reference/liver.tumor.md)
+  : Liver tumor incidence
+
+- [`M.bahia`](https://hreinwald.github.io/drc/reference/M.bahia.md) :
+  Effect of an effluent on the growth of mysid shrimp
+
+- [`mdra`](https://hreinwald.github.io/drc/reference/mdra.md) : 3T3
+  mouse fibroblasts and NRU assay
+
+- [`mecter`](https://hreinwald.github.io/drc/reference/mecter.md) :
+  Mechlorprop and terbythylazine tested on Lemna minor
+
+- [`metals`](https://hreinwald.github.io/drc/reference/metals.md) : Data
+  from heavy metal mixture experiments
+
+- [`methionine`](https://hreinwald.github.io/drc/reference/methionine.md)
+  : Weight gain for different methionine sources
+
+- [`mixture()`](https://hreinwald.github.io/drc/reference/mixture.md) :
+  Fitting binary mixture models
+
+- [`multi2()`](https://hreinwald.github.io/drc/reference/multi2.md) :
+  Multistage Dose-Response Model with Quadratic Terms
+
+- [`nasturtium`](https://hreinwald.github.io/drc/reference/nasturtium.md)
+  : Dose-response profile of degradation of agrochemical using
+  nasturtium
+
+- [`nfa`](https://hreinwald.github.io/drc/reference/nfa.md) : Network
+  Formation Assay Data
+
+- [`nicotine`](https://hreinwald.github.io/drc/reference/nicotine.md) :
+  nicotine
+
+- [`O.mykiss`](https://hreinwald.github.io/drc/reference/O.mykiss.md) :
+  Test data from a 21 day fish test
+
+- [`P.promelas`](https://hreinwald.github.io/drc/reference/P.promelas.md)
+  : Effect of sodium pentachlorophenate on growth of fathead minnow
+
+- [`RScompetition`](https://hreinwald.github.io/drc/reference/RScompetition.md)
+  : Competition between two biotypes
+
+- [`red.fescue`](https://hreinwald.github.io/drc/reference/red.fescue.md)
+  : Red fescue
+
+- [`ryegrass`](https://hreinwald.github.io/drc/reference/ryegrass.md) :
+  Effect of ferulic acid on growth of ryegrass
+
+- [`ryegrass2`](https://hreinwald.github.io/drc/reference/ryegrass2.md)
+  : Ryegrass
+
+- [`S.alba`](https://hreinwald.github.io/drc/reference/S.alba.md) :
+  Potency of two herbicides
+
+- [`S.alba.comp`](https://hreinwald.github.io/drc/reference/S.alba.comp.md)
+  : Potency of two herbicides
+
+- [`S.capricornutum`](https://hreinwald.github.io/drc/reference/S.capricornutum.md)
+  : Effect of cadmium on growth of green alga
+
+- [`secalonic`](https://hreinwald.github.io/drc/reference/secalonic.md)
+  : Root length measurements
+
+- [`selenium`](https://hreinwald.github.io/drc/reference/selenium.md) :
+  Data from toxicology experiments with selenium
+
+- [`spinach`](https://hreinwald.github.io/drc/reference/spinach.md) :
+  Inhibition of photosynthesis
+
+- [`TCDD`](https://hreinwald.github.io/drc/reference/TCDD.md) : Liver
+  tumor incidence
+
+- [`terbuthylazin`](https://hreinwald.github.io/drc/reference/terbuthylazin.md)
+  : The effect of terbuthylazin on growth rate
+
+- [`ursa()`](https://hreinwald.github.io/drc/reference/ursa.md) :
+  Universal Response Surface Approach (URSA) for Drug Interaction
+
+- [`vinclozolin`](https://hreinwald.github.io/drc/reference/vinclozolin.md)
+  : Vinclozolin from AR in vitro assay

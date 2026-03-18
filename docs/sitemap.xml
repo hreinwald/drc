@@ -1,828 +1,278 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://hreinwald.github.io/drc/404.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/articles/dose-response-workflow.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/articles/nec-models.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/AR.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/AR.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/BC.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/BC.5.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/C.dubia.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CIcomp.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CIcompX.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.4a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.4b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.4c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.5.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.5a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.5b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.5c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CRS.6.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/CadmiumDaphnia.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/Cyp17.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/Daphnia.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ED.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ED.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ED.lin.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ED_robust.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/EDcomp.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/EDhelper.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/EDinvreg.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/EXD.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/EXD.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/Eryngium.sparganophyllum.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/FPL.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/G.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/G.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/G.3u.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/G.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/G.aparine.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/GiantKelp.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/H.virescens.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/L.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/L.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/L.5.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL.3u.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL.5.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL2.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL2.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL2.3u.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL2.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LL2.5.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LN.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LN.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LN.3u.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/LN.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/M.bahia.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/MAX.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/MM.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/MM.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/NEC.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/NEC.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/NEC.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/NEC.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/O.mykiss.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/P.promelas.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/PR.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/RScompetition.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/Rsq.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/S.alba.comp.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/S.alba.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/S.capricornutum.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/TCDD.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/UCRS.4a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/UCRS.4b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/UCRS.4c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/UCRS.5a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/UCRS.5b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/UCRS.5c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W1.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W1.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W1.3u.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W1.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W2.2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W2.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W2.3u.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W2.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W2x.3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/W2x.4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/absToRel.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/acidiq.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/aconiazide.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/acute.inh.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/algae.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/anova.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/anova.drclist.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/arandaordaz.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/arbovirus.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/auxins.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/backfit.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/barley.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/baro5.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/bcl3.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/bcl4.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/bees.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/blackgrass.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/boxcox.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/braincousens.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/braincousens.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/bread.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/broccoli.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/carbendazim.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/cedergreen.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/cedergreen.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/cedergreen_edfct.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/cedergreen_maxfct.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/chickweed.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/chlorac.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/chlordan.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/coef.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/commatFct.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/compParm.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/comped.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/confint.basic.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/confint.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/cooks.distance.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/createsifct.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ctb.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/daphnids.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/decontaminants.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/deguelin.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/divAtInf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/dot-onAttach.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drc-package.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drm.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmConvertParm.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmEMbinomial.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmEMls.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmLOFPoisson.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmLOFbinomial.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmLOFeventtime.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmLOFls.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmLOFnegbin.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmLOFssd.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmLOFstandard.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmOpt.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmPNsplit.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmParNames.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmRobust.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drm_legacy.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/drmc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/earthworms.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/echovirus.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/estfun.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/etmotc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/fieller.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/findbe1.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/findcd.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/finney71.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/fitted.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/fluoranthene.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/fplogistic.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/gammadr.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/gaussian.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/gaussian.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/genRetFct.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/germination.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/getInitial.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/getMeanFunctions.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/get_ed_interval.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/glymet.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/gompertz.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/gompertz.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/gompertzd.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/guthion.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/hatvalues.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/heartrate.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/hewlett.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/iband.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/idrm.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/isobole.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/leaflength.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/leaveOneOut.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lemna.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lepidium.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lettuce.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lgaussian.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lin.test.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/liver.tumor.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/llogistic.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/llogistic.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/llogistic2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lnormal.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lnormal.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/logLik.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/logistic.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/logistic.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lowFixed.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/lowupFixed.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/maED.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/maED_robust.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/mdra.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/mecter.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/metals.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/methionine.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/mixture.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ml3a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ml3b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ml3c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ml4a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ml4b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ml4c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/modelFit.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/modelFunction.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/mr.test.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/mselect.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/multi2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/nasturtium.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/neill.test.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/nfa.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/nicotine.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/noEffect.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/pickParm.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/plot.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/plotFACI.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/predict.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/print.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/print.summary.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/rdrm.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/red.fescue.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/relpot.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/repChar.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/resPrint.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/residuals.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/rse.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ryegrass.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ryegrass2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/searchdrc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/secalonic.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/selenium.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/showNews.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/siInner.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/simDR.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/simFct.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/spinach.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/splitInd.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/summary.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/terbuthylazin.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/threephase.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/twophase.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ucedergreen.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/uml3a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/uml3b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/uml3c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/uml4a.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/uml4b.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/uml4c.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/upFixed.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/update.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/ursa.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/vcov.drc.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/vec2mat.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/vinclozolin.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/voelund.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/weibull1.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/weibull1.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/weibull2.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/weibull2.ssf.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/weibull2x.html</loc>
-  </url>
-  <url>
-    <loc>https://hreinwald.github.io/drc/reference/yieldLoss.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://hreinwald.github.io/drc/404.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/articles/dose-response-workflow.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/articles/index.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/articles/nec-models.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/authors.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/index.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/LICENSE-text.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/absToRel.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/acidiq.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/aconiazide.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/acute.inh.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/algae.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/anova.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/anova.drclist.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/AR.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/AR.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/arandaordaz.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/arbovirus.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/auxins.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/backfit.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/barley.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/baro5.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/BC.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/BC.5.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/bcl3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/bcl4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/bees.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/blackgrass.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/boxcox.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/braincousens.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/braincousens.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/bread.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/broccoli.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/C.dubia.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CadmiumDaphnia.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/carbendazim.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/cedergreen.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/cedergreen.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/cedergreen_edfct.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/cedergreen_maxfct.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/chickweed.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/chlorac.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/chlordan.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CIcomp.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CIcompX.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/coef.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/commatFct.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/comped.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/compParm.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/confint.basic.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/confint.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/cooks.distance.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/createsifct.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.4a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.4b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.4c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.5.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.5a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.5b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.5c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/CRS.6.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ctb.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/Cyp17.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/Daphnia.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/daphnids.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/decontaminants.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/deguelin.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/divAtInf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/dot-onAttach.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drc-package.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drm.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmConvertParm.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmEMbinomial.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmEMls.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmLOFbinomial.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmLOFeventtime.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmLOFls.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmLOFnegbin.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmLOFPoisson.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmLOFssd.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmLOFstandard.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmOpt.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmParNames.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmPNsplit.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drmRobust.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/drm_legacy.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/earthworms.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/echovirus.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ED.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ED.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ED.lin.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/EDcomp.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/EDhelper.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/EDinvreg.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ED_robust.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/Eryngium.sparganophyllum.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/estfun.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/etmotc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/EXD.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/EXD.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/fieller.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/findbe1.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/findcd.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/finney71.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/fitted.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/fluoranthene.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/FPL.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/fplogistic.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/G.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/G.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/G.3u.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/G.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/G.aparine.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/gammadr.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/gaussian.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/gaussian.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/genRetFct.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/germination.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/getInitial.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/getMeanFunctions.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/get_ed_interval.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/GiantKelp.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/glymet.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/gompertz.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/gompertz.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/gompertzd.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/guthion.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/H.virescens.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/hatvalues.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/heartrate.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/hewlett.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/iband.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/idrm.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/index.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/isobole.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/L.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/L.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/L.5.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/leaflength.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/leaveOneOut.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lemna.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lepidium.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lettuce.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lgaussian.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lin.test.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/liver.tumor.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL.3u.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL.5.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL2.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL2.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL2.3u.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL2.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LL2.5.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/llogistic.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/llogistic.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/llogistic2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LN.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LN.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LN.3u.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/LN.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lnormal.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lnormal.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/logistic.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/logistic.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/logLik.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lowFixed.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/lowupFixed.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/M.bahia.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/maED.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/maED_robust.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/MAX.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/mdra.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/mecter.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/metals.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/methionine.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/mixture.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ml3a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ml3b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ml3c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ml4a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ml4b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ml4c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/MM.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/MM.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/modelFit.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/modelFunction.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/mr.test.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/mselect.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/multi2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/nasturtium.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/NEC.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/NEC.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/NEC.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/NEC.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/neill.test.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/nfa.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/nicotine.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/noEffect.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/O.mykiss.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/P.promelas.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/pickParm.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/plot.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/plotFACI.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/PR.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/predict.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/print.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/print.summary.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/rdrm.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/red.fescue.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/relpot.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/repChar.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/residuals.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/resPrint.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/RScompetition.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/rse.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/Rsq.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ryegrass.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ryegrass2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/S.alba.comp.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/S.alba.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/S.capricornutum.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/searchdrc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/secalonic.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/selenium.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/showNews.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/siInner.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/simDR.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/simFct.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/spinach.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/splitInd.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/summary.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/TCDD.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/terbuthylazin.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/threephase.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/twophase.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ucedergreen.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/UCRS.4a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/UCRS.4b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/UCRS.4c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/UCRS.5a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/UCRS.5b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/UCRS.5c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/uml3a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/uml3b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/uml3c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/uml4a.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/uml4b.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/uml4c.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/update.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/upFixed.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/ursa.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/vcov.drc.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/vec2mat.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/vinclozolin.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/voelund.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W1.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W1.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W1.3u.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W1.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W2.2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W2.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W2.3u.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W2.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W2x.3.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/W2x.4.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/weibull1.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/weibull1.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/weibull2.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/weibull2.ssf.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/weibull2x.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/reference/yieldLoss.html</loc></url>
 </urlset>
+
