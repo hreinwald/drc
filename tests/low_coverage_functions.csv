@@ -43,7 +43,6 @@ rank,file,coverage_pct,lines_of_code
 42,R/backfit.R,0.00,38
 43,R/gompertz.ssf.R,0.00,32
 44,R/gaussian.ssf.R,0.00,27
-45,R/iband.R,0.00,20
-46,R/getInitial.R,0.00,20
-47,R/commatFct.R,0.00,12
-48,R/showNews.R,0.00,9
+45,R/getInitial.R,0.00,20
+46,R/commatFct.R,0.00,12
+47,R/showNews.R,0.00,9
