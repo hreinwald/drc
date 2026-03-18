@@ -1,7 +1,5 @@
 # OUTPUT from covr::package_coverage() 
-drc Coverage: 86.78%
-R/backfit.R: 0.00%
-R/getInitial.R: 0.00%
+drc Coverage: 86.57%
 R/max.R: 0.00%
 R/noEffect.R: 0.00%
 R/pr.R: 0.00%
@@ -50,6 +48,7 @@ R/lnormal.R: 99.38%
 R/absToRel.R: 100.00%
 R/anova.drc.R: 100.00%
 R/arandaordaz.R: 100.00%
+R/backfit.R: 100.00%
 R/baro5.R: 100.00%
 R/boxcox.drc.R: 100.00%
 R/braincousens.ssf.R: 100.00%
@@ -75,6 +74,7 @@ R/fplogistic.R: 100.00%
 R/gammadr.R: 100.00%
 R/gaussian.R: 100.00%
 R/gaussian.ssf.R: 100.00%
+R/getInitial.R: 100.00%
 R/getMeanFunctions.R: 100.00%
 R/gompertz.R: 100.00%
 R/gompertz.ssf.R: 100.00%
