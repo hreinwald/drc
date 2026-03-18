@@ -2,34 +2,78 @@
 % Please edit documentation in R/searchdrc.R
 \name{searchdrc}
 \alias{searchdrc}
-\title{Searching through a range of initial parameter values to obtain convergence}
+\title{Search through a range of initial parameter values to obtain convergence}
 \usage{
-searchdrc(object, which, range, len = 50)
+searchdrc(object, which, range, len = 50, verbose = FALSE)
 }
 \arguments{
-\item{object}{an object of class 'drc'. The object can be from a model that could not be fitted.}
+\item{object}{an object of class \code{'drc'}, which must have valid
+\code{$start} and \code{$parNames} fields populated. This is typically
+an object from a model that failed to converge but was still constructed
+with initial parameter values.}
 
-\item{which}{a character string containing the parameter name.}
+\item{which}{a character string containing the parameter name
+\strong{without} the curve suffix (e.g., \code{"b"} not \code{"b:1"}).
+Must exactly match one of the parameter names in the model object.}
 
-\item{range}{a numeric vector of length 2 specifying the interval endpoints for the range.}
+\item{range}{a numeric vector of exactly length 2 specifying the interval
+endpoints \code{c(lower, upper)} for the search range. The two endpoints
+must be different.}
 
-\item{len}{numeric. The number of points in the interval.}
+\item{len}{a positive integer (minimum 2). The maximum number of evenly
+spaced starting values to try within \code{range}. The search stops early
+as soon as convergence is achieved, so the actual number of attempts may
+be less than \code{len}. Defaults to \code{50}.}
+
+\item{verbose}{logical. If \code{TRUE}, prints progress messages indicating
+which starting value is currently being tried. Defaults to \code{FALSE}.}
 }
 \value{
-An object of class 'drc'.
+If convergence is achieved, returns the fitted model object of class
+\code{'drc'}, corresponding to the \strong{first} starting value in the
+search grid that led to a successful fit. If no starting value leads to
+convergence, the function throws an error.
 }
 \description{
-\code{searchdrc} provides a facility for searching through a range of parameter values
-(one-dimensional) in order to obtain convergence of the estimation procedure.
+\code{searchdrc} provides a facility for searching through a range of initial
+values for a single parameter in order to obtain convergence of the non-linear
+estimation procedure used in dose-response curve fitting.
 }
 \details{
-The function goes through the range with increments such that in total at most \code{len}
-sets of parameter values are used as initial values for the estimation procedure. You would
-need to identify the parameter which is most likely to cause problems for the estimation
-procedure.
+The function iterates through at most \code{len} evenly spaced values within
+the specified \code{range}, using each as a starting value for the chosen
+parameter. The search stops as soon as the first successful model fit is
+found. You would need to identify the parameter which is most likely to cause
+problems for the estimation procedure.
+
+Parameter names should be provided \strong{without} the curve suffix. For
+example, use \code{"b"} rather than \code{"b:1"}. The function internally
+matches the parameter using the pattern \code{"^<which>:"} against the full
+parameter names stored in the model object.
+}
+\examples{
+\dontrun{
+library(drc)
+
+# Fit an initial model (which may fail to converge)
+myModel <- drm(response ~ dose, data = myData, fct = LL.4())
+
+# Search over a range of starting values for the slope parameter "b"
+myModelFixed <- searchdrc(myModel, which = "b", range = c(-5, 5), len = 100)
+
+# With progress messages enabled
+myModelFixed <- searchdrc(myModel, which = "b", range = c(-5, 5),
+                          len = 100, verbose = TRUE)
+}
+
+}
+\seealso{
+\code{\link[drc]{drm}} for the main model fitting function,
+\code{\link[drc]{drmc}} for control arguments,
+\code{\link[stats]{update}} for the update method used internally.
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald.
 }
 \keyword{models}
 \keyword{nonlinear}
