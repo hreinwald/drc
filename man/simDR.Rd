@@ -19,42 +19,53 @@ simDR(
 
 \item{sigma}{numeric specifying the residual standard deviation.}
 
-\item{fct}{list supplying the chosen mean function.}
+\item{fct}{list supplying the chosen dose-response mean function (e.g., \code{LL.4()}).}
 
-\item{noSim}{numeric giving the number of simulations.}
+\item{noSim}{numeric giving the number of simulations. Defaults to \code{1000}.}
 
-\item{conc}{numeric vector of concentration/dose values.}
+\item{conc}{numeric vector of concentration/dose values. Must contain at least 5 values.}
 
-\item{edVec}{numeric vector of ED values to estimate in each simulation.}
+\item{edVec}{numeric vector of ED levels to estimate in each simulation. Defaults to
+\code{c(10, 50)}.}
 
-\item{seedVal}{numeric giving the seed used to initiate the random number generator.}
+\item{seedVal}{numeric giving the seed used to initialise the random number generator.
+Defaults to \code{20070723}.}
 }
 \value{
-A list of matrices with as many components as there are chosen ED values. The
-entries in the matrices are empirical standard deviations of the estimated ED values.
-Row-wise from top to bottom more and more concentration/dose values are included in
-the simulations; top row starting with 5 concentrations. The number of replicates
-increases column by column from left to right.
-
-The list is returned invisibly as the matrices also are displayed.
+Invisibly returns a list with one element:
+\describe{
+\item{\code{se}}{A 3D array of dimensions
+\code{(length(conc) - 4) x 6 x length(edVec)} containing empirical
+standard deviations of the estimated ED values. Rows correspond to the
+number of concentration levels used (starting from 5). Columns correspond
+to the number of replicates per concentration (1 to 6). The third dimension
+corresponds to each ED level in \code{edVec}.}
+}
+The array values are also printed to the console during execution.
 }
 \description{
 Simulating ED values for a given model and given dose values.
 }
 \details{
-The arguments \code{mpar} and \code{sigma} are typically obtained from a previous model fit.
-
-Only dose-response models assuming normally distributed errors can be used.
+The arguments \code{mpar} and \code{sigma} are typically obtained from a
+previous model fit. Only dose-response models assuming normally distributed
+errors can be used.
 }
 \examples{
-ryegrass.m1 <- drm(ryegrass, fct=LL.4())
+ryegrass.m1 <- drm(ryegrass, fct = LL.4())
 
-simDR(coef(ryegrass.m1), sqrt(summary(ryegrass.m1)$resVar), LL.4(), 2,
-c(1.88, 3.75, 7.50, 0.94, 15, 0.47, 30, 0.23, 60), seedVal = 200710291)
+simDR(
+  mpar     = coef(ryegrass.m1),
+  sigma    = sqrt(summary(ryegrass.m1)$resVar),
+  fct      = LL.4(),
+  noSim    = 2,
+  conc     = c(1.88, 3.75, 7.50, 0.94, 15, 0.47, 30, 0.23, 60),
+  seedVal  = 20070723
+)
 
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}
