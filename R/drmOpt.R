@@ -4,7 +4,6 @@
 function(opfct, opdfct1, startVec, optMethod, constrained, warnVal, 
 upperLimits, lowerLimits, errorMessage, maxIt, relTol, opdfct2 = NULL, parmVec, traceVal, silentVal = TRUE,
 matchCall)
-## propagate "silentVal" from calling function? 
 {
     ## Controlling the warnings
     options(warn = warnVal)   
