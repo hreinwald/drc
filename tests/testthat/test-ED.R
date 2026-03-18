@@ -96,6 +96,25 @@ test_that("ED.drc works with absolute type response levels", {
   expect_true(result[, "Estimate"] > 0)
 })
 
+# Helper: compute the expected SE for an absolute-type ED using numerical
+# central differences on the model's edfct and the fitted vcov matrix.
+compute_numgrad_se <- function(model, absResp) {
+  vc <- vcov(model)
+  edfct <- model$fct$edfct
+  parms <- coef(model)
+  eps <- .Machine$double.eps^(1/3)
+  numGrad <- numeric(length(parms))
+  for (k in seq_along(parms)) {
+    h <- max(abs(parms[k]), 1) * eps
+    pu <- replace(parms, k, parms[k] + h)
+    pd <- replace(parms, k, parms[k] - h)
+    eu <- edfct(pu, absResp, reference = "control", type = "absolute")[[1]]
+    ed <- edfct(pd, absResp, reference = "control", type = "absolute")[[1]]
+    numGrad[k] <- (eu - ed) / (2 * h)
+  }
+  as.numeric(sqrt(numGrad %*% vc %*% numGrad))
+}
+
 test_that("ED.drc absolute type SE includes asymptote parameter uncertainty", {
   # Fit a 4-parameter log-logistic model
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
@@ -112,29 +131,11 @@ test_that("ED.drc absolute type SE includes asymptote parameter uncertainty", {
                tolerance = 0.01)
 
   # The absolute-type SE must be >= the relative-type SE because it
-	# additionally accounts for uncertainty in c and d.
+  # additionally accounts for uncertainty in c and d.
   expect_true(result_abs[, "Std. Error"] >= result_rel[, "Std. Error"] * 0.99)
 
-  # Cross-check: manually compute the SE using numerical differentiation
-  # of the full parameter vector (including c and d).
-  vc <- vcov(m1)
-  edfct <- m1$fct$edfct
-  parms <- cf
-  eps <- .Machine$double.eps^(1/3)
-  npar <- length(parms)
-  numGrad <- numeric(npar)
-  edVal <- edfct(parms, midResp, reference = "control",
-                 type = "absolute")[[1]]
-  for (k in seq_len(npar)) {
-    h <- max(abs(parms[k]), 1) * eps
-    pu <- replace(parms, k, parms[k] + h)
-    pd <- replace(parms, k, parms[k] - h)
-    eu <- edfct(pu, midResp, reference = "control", type = "absolute")[[1]]
-    ed <- edfct(pd, midResp, reference = "control", type = "absolute")[[1]]
-    numGrad[k] <- (eu - ed) / (2 * h)
-  }
-  expectedSE <- as.numeric(sqrt(numGrad %*% vc %*% numGrad))
-
+  # Cross-check: manually computed SE should match
+  expectedSE <- compute_numgrad_se(m1, midResp)
   expect_equal(result_abs[, "Std. Error"], expectedSE, tolerance = 1e-4)
 })
 
@@ -146,22 +147,7 @@ test_that("ED.drc absolute type SE is correct for Weibull type 2", {
 
   result_abs <- ED(m1, midResp, type = "absolute", display = FALSE)
 
-  # Cross-check with numerical gradient
-  vc <- vcov(m1)
-  edfct <- m1$fct$edfct
-  parms <- cf
-  eps <- .Machine$double.eps^(1/3)
-  numGrad <- numeric(length(parms))
-  for (k in seq_along(parms)) {
-    h <- max(abs(parms[k]), 1) * eps
-    pu <- replace(parms, k, parms[k] + h)
-    pd <- replace(parms, k, parms[k] - h)
-    eu <- edfct(pu, midResp, reference = "control", type = "absolute")[[1]]
-    ed <- edfct(pd, midResp, reference = "control", type = "absolute")[[1]]
-    numGrad[k] <- (eu - ed) / (2 * h)
-  }
-  expectedSE <- as.numeric(sqrt(numGrad %*% vc %*% numGrad))
-
+  expectedSE <- compute_numgrad_se(m1, midResp)
   expect_equal(result_abs[, "Std. Error"], expectedSE, tolerance = 1e-4)
 })
 
@@ -173,22 +159,7 @@ test_that("ED.drc absolute type SE is correct for Weibull type 1", {
 
   result_abs <- ED(m1, midResp, type = "absolute", display = FALSE)
 
-  # Cross-check with numerical gradient
-  vc <- vcov(m1)
-  edfct <- m1$fct$edfct
-  parms <- cf
-  eps <- .Machine$double.eps^(1/3)
-  numGrad <- numeric(length(parms))
-  for (k in seq_along(parms)) {
-    h <- max(abs(parms[k]), 1) * eps
-    pu <- replace(parms, k, parms[k] + h)
-    pd <- replace(parms, k, parms[k] - h)
-    eu <- edfct(pu, midResp, reference = "control", type = "absolute")[[1]]
-    ed <- edfct(pd, midResp, reference = "control", type = "absolute")[[1]]
-    numGrad[k] <- (eu - ed) / (2 * h)
-  }
-  expectedSE <- as.numeric(sqrt(numGrad %*% vc %*% numGrad))
-
+  expectedSE <- compute_numgrad_se(m1, midResp)
   expect_equal(result_abs[, "Std. Error"], expectedSE, tolerance = 1e-4)
 })
 
