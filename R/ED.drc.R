@@ -243,6 +243,28 @@ ED <- function(object, ...) UseMethod("ED", object)
         EDval  <- EDeval[[1]]
         dEDval <- EDeval[[2]]
         
+        # When type is "absolute", the model-specific gradient typically
+        # treats the (converted) relative response level as a constant,
+        # missing the chain-rule contribution from the lower and upper
+        # asymptote parameters (c and d) that enter via the
+        # absolute-to-relative conversion (absToRel / EDhelper).  Use
+        # numerical central differences to obtain the complete gradient.
+        if (identical(type, "absolute") && is.finite(EDval)) {
+          eps <- .Machine$double.eps^(1/3)
+          numGrad <- numeric(length(parmChosen))
+          for (k in seq_along(parmChosen)) {
+            h <- max(abs(parmChosen[k]), 1) * eps
+            pUp   <- replace(parmChosen, k, parmChosen[k] + h)
+            pDown <- replace(parmChosen, k, parmChosen[k] - h)
+            edUp   <- EDlist(pUp,   respLev[j], reference = reference,
+                             type = type, ...)[[1]]
+            edDown <- EDlist(pDown, respLev[j], reference = reference,
+                             type = type, ...)[[1]]
+            numGrad[k] <- (edUp - edDown) / (2 * h)
+          }
+          dEDval <- numGrad
+        }
+        
         dEdMat[rowIndex, parmInd] <- dEDval
         
         oriMat[rowIndex, 1] <- EDval
