@@ -94,7 +94,7 @@ searchdrc <- function(object, which, range, len = 50, verbose = FALSE)
   sv       <- object$start
   parNames <- object$parNames[[2]]
   
-  matchPattern <- paste0("^", gsub("([.\\^$*+?\\[\\]{}()|])", "\\\\\\1", which), ":")
+  matchPattern <- paste0("^", gsub("([.\\^$*+?\\[\\]\\{\\}()|])", "\\\\\\1", which), ":")
   matchIndices <- seq_along(parNames)[regexpr(matchPattern, parNames) > 0]
   
   if (length(matchIndices) == 0) {
