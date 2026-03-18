@@ -41,6 +41,10 @@ For more details visit:
 :book: **[drc github documentation](https://hreinwald.github.io/drc/)**  
 :zap: **[drc example workflow](https://hreinwald.github.io/drc/articles/dose-response-workflow.html)**
 
+Feature requests or ideas?
+
+:bulb: **[Post them here](https://github.com/hreinwald/drc/discussions)**
+
 ## Installation
 
 To install the stable but outdated version from CRAN:
