@@ -97,7 +97,7 @@ test_that("llfct computes correct values", {
   )
 
   result <- em$llfct(mock_object)
-  # First element: -fit_value + sum(log(gamma(resp+1)))
+  # First element: -object$fit$value + sum(log(gamma(resp+1)))
   expected_ll <- -10 + sum(log(gamma(test_resp + 1)))
   expect_equal(result[1], expected_ll)
   # Second element: df.residual
