@@ -87,7 +87,7 @@ test_that("threephase fct works with fixed parameters", {
   result <- threephase(fixed = c(1, NA, NA, NA, 2, NA, NA, NA, NA, NA))
 
   dose <- c(0.1, 1, 10)
-  # parm should have 8 columns (the 8 free parameters)
+  # parm should have 8 values (the 8 free parameters)
   parm <- matrix(c(0, 1, 1, 1, 1, 1, 1, 1), nrow = 1)
 
   output <- result$fct(dose, parm)
