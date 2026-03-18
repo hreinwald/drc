@@ -190,7 +190,13 @@ test_that("twophase works with drm for model fitting", {
   set.seed(123)
   dose <- rep(c(0.01, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500), each = 3)
   # Two-phase response: LL.4 component + LL.3 component
-  b1 <- 1; c1 <- 0; d1 <- 50; e1 <- 5; b2 <- 1; d2 <- 50; e2 <- 100
+  b1 <- 1
+  c1 <- 0
+  d1 <- 50
+  e1 <- 5
+  b2 <- 1
+  d2 <- 50
+  e2 <- 100
   response <- c1 + (d1 - c1) / (1 + exp(b1 * (log(dose) - log(e1)))) +
     d2 / (1 + exp(b2 * (log(dose) - log(e2)))) +
     rnorm(length(dose), 0, 2)
