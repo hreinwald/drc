@@ -58,8 +58,7 @@
     lapFct <- function(x) {c(x$"name", x$"text")} 
     if (!is.null(fname))
     {
-        textVec <- fname       
-        sapFct <- function(x, object){grep(x, object$"name", fixed = TRUE)}
+        textVec <- fname
     }
 #    if (!is.null(ftext))
 #    {
