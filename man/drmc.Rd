@@ -44,7 +44,7 @@ Default is \code{FALSE} (not removed).}
 
 \item{trace}{logical. If \code{TRUE} the trace from \code{\link{optim}} is displayed.}
 
-\item{otrace}{logical. If \code{TRUE} the output from \code{\link{optim}} is displayed.}
+\item{otrace}{logical. If \code{TRUE} error messages from the optimisation are displayed.}
 
 \item{warnVal}{numeric. If equal to 0 then the warnings are stored and displayed at the end.
 See under \sQuote{warn} in \code{\link{options}}. The default results in suppression of
