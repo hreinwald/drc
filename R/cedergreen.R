@@ -190,7 +190,9 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
 #' @seealso \code{\link[drc]{drm}} for model fitting, and \code{\link{cedergreen.ssf}} for the 
 #'   underlying self-starter function.
 #'   
-#' @author Hannes Reinwald
+#' @author Christian Ritz, Hannes Reinwald
+#' 
+#' @keywords models nonlinear
 #'
 #' @examples
 #' dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)

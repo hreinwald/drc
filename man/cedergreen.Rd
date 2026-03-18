@@ -69,5 +69,7 @@ summary(model_fit)
 underlying self-starter function.
 }
 \author{
-Hannes Reinwald
+Christian Ritz, Hannes Reinwald
 }
+\keyword{models}
+\keyword{nonlinear}
