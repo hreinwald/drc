@@ -14,7 +14,7 @@
 
 # drc — Dose-Response Curve Analysis in R
 
-## Note ⚠️
+## Note
 
 This repository contains a refactored development version of the [*drc*](https://github.com/DoseResponse/drc) R package first published by **Christian Ritz, Florent Baty, Jens C. Streibig und Daniel Gerhard** [(2015)](https://doi.org/10.1371/journal.pone.0146021). Their foundational work on dose–response modeling in R is gratefully acknowledged and inspired the present refactoring.
 
@@ -188,7 +188,7 @@ and imports from: car, graphics, gtools, lifecycle, multcomp, plotrix, sandwich,
 - Ritz, C., Baty, F., Streibig, J. C., and Gerhard, D. (2015). Dose-Response Analysis Using R. *PLOS ONE*, 10(12), e0146021.
 - Ritz, C. and Streibig, J. C. (2005). Bioassay Analysis using R. *Journal of Statistical Software*, 12(5), 1–22.
 
-## Bug Reports ⚠️
+## Bug Reports
 
 Please report issues with this re-factory version at <https://github.com/hreinwald/drc/issues/>.
 
