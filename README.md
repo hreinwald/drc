@@ -38,7 +38,8 @@ The package offers:
 
 For more details visit:
 
-📚 **[Full github documentation](https://hreinwald.github.io/drc/)**  
+:book: **[drc github documentation](https://hreinwald.github.io/drc/)**  
+:zap: **[drc example workflow](https://hreinwald.github.io/drc/articles/dose-response-workflow.html)**
 
 ## Installation
 
