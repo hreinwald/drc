@@ -17,6 +17,7 @@ For the complete package reference, vignettes, and usage examples, visit the doc
 | Resource | Link |
 |----------|------|
 | **Documentation site** | [hreinwald.github.io/drc](https://hreinwald.github.io/drc/) |
+| **Example workflow** | [Dose-Response Workflow](https://hreinwald.github.io/drc/articles/dose-response-workflow.html) |
 | **GitHub repository** | [github.com/hreinwald/drc](https://github.com/hreinwald/drc) |
 | **Report an issue** | [Issues](https://github.com/hreinwald/drc/issues) |
 | **Feature requests & ideas** | [Discussions](https://github.com/hreinwald/drc/discussions) |
