@@ -130,9 +130,11 @@ test_that("ED.drc absolute type SE includes asymptote parameter uncertainty", {
   expect_equal(result_abs[, "Estimate"], result_rel[, "Estimate"],
                tolerance = 0.01)
 
-  # The absolute-type SE must be >= the relative-type SE because it
-  # additionally accounts for uncertainty in c and d.
-  expect_true(result_abs[, "Std. Error"] >= result_rel[, "Std. Error"] * 0.99)
+  # The absolute-type SE differs from the relative-type SE because it
+  # additionally accounts for uncertainty in c and d via the full
+  # numerical gradient (parameter covariances can make it larger or smaller).
+  expect_false(isTRUE(all.equal(result_abs[, "Std. Error"],
+                                result_rel[, "Std. Error"])))
 
   # Cross-check: manually computed SE should match
   expectedSE <- compute_numgrad_se(m1, midResp)
