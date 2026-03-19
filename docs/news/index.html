@@ -40,8 +40,26 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.3.0.02" id="drc-33002">drc 3.3.0.02<a class="anchor" aria-label="anchor" href="#drc-33002"></a></h2>
 <div class="section level3">
+<h3 id="bug-fixes-3-3-0-02">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-0-02"></a></h3>
+<ul><li>Fixed boundary detection bugs in <code><a href="../reference/MAX.html">MAX()</a></code>: used <code>unname()</code> so named return values from cedergreen models are compared correctly with unnamed lower/upper scalars, and added tolerance in boundary check since numerical optimizers return values near but not exactly at boundaries.</li>
+<li>Fixed <code><a href="../reference/PR.html">PR()</a></code> dropping <code>...</code> arguments for single-curve models.</li>
+<li>Fixed all 17 issues in <code>ucedergreen()</code> function: missing <code>+c</code> term in model formula, <code>edfct</code> signature mismatch with the drc framework, undefined <code>xlogx</code> function call in <code>deriv1</code>, missing <code>match.arg()</code> validation for <code>method</code>, vectorized <code>|</code> operators in scalar <code>if()</code> guards, missing <code>useFixed</code> flag computation, <code>maxfct</code> signature mismatch and unsafe parameter indexing, broken self-starter ignoring <code>alpha</code>/<code>method</code>/<code>useFixed</code>, missing <code>fctName</code>/<code>fctText</code> parameters, <code>deriv1</code> excluded from return list, and documentation issues.</li>
+<li>Fixed SE calculation for absolute type <code><a href="../reference/ED.html">ED()</a></code>: the model-specific <code>edfct</code> gradient functions treated asymptote parameters as constants when <code>type="absolute"</code>, missing the chain-rule contribution from the <code>absToRel</code> conversion and underestimating the standard error. Now uses numerical central differences for the complete gradient.</li>
+<li>Fixed inverted <code>otrace</code>/<code>silentVal</code> logic in <code>drmOpt()</code> where <code>otrace=TRUE</code> incorrectly caused <code>silent=TRUE</code> in <code>try(optim())</code>, suppressing error messages instead of displaying them.</li>
+<li>Fixed <code>searchdrc()</code> regex error and convergence failure behavior.</li>
+<li>Fixed citation URL: reordered URLs in DESCRIPTION so <code>citation('drc')</code> returns the GitHub repository URL instead of r-project.org.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="changes-3-3-0-02">Changes<a class="anchor" aria-label="anchor" href="#changes-3-3-0-02"></a></h3>
-<ul><li>Added <code>NEWS.md</code> version control log.</li>
+<ul><li>Added <code>NEWS.md</code> version control log. Reformatted legacy news file into properly formatted <code>NEWS.md</code> with categorized sections.</li>
+<li>Improved documentation for Weibull starting value <code>method</code> parameter across <code>weibull1()</code>, <code>weibull2()</code>, and all wrapper functions (<code>W1.2</code>, <code>W1.3</code>, <code>W1.4</code>, <code>W2.2</code>, <code>W2.3</code>, <code>W2.4</code>, <code>AR.2</code>, <code>AR.3</code>, <code>EXD.2</code>, <code>EXD.3</code>).</li>
+<li>Added comprehensive test suites for <code>summary.drc</code>, <code>print.summary.drc</code>, <code>noEffect</code>, <code>searchdrc</code>, <code>backfit</code>, <code>getInitial</code>, <code>drmEMeventtime</code>, <code>repChar</code>, <code>rdrm</code>, <code>gompertzd</code>, <code>MAX()</code>, and <code>PR()</code> functions.</li>
+<li>Removed dead code <code>iband.R</code> and all associated references.</li>
+<li>Removed unused <code>inst/citation</code> file, superseded by <code>CITATION.cff</code> at repository root.</li>
+<li>Deleted <code>build_pkgdown.R</code> build script.</li>
+<li>Added PLoS ONE 2015 article and CRC Press 2019 book references to <code>CITATION.cff</code>.</li>
+<li>Updated installation instructions and README documentation.</li>
+<li>Added <code>magic</code> to Suggests in DESCRIPTION for test dependency.</li>
 </ul><hr></div>
 </div>
     <div class="section level2">
@@ -50,7 +68,7 @@
 <h3 id="new-features-3-3-0-01">New Features<a class="anchor" aria-label="anchor" href="#new-features-3-3-0-01"></a></h3>
 <ul><li>Created comprehensive vignettes: <code>dose-response-workflow.Rmd</code> providing a complete tutorial on dose-response analysis, and <code>nec-models.Rmd</code> documenting No Effect Concentration modeling with <code>NEC.2</code>/<code>NEC.3</code>/<code>NEC.4</code> function variants.</li>
 <li>Set up pkgdown website infrastructure: added <code>_pkgdown.yml</code> with Bootstrap 5 configuration, created <code>build_pkgdown.R</code> script for build automation, documented pkgdown build process in README, and generated pkgdown documentation site.</li>
-<li>Added robust estimation methods in new <code>ED_robust.R</code> module: <code><a href="../reference/ED_robust.html">ED_robust()</a></code> for calculating ED values using propper error handling, <code><a href="../reference/maED_robust.html">maED_robust()</a></code> for model-averaged robust ED estimation, and <code><a href="../reference/get_ed_interval.html">get_ed_interval()</a></code> for recommending appropriate confidence interval methods based on model type.</li>
+<li>Added computationally robust (stable) wrapper functions in new <code>ED_robust.R</code> module: <code><a href="../reference/ED_robust.html">ED_robust()</a></code> for calculating ED values with proper error handling that returns <code>NA</code> instead of failing when an ED value is not estimable, <code><a href="../reference/maED_robust.html">maED_robust()</a></code> for model-averaged ED estimation with the same graceful error handling, and <code><a href="../reference/get_ed_interval.html">get_ed_interval()</a></code> for recommending appropriate confidence interval methods based on model type.</li>
 <li>Added comprehensive test suite covering ED calculations, predictions, plotting, residuals, model selection, and utility functions.</li>
 <li>Added <code>drm_name()</code> helper function to <code>ED_robust.R</code>.</li>
 <li>Enhanced package startup message with citations and developer credits.</li>
@@ -69,7 +87,7 @@
 <li>Added edge case handling in <code>modelFit.R</code>.</li>
 <li>Added input validation for <code><a href="../reference/comped.html">comped()</a></code> and <code><a href="../reference/compParm.html">compParm()</a></code>.</li>
 <li>Fixed unsafe global state modification via <code>options(warn)</code>, incorrect <code>compParm</code> od/pool handling, and residuals division by zero.</li>
-<li>Fixed NaN warning in <code>summary.drc</code> for robust median estimation.</li>
+<li>Fixed NaN warning in <code>summary.drc</code> for robust estimation methods (metric trimming, Winsorizing, Tukey's biweight).</li>
 <li>Improved <code>predict.drc</code> and <code>vcov.drc</code> to resolve 23 test failures.</li>
 <li>Fixed <code><a href="../reference/mselect.html">mselect()</a></code> to always compute Lack of fit p-values for all models, not only when <code>nested=TRUE</code>.</li>
 <li>Fixed a bug in <code>anova.drclist</code> where negative or non-finite F statistics produced NaN p-values; negative F statistics now return p-value of 1 and non-finite F statistics return NA.</li>
