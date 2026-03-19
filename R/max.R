@@ -148,8 +148,13 @@
         result <- MAXlist(parmChosen, lower, upper)
         
         # Warn if the optimum landed on a boundary (likely out-of-range)
-        if (isTRUE(all.equal(result[1], lower)) ||
-            isTRUE(all.equal(result[1], upper))) {
+        # Use unname() so that named return values (e.g. from cedergreen) are
+        # compared correctly with the unnamed lower/upper scalars.
+        # A tolerance of 1e-3 is used because numerical optimisers (e.g.
+        # optimize()) return values near—but not exactly at—the boundary.
+        bnd_tol <- 1e-3
+        if (isTRUE(all.equal(unname(result[1]), lower, tolerance = bnd_tol)) ||
+            isTRUE(all.equal(unname(result[1]), upper, tolerance = bnd_tol))) {
           warning(
             "The estimated maximum dose for curve '", curveName,
             "' is at the boundary of [lower, upper] = [", lower, ", ", upper, "]. ",
