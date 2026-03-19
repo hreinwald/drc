@@ -1,15 +1,9 @@
 # OUTPUT from covr::package_coverage() 
-drc Coverage: 86.57%
+drc Coverage: 89.08%
 R/max.R: 0.00%
-R/noEffect.R: 0.00%
 R/pr.R: 0.00%
-R/searchdrc.R: 0.00%
-R/ucedergreen.R: 0.00%
-R/summary.drc.R: 39.78%
 R/weibull1.R: 43.36%
 R/logistic.ssf.R: 44.44%
-R/print.summary.drc.R: 44.44%
-R/drmRobust.R: 46.67%
 R/ED.lin.R: 47.22%
 R/modelFunction.R: 51.61%
 R/drmOpt.R: 54.29%
@@ -17,33 +11,38 @@ R/modelFit.R: 64.62%
 R/vcov.drc.R: 65.91%
 R/anova.drclist.R: 66.30%
 R/EDcomp.R: 67.48%
+R/searchdrc.R: 68.18%
 R/llogistic.R: 68.90%
 R/drm_legacy.R: 68.97%
 R/logLik.drc.R: 70.00%
 R/mselect.R: 71.19%
 R/cooks.distance.drc.R: 75.00%
-R/drmEMPoisson.R: 76.00%
 R/compParm.R: 78.43%
 R/plot.drc.R: 79.08%
 R/comped.R: 80.00%
 R/drmLOFbinomial.R: 81.82%
 R/braincousens.R: 83.19%
+R/summary.drc.R: 84.44%
 R/EDhelper.R: 84.62%
 R/predict.drc.R: 84.62%
 R/lnormal.ssf.R: 85.00%
 R/drmEMls.R: 85.19%
-R/drm.R: 85.54%
 R/EDinvreg.R: 86.21%
+R/drm.R: 86.35%
 R/update.drc.R: 86.67%
 R/drmEMnegbin.R: 87.88%
 R/weibull1.ssf.R: 88.89%
 R/weibull2.ssf.R: 88.89%
 R/llogistic.ssf.R: 89.47%
+R/drmRobust.R: 91.11%
 R/drmLOFls.R: 91.67%
+R/drmEMPoisson.R: 92.00%
 R/rse.R: 93.33%
 R/drmParNames.R: 94.12%
 R/drmConvertParm.R: 94.44%
+R/ucedergreen.R: 95.12%
 R/drmEMbinomial.R: 96.43%
+R/print.summary.drc.R: 98.15%
 R/lnormal.R: 99.38%
 R/absToRel.R: 100.00%
 R/anova.drc.R: 100.00%
@@ -94,6 +93,7 @@ R/mrdrm.R: 100.00%
 R/multi2.R: 100.00%
 R/nec.R: 100.00%
 R/neill.test.R: 100.00%
+R/noEffect.R: 100.00%
 R/onAttach.R: 100.00%
 R/pickParm.R: 100.00%
 R/print.drc.R: 100.00%
