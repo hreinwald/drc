@@ -11,9 +11,9 @@ Analysis of dose-response data is made available through a suite of flexible and
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://www.r-project.org}
-  \item \url{https://www.bioassay.dk}
   \item \url{https://github.com/hreinwald/drc}
+  \item \url{https://www.bioassay.dk}
+  \item \url{https://www.r-project.org}
   \item \url{https://cran.r-project.org/web/packages/drc/index.html}
   \item Report bugs at \url{https://github.com/hreinwald/drc/issues/}
 }
