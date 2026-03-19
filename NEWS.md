@@ -10,7 +10,7 @@
 ## New Features
 * Created comprehensive vignettes: `dose-response-workflow.Rmd` providing a complete tutorial on dose-response analysis, and `nec-models.Rmd` documenting No Effect Concentration modeling with `NEC.2`/`NEC.3`/`NEC.4` function variants.
 * Set up pkgdown website infrastructure: added `_pkgdown.yml` with Bootstrap 5 configuration, created `build_pkgdown.R` script for build automation, documented pkgdown build process in README, and generated pkgdown documentation site.
-* Added robust estimation methods in new `ED_robust.R` module: `ED_robust()` for calculating ED values using robust median-based estimation, `maED_robust()` for model-averaged robust ED estimation, and `get_ed_interval()` for recommending appropriate confidence interval methods based on model type.
+* Added robust estimation methods in new `ED_robust.R` module: `ED_robust()` for calculating ED values using propper error handling, `maED_robust()` for model-averaged robust ED estimation, and `get_ed_interval()` for recommending appropriate confidence interval methods based on model type.
 * Added comprehensive test suite covering ED calculations, predictions, plotting, residuals, model selection, and utility functions.
 * Added `drm_name()` helper function to `ED_robust.R`.
 * Enhanced package startup message with citations and developer credits.
