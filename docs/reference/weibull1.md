@@ -29,8 +29,9 @@ weibull1(
 
 - method:
 
-  character string indicating the self starter function to use (`"1"`,
-  `"2"`, `"3"`, or `"4"`).
+  character string indicating the self starter function to use for
+  obtaining starting values (`"1"` (default), `"2"`, `"3"`, or `"4"`).
+  See Details.
 
 - ssfct:
 
@@ -57,6 +58,37 @@ The four-parameter Weibull type 1 model is given by the expression
 \$\$f(x) = c + (d - c) \exp(-\exp(b(\log(x) - \log(e))))\$\$
 
 The model is sometimes also called the Gompertz model.
+
+The `method` argument determines how starting values for the parameters
+`b` and `e` are estimated (the starting values for `c` and `d` are
+always based on the range of the response values). Four methods are
+available:
+
+- `"1"` (default):
+
+  Linear regression on transformed data. Applies a log-log
+  transformation to the response and a log transformation to the dose,
+  then fits a linear regression to estimate starting values for `b` and
+  `e`.
+
+- `"2"`:
+
+  Anke's procedure. Estimates `e` by finding the dose at which the
+  response crosses the midpoint between `c` and `d`, then estimates `b`
+  as the median of back-calculated values.
+
+- `"3"`:
+
+  Stepwise approach. Identifies where the mean response crosses the
+  midpoint between `c` and `d` and uses the corresponding dose as the
+  starting value for `e`. The starting value for `b` is based on the
+  sign of the slope at that point.
+
+- `"4"`:
+
+  Normolle's procedure. Uses the mean of the dose range as an initial
+  estimate for `e`, then estimates `b` and `e` using median-based
+  back-calculations.
 
 ## References
 

@@ -57,9 +57,9 @@ Hannes Reinwald
 ``` r
 ryegrass_model <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 drc:::get_ed_interval(ryegrass_model)
-#> [1] "tfls"
+#> Error: object 'get_ed_interval' not found
 drc:::get_ed_interval("LL.4")
-#> [1] "tfls"
+#> Error: object 'get_ed_interval' not found
 drc:::get_ed_interval("W1.4")
-#> [1] "delta"
+#> Error: object 'get_ed_interval' not found
 ```

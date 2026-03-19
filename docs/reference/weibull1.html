@@ -70,7 +70,8 @@ parameters <code>b</code>, <code>c</code>, <code>d</code>, and <code>e</code>.</
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>character string indicating the self starter function to use
-(<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, or <code>"4"</code>).</p></dd>
+for obtaining starting values (<code>"1"</code> (default), <code>"2"</code>,
+<code>"3"</code>, or <code>"4"</code>). See Details.</p></dd>
 
 
 <dt id="arg-ssfct">ssfct<a class="anchor" aria-label="anchor" href="#arg-ssfct"></a></dt>
@@ -98,7 +99,33 @@ self starter function, and parameter names.</p>
     <p>The four-parameter Weibull type 1 model is given by the expression
 $$f(x) = c + (d - c) \exp(-\exp(b(\log(x) - \log(e))))$$</p>
 <p>The model is sometimes also called the Gompertz model.</p>
-    </div>
+<p>The <code>method</code> argument determines how starting values for the parameters
+<code>b</code> and <code>e</code> are estimated (the starting values for <code>c</code> and
+<code>d</code> are always based on the range of the response values). Four methods
+are available:</p><dl><dt><code>"1"</code> (default)</dt>
+<dd><p>Linear regression on transformed data. Applies a
+log-log transformation to the response and a log transformation to the
+dose, then fits a linear regression to estimate starting values for
+<code>b</code> and <code>e</code>.</p></dd>
+
+<dt><code>"2"</code></dt>
+<dd><p>Anke's procedure. Estimates <code>e</code> by finding the dose
+at which the response crosses the midpoint between <code>c</code> and <code>d</code>,
+then estimates <code>b</code> as the median of back-calculated values.</p></dd>
+
+<dt><code>"3"</code></dt>
+<dd><p>Stepwise approach. Identifies where the mean response
+crosses the midpoint between <code>c</code> and <code>d</code> and uses the
+corresponding dose as the starting value for <code>e</code>. The starting value
+for <code>b</code> is based on the sign of the slope at that point.</p></dd>
+
+<dt><code>"4"</code></dt>
+<dd><p>Normolle's procedure. Uses the mean of the dose range as
+an initial estimate for <code>e</code>, then estimates <code>b</code> and <code>e</code>
+using median-based back-calculations.</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Seber, G. A. F. and Wild, C. J. (1989)

@@ -127,7 +127,7 @@
 <h3 id="fitting-a-basic-dose-response-model">Fitting a basic dose-response model<a class="anchor" aria-label="anchor" href="#fitting-a-basic-dose-response-model"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.r-project.org" class="external-link">drc</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.r-project.org" class="external-link">drc</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Fit a four-parameter log-logistic model to the built-in 'ryegrass' dataset</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="reference/LL.4.html">LL.4</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>

@@ -119,6 +119,10 @@ summary(ryegrass.m1)
 
 ## Fitting the same model with the optimal Box-Cox transformation
 ryegrass.m2 <- boxcox(ryegrass.m1)
+#> Warning: NaNs produced
+#> Warning: NaNs produced
+#> Warning: NaNs produced
+#> Warning: NaNs produced
 
 summary(ryegrass.m2)
 #> 

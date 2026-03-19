@@ -70,6 +70,6 @@ ED(lettuce.bcm2, c(50))
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate Std. Error
-#> e:50   35.023     15.427
+#>        Estimate Std. Error
+#> e:1:50   35.023     15.427
 ```

@@ -122,54 +122,37 @@ argument in <code><a href="drm.html">drm()</a></code>.</p>
 <span class="r-in"><span><span class="va">lettuce.crsm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="drm.html">drm</a></span><span class="op">(</span> <span class="va">lettuce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span>, fct <span class="op">=</span> <span class="fu">ml3b</span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">lettuce.crsm2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model fitted: Cedergreen-Ritz-Streibig with lower limit 0 (alpha=) (4 parms)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model fitted: Cedergreen-Ritz-Streibig with lower limit 0 (alpha=.5) (4 parms)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error t-value   p-value    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> b:(Intercept) 0.569426   0.068538  8.3081 8.444e-06 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d:(Intercept) 1.008915   0.094919 10.6292 9.061e-07 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:(Intercept) 0.642290   1.533937  0.4187    0.6843    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> f:(Intercept) 4.446933   5.821389  0.7639    0.4626    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b:(Intercept) 0.576206   0.090347  6.3777 8.060e-05 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d:(Intercept) 1.013816   0.097630 10.3842 1.124e-06 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:(Intercept) 0.921496   2.937965  0.3137    0.7602    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> f:(Intercept) 3.635793   6.503370  0.5591    0.5884    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Residual standard error:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1345066 (10 degrees of freedom)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1351142 (10 degrees of freedom)</span>
 <span class="r-in"><span><span class="fu"><a href="ED.html">ED</a></span><span class="op">(</span><span class="va">lettuce.crsm2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Estimate Std. Error</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:50  26.1252     8.6286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimate Std. Error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:50  26.3389     8.9005</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Recommended replacement:</span></span></span>
 <span class="r-in"><span><span class="va">fct_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="CRS.5.html">CRS.5</a></span><span class="op">(</span>alpha_type <span class="op">=</span> <span class="st">"b"</span>, fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in CRS.5(alpha_type = "b", fixed = c(NA, 0, NA, NA, NA)):</span> could not find function "CRS.5"</span>
 <span class="r-in"><span><span class="va">lettuce.crs5</span> <span class="op">&lt;-</span> <span class="fu"><a href="drm.html">drm</a></span><span class="op">(</span><span class="va">lettuce</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span>, fct <span class="op">=</span> <span class="va">fct_spec</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fct_spec' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">lettuce.crs5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model fitted: Cedergreen-Ritz-Streibig (alpha=0.5) (4 parms)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter estimates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error t-value   p-value    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> b:(Intercept) 0.569426   0.068538  8.3081 8.444e-06 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d:(Intercept) 1.008915   0.094919 10.6292 9.061e-07 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:(Intercept) 0.642290   1.533937  0.4187    0.6843    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> f:(Intercept) 4.446933   5.821389  0.7639    0.4626    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual standard error:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1345066 (10 degrees of freedom)</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'lettuce.crs5' not found</span>
 <span class="r-in"><span><span class="fu"><a href="ED.html">ED</a></span><span class="op">(</span><span class="va">lettuce.crs5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Estimate Std. Error</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:50  26.1252     8.6286</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'lettuce.crs5' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -118,24 +118,24 @@ data.</p>
 <span class="r-in"><span><span class="co">## Model selection</span></span></span>
 <span class="r-in"><span><span class="fu">mselect</span><span class="op">(</span><span class="va">ryegrass.m1</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="LL.3.html">LL.3</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="LL.5.html">LL.5</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="W1.3.html">W1.3</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="W1.4.html">W1.4</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="W2.4.html">W2.4</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="baro5.html">baro5</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          logLik       IC Lack of fit   Res var</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> W2.4  -15.91352 41.82703  0.94507131 0.2646283</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LL.4  -16.15514 42.31029  0.86648304 0.2700107</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> baro5 -15.86422 43.72844  0.86239408 0.2774141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LL.5  -15.87828 43.75656  0.85384758 0.2777393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> W1.4  -17.46720 44.93439  0.45056762 0.3012075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LL.3  -18.60413 45.20827  0.35316787 0.3153724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> W1.3  -22.22047 52.44094  0.04379149 0.4262881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> W2.4  -15.91352 41.82703           0 0.2646283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LL.4  -16.15514 42.31029           0 0.2700107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> baro5 -15.86422 43.72844           0 0.2774141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LL.5  -15.87828 43.75656           0 0.2777393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> W1.4  -17.46720 44.93439           0 0.3012075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LL.3  -18.60413 45.20827           0 0.3153724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> W1.3  -22.22047 52.44094           0 0.4262881</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Model selection including linear, quadratic, and cubic regression models</span></span></span>
 <span class="r-in"><span><span class="fu">mselect</span><span class="op">(</span><span class="va">ryegrass.m1</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="LL.3.html">LL.3</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="LL.5.html">LL.5</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="W1.3.html">W1.3</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="W1.4.html">W1.4</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="W2.4.html">W2.4</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="baro5.html">baro5</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, linreg <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          logLik        IC Lack of fit   Res var</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> W2.4  -15.91352  41.82703  0.94507131 0.2646283</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LL.4  -16.15514  42.31029  0.86648304 0.2700107</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> baro5 -15.86422  43.72844  0.86239408 0.2774141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LL.5  -15.87828  43.75656  0.85384758 0.2777393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> W1.4  -17.46720  44.93439  0.45056762 0.3012075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LL.3  -18.60413  45.20827  0.35316787 0.3153724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> W1.3  -22.22047  52.44094  0.04379149 0.4262881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> W2.4  -15.91352  41.82703           0 0.2646283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LL.4  -16.15514  42.31029           0 0.2700107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> baro5 -15.86422  43.72844           0 0.2774141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LL.5  -15.87828  43.75656           0 0.2777393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> W1.4  -17.46720  44.93439           0 0.3012075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LL.3  -18.60413  45.20827           0 0.3153724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> W1.3  -22.22047  52.44094           0 0.4262881</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cubic -25.53428  61.06856          NA 0.5899609</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Quad  -35.11558  78.23116          NA 1.2485122</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Lin   -50.47554 106.95109          NA 4.2863247</span>

@@ -70,7 +70,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.r-project.org" class="external-link">drc</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.r-project.org" class="external-link">drc</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Model with ED50 as a parameter</span></span></span>
 <span class="r-in"><span><span class="va">finney71.m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="drm.html">drm</a></span><span class="op">(</span><span class="va">affected</span><span class="op">/</span><span class="va">total</span> <span class="op">~</span> <span class="va">dose</span>, weights <span class="op">=</span> <span class="va">total</span>,</span></span>
@@ -94,10 +94,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Estimate Std. Error   Lower   Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:10  2.37896    0.25164 1.88576 2.87217</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:20  3.08932    0.24372 2.61163 3.56700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:50  4.82890    0.24958 4.33974 5.31806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimate Std. Error   Lower   Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:10  2.37896    0.25164 1.88576 2.87217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:20  3.08932    0.24372 2.61163 3.56700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:50  4.82890    0.24958 4.33974 5.31806</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Model fitted with 'glm'</span></span></span>
 <span class="r-in"><span><span class="co">#fitl.glm &lt;- glm(cbind(affected, total-affected) ~ log(dose),</span></span></span>
@@ -120,10 +120,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated effective doses</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Estimate  Lower  Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:10   2.3789 1.9335 2.9270</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:20   3.0893 2.6467 3.6059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e:50   4.8289 4.3637 5.3437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimate  Lower  Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:10   2.3789 1.9335 2.9270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:20   3.0893 2.6467 3.6059</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e:1:50   4.8289 4.3637 5.3437</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

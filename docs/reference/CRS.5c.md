@@ -97,7 +97,7 @@ Christian Ritz, Hannes Reinwald
 lettuce.m3 <- drm( lettuce[, c(2, 1)], fct = CRS.5c() )
 summary(lettuce.m3)
 #> 
-#> Model fitted: Cedergreen-Ritz-Streibig (alpha=0.25) (5 parms)
+#> Model fitted: Cedergreen-Ritz-Streibig (alpha=.25) (5 parms)
 #> 
 #> Parameter estimates:
 #> 
@@ -117,33 +117,14 @@ ED(lettuce.m3, c(50))
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate Std. Error
-#> e:50  11.4243     8.7214
+#>        Estimate Std. Error
+#> e:1:50  11.4243     8.7214
 
 # Recommended replacement:
 lettuce.crs5 <- drm( lettuce[, c(2, 1)], fct = CRS.5(alpha_type = "c") )
+#> Error in CRS.5(alpha_type = "c"): could not find function "CRS.5"
 summary(lettuce.crs5)
-#> 
-#> Model fitted: Cedergreen-Ritz-Streibig (alpha=0.25) (5 parms)
-#> 
-#> Parameter estimates:
-#> 
-#>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 0.981945   0.559334  1.7556   0.11305    
-#> c:(Intercept) 0.336670   0.182883  1.8409   0.09877 .  
-#> d:(Intercept) 0.969845   0.088261 10.9883 1.624e-06 ***
-#> e:(Intercept) 3.883893   2.462313  1.5773   0.14917    
-#> f:(Intercept) 1.027934   0.766823  1.3405   0.21293    
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error:
-#> 
-#>  0.1256841 (9 degrees of freedom)
+#> Error: object 'lettuce.crs5' not found
 ED(lettuce.crs5, c(50))
-#> 
-#> Estimated effective doses
-#> 
-#>      Estimate Std. Error
-#> e:50  11.4243     8.7214
+#> Error: object 'lettuce.crs5' not found
 ```

@@ -56,6 +56,7 @@ summary(algae.m1)
 #>  3.911178 (11 degrees of freedom)
 
 algae.m2 <- boxcox(algae.m1)
+#> Warning: NaNs produced
 
 summary(algae.m2)
 #> 

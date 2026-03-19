@@ -31,8 +31,9 @@ weibull2(
 
 - method:
 
-  character string indicating the self starter method to use. One of
-  `"1"`, `"2"`, `"3"`, or `"4"`.
+  character string indicating the self starter method to use for
+  obtaining starting values. One of `"1"` (default), `"2"`, `"3"`, or
+  `"4"`. See Details.
 
 - ssfct:
 
@@ -52,6 +53,39 @@ weibull2(
 
 A list containing the nonlinear function, self starter function, and
 parameter names. The list has class `"Weibull-2"`.
+
+## Details
+
+The `method` argument determines how starting values for the parameters
+`b` and `e` are estimated (the starting values for `c` and `d` are
+always based on the range of the response values). Four methods are
+available:
+
+- `"1"` (default):
+
+  Linear regression on transformed data. Applies a complementary log-log
+  transformation to the response and a log transformation to the dose,
+  then fits a linear regression to estimate starting values for `b` and
+  `e`.
+
+- `"2"`:
+
+  Anke's procedure. Estimates `e` by finding the dose at which the
+  response crosses the midpoint between `c` and `d`, then estimates `b`
+  as the median of back-calculated values.
+
+- `"3"`:
+
+  Stepwise approach. Identifies where the mean response crosses the
+  midpoint between `c` and `d` and uses the corresponding dose as the
+  starting value for `e`. The starting value for `b` is based on the
+  sign of the slope at that point.
+
+- `"4"`:
+
+  Normolle's procedure. Uses the mean of the dose range as an initial
+  estimate for `e`, then estimates `b` and `e` using median-based
+  back-calculations.
 
 ## References
 

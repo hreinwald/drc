@@ -94,48 +94,31 @@ summary(lettuce.crsm1)
 #> 
 #> Parameter estimates:
 #> 
-#>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 7.7892e-01 2.5343e-01  3.0735   0.01177 *  
-#> d:(Intercept) 1.1091e+00 7.8336e-02 14.1586 6.081e-08 ***
-#> e:(Intercept) 2.8572e+01 3.1328e+01  0.9120   0.38322    
-#> f:(Intercept) 5.5833e-04 4.1209e-01  0.0014   0.99895    
+#>                Estimate Std. Error t-value   p-value    
+#> b:(Intercept)  0.774519   0.248592  3.1156   0.01096 *  
+#> d:(Intercept)  1.108705   0.078481 14.1270 6.212e-08 ***
+#> e:(Intercept) 27.620019  30.307666  0.9113   0.38357    
+#> f:(Intercept)  0.013090   0.417215  0.0314   0.97559    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.155635 (10 degrees of freedom)
+#>  0.1556406 (10 degrees of freedom)
 ED(lettuce.crsm1, c(50))
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate Std. Error
-#> e:50   28.608     11.751
+#>        Estimate Std. Error
+#> e:1:50   28.436     11.618
 
 # Recommended replacement:
 fct_spec <- CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA))
+#> Error in CRS.5(alpha_type = "a", fixed = c(NA, 0, NA, NA, NA)): could not find function "CRS.5"
 lettuce.crs5 <- drm(lettuce[, c(2, 1)], fct = fct_spec)
+#> Error: object 'fct_spec' not found
 summary(lettuce.crs5)
-#> 
-#> Model fitted: Cedergreen-Ritz-Streibig (alpha=1) (4 parms)
-#> 
-#> Parameter estimates:
-#> 
-#>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 7.7892e-01 2.5343e-01  3.0735   0.01177 *  
-#> d:(Intercept) 1.1091e+00 7.8336e-02 14.1586 6.081e-08 ***
-#> e:(Intercept) 2.8572e+01 3.1328e+01  0.9120   0.38322    
-#> f:(Intercept) 5.5833e-04 4.1209e-01  0.0014   0.99895    
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error:
-#> 
-#>  0.155635 (10 degrees of freedom)
+#> Error: object 'lettuce.crs5' not found
 ED(lettuce.crs5, c(50))
-#> 
-#> Estimated effective doses
-#> 
-#>      Estimate Std. Error
-#> e:50   28.608     11.751
+#> Error: object 'lettuce.crs5' not found
 ```

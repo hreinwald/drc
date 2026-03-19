@@ -121,11 +121,13 @@ fixed parameters, ensuring that initial values are appropriately calculated for 
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Create a CRS.5 model specification</span></span></span>
 <span class="r-in"><span><span class="va">crs_model_a</span> <span class="op">&lt;-</span> <span class="fu">CRS.5</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in CRS.5():</span> could not find function "CRS.5"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fix the lower limit to 0 and use a custom numeric alpha</span></span></span>
 <span class="r-in"><span><span class="va">crs_model_custom</span> <span class="op">&lt;-</span> <span class="fu">CRS.5</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, alpha_type <span class="op">=</span> <span class="fl">0.75</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in CRS.5(fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75):</span> could not find function "CRS.5"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

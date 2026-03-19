@@ -24,7 +24,12 @@ EXD.2(fixed = c(NA, NA), names = c("d", "e"), ...)
 - ...:
 
   additional arguments passed to
-  [`weibull1`](https://hreinwald.github.io/drc/reference/weibull1.md).
+  [`weibull1`](https://hreinwald.github.io/drc/reference/weibull1.md),
+  most notably `method` (a character string: `"1"` (default), `"2"`,
+  `"3"`, or `"4"`) which selects the self-starter method for obtaining
+  starting values. See
+  [`weibull1`](https://hreinwald.github.io/drc/reference/weibull1.md)
+  for details.
 
 ## Value
 

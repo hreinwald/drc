@@ -44,6 +44,7 @@ starter function, and parameter names.
 ``` r
 spinach.m1 <- drm(SLOPE ~ DOSE, data = spinach, fct = W2x.3())
 summary(spinach.m1)
+#> Warning: NaNs produced
 #> 
 #> Model fitted: Weibull (type 2) with lower limit at 0 (3 parms)
 #> 

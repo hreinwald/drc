@@ -74,12 +74,5 @@ Hannes Reinwald
 data(lettuce)
 m <- drm(weight ~ conc, data = lettuce, fct = BC.4())
 ED_robust(m, respLev = c(10, 50), CI_level = 0.95)
-#>     Estimate    stderr     Lower    Upper confint_level confint_method
-#>        <num>     <num>     <num>    <num>         <num>         <char>
-#> 1:  4.457785  1.674585  1.930237 10.29503          0.95           tfls
-#> 2: 35.022556 15.426732 13.125303 93.45151          0.95           tfls
-#>           model    EC
-#>          <char> <num>
-#> 1: BC.4:b-d-e-f    10
-#> 2: BC.4:b-d-e-f    50
+#> Error in ED_robust(m, respLev = c(10, 50), CI_level = 0.95): could not find function "ED_robust"
 ```

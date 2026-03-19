@@ -68,10 +68,10 @@ ED(p.prom.m1, c(10,20,50), interval="delta")
 #> 
 #> Estimated effective doses
 #> 
-#>       Estimate Std. Error     Lower     Upper
-#> e:10  121.8002    59.4612   -1.8561  245.4565
-#> e:20  262.9046    72.2694  112.6121  413.1970
-#> e:50 1145.6543   392.6246  329.1468 1962.1618
+#>         Estimate Std. Error     Lower     Upper
+#> e:1:10  121.8002    59.4612   -1.8561  245.4565
+#> e:1:20  262.9046    72.2694  112.6121  413.1970
+#> e:1:50 1145.6543   392.6246  329.1468 1962.1618
 
 ## Model with ED50 as parameter
 p.prom.m2<-drm(dryweight~conc, data=P.promelas, fct=LN.3(loge=TRUE))
@@ -95,8 +95,8 @@ ED(p.prom.m2, c(10,20,50), interval="fls")
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate    Lower    Upper
-#> e:10  121.795   44.111  336.290
-#> e:20  262.930  148.437  465.735
-#> e:50 1146.080  561.466 2339.410
+#>        Estimate    Lower    Upper
+#> e:1:10  121.795   44.111  336.290
+#> e:1:20  262.930  148.437  465.735
+#> e:1:50 1146.080  561.466 2339.410
 ```
