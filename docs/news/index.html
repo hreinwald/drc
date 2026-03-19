@@ -37,7 +37,114 @@
       <small>Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.3.0.02" id="drc-33002">drc 3.3.0.02<a class="anchor" aria-label="anchor" href="#drc-33002"></a></h2>
+<div class="section level3">
+<h3 id="changes-3-3-0-02">Changes<a class="anchor" aria-label="anchor" href="#changes-3-3-0-02"></a></h3>
+<ul><li>Added <code>NEWS.md</code> version control log.</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.3.0.01" id="drc-33001">drc 3.3.0.01<a class="anchor" aria-label="anchor" href="#drc-33001"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-3-0-01">New Features<a class="anchor" aria-label="anchor" href="#new-features-3-3-0-01"></a></h3>
+<ul><li>Created comprehensive vignettes: <code>dose-response-workflow.Rmd</code> providing a complete tutorial on dose-response analysis, and <code>nec-models.Rmd</code> documenting No Effect Concentration modeling with <code>NEC.2</code>/<code>NEC.3</code>/<code>NEC.4</code> function variants.</li>
+<li>Set up pkgdown website infrastructure: added <code>_pkgdown.yml</code> with Bootstrap 5 configuration, created <code>build_pkgdown.R</code> script for build automation, documented pkgdown build process in README, and generated pkgdown documentation site.</li>
+<li>Added robust estimation methods in new <code>ED_robust.R</code> module: <code><a href="../reference/ED_robust.html">ED_robust()</a></code> for calculating ED values using robust median-based estimation, <code><a href="../reference/maED_robust.html">maED_robust()</a></code> for model-averaged robust ED estimation, and <code><a href="../reference/get_ed_interval.html">get_ed_interval()</a></code> for recommending appropriate confidence interval methods based on model type.</li>
+<li>Added comprehensive test suite covering ED calculations, predictions, plotting, residuals, model selection, and utility functions.</li>
+<li>Added <code>drm_name()</code> helper function to <code>ED_robust.R</code>.</li>
+<li>Enhanced package startup message with citations and developer credits.</li>
+<li>Added <code><a href="../reference/drm_legacy.html">drm_legacy()</a></code> as an internal reference function preserving the original <code><a href="../reference/drm.html">drm()</a></code> implementation.</li>
+<li>Added testthat infrastructure with tests verifying <code><a href="../reference/drm.html">drm()</a></code> output matches <code><a href="../reference/drm_legacy.html">drm_legacy()</a></code> output across continuous, binomial, Poisson, and negative binomial data types.</li>
+<li>Added comprehensive anova tests.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-3-3-0-01">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-0-01"></a></h3>
+<ul><li>Fixed vignette build by removing vignettes from <code>.Rbuildignore</code> and correcting incorrect <code><a href="../reference/mselect.html">mselect()</a></code> usage in examples.</li>
+<li>Fixed Rd comment warning by escaping the <code>%*%</code> operator in documentation.</li>
+<li>Fixed all <code><a href="https://rdrr.io/pkg/devtools/man/check.html" class="external-link">devtools::check()</a></code> errors and warnings: added roxygen2 <code>@keywords</code> and lifecycle deprecation notices for deprecated CRS functions, expanded dataset documentation files with examples, added missing dataset aliases, and fixed Weibull model documentation.</li>
+<li>Fixed division-by-zero in <code><a href="../reference/Rsq.html">Rsq()</a></code> and <code><a href="../reference/absToRel.html">absToRel()</a></code>.</li>
+<li>Removed dead <code>scaleEst()</code> stub function.</li>
+<li>Fixed <code><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits()</a></code> bug in <code>mselect.R</code>.</li>
+<li>Added edge case handling in <code>modelFit.R</code>.</li>
+<li>Added input validation for <code><a href="../reference/comped.html">comped()</a></code> and <code><a href="../reference/compParm.html">compParm()</a></code>.</li>
+<li>Fixed unsafe global state modification via <code>options(warn)</code>, incorrect <code>compParm</code> od/pool handling, and residuals division by zero.</li>
+<li>Fixed NaN warning in <code>summary.drc</code> for robust median estimation.</li>
+<li>Improved <code>predict.drc</code> and <code>vcov.drc</code> to resolve 23 test failures.</li>
+<li>Fixed <code><a href="../reference/mselect.html">mselect()</a></code> to always compute Lack of fit p-values for all models, not only when <code>nested=TRUE</code>.</li>
+<li>Fixed a bug in <code>anova.drclist</code> where negative or non-finite F statistics produced NaN p-values; negative F statistics now return p-value of 1 and non-finite F statistics return NA.</li>
+<li>Fixed duplicate aliases and unstated dependencies in examples.</li>
+<li>Fixed package dependency warnings: added <code>data.table</code> and <code>dplyr</code> to Imports, updated NAMESPACE with required imports.</li>
+<li>Fixed S3 method consistency issues and changed <code>confint.basic</code> roxygen tag from <code>@exportS3Method</code> to <code>@export</code>.</li>
+<li>Fixed escaped LaTeX special characters in roxygen2 documentation and Rd files.</li>
+<li>Fixed escaped percent signs in roxygen docs causing Rd parse warnings.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-3-3-0-01">Changes<a class="anchor" aria-label="anchor" href="#changes-3-3-0-01"></a></h3>
+<ul><li>Added vignette access information to README.</li>
+<li>Completed comprehensive roxygen2 documentation audit: added missing <code>@param</code> tags, removed <code>dontrun</code>/<code>donttest</code> wrappers to enable automated example testing, and fixed broken examples across documentation files.</li>
+<li>Enhanced dataset documentation: improved descriptions and fixed typos in dataset <code>.Rd</code> files, added examples sections to dataset <code>.Rd</code> files that were missing them.</li>
+<li>Improved <code>confint.drc</code> robustness: added <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code> fallback to <code><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch()</a></code> in <code><a href="../reference/confint.basic.html">confint.basic()</a></code> to handle unknown <code>intType</code> values gracefully instead of returning silent NULL.</li>
+<li>Removed <code>@export</code> from <code><a href="../reference/confint.basic.html">confint.basic()</a></code> as internal helpers should not be part of the public API.</li>
+<li>Enhanced roxygen2 documentation for <code>CRS.5</code>, convenience functions, and <code>ED_robust</code> with improved argument descriptions.</li>
+<li>Updated DESCRIPTION: added Hannes Reinwald as maintainer and co-author, updated package version to 3.3.0.01.</li>
+<li>Removed external <code>drcData</code> package dependency; example datasets are now bundled directly in the package <code>data/</code> directory.</li>
+<li>Added <code>.Rd</code> documentation files for all bundled datasets.</li>
+<li>Renamed internal variables for clarity: <code>ndRows</code> to <code>nRows</code> in <code>predict.drc</code>, <code>posIdx</code> to <code>validVar</code> in <code>summary.drc</code>.</li>
+<li>Added test coverage documentation.</li>
+<li>Renamed all 33 R source files from lowercase <code>.r</code> to uppercase <code>.R</code> extensions for consistency.</li>
+<li>Updated all <code>.Rd</code> documentation files to reference the new file names.</li>
+<li>Added GNU General Public License version 2 file and updated license version from GPL-2 to GPL-2.0 in DESCRIPTION.</li>
+<li>Added Hannes Reinwald as author in the DESCRIPTION file.</li>
+<li>Updated README with revised installation instructions and bug report link.</li>
+<li>Migrated all package documentation to roxygen2-generated Rd files.</li>
+<li>Regenerated NAMESPACE via roxygen2.</li>
+<li>Added <code>@exportS3Method</code> tags to S3 methods in <code>confint.drc.R</code> and <code>mrdrm.r</code>.</li>
+<li>Updated package version format from 3.3-0 to 3.3.0.</li>
+<li>Lowered the minimum R version requirement to 4.0.0.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-3-3-0-01">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-3-3-0-01"></a></h3>
+<ul><li>Removed deprecated developmental <code>cedergreen2</code> function.</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.3.0" id="drc-330">drc 3.3.0<a class="anchor" aria-label="anchor" href="#drc-330"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-3-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-3-3-0"></a></h3>
+<ul><li>Added new <code>CRS.5</code> wrapper function and <code>CRS.6</code> six-parameter model where the alpha exponent is estimated rather than fixed.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-3-3-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-0"></a></h3>
+<ul><li>Fixed a bug where the <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code> call for using separate curves with control measurements was inside the <code>if(!noMessage)</code> block, meaning it would be silently skipped when messages were suppressed.</li>
+<li>Fixed a bug in <code>noEffect.R</code> where the Poisson null model incorrectly referenced <code>resp</code> instead of using the response vector from the fitted object.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-3-3-0">Changes<a class="anchor" aria-label="anchor" href="#changes-3-3-0"></a></h3>
+<ul><li>Refactored the Cedergreen-Ritz-Streibig hormesis model: extracted <code>edfct</code> and <code>maxfct</code> into standalone helper functions (<code>cedergreen_edfct</code>, <code>cedergreen_maxfct</code>), refactored the self-starter function, and improved documentation.</li>
+<li>Cleaned up <code><a href="../reference/drm.html">drm()</a></code> function by removing approximately 900 lines of commented-out dead code, debug print statements, and old experimental implementations.</li>
+<li>Removed unused variable <code>isfi</code> and redundant variable <code>lenData</code> (identical to <code>numObs</code>).</li>
+<li>Removed a dead loop over <code>pmodelsList2</code> that could never execute.</li>
+<li>Added roxygen2 documentation headers to all R source files across the package.</li>
+<li>Fixed typos in source code and manual pages: ‘insted’ to ‘instead’ in <code>gaussian.r</code> and <code>lgaussian.R</code>, duplicate parameter name ‘e1’ to ‘e2’ in <code>ursa.r</code>, ‘contain’ to ‘contents’ in <code>EDcomp.R</code>, ‘mising’ to ‘missing’ and ‘reponses’ to ‘responses’ in <code>drm.Rd</code>, and ‘reponse’ to ‘response’ in <code>CRS.5a.Rd</code>.</li>
+<li>Updated DESCRIPTION file: added Encoding field (UTF-8), fixed <code>Authors@R</code> to use proper <code><a href="https://rdrr.io/r/utils/person.html" class="external-link">person()</a></code> format, removed deprecated Maintainer and LazyLoad fields, added missing Imports (<code>graphics</code>, <code>utils</code>), and updated URLs from HTTP to HTTPS.</li>
+<li>Comprehensive repository cleanup and code quality improvements.</li>
+<li>Removed obsolete configuration files (<code>.travis.yml</code>, <code>drc.Rproj</code>, <code>_pkgdown.yml</code>, <code>README.Rmd</code>) and redundant reference files (<code>_gitignore</code>, <code>_Rbuildignore</code>).</li>
+<li>Removed the <code>/tests</code> directory containing outdated development artifacts with no testing value.</li>
+<li>Updated <code>.gitignore</code> and <code>.Rbuildignore</code> with standard R/RStudio settings.</li>
+<li>Rewrote <code>README.md</code> with comprehensive documentation including quick-start examples, available models, key functions, and supported data types.</li>
+<li>Removed debug <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> statements in <code>drmEMstandard.R</code> and <code>findbe.r</code>.</li>
+<li>Removed dead code block (commented-out experimental code wrapped in <code>if (FALSE)</code>) in <code>drmEMstandard.R</code> and <code>llogistic.ssf.R</code>.</li>
+<li>Replaced unsafe <code>eval(parse(text=...))</code> calls with <code><a href="https://rdrr.io/r/base/match.fun.html" class="external-link">match.fun()</a></code> and <code><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call()</a></code> in <code>rdrm.r</code>.</li>
+<li>Improved <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> handling in <code>searchdrc.R</code> by saving and restoring the original warn setting using <code>on.exit(add=TRUE)</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="deprecated-3-3-0">Deprecated<a class="anchor" aria-label="anchor" href="#deprecated-3-3-0"></a></h3>
+<ul><li>Deprecated old CRS function names (<code>CRS.4a</code>, <code>CRS.4b</code>, <code>CRS.4c</code>, <code>CRS.5a</code>, <code>CRS.5b</code>, <code>CRS.5c</code>) with lifecycle notices in favor of new wrappers.</li>
+</ul><hr></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

@@ -7,11 +7,11 @@ flexible and versatile model fitting and after-fitting functions.
 
 Useful links:
 
-- <https://www.r-project.org>
+- <https://github.com/hreinwald/drc>
 
 - <https://www.bioassay.dk>
 
-- <https://github.com/hreinwald/drc>
+- <https://www.r-project.org>
 
 - <https://cran.r-project.org/web/packages/drc/index.html>
 

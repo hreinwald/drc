@@ -7,6 +7,12 @@
 [![](https://img.shields.io/github/last-commit/hreinwald/drc)](https://github.com/hreinwald/drc/commits/dev)
 [![](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/hreinwald/drc/issues)
 
+## Documentation
+
+📖 The full package documentation, function reference, and vignettes are
+available at
+**[hreinwald.github.io/drc](https://hreinwald.github.io/drc/)**.
+
 ## Note
 
 This repository contains a refactored development version of the
@@ -67,7 +73,7 @@ Feature requests or ideas?
 
 ## Installation
 
-To install the stable but outdated version from CRAN:
+To install the outdated version from CRAN:
 
 ``` r
 install.packages("drc")
@@ -82,23 +88,6 @@ Install the bug-fix development version from GitHub:
 devtools::install_github("hreinwald/drc")           # <- re-factored development version 3.3.0
 devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
 ```
-
-### Building the Documentation Website
-
-To build the pkgdown documentation website locally:
-
-``` r
-# Option 1: Use the provided helper script (recommended)
-source("build_pkgdown.R")
-
-# Option 2: Manual build
-# If you get an error about docs/ not being a pkgdown site, first clean it:
-pkgdown::clean_site(force = TRUE)
-pkgdown::build_site()
-```
-
-The helper script `build_pkgdown.R` automatically handles the case where
-a `docs/` directory exists but wasn’t created by pkgdown.
 
 ## Quick Start
 

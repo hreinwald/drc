@@ -11,14 +11,15 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/hreinwald/drc/blob/HEAD/inst/CITATION)
+[`DESCRIPTION`](https://github.com/hreinwald/drc/blob/HEAD/DESCRIPTION)
 
-Ritz, C., Jensen, S. M., Gerhard, D., Streibig, J. C. (2019)
-Dose-Response Analysis Using R CRC Press
+Ritz C, Streibig JC, Reinwald H (2026). *drc: Analysis of Dose-Response
+Data*. R package version 3.3.0.02, <https://github.com/hreinwald/drc>.
 
-    @Book{,
-      title = {Dose-Response Analysis Using R},
-      author = {C. Ritz and S. M. Jensen and D. Gerhard and J. C. Streibig},
-      publisher = {CRC Press},
-      year = {2019},
+    @Manual{,
+      title = {drc: Analysis of Dose-Response Data},
+      author = {Christian Ritz and Jens C. Streibig and Hannes Reinwald},
+      year = {2026},
+      note = {R package version 3.3.0.02},
+      url = {https://github.com/hreinwald/drc},
     }
