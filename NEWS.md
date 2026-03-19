@@ -1,7 +1,24 @@
 # drc 3.3.0.02
 
+## Bug Fixes
+* Fixed boundary detection bugs in `MAX()`: used `unname()` so named return values from cedergreen models are compared correctly with unnamed lower/upper scalars, and added tolerance in boundary check since numerical optimizers return values near but not exactly at boundaries.
+* Fixed `PR()` dropping `...` arguments for single-curve models.
+* Fixed all 17 issues in `ucedergreen()` function: missing `+c` term in model formula, `edfct` signature mismatch with the drc framework, undefined `xlogx` function call in `deriv1`, missing `match.arg()` validation for `method`, vectorized `|` operators in scalar `if()` guards, missing `useFixed` flag computation, `maxfct` signature mismatch and unsafe parameter indexing, broken self-starter ignoring `alpha`/`method`/`useFixed`, missing `fctName`/`fctText` parameters, `deriv1` excluded from return list, and documentation issues.
+* Fixed SE calculation for absolute type `ED()`: the model-specific `edfct` gradient functions treated asymptote parameters as constants when `type="absolute"`, missing the chain-rule contribution from the `absToRel` conversion and underestimating the standard error. Now uses numerical central differences for the complete gradient.
+* Fixed inverted `otrace`/`silentVal` logic in `drmOpt()` where `otrace=TRUE` incorrectly caused `silent=TRUE` in `try(optim())`, suppressing error messages instead of displaying them.
+* Fixed `searchdrc()` regex error and convergence failure behavior.
+* Fixed citation URL: reordered URLs in DESCRIPTION so `citation('drc')` returns the GitHub repository URL instead of r-project.org.
+
 ## Changes
-* Added `NEWS.md` version control log.
+* Added `NEWS.md` version control log. Reformatted legacy news file into properly formatted `NEWS.md` with categorized sections.
+* Improved documentation for Weibull starting value `method` parameter across `weibull1()`, `weibull2()`, and all wrapper functions (`W1.2`, `W1.3`, `W1.4`, `W2.2`, `W2.3`, `W2.4`, `AR.2`, `AR.3`, `EXD.2`, `EXD.3`).
+* Added comprehensive test suites for `summary.drc`, `print.summary.drc`, `noEffect`, `searchdrc`, `backfit`, `getInitial`, `drmEMeventtime`, `repChar`, `rdrm`, `gompertzd`, `MAX()`, and `PR()` functions.
+* Removed dead code `iband.R` and all associated references.
+* Removed unused `inst/citation` file, superseded by `CITATION.cff` at repository root.
+* Deleted `build_pkgdown.R` build script.
+* Added PLoS ONE 2015 article and CRC Press 2019 book references to `CITATION.cff`.
+* Updated installation instructions and README documentation.
+* Added `magic` to Suggests in DESCRIPTION for test dependency.
 
 ---
 
@@ -10,7 +27,7 @@
 ## New Features
 * Created comprehensive vignettes: `dose-response-workflow.Rmd` providing a complete tutorial on dose-response analysis, and `nec-models.Rmd` documenting No Effect Concentration modeling with `NEC.2`/`NEC.3`/`NEC.4` function variants.
 * Set up pkgdown website infrastructure: added `_pkgdown.yml` with Bootstrap 5 configuration, created `build_pkgdown.R` script for build automation, documented pkgdown build process in README, and generated pkgdown documentation site.
-* Added robust estimation methods in new `ED_robust.R` module: `ED_robust()` for calculating ED values using propper error handling, `maED_robust()` for model-averaged robust ED estimation, and `get_ed_interval()` for recommending appropriate confidence interval methods based on model type.
+* Added computationally robust (stable) wrapper functions in new `ED_robust.R` module: `ED_robust()` for calculating ED values with proper error handling that returns `NA` instead of failing when an ED value is not estimable, `maED_robust()` for model-averaged ED estimation with the same graceful error handling, and `get_ed_interval()` for recommending appropriate confidence interval methods based on model type.
 * Added comprehensive test suite covering ED calculations, predictions, plotting, residuals, model selection, and utility functions.
 * Added `drm_name()` helper function to `ED_robust.R`.
 * Enhanced package startup message with citations and developer credits.
@@ -28,7 +45,7 @@
 * Added edge case handling in `modelFit.R`.
 * Added input validation for `comped()` and `compParm()`.
 * Fixed unsafe global state modification via `options(warn)`, incorrect `compParm` od/pool handling, and residuals division by zero.
-* Fixed NaN warning in `summary.drc` for robust median estimation.
+* Fixed NaN warning in `summary.drc` for robust estimation methods (metric trimming, Winsorizing, Tukey's biweight).
 * Improved `predict.drc` and `vcov.drc` to resolve 23 test failures.
 * Fixed `mselect()` to always compute Lack of fit p-values for all models, not only when `nested=TRUE`.
 * Fixed a bug in `anova.drclist` where negative or non-finite F statistics produced NaN p-values; negative F statistics now return p-value of 1 and non-finite F statistics return NA.
