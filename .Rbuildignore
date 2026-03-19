@@ -17,3 +17,4 @@
 ^local_testing$
 ^\.vscode$
 ^build_pkgdown\.R$
+^CITATION\.cff$

@@ -1,20 +1,34 @@
 [![GitHub dev version](https://img.shields.io/github/r-package/v/hreinwald/drc)](https://github.com/hreinwald/drc)
+[![Documentation](https://img.shields.io/static/v1?style=flat-square&message=ReadTheDocs&color=2C4AA8&logo=ReadTheDocs&logoColor=FFFFFF&label=Documentation)](https://hreinwald.github.io/drc/)
 <a href="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml/badge.svg"></a>
 <a href="https://app.codecov.io/gh/hreinwald/drc"><img src="https://codecov.io/gh/hreinwald/drc/branch/dev/graph/badge.svg"></a>
 <a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg"></a>
-<a href="https://github.com/hreinwald/drc/commits/dev"><img src="https://img.shields.io/github/last-commit/hreinwald/drc"></a>
-<a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 
 <a href="https://cran.r-project.org/package=drc"><img src="https://www.r-pkg.org/badges/version/drc"></a>
 [![Downloads](https://cranlogs.r-pkg.org/badges/drc)](https://cranlogs.r-pkg.org/)
 <a href="https://github.com/hreinwald/drc/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/hreinwald/drc"></a>
 <!-- <a href="https://cran.r-project.org/package=drc"><img src="https://cranlogs.r-pkg.org/badges/grand-total/drc"></a> --> <!-- Ignore this for now -->
 
+<a href="https://github.com/hreinwald/drc/commits/dev"><img src="https://img.shields.io/github/last-commit/hreinwald/drc"></a>
+<a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+
 # drc — Dose-Response Curve Analysis in R
+
+## Documentation
+
+📖 The full package documentation, function reference, and vignettes are available at **[hreinwald.github.io/drc](https://hreinwald.github.io/drc/)**.
+
+## Note
+
+This repository contains a refactored development version of the [*drc*](https://github.com/DoseResponse/drc) R package first published by **Christian Ritz, Florent Baty, Jens C. Streibig und Daniel Gerhard** [(2015)](https://doi.org/10.1371/journal.pone.0146021). Their foundational work on dose–response modeling in R is gratefully acknowledged and inspired the present refactoring.
+
+The goal of this project is to modernize the codebase, improve maintainability, and provide a clearer development structure while preserving the core functionality of the original package.
+
+This repository focuses on structural refactoring and development improvements. Behavior and interfaces may change as the codebase is modernized.
 
 ## Overview
 
-The **drc** package provides a comprehensive framework for fitting, analyzing, and visualizing dose-response curves in R. It is widely used in bioassay, toxicology, pharmacology, and agricultural research to model the relationship between a dose (e.g., concentration of a substance) and a biological response.
+The **drc** package provides a comprehensive framework for fitting, analyzing, and visualizing dose-response curves in R. It is widely used in bioassay, toxicology, pharmacology, and agricultural research to model the relationship between an exposure (e.g., concentration of a substance) or dose and a biological response.
 
 The package offers:
 
@@ -26,9 +40,18 @@ The package offers:
 - **Robust inference**: sandwich variance estimators for heteroscedasticity-consistent standard errors.
 - **Simulation tools**: generate random dose-response data for power analysis and method comparison.
 
+For more details visit:
+
+:book: **[drc github documentation](https://hreinwald.github.io/drc/)**  
+:zap: **[drc example workflow](https://hreinwald.github.io/drc/articles/dose-response-workflow.html)**
+
+Feature requests or ideas?
+
+:bulb: **[Post them here](https://github.com/hreinwald/drc/discussions)**
+
 ## Installation
 
-To install the stable but outdated version from CRAN:
+To install the outdated version from CRAN:
 
 ``` r
 install.packages("drc")
@@ -43,22 +66,6 @@ Install the bug-fix development version from GitHub:
 devtools::install_github("hreinwald/drc")           # <- re-factored development version 3.3.0
 devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
 ```
-
-### Building the Documentation Website
-
-To build the pkgdown documentation website locally:
-
-``` r
-# Option 1: Use the provided helper script (recommended)
-source("build_pkgdown.R")
-
-# Option 2: Manual build
-# If you get an error about docs/ not being a pkgdown site, first clean it:
-pkgdown::clean_site(force = TRUE)
-pkgdown::build_site()
-```
-
-The helper script `build_pkgdown.R` automatically handles the case where a `docs/` directory exists but wasn't created by pkgdown.
 
 ## Quick Start
 
@@ -176,7 +183,7 @@ and imports from: car, graphics, gtools, lifecycle, multcomp, plotrix, sandwich,
 
 ## Bug Reports
 
-Please report issues with this re-factory version at <https://github.com/hreinwald/drc/issues/>.
+Please report issues with this re-factory version [here](https://github.com/hreinwald/drc/issues/).
 
 ## License
 

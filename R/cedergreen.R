@@ -120,18 +120,18 @@ cedergreen_edfct <- function(
 #' @keywords internal
 #'
 #' @importFrom stats optimize
-cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
+cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .optimize_fn = stats::optimize)
 {
   # Define the dose-response model using named parameters for clarity
   response_model <- function(dose, p, alpha) {
     p$c + (p$d - p$c + p$f * exp(-1 / (dose^alpha))) / (1 + exp(p$b * (log(dose) - log(p$e))))
   }
-  
+
   # Use optimize() to directly find the dose that maximizes the response.
   # It is more robust than finding the root of the derivative.
   # We search for the maximum by telling optimize to maximize=TRUE.
   opt_result <- tryCatch({
-    optimize(
+    .optimize_fn(
       f = response_model,
       interval = c(lower, upper),
       p = all_params,
@@ -142,11 +142,11 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
     warning("Optimization failed to find a maximum hormesis dose.")
     return(NULL)
   })
-  
+
   if (is.null(opt_result)) {
     return(c(maxDose = NA, maxResponse = NA))
   }
-  
+
   # Return the dose at the maximum and the value of the function at that maximum
   return(c(maxDose = opt_result$maximum, maxResponse = opt_result$objective))
 }
@@ -190,7 +190,9 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
 #' @seealso \code{\link[drc]{drm}} for model fitting, and \code{\link{cedergreen.ssf}} for the 
 #'   underlying self-starter function.
 #'   
-#' @author Hannes Reinwald
+#' @author Christian Ritz, Hannes Reinwald
+#' 
+#' @keywords models nonlinear
 #'
 #' @examples
 #' dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
@@ -279,12 +281,12 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000)
   ## Finding the maximal hormesis: wrapper closure that delegates to cedergreen_maxfct
   ## The framework calls maxfct(parm, lower, upper) where parm is the non-fixed
   ## parameter vector. We reconstruct the full named-list and bind alpha.
-  maxfct <- function(parm, lower = 1e-3, upper = 1000)
+  maxfct <- function(parm, lower = 1e-3, upper = 1000, .optimize_fn = stats::optimize)
   {
     parmVec[notFixed] <- parm
     all_params <- list(b = parmVec[1], c = parmVec[2], d = parmVec[3],
                        e = parmVec[4], f = parmVec[5])
-    cedergreen_maxfct(all_params, alpha, lower, upper)
+    cedergreen_maxfct(all_params, alpha, lower, upper, .optimize_fn)
   }
   
   # Return results

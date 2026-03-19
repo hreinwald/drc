@@ -83,24 +83,25 @@ type = c("relative", "absolute"), scale = c("original", "percent", "unconstraine
         }
     }
 
+    ## Compute xVec (always needed for the return value)
+    if ( (type == "relative") && ((scale == "percent") || (scale == "unconstrained")) )
+    {
+        xlabStr <- "Relative response level (%)"
+        xVec <- percVec
+    }
+    if ( (type == "relative") && (scale == "original") )
+    {
+        xlabStr <- "Response level"
+        xVec <- seq(maxLow, minUp, length.out = lenpv)            
+    }
+    if (type == "absolute")
+    {
+        xlabStr <- "Response level"
+        xVec <- percVec
+    }
+
     if (plotit)
     {
-        if ( (type == "relative") && ((scale == "percent") || (scale == "unconstrained")) )
-        {
-            xlabStr <- "Relative response level (%)"
-            xVec <- percVec
-        }
-        if ( (type == "relative") && (scale == "original") )
-        {
-            xlabStr <- "Response level"
-            xVec <- seq(maxLow, minUp, length.out = 99)            
-        }
-        if (type == "absolute")
-        {
-            xlabStr <- "Response level"
-            xVec <- percVec
-        }
-                
         if (!identical(interval, "none"))
         {
             plot(xVec, rpVec, type = "l", xlab = xlabStr, ylab = "Relative potency", 

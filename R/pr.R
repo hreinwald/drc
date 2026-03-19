@@ -31,7 +31,7 @@
         retMat <- predict(object, data.frame(xVec, rep(curveId, rep(lenXV, lenCI))), se.fit = TRUE, ...)
         rownames(retMat) <- paste(rep(curveId, rep(lenXV, lenCI)), rep(as.character(xVec), lenCI), sep = ":")
     } else {
-        retMat <- predict(object, data.frame(xVec))
+        retMat <- predict(object, data.frame(xVec), ...)
         if (is.matrix(retMat))
         {
             rownames(retMat) <- rep(as.character(xVec), lenCI)

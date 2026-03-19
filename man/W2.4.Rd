@@ -13,7 +13,11 @@ parameters that should be estimated).}
 \item{names}{character vector of length 4 giving the names of the parameters
 (default \code{c("b", "c", "d", "e")}).}
 
-\item{...}{additional arguments passed to \code{\link{weibull2}}.}
+\item{...}{additional arguments passed to \code{\link{weibull2}}, most
+notably \code{method} (a character string: \code{"1"} (default),
+\code{"2"}, \code{"3"}, or \code{"4"}) which selects the self-starter
+method for obtaining starting values. See \code{\link{weibull2}} for
+details.}
 }
 \value{
 A list of class \code{"Weibull-2"} as returned by \code{\link{weibull2}}.

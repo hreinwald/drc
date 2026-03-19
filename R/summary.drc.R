@@ -47,7 +47,7 @@ function(object, od = FALSE, pool = TRUE, ...)
 #        resVar <- NULL
 #    }    
     resVar <- rse(object, TRUE)
-    if (!is.null(resVar))
+    if (!is.na(resVar))
     {
         varMat.us <- varMat / (2*resVar)    
     } else {
@@ -62,8 +62,8 @@ function(object, od = FALSE, pool = TRUE, ...)
         
         rseMat <- matrix(NA, lenol, 2)
         rownames(rseMat) <- names(objList) 
-        resVar <- as.vector(unlist(lapply(objList, rse, resvar = TRUE)))
-        rseMat[, 1] <- sqrt(resVar)  # only to keep resVar
+        resVarVec <- as.vector(unlist(lapply(objList, rse, resvar = TRUE)))
+        rseMat[, 1] <- sqrt(resVarVec)
         rseMat[, 2] <- as.vector(unlist(lapply(objList, df.residual)))
     } else {
         resVar <- rse(object, TRUE)
@@ -91,84 +91,8 @@ function(object, od = FALSE, pool = TRUE, ...)
     ## M-estimators
     if (!is.null(object$robust) && object$robust%in%c("metric trimming", "metric Winsorizing", "Tukey's biweight"))
     {
-        psi.trimmed <- function(u, deriv = 0)
-        {
-            if (deriv == 0)
-            {
-                retVec <- u
-                retVec[ abs(u) > 1.345 ] <- 0
-            }
-            if (deriv == 1)
-            {
-                retVec <- rep(1, length(u))
-                retVec[ abs(u) > 1.345 ] <- 0
-            }
-            return(retVec)            
-        }
-    
-        if (object$robust=="Tukey's biweight")
-        {
-            psifct <- psi.bisquare  # in MASS
-        }
-        if (object$robust=="metric Winsorizing")
-        {
-            psifct <- psi.huber  # in MASS
-        }
-        if (object$robust=="metric trimming")
-        {
-            psifct <- psi.trimmed
-        }
-
-        if (FALSE)
-        {  
-#        resVec <- residuals(object)
-        resVec <- (object)[["predres"]][, "Residuals"]
-        psiprime <- psifct(resVec/sqrt(resVar), deriv = 1)
-        meanpp <- mean(psiprime)
-        
-        notNA <- !is.na(parVec) 
-        sumVec1 <- object$fit 
-        
-#        K <- 1 + length(parVec[notNA])*var(psiprime)/(object$summary[7]*meanpp^2) 
-
-        nVal <- object[["sumList"]][["lenData"]]
-        dfVal <- object[["sumList"]][["df.residual"]]
-
-        pVal <- nVal - dfVal
-        K <- 1 + pVal * var(psiprime) / (nVal * meanpp^2)        
-        w <- psifct(resVec/sqrt(resVar))
-#        s <- sum((resVec*w)^2)/object$summary[6]
-        s <- sum((resVec*w)^2) / dfVal 
-        print(c(K, resVar, s, mean(psiprime)^2, mean(w^2)))
-
-#        print(parVec[notNA])
-#        print(var(psiprime))
-#        print(c(K,w,s))
-        stddev <- sqrt(s) * (K / meanpp)
-#        invXXt <- solve(sumVec1$hessian[notNA, notNA] / mean(psiprime) * resVar)
-        invXXt <- solve(sumVec1$hessian[notNA, notNA]) * (mean(psiprime) / resVar)
-        estSE <- sqrt(diag(invXXt)) * stddev
-        # formulas (6.5) (6.14) in Huber: Robust Statistics?
-        } # end of FALSE 
-
-#        objDer <- object[["deriv"]]
-#        if ( (!is.null(objDer)) && (!observed) )
-#        {
-#            estSE <- sqrt(resVar * (sum(w^2)/(nVal - dfVal) / mean(psiprime)^2) * diag(solve(t(objDer) %*% objDer)) )
-#            # formula (6.5) in Huber: Robust Statistics
-#        } else {
-            # Observed information-type of variance-covariance matrix
-#            estSE <- sqrt(resVar * diag(solve(object[["fit"]][["hessian"]])))
-#        }
          # Observed "information"-type of variance-covariance matrix
          estSE <- sqrt(resVar * diag(solve(object[["fit"]][["hessian"]])))
-
-#          resVec <- (object)[["predres"]][, "Residuals"]
-#          psiprime <- psifct(resVec/sqrt(resVar), deriv = 1)
-#          w <- psifct(resVec/sqrt(resVar))
-#          K <- mean(w^2) / (mean(psiprime)^2) 
-#          estSE <- sqrt(resVar * K * diag(solve(object[["fit"]][["hessian"]])))
-# 
     }
 
 
@@ -194,29 +118,6 @@ function(object, od = FALSE, pool = TRUE, ...)
         pFct <- pnorm
     }    
     resultMat[, 4] <- pFct(-abs(tempStat)) + (1 - pFct(abs(tempStat)))
-
-    ## Separating out variance parameters
-if (FALSE)
-{    
-    if (!is.null(object$"varParm"))
-    {
-        indexVec <- object$"varParm"$"index"
-        varParm <- object$"varParm"
-
-        estVec <- resultMat[-indexVec, , drop = FALSE]
-        if (object$"varParm"$"type" == "varPower")
-        {
-            estVec[2, 3] <- (estVec[2, 1] - 0)/estVec[2, 2]  # testing the hypothesis theta=0
-            estVec[2, 4] <- 2*pt(-abs(estVec[2, 3]), df.residual(object))
-        }
-        varParm$"estimates" <- estVec
-        
-        resultMat <- resultMat[indexVec,]
-        varMat <- varMat[indexVec, indexVec]  # for use in ED/MAX/SI
-    } else {
-        varParm <- NULL
-    }
-}
 
     fctName <- deparse(object$call$fct)    
 

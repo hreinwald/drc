@@ -7,20 +7,38 @@
 arandaordaz(fixed = c(NA, NA, NA), names = c("a", "b", "c"), fctName, fctText)
 }
 \arguments{
-\item{fixed}{numeric vector. Specifies which parameters are fixed and at what value
-they are fixed. NAs for parameters that are not fixed.}
+\item{fixed}{numeric vector. Specifies which parameters are fixed and at what
+value they are fixed. Use \code{NA} for parameters that are not fixed.
+Must be of length 3.}
 
-\item{names}{vector of character strings giving the names of the parameters
+\item{names}{character vector of length 3 giving the names of the parameters
 (should not contain ":").}
 
-\item{fctName}{optional character string used internally by convenience functions.}
+\item{fctName}{optional character string used internally by convenience
+functions. Defaults to \code{"arandaordaz"} if not provided.}
 
-\item{fctText}{optional character string used internally by convenience functions.}
+\item{fctText}{optional character string used internally by convenience
+functions. Defaults to \code{"Asymptotic regression"} if not provided.}
 }
 \value{
-A list of class \code{drcMean}, containing the mean function, the self starter
-function, the parameter names, and other components such as derivatives and a function
-for calculating ED values.
+A list of class \code{drcMean} with the following components:
+\describe{
+\item{fct}{The mean function taking arguments \code{dose} and \code{parm}.}
+\item{ssfct}{Self-starter function for generating initial parameter
+estimates from data.}
+\item{names}{Character vector of non-fixed parameter names.}
+\item{deriv1}{Reserved first derivative slot (currently \code{NULL}).}
+\item{deriv2}{Reserved second derivative slot (currently \code{NULL}).}
+\item{derivx}{Reserved derivative-with-respect-to-x slot (currently
+\code{NULL}).}
+\item{edfct}{Function for calculating effective dose (ED) values and
+their derivatives.}
+\item{inversion}{Inverse mean function for back-calculating dose from
+response.}
+\item{name}{Character string identifying the model function name.}
+\item{text}{Character string with a human-readable model description.}
+\item{noParm}{Integer giving the number of non-fixed parameters.}
+}
 }
 \description{
 The base function for the asymptotic regression model, providing the mean
@@ -35,10 +53,11 @@ The parameter \eqn{c} is the lower limit (at \eqn{x=0}), \eqn{d} is the upper li
 and \eqn{e>0} determines the steepness of the increase.
 }
 \seealso{
-\code{\link{AR.2}}, \code{\link{AR.3}}, \code{\link{EXD.2}}, \code{\link{EXD.3}}
+\code{\link{AR.2}}, \code{\link{AR.3}}, \code{\link{EXD.2}},
+\code{\link{EXD.3}}
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

@@ -74,38 +74,6 @@ fctName, fctText)
     }
 
     ## Defining self starter function
-if (FALSE)
-{    
-    ssfct <- function(dframe)
-    {
-        x <- dframe[, 1]
-        y <- dframe[, 2]    
-
-        cVal <- ifelse(notFixed[2], 0.99*min(y), fixed[2])    
-        dVal <- ifelse(notFixed[3], 1.01*max(y), fixed[3])
-
-        ## Finding b and e based on linear regression
-        findbe <- function(x, y, 
-        transx = function(x){x},
-        transy = function(y) {log(-log((dVal-y)/(dVal-cVal)))})
-        {
-            transY <- transy(y)  
-            transX <- transx(x)
-
-            lmFit <- lm(transY ~ transX)
-            coefVec <- coef(lmFit)
-#            bVal <- coefVec[2]        
-            bVal <- ifelse(notFixed[1], coefVec[2], fixed[1]) 
-#            eVal <- -coefVec[1] / bVal    
-            eVal <- ifelse(notFixed[4], -coefVec[1] / bVal, fixed[4]) 
-    
-            return(as.vector(c(bVal, eVal)))
-        }
-        beVec <- findbe(x, y)
-        
-        c(beVec[1], cVal, dVal, beVec[2])[notFixed]
-    }
-}
     if (!is.null(ssfct))
     {
         ssfct <- ssfct

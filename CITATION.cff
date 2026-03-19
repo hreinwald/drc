@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Ritz"
+  given-names: "Christian"
+  orcid: "https://orcid.org/0000-0002-5095-0624"
+- family-names: "Baty"
+  given-names: "Florent"
+  orcid: "https://orcid.org/0000-0002-1425-0428"
+- family-names: "Streibig"
+  given-names: "Jens Carl"
+  orcid: "https://orcid.org/0000-0002-6204-4004"
+- family-names: "Gerhard"
+  given-names: "Daniel"
+  orcid: "https://orcid.org/0000-0002-9336-3454"
+title: "Dose-Response Analysis Using R"
+version: 3.3.0.01
+doi: 10.1371/journal.pone.0146021
+date-released: 2015-12-15
+url: "https://github.com/hreinwald/drc"
+references:
+  - type: article
+    title: "Dose-Response Analysis Using R"
+    authors:
+      - family-names: "Ritz"
+        given-names: "Christian"
+      - family-names: "Baty"
+        given-names: "Florent"
+      - family-names: "Streibig"
+        given-names: "Jens C"
+      - family-names: "Gerhard"
+        given-names: "Daniel"
+    journal: "PLoS ONE"
+    volume: 10
+    issue: 12
+    pages: "e0146021"
+    year: 2015
+    doi: "10.1371/journal.pone.0146021"
+  - type: book
+    title: "Dose-Response Analysis Using R"
+    authors:
+      - family-names: "Ritz"
+        given-names: "C."
+      - family-names: "Jensen"
+        given-names: "S. M."
+      - family-names: "Gerhard"
+        given-names: "D."
+      - family-names: "Streibig"
+        given-names: "J. C."
+    publisher:
+      name: "CRC Press"
+    year: 2019

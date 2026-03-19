@@ -1,0 +1,25 @@
+# Authors and Citation
+
+## Authors
+
+- **Christian Ritz**. Author, maintainer.
+
+- **Jens C. Streibig**. Author.
+
+- **Hannes Reinwald**. Author.
+
+## Citation
+
+Source:
+[`DESCRIPTION`](https://github.com/hreinwald/drc/blob/HEAD/DESCRIPTION)
+
+Ritz C, Streibig JC, Reinwald H (2026). *drc: Analysis of Dose-Response
+Data*. R package version 3.3.0.02, <https://github.com/hreinwald/drc>.
+
+    @Manual{,
+      title = {drc: Analysis of Dose-Response Data},
+      author = {Christian Ritz and Jens C. Streibig and Hannes Reinwald},
+      year = {2026},
+      note = {R package version 3.3.0.02},
+      url = {https://github.com/hreinwald/drc},
+    }

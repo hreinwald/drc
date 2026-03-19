@@ -4,7 +4,13 @@
 \alias{cedergreen_maxfct}
 \title{Find the Dose and Response at Maximum Hormesis}
 \usage{
-cedergreen_maxfct(all_params, alpha, lower = 1e-06, upper = 1000)
+cedergreen_maxfct(
+  all_params,
+  alpha,
+  lower = 1e-06,
+  upper = 1000,
+  .optimize_fn = stats::optimize
+)
 }
 \arguments{
 \item{all_params}{A named list of all model parameters (b, c, d, e, f).}

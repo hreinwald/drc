@@ -96,8 +96,10 @@ fctName, fctText)
             p <- 100 - p
         }
                 
-        weibull1(fixed, names)$edfct(head(parm, -1), 100 - p, reference, type, ...) + parmVec[5]
+        edResult <- weibull1(head(fixed, -1), head(names, -1))$edfct(head(parm, -1), 100 - p, reference, type, ...)
         # not accounting completely for the uncertainty due to estimation of the lag time
+        edResult[[1]] <- edResult[[1]] + parmVec[5]
+        edResult
     }
     ## using head( , -1) to remove the lag-time parameter
 
@@ -184,5 +186,5 @@ function(fixed = c(NA, NA, NA, NA), names = c("c", "d", "e", "t0"), ...)
 
     return(weibull2x(fixed = c(1, fixed[1:4]), names = c("b", names[1:4]),
     fctName = as.character(match.call()[[1]]), 
-    fctText = lowFixed("Weibull (type 2)"), ...))
+    fctText = "Weibull (type 2)", ...))
 }

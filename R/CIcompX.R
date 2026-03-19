@@ -44,12 +44,6 @@ CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
     pred1 <- predict(modelList[[2]], data.frame(ese1Vec[, 1]), se.fit = TRUE)
     pred2 <- predict(modelList[[3]], data.frame(ese2Vec[, 1]), se.fit = TRUE) 
     
-    ## In case only a single ED level is specified 
-    ## (as predict() then returns a vector, not a matrix)
-    if (!is.matrix(pred12)) {pred12 <- matrix(pred12, nrow = 1)}
-    if (!is.matrix(pred1)) {pred1 <- matrix(pred1, nrow = 1)}
-    if (!is.matrix(pred2)) {pred2 <- matrix(pred2, nrow = 1)}
-       
     predMat <- as.matrix(cbind(pred12[, 1], pred1[, 1], pred2[, 1], 
                                pred12[, 2], pred1[, 2], pred2[, 2]))
     rownames(predMat) <- as.character(EDvec)
@@ -194,7 +188,7 @@ CIcomp <- function(mixProp, modelList, EDvec)
     resMt[3, 1:2] <- resLst[["CAx"]][7:8]
     resMt[5, ] <- resLst[["CAx"]][c(1:2, 4:6)]
     
-    resMt <- cbind(resLst[["CAx"]][, -5], resLst[["Effx"]][, c(1, 4)])
+    resMt <- cbind(resLst[["CAx"]][, -5, drop = FALSE], resLst[["Effx"]][, c(1, 4), drop = FALSE])
     colnames(resMt)[6:7] <- c("ED.CA", "SE.CA")
 
     # colnames(resMt) <- c("Est", "SE", "CIlow", "CIupp", "p-val")

@@ -7,12 +7,22 @@
 ED(object, ...)
 }
 \arguments{
-\item{object}{an object of class 'drc'.}
+\item{object}{an object of class \code{drc}.}
 
-\item{...}{additional arguments passed to methods.}
+\item{...}{additional arguments passed to the method.}
+}
+\value{
+See \code{\link{ED.drc}} for details on the return value.
 }
 \description{
 Estimates effective concentration or doses for specified response levels.
+This is a generic function; see \code{\link{ED.drc}} for the default method.
+}
+\seealso{
+\code{\link{ED.drc}} for the default method, \code{\link{EDcomp}} for estimating differences and ratios of ED
+}
+\author{
+Christian Ritz
 }
 \keyword{models}
 \keyword{nonlinear}

@@ -96,12 +96,135 @@ test_that("ED.drc works with absolute type response levels", {
   expect_true(result[, "Estimate"] > 0)
 })
 
+# Helper: compute the expected SE for an absolute-type ED using numerical
+# central differences on the model's edfct and the fitted vcov matrix.
+compute_numgrad_se <- function(model, absResp) {
+  vc <- vcov(model)
+  edfct <- model$fct$edfct
+  parms <- coef(model)
+  eps <- .Machine$double.eps^(1/3)
+  numGrad <- numeric(length(parms))
+  for (k in seq_along(parms)) {
+    h <- max(abs(parms[k]), 1) * eps
+    pu <- replace(parms, k, parms[k] + h)
+    pd <- replace(parms, k, parms[k] - h)
+    eu <- edfct(pu, absResp, reference = "control", type = "absolute")[[1]]
+    ed <- edfct(pd, absResp, reference = "control", type = "absolute")[[1]]
+    numGrad[k] <- (eu - ed) / (2 * h)
+  }
+  as.numeric(sqrt(numGrad %*% vc %*% numGrad))
+}
+
+test_that("ED.drc absolute type SE includes asymptote parameter uncertainty", {
+  # Fit a 4-parameter log-logistic model
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  # Pick an absolute response level (midpoint of the fitted curve)
+  cf <- coef(m1)
+  midResp <- (cf[2] + cf[3]) / 2  # midpoint between c and d
+
+  result_abs <- ED(m1, midResp, type = "absolute", display = FALSE)
+  result_rel <- ED(m1, 50, type = "relative", display = FALSE)
+
+  # The ED estimates should be the same (midpoint = ED50 for symmetric model)
+  expect_equal(result_abs[, "Estimate"], result_rel[, "Estimate"],
+               tolerance = 0.01)
+
+  # The absolute-type SE differs from the relative-type SE because it
+  # additionally accounts for uncertainty in c and d via the full
+  # numerical gradient (parameter covariances can make it larger or smaller).
+  expect_false(isTRUE(all.equal(result_abs[, "Std. Error"],
+                                result_rel[, "Std. Error"])))
+
+  # Cross-check: manually computed SE should match
+  expectedSE <- compute_numgrad_se(m1, midResp)
+  expect_equal(result_abs[, "Std. Error"], expectedSE, tolerance = 1e-4)
+})
+
+test_that("ED.drc absolute type SE is correct for Weibull type 2", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2.4())
+
+  cf <- coef(m1)
+  midResp <- (cf[2] + cf[3]) / 2
+
+  result_abs <- ED(m1, midResp, type = "absolute", display = FALSE)
+
+  expectedSE <- compute_numgrad_se(m1, midResp)
+  expect_equal(result_abs[, "Std. Error"], expectedSE, tolerance = 1e-4)
+})
+
+test_that("ED.drc absolute type SE is correct for Weibull type 1", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
+
+  cf <- coef(m1)
+  midResp <- (cf[2] + cf[3]) / 2
+
+  result_abs <- ED(m1, midResp, type = "absolute", display = FALSE)
+
+  expectedSE <- compute_numgrad_se(m1, midResp)
+  expect_equal(result_abs[, "Std. Error"], expectedSE, tolerance = 1e-4)
+})
+
+test_that("ED.drc relative type SE unchanged by fix", {
+  # The relative-type SE should NOT be affected by the absolute-type fix
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  result <- ED(m1, 50, type = "relative", display = FALSE)
+
+  # Manually compute relative-type SE using the analytical gradient
+  cf <- coef(m1)
+  vc <- vcov(m1)
+  edfct <- m1$fct$edfct
+  edResult <- edfct(cf, 50, reference = "control", type = "relative")
+  edGrad <- edResult[[2]]
+  expectedSE <- as.numeric(sqrt(edGrad %*% vc %*% edGrad))
+
+  expect_equal(result[, "Std. Error"], expectedSE, tolerance = 1e-8)
+})
+
 test_that("ED.drc errors when model has no edfct function", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   # Remove the edfct function to simulate a model without it
   m1$fct$edfct <- NULL
 
   expect_error(ED(m1, 50, display = FALSE), "ED values cannot be calculated")
+})
+
+# Tests for input validation error branches in ED.drc
+
+test_that("ED.drc errors when object is not of class drc", {
+  expect_error(drc:::ED.drc("not_a_model", 50), "'object' must be of class 'drc'")
+  expect_error(drc:::ED.drc(42, 50), "'object' must be of class 'drc'")
+})
+
+test_that("ED.drc errors when respLev is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, "abc"), "'respLev' must be a non-empty numeric vector")
+  expect_error(drc:::ED.drc(m1, numeric(0)), "'respLev' must be a non-empty numeric vector")
+})
+
+test_that("ED.drc errors when level is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, level = "a"), "'level' must be a single numeric value strictly between 0 and 1")
+  expect_error(drc:::ED.drc(m1, 50, level = 0), "'level' must be a single numeric value strictly between 0 and 1")
+  expect_error(drc:::ED.drc(m1, 50, level = 1), "'level' must be a single numeric value strictly between 0 and 1")
+  expect_error(drc:::ED.drc(m1, 50, level = c(0.9, 0.95)), "'level' must be a single numeric value strictly between 0 and 1")
+})
+
+test_that("ED.drc errors when bound is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, bound = "yes"), "'bound' must be a single logical value")
+  expect_error(drc:::ED.drc(m1, 50, bound = c(TRUE, FALSE)), "'bound' must be a single logical value")
+})
+
+test_that("ED.drc errors when display is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, display = "yes"), "'display' must be a single logical value")
+})
+
+test_that("ED.drc errors when multcomp is invalid", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(drc:::ED.drc(m1, 50, multcomp = "yes"), "'multcomp' must be a single logical value")
 })
 
 # Tests for multi-curve models

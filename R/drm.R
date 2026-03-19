@@ -693,7 +693,7 @@ pshifts = NULL, varcov = NULL)
     ## Optimising the objective function previously defined
     nlsFit <- drmOpt(opfct, opdfct1, startVecSc, optMethod, constrained, warnVal, 
     upperLimits, lowerLimits, errorMessage, maxIt, relTol, parmVec = parmVec, traceVal = control$"trace",
-    matchCall = callDetail, silentVal = control$"otrace") 
+    matchCall = callDetail, silentVal = !control$"otrace") 
         
     if (!nlsFit$convergence) {return(nlsFit)}
     

@@ -5,61 +5,49 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="drc">
 <title>A Practical Workflow for Dose-Response Analysis • drc</title>
-<script src="../deps/jquery-3.6.1/jquery-3.6.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A Practical Workflow for Dose-Response Analysis">
-<meta property="og:description" content="drc">
-<!-- mathjax --><script src="file:///usr/share/javascript/mathjax/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A Practical Workflow for Dose-Response Analysis">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.02</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/dose-response-workflow.html">A Practical Workflow for Dose-Response Analysis</a>
-    <a class="dropdown-item" href="../articles/nec-models.html">Understanding NEC Models in the drc Package</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/dose-response-workflow.html">A Practical Workflow for Dose-Response Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/nec-models.html">Understanding NEC Models in the drc Package</a></li>
+  </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/hreinwald/drc/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/hreinwald/drc/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -68,11 +56,12 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>A Practical Workflow for Dose-Response Analysis</h1>
-                        <h4 data-toc-skip class="author">drc Package
-Authors</h4>
+
+      <h1>A Practical Workflow for Dose-Response Analysis</h1>
+                        <h4 data-toc-skip class="author">Hannes
+Reinwald</h4>
             
-            <h4 data-toc-skip class="date">2026-03-16</h4>
+            <h4 data-toc-skip class="date">2026-03-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/vignettes/dose-response-workflow.Rmd" class="external-link"><code>vignettes/dose-response-workflow.Rmd</code></a></small>
       <div class="d-none name"><code>dose-response-workflow.Rmd</code></div>
@@ -154,7 +143,7 @@ compound that inhibits plant growth.</p>
 <span>     ylab <span class="op">=</span> <span class="st">"Root length (cm)"</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Ryegrass Root Growth vs. Ferulic Acid Concentration"</span>,</span>
 <span>     pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/load-data-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/load-data-1.png" class="r-plt" width="672"></p>
 <p>The dataset contains 24 observations with: - <code>conc</code>:
 Ferulic acid concentration in millimolar (mM) - <code>rootl</code>: Root
 length in centimeters (cm)</p>
@@ -173,8 +162,7 @@ ferulic acid on ryegrass root growth.</p>
 log-logistic model (<code>LL.4</code>) is an excellent starting point.
 It is flexible, well-characterized, and commonly used in toxicology.</p>
 <p>The <code>LL.4</code> model has the form:</p>
-<p><span class="math display">\[f(x) = c + \frac{d-c}{1 + \exp(b(\log(x)
-- \log(e)))}\]</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>c</mi><mo>+</mo><mfrac><mrow><mi>d</mi><mo>−</mo><mi>c</mi></mrow><mrow><mn>1</mn><mo>+</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">f(x) = c + \frac{d-c}{1 + \exp(b(\log(x) - \log(e)))}</annotation></semantics></math></p>
 <p>where: - <strong>b</strong>: Slope parameter (steepness of the curve)
 - <strong>c</strong>: Lower asymptote (response at infinite dose) -
 <strong>d</strong>: Upper asymptote (response at zero dose, control
@@ -233,7 +221,7 @@ dose-response plot and quantile-quantile (Q-Q) plots.</p>
 <span>     xlab <span class="op">=</span> <span class="st">"Ferulic acid concentration (mM)"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Root length (cm)"</span>,</span>
 <span>     lwd <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/basic-plot-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/basic-plot-1.png" class="r-plt" width="672"></p>
 <p>The plot shows: - Observed data points - Fitted dose-response curve -
 Overall pattern of fit</p>
 <p><strong>What to Look For:</strong> - Do the fitted values follow the
@@ -252,7 +240,7 @@ distribution, which is an assumption of the fitting procedure.</p>
 <span>       main <span class="op">=</span> <span class="st">"Normal Q-Q Plot of Residuals (LL.4)"</span>,</span>
 <span>       pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">ryegrass.LL4</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/qq-plot-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/qq-plot-1.png" class="r-plt" width="672"></p>
 <p><strong>Interpretation:</strong> - Points should fall approximately
 along the diagonal line - Systematic deviations suggest non-normality of
 residuals - Deviations at the extremes are common and often acceptable -
@@ -271,7 +259,7 @@ values:</p>
 <span>     main <span class="op">=</span> <span class="st">"Residual Plot (LL.4)"</span>,</span>
 <span>     pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/residual-plot-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/residual-plot-1.png" class="r-plt" width="672"></p>
 <p><strong>What to Look For:</strong> - Random scatter around zero (no
 systematic pattern) - Constant variance across fitted values
 (homoscedasticity) - No obvious outliers or influential points</p>
@@ -416,13 +404,13 @@ model</li>
 <span> <span class="op">)</span></span>
 <span><span class="va">model_comparison</span></span>
 <span><span class="co">#&gt;          logLik       IC Lack of fit   Res var</span></span>
-<span><span class="co">#&gt; W2.4  -15.91352 41.82703 0.945071314 0.2646283</span></span>
-<span><span class="co">#&gt; LL.4  -16.15514 42.31029 0.866483043 0.2700107</span></span>
-<span><span class="co">#&gt; LN.4  -16.29214 42.58429 0.818641010 0.2731110</span></span>
-<span><span class="co">#&gt; LL.5  -15.87828 43.75656 0.853847582 0.2777393</span></span>
-<span><span class="co">#&gt; BC.4  -17.05120 44.10241 0.565407254 0.2909448</span></span>
-<span><span class="co">#&gt; W1.4  -17.46720 44.93439 0.450567622 0.3012075</span></span>
-<span><span class="co">#&gt; EXD.3 -28.22358 64.44717 0.000886637 0.7030127</span></span></code></pre></div>
+<span><span class="co">#&gt; W2.4  -15.91352 41.82703           0 0.2646283</span></span>
+<span><span class="co">#&gt; LL.4  -16.15514 42.31029           0 0.2700107</span></span>
+<span><span class="co">#&gt; LN.4  -16.29214 42.58429           0 0.2731110</span></span>
+<span><span class="co">#&gt; LL.5  -15.87828 43.75656           0 0.2777393</span></span>
+<span><span class="co">#&gt; BC.4  -17.05120 44.10241           0 0.2909448</span></span>
+<span><span class="co">#&gt; W1.4  -17.46720 44.93439           0 0.3012075</span></span>
+<span><span class="co">#&gt; EXD.3 -28.22358 64.44717           0 0.7030127</span></span></code></pre></div>
 <p><strong>Understanding the Output:</strong></p>
 <p>The table shows: - <strong>logLik</strong>: Log-likelihood (higher is
 better, but penalized for parameters) - <strong>IC</strong>: Information
@@ -497,7 +485,7 @@ fit:</p>
 <span><span class="co"># Add legend</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LL.4 (initial)"</span>, <span class="st">"W1.4 (best)"</span><span class="op">)</span>,</span>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/model-comparison-plot-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/model-comparison-plot-1.png" class="r-plt" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="comparing-ed-estimates-between-models">Comparing ED Estimates Between Models<a class="anchor" aria-label="anchor" href="#comparing-ed-estimates-between-models"></a>
@@ -698,7 +686,7 @@ effect)</li>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"blue"</span><span class="op">)</span>,</span>
 <span>       lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>       cex <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/asymptote-plot-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/asymptote-plot-1.png" class="r-plt" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="implications-of-fixing-asymptotes">Implications of Fixing Asymptotes<a class="anchor" aria-label="anchor" href="#implications-of-fixing-asymptotes"></a>
@@ -788,7 +776,7 @@ studies - EC50/ED50 estimation</p>
 <code class="sourceCode R"><span><span class="co"># Standard application of log-logistic model</span></span>
 <span><span class="va">example.LL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/LL.4.html">LL.4</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">example.LL</span>, main <span class="op">=</span> <span class="st">"Log-Logistic Model (LL.4)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/ll-example-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/ll-example-1.png" class="r-plt" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="weibull-models-w1-and-w2-families">Weibull Models (W1 and W2 families)<a class="anchor" aria-label="anchor" href="#weibull-models-w1-and-w2-families"></a>
@@ -814,7 +802,7 @@ curves - Time-to-event data - Germination/mortality studies</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">example.W2</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"none"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"W1.4"</span>, <span class="st">"W2.4"</span><span class="op">)</span>,</span>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/weibull-example-1.png" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/weibull-example-1.png" class="r-plt" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="log-normal-models-ln-family">Log-Normal Models (LN family)<a class="anchor" aria-label="anchor" href="#log-normal-models-ln-family"></a>
@@ -1115,28 +1103,26 @@ models</li>
 <code><a href="../reference/plot.drc.html">?plot.drc</a></code> - Plotting dose-response curves</li>
 </ul>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Developed by Christian Ritz, Jens C. Streibig, Hannes Reinwald.</p>
+  <p>Developed by Christian Ritz, Jens C. Streibig, Hannes Reinwald.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

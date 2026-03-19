@@ -1,23 +1,6 @@
 "drmEMstandard" <- 
 function(dose, resp, multCurves, doseScaling = 1)
 {
-
-    ## Defining a helper function for calculating the variance-covariance matrix
-#    vcFct <- function(beta0, beta, sigma2, len0)
-#    {
-#        vc <- (sigma2 / len0) * (beta %o% beta) / (beta0^4)
-#        diag(vc) <- diag(vc) + sigma2 / (beta0^2)
-#
-#        return(vc)
-#    }
-    vcFct <- function(beta0, beta, len0)
-    {
-        vc <- (1 / len0) * (beta %o% beta) / (beta0^4)
-        diag(vc) <- diag(vc) + (1 / (beta0^2))
-
-        return(vc)
-    }
-    
     zeroDose <- dose < 1e-15  # hardcoded tolerance of 1e-15
     len0 <- sum(zeroDose)
     vcFct2 <- function(beta0, betaVec)
