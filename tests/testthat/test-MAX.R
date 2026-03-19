@@ -51,8 +51,7 @@ test_that("MAX errors when model has no 'maxfct' method", {
 test_that("MAX errors for invalid 'lower' argument", {
   m <- make_crs_model()
   # Non-numeric
-
-expect_error(drc:::MAX(m, lower = "a"),
+  expect_error(drc:::MAX(m, lower = "a"),
                "'lower' must be a single finite numeric value")
   # Length > 1
   expect_error(drc:::MAX(m, lower = c(1, 2)),
