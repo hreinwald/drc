@@ -158,7 +158,8 @@ fctName, fctText)
         expTerm <- exp(-tempVal/parmVec[5])
 
         # Check if expTerm - 1 is valid (must be positive for log)
-        if (expTerm <= 1) {
+        # Handle NaN from tempVal or expTerm being invalid
+        if (is.na(expTerm) || expTerm <= 1) {
             # ED value is outside the valid range or model is ill-conditioned
             EDp <- Inf
             EDder <- rep(NA, 5)
