@@ -23,7 +23,6 @@ function(x, ...)
     object <- x
     
     cat("\n")
-#    cat(paste("Model fitted: ", object$"fctName", "\n", sep = ""))
 
     if (!is.null(object$"noParm"))
     {
@@ -44,7 +43,6 @@ function(x, ...)
     printCoefmat(object$"coefficients")
 
     if (!is.na(object$"resVar"))
-#    if ((!is.null(object$"resVar")) && (!identical(object$"type", "binomial")))
     {
         cat("\nResidual standard error")
         
@@ -105,9 +103,6 @@ function(x, ...)
         {
             # empty
         } else {
-#            pVal <- format(object$"boxcox"[2], digits=3)
-#            boxcoxci <- c(format(ci[1], digits = 3), format(ci[2], digits = 3))
-
             cat("\n")
             cat("Non-normality/heterogeneity adjustment through Box-Cox transformation\n\n")
 
@@ -115,7 +110,6 @@ function(x, ...)
             if (!is.na(ci[1]))
             {        
                 cat("Estimated lambda:", format(lambda, digits = 3), "\n")
-#                cat("P-value for test of null hypothesis that lambda=1:", pVal, "\n")
                 ci <- format(ci, digits = 3) 
                 ciStr <- paste("[", ci[1], ",", ci[2], "]", sep="")
                 cat("Confidence interval for lambda:", ciStr, "\n\n")

@@ -34,8 +34,6 @@ function(object, typeRes = c("working", "standardised", "studentised"), trScale 
 {
     typeRes <- match.arg(typeRes)
     
-#    rawResiduals <- object$"dataList"$"resp" - fitted(object)  # changed 29/12 2012
-
     if (trScale && (!is.null(object$"boxcox")))
     {
         ## Defining Box-Cox transformation function
@@ -61,15 +59,9 @@ function(object, typeRes = c("working", "standardised", "studentised"), trScale 
         if (is.null(rstan)) 
         {
             cat("Scale parameter fixed at 1. So working residuals are returned\n\n")
-#            return(object$"predres"[, 2])
             return(rawResiduals)
-            
-#            stop("No standardisation available")
         } else {
-#            return(object$"predres"[, 2] / rstan(object))  
             return(rawResiduals / rstan(object))  
-            
-#            return( object$"predres"[, 2] / sqrt(summary(object)$"resVar") )
         }
     } 
     
@@ -96,7 +88,6 @@ function(object, typeRes = c("working", "standardised", "studentised"), trScale 
     
     if (identical(typeRes, "working"))
     {
-#        return(object$"predres"[, 2])
         return(rawResiduals)
     }
 }

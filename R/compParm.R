@@ -44,7 +44,6 @@ function(object, strVal, operator = "/", vcov. = vcov, od = FALSE, pool = TRUE, 
         stop("'operator' must be either '/' or '-'")
     }
 
-#    if (inherits(object, "mixdrc")) {sep <- ".{1}"} else {sep <- ":{1}"}
     sep <- ":{1}"
     presentVec <- grep(paste("^", strVal, sep, sep = ""), object$"parNames"[[1]])  # strParm)
 
@@ -55,15 +54,6 @@ function(object, strVal, operator = "/", vcov. = vcov, od = FALSE, pool = TRUE, 
     }
 
     ## Extracting information from model fit 
-#    if (inherits(object, "mixdrc")) 
-#    {
-#        sumObj <- summary(object)
-#        parm <- sumObj$"coefficients"
-#        varMat <- sumObj$"varMat"
-#    } else {
-#        parm <- as.vector(coef(object))
-#        varMat <- vcov(object, od = od, pool = pool)
-#    }
     parm <- as.vector(coef(object))
     if (identical(vcov., vcov)) {
         varMat <- vcov.(object, od = od, pool = pool)

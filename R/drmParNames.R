@@ -19,7 +19,6 @@ function(numNames, parNames, collapseList2, repStr1 = "factor(pmodels[, i])", re
     parmVec <- unlist(parmVecList)
         
     parmVec2 <- parmVec
-#    print(parmVec2)
     for (i in 1:length(parmVec))
     {
         pos <- regexpr(repStr1, parmVec[i], fixed = TRUE)
@@ -35,6 +34,5 @@ function(numNames, parNames, collapseList2, repStr1 = "factor(pmodels[, i])", re
         }
     }
     
-#    print(parmVec2)
     return(drmPNsplit(parmVec2, ":"))
 }

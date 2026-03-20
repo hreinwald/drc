@@ -7,7 +7,6 @@
     ## Defining helper functions (used below)
     ytrans <- function(y, cVal, dVal) {log((dVal - y)/(y - cVal))}
     bfct <- function(x, y, cVal, dVal, eVal) {ytrans(y, cVal, dVal) / log(x / eVal)}
-#    efct <- function(x, y, bVal, cVal, dVal) {x * (((dVal - y) / (y - cVal))^(-1 / bVal))}
     efct <- function(x, y, bVal, cVal, dVal) {x * exp(-ytrans(y, cVal, dVal)/bVal)}
     
     ## Assigning function for finding initial b and e parameter values    
@@ -21,17 +20,10 @@
     {
         ncoldf <- ncol(dframe)
         x <- dframe[, 1]        
-#        x <- dframe[, -ncoldf]
         y <- dframe[, ncoldf]
-    
-#        x <- dframe[, 1]
-#        y <- dframe[, 2]
 
         ## Finding initial values for c and d parameters
         cdVal <- findcd(x, y)
-#        if (useFixed) {  # not implemented at the moment
-#            cdVal <- c(ifelse(notFixed[2], cdVal[1], fixed[2] / respScaling),
-#            ifelse(notFixed[3], cdVal[2], fixed[3] / respScaling))}
     
         ## Finding initial values for b and e parameters    
         beVal <- findbe(x, y, cdVal[1], cdVal[2])       

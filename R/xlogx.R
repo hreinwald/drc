@@ -3,21 +3,6 @@
 
 #' @title Helper functions for x*log(x) calculations
 #' @keywords internal
-#"xlogx" <- function(x, p)
-#{
-#    lv <- (x < 1e-12)
-#    nlv <- !lv
-#        
-#    rv <- rep(0, length(x))
-#        
-#    xlv <- x[lv] 
-#    rv[lv] <- log(xlv^(xlv^p[lv]))
-#        
-#    xnlv <- x[nlv]
-#    rv[nlv] <- (xnlv^p[nlv])*log(xnlv)
-#    
-#    rv
-#}
 
 divAtInf <- function(x, y)
 {
@@ -39,17 +24,13 @@ divAtInf <- function(x, y)
     xPowerp <- x^p    
 
     # Handling Inf/Inf    
-#    ratioVec <- xPowerp / (1 + xPowerp)^f
-#    ratioVec[!is.finite(xPowerp)] <- 0
     ratioVec <- divAtInf(xPowerp, (1 + xPowerp)^f)
         
     xlv <- x[lv] 
     rv[lv] <- log( xlv^ratioVec[lv] )
-#    rv[lv] <- log( xlv^(xlv^p[lv] / (1 + xlv^p[lv])^f[lv]) )
         
     xnlv <- x[nlv]
-    rv[nlv] <- ratioVec[nlv] * log(xnlv)    
-#    rv[nlv] <- ( xnlv^p[nlv] / (1 + xnlv^p[nlv])^f[nlv] ) * log(xnlv)
+    rv[nlv] <- ratioVec[nlv] * log(xnlv)
     
     rv
 }

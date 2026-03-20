@@ -69,7 +69,6 @@ fctName, fctText)
         parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
         parmMat[, notFixed] <- parm
 
-#        parmMat[,2] + (parmMat[,3] - parmMat[,2]) * exp(-exp(parmMat[,1] *(dose - parmMat[,4])))
         fd(dose, parmMat[, 1], parmMat[, 2], parmMat[, 3], parmMat[, 4])
     }
 

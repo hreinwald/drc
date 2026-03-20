@@ -45,7 +45,6 @@ fctName, fctText)
         parmMat[, notFixed] <- parm
         
         cParm <- parmMat[, 2]
-#        cParm + (parmMat[, 3] - cParm)/((1+exp(parmMat[, 1]*(log(dose)-log(parmMat[, 4]))))^parmMat[, 5])
         cParm + (parmMat[, 3] - cParm) * pgamma(parmMat[, 1] * dose, parmMat[, 4], 1)
     }
 
@@ -66,7 +65,6 @@ fctName, fctText)
         for (i in 1:lenX)
         {
             intFct <- function(t){dgamma(t, y[i], 1) * log(t)}
-#            print(ifelse(x[i] < 1e-10, 0, integrate(intFct, 0, x[i])[[1]]))
             retVec[i] <- ifelse(x[i] < 1e-10, 0, integrate(intFct, 0, x[i])[[1]])
         }
         retVec
@@ -85,7 +83,6 @@ fctName, fctText)
         1 - t2,
         t2,
         t1 * logGamma(parmMat[, 1] * dose, parmMat[, 4])
-#        t1 * (parmMat[, 4] - 1) * pgamma(parmMat[, 1] * dose, parmMat[, 4] - 1, 1)
         )[, notFixed]
     }
     deriv2 <- NULL

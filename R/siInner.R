@@ -5,22 +5,17 @@ siInner <- function(indPair, pVec, compMatch, object, indexMat, parmMat, varMat,
     jInd <- indPair[1]
     kInd <- indPair[2]
 
-#    indexMat <- object$"indexMat"
     parmInd1 <- indexMat[, jInd]
     parmInd2 <- indexMat[, kInd]
-#    parmMat <- matrix(coef(object)[indexMat], ncol = ncol(indexMat))
 
     parmChosen1 <- parmMat[, jInd]
     parmChosen2 <- parmMat[, kInd]
 
-#    SIeval <- sifct(parmChosen1, parmChosen2, pVec, 1,2,1,2, reference, type, jInd, kInd)
     SIeval <- sifct(parmChosen1, parmChosen2, pVec, jInd, kInd, reference, type)
 
     SIval <- SIeval$"val"  # SIeval[[1]]
     dSIval <- SIeval$"der"  # SIeval[[2]]
-#    print(dSIval)
 
-#    print(varMat)
     oriMatRow <- c(SIval, sqrt(t(dSIval) %*% varMat %*% dSIval))
     siMatRow <- matrix(NA, 1, 4)  # four is the maximum number of columns
     siMatRow[1, 1] <- SIval
@@ -74,9 +69,6 @@ siInner <- function(indPair, pVec, compMatch, object, indexMat, parmMat, varMat,
     if (identical(interval, "fieller"))  # using t-distribution
     {
         vcMat <- matrix(NA, 2, 2)
-#        vcMat[1, 1] <- SIeval$"der1" %*% varMat[parmInd1, parmInd1] %*% SIeval$"der1"
-#        vcMat[2, 2] <- SIeval$"der2" %*% varMat[parmInd2, parmInd2] %*% SIeval$"der2"
-#        vcMat[1, 2] <- SIeval$"der1" %*% varMat[parmInd1, parmInd2] %*% SIeval$"der2"        
         vcMat[1, 1] <- SIeval$"der1" %*% varMat %*% SIeval$"der1"
         vcMat[2, 2] <- SIeval$"der2" %*% varMat %*% SIeval$"der2"
         vcMat[1, 2] <- SIeval$"der1" %*% varMat %*% SIeval$"der2"

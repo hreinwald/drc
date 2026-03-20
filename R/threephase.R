@@ -42,30 +42,17 @@ fctName, fctText)
     ## Defining the non-linear function
     fct <- function(dose, parm) 
     {
-#        print("A")
         parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
-#        print(notFixed)
-#        print(parm)
-#        print(parmMat[, notFixed])
         parmMat[, notFixed] <- parm
-#        print("B")
-#        LL.4(fixed[1:4])$fct(dose, parmMat[, 1:4]) + LL.3(fixed[5:7])$fct(dose, parmMat[, 5:7])
 
-#        fixed1.4 <- fixed[1:4]
-#        fixed5.7 <- fixed[5:7] 
         {LL.4()$fct(dose, parmMat[, 1:4, drop = FALSE]) + LL.3()$fct(dose, parmMat[, 5:7, drop = FALSE]) + LL.3()$fct(dose, parmMat[, 8:10, drop = FALSE])}
     }
 
     ## Defining self starter function
     ssfct <- function(dframe)
     {  
-#        first4 <- drc:::llogistic.ssf(fixed = fixed[1:4])(dframe)  # drc::: not need
-#        first4 <- drc:::llogistic.ssf(fixed = c(NA, NA, NA, NA, 1))(dframe)    
         first4 <- llogistic.ssf(fixed = c(NA, NA, NA, NA, 1))(dframe)    
     
-#    print(c(first4[1:2], first4[3]/2, first4[4]/3, first4[1], first4[3]/2, first4[4])[is.na(fixed)])
-
-#        c(first4[1:2], first4[3]/2, first4[4]/3, first4[1], first4[3]/2, first4[4])[is.na(fixed)]
         c(first4[1:2], first4[3]/3, first4[4]/3, first4[1], first4[3]*(2/3), first4[4]*(2/3),
         first4[1], first4[3], first4[4])[is.na(fixed)]
     }     

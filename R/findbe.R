@@ -7,10 +7,6 @@ findbe1 <- function(doseTr, respTr, sgnb = 1, back = exp)
 {
     function(x, y, cVal, dVal)
     {
-#        lmFit <- lm(log((dVal - y)/(y - cVal)) ~ log(x), subset = x > 0)
-
-#respTr <- function(y, cVal, dVal) {log((dVal - y)/(y - cVal))}
-#doseTr <- function(x) {rVec <- log(x); rVec[!x>0] <- NA; rVec}
         lmFit <- lm(respTr(y, cVal, dVal) ~ doseTr(x))
         coefVec <- coef(lmFit)
         bVal <- sgnb * coefVec[2]        
@@ -51,8 +47,6 @@ findbe2 <- function(bfct, efct, method, sgnb = 1)
             uniAbove <- head(uniAbove, -1)
         }
         maxDose <- max(x[x %in% uniAbove])
-#        print(maxDose)
-        
         ## Smallest dose with all responses below
         belowVec <- x[y < midResp]
         uniBelow <- unique(belowVec)
@@ -61,10 +55,7 @@ findbe2 <- function(bfct, efct, method, sgnb = 1)
             uniBelow <- tail(uniBelow, -1)
         }
         minDose <- min(x[x %in% uniBelow])
-#        print(minDose)
-
         subsetInd <- (x > maxDose) & (x < minDose)
-#        print(subsetInd)
         eVal <- mean((1 / (1 + (abs(y[subsetInd] - midResp)/15)^2)) * x[subsetInd])
         if (is.nan(eVal))  # in case subsetInd are all FALSE
         {
@@ -80,19 +71,13 @@ findbe2 <- function(bfct, efct, method, sgnb = 1)
         {
             eVal <- sort2
         }
-#        print(eVal)
-
         ## Finding initial value for b
-#        bVal <- median(log((dVal - y) / (y - cVal)) / log(x / eVal), na.rm = TRUE)
         bVal <- bFct(x, y, cVal, dVal, eVal)
-#        print(bVal)
         
         ## Checking sign of b and possibly take action if it's wrong
         regSlope <- as.vector(coef(lm(y ~ x)))[2]
         if ((!is.na(bVal)) && ((sgnb * regSlope / bVal) > 0))
         {
-#             bVal <- -bVal
-#             eVal <- median(x * (((dVal - y) / (y - cVal))^(-1/bVal)), na.rm = TRUE)
              eVal <- eFct(x, y, -bVal, cVal, dVal)
              bVal <- bFct(x, y, cVal, dVal, eVal)   
         }
@@ -137,27 +122,4 @@ findbe3 <- function(sgnb = 1)
 }
     
     
-## Normolle's procedure
-#findbe4 <- function(bfct, efct)
-#{
-#    ## Helper functions used below
-#    # bfct <- function(x, y, cVal, dVal, eVal) {log((dVal - y) / (y - cVal)) / log(x / eVal)}
-#    bFct <- function(x, y, cVal, dVal, eVal)
-#    {
-#        median(bfct(x, y, cVal, dVal, eVal), na.rm = TRUE)
-#    }
-#    # efct <- function(x, y, bVal, cVal, dVal) {x * (((dVal - y) / (y - cVal))^(-1 / bVal))}
-#    eFct <- function(x, y, bVal, cVal, dVal)
-#    {
-#        median(efct(x, y, bVal, cVal, dVal), na.rm = TRUE)
-#    }
-#
-#    function(x, y, cVal, dVal)
-#    {
-##        initeVal <- mean(range(x))
-#        bVal <- bFct(x, y, cVal, dVal, mean(range(x)))
-#        eVal <- eFct(x, y, bVal, cVal, dVal)
-#
-#        return(c(bVal, eVal)) 
-#    }    
-#}
+

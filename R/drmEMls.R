@@ -26,9 +26,6 @@ doseScaling = 1, respScaling = 1, varcov = NULL)
     {
         opdfct1 <- function(parm)
         {
-#            apply(-2*(resp - multCurves(dose, parm))*dmf(dose, parm), 2, sum)
-#            apply(-2*(resp - multCurves(dose, parm))*dmf(dose, parm), 2, appFct, cid)
-
             -2*((resp / respScaling) - multCurves((dose / doseScaling), parm)) * dmf((dose / doseScaling), parm)
         }
     } else {
@@ -44,7 +41,6 @@ doseScaling = 1, respScaling = 1, varcov = NULL)
         degfre <- object$"sumList"$"lenData"  # "df.residual"  # object$summary[6]
         c( -(degfre/2)*(log(2*pi)+log(object$"fit"$"value")-log(degfre)+1), 
         object$"sumList"$"lenData" - object$"sumList"$"df.residual" + 1)
-#        length(object$"fit"$"par") + 1 )
     }   
     
     ## Defining functions returning the residual variance, the variance-covariance matrix and the fixed effects estimates
@@ -55,7 +51,6 @@ doseScaling = 1, respScaling = 1, varcov = NULL)
 
     vcovfct <- function(object)
     {
-#        scaledH <- (object$"fit"$"hessian")*(1/(2*object$"fit"$"ovalue"/object$"sumList"$"df.residual"))  # /2
         scaledH <- (object$"fit"$"hessian") / (2 * rvfct(object))
         invMat <- try(solve(scaledH), silent = TRUE)
     
@@ -72,8 +67,6 @@ doseScaling = 1, respScaling = 1, varcov = NULL)
         } else {
             return(invMat)
         }
-#        solve((object$"fit"$"hessian")*(1/rvfct(object))/2)  
-#        solve((object$"fit"$"hessian")*(1/(object$"fit"$"ovalue"/object$"sumList"$"df.residual"))/2)   
     }
     
     parmfct <- function(fit, fixed = TRUE)

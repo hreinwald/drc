@@ -235,7 +235,6 @@ pshifts = NULL, varcov = NULL)
     assayNames <- as.character(unique(assayNoOld))
     numAss <- length(assayNames)
       
-#    lenDose <- unlist(lapply(tapply(dose, assayNoOld, unique), length))
     if (xDim > 1) {tempDoseVec <- dose[, 1]} else {tempDoseVec <- dose} 
     uniqueDose <- lapply(tapply(tempDoseVec, assayNoOld, unique), length)
     udNames <- names(uniqueDose[uniqueDose == 1])
