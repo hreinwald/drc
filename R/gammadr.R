@@ -81,7 +81,7 @@ fctName, fctText)
         t2 <- pgamma(parmMat[, 1] * dose, parmMat[, 4], 1)
 
         cbind(
-        t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * parmMat[, 1],
+        t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * dose,
         1 - t2,
         t2,
         t1 * logGamma(parmMat[, 1] * dose, parmMat[, 4])
