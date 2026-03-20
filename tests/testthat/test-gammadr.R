@@ -192,6 +192,20 @@ test_that("gammadr deriv1 computes finite values", {
   expect_true(all(is.finite(result)))
 })
 
+test_that("gammadr deriv1 computes correct df/db value", {
+  g <- gammadr()
+
+  # b=1, c=0, d=1, e=3
+  dose <- c(2)
+  parm <- matrix(c(1, 0, 1, 3), nrow = 1, ncol = 4)
+
+  result <- g$deriv1(dose, parm)
+
+  # df/db = (d-c) * dgamma(b*x, e, 1) * x (chain rule: d/db[b*x] = x)
+  expected_db <- (1 - 0) * dgamma(1 * 2, 3, 1) * 2
+  expect_equal(unname(result[1]), expected_db, tolerance = 1e-10)
+})
+
 # --- logGamma helper (called via deriv1) ---
 
 test_that("gammadr deriv1 exercises logGamma with x < 1e-10 (zero dose)", {

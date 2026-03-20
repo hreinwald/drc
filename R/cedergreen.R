@@ -614,7 +614,7 @@ ml3a <- CRS.4a
     cedergreen(
       fixed = fixed, names = names, alpha = 0.5, 
       fctName = as.character(match.call()[[1]]), 
-      fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=)", 
+      fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.5)", 
       ...
     )
   )
