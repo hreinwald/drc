@@ -203,7 +203,7 @@ test_that("gammadr deriv1 computes correct df/db value", {
 
   # df/db = (d-c) * dgamma(b*x, e, 1) * x (chain rule: d/db[b*x] = x)
   expected_db <- (1 - 0) * dgamma(1 * 2, 3, 1) * 2
-  expect_equal(result[1], expected_db, tolerance = 1e-10)
+  expect_equal(unname(result[1]), expected_db, tolerance = 1e-10)
 })
 
 # --- logGamma helper (called via deriv1) ---

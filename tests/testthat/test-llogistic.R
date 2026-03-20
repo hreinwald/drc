@@ -17,7 +17,7 @@ ryegrass <- data.frame(
 
 test_that("llogistic returns correct class and structure", {
   ll <- llogistic()
-  expect_s3_class(ll, "log-logistic")
+  expect_s3_class(ll, "llogistic")
   expect_true(is.list(ll))
   expect_true(all(c("fct", "ssfct", "names", "deriv1", "deriv2",
                      "edfct", "name", "text", "noParm") %in% names(ll)))
@@ -98,7 +98,7 @@ test_that("llogistic fct works with f != 1 (asymmetric)", {
 
 test_that("LL.2 returns correct class and structure", {
   ll2 <- LL.2()
-  expect_s3_class(ll2, "log-logistic")
+  expect_s3_class(ll2, "llogistic")
   expect_equal(ll2$noParm, 2)
   expect_equal(ll2$names, c("b", "e"))
 })
@@ -122,7 +122,7 @@ test_that("LL.2 errors on invalid fixed", {
 
 test_that("LL.3 returns correct class and structure", {
   ll3 <- LL.3()
-  expect_s3_class(ll3, "log-logistic")
+  expect_s3_class(ll3, "llogistic")
   expect_equal(ll3$noParm, 3)
   expect_equal(ll3$names, c("b", "d", "e"))
 })
@@ -145,7 +145,7 @@ test_that("LL.3 errors on invalid fixed", {
 
 test_that("LL.3u returns correct class and structure", {
   ll3u <- LL.3u()
-  expect_s3_class(ll3u, "log-logistic")
+  expect_s3_class(ll3u, "llogistic")
   expect_equal(ll3u$noParm, 3)
   expect_equal(ll3u$names, c("b", "c", "e"))
 })
@@ -168,7 +168,7 @@ test_that("LL.3u errors on invalid fixed", {
 
 test_that("LL.4 returns correct class and structure", {
   ll4 <- LL.4()
-  expect_s3_class(ll4, "log-logistic")
+  expect_s3_class(ll4, "llogistic")
   expect_equal(ll4$noParm, 4)
   expect_equal(ll4$names, c("b", "c", "d", "e"))
 })
@@ -186,7 +186,7 @@ test_that("LL.4 errors on invalid names", {
 
 test_that("LL.5 returns correct class and structure", {
   ll5 <- LL.5()
-  expect_s3_class(ll5, "log-logistic")
+  expect_s3_class(ll5, "llogistic")
   expect_equal(ll5$noParm, 5)
   expect_equal(ll5$names, c("b", "c", "d", "e", "f"))
 })
