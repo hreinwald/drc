@@ -39,9 +39,6 @@ method = c("1", "2", "3", "4"), ssfct = NULL)
     if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
     if (!(length(fixed)==numParm)) {stop("Not correct 'fixed' argument")}    
 
-#    if (!is.logical(useDer)) {stop("Not logical useDer argument")}
-#    if (useDer) {stop("Derivatives not available")}
-
     notFixed <- is.na(fixed)
     parmVec <- rep(0, numParm)
     parmVec[!notFixed] <- fixed[!notFixed]
@@ -52,12 +49,6 @@ method = c("1", "2", "3", "4"), ssfct = NULL)
         parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
         parmMat[, notFixed] <- parm
     
-#        c <- 2*parmMat[, 3]*parmMat[, 5]/abs(parmMat[, 3]+parmMat[, 5])
-#        f <- 1/(1+exp(-c*(log(parmMat[, 4]) - log(dose))))
-#        g <- exp(parmMat[, 3]*(log(parmMat[, 4]) - log(dose)))
-#        h <- exp(parmMat[, 5]*(log(parmMat[, 4]) - log(dose)))
-#        parmMat[, 1]+((parmMat[,2]-parmMat[,1])/(1+f*g+(1-f)*h))
-
         c <- 2*parmMat[, 1]*parmMat[, 2]/abs(parmMat[, 1]+parmMat[, 2])
 
         tempVal <- log(dose) - log(parmMat[, 5])
@@ -67,22 +58,6 @@ method = c("1", "2", "3", "4"), ssfct = NULL)
         parmMat[, 3]+((parmMat[,4]-parmMat[,3])/(1+f*g+(1-f)*h))
 
     }
-
-#    ## Defining value for control measurements (dose=0)
-#    confct <- function(drcSign)
-#    {
-#        if (drcSign>0) {conPos <- 1} else {conPos <- 2}
-#        confct2 <- function(parm)
-#        { 
-#            parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
-#            parmMat[, notFixed] <- parm
-#            parmMat[, conPos]
-#        }
-#        return(list(pos=conPos, fct=confct2))
-#    }
-#
-#    ## Defining flag to indicate if more general ANOVA model is available as alternative
-#    anovaYes <- TRUE
 
     ## Defining self starter function
     if (!is.null(ssfct))
@@ -100,21 +75,9 @@ method = c("1", "2", "3", "4"), ssfct = NULL)
     ## Defining names
     names <- names[notFixed]
 
-#    ## Defining parameter to be scaled
-#    if ( (scaleDose) && (is.na(fixed[5])) ) 
-#    {
-#        scaleInd <- sum(is.na(fixed[1:5]))
-#    } else {
-#        scaleInd <- NULL
-#    }
-
     ## Defining derivatives
     deriv1 <- NULL
     deriv2 <- NULL
-
-#    ## Limits
-#    if (length(lowerc)==numParm) {lowerLimits <- lowerc[notFixed]} else {lowerLimits <- lowerc}
-#    if (length(upperc)==numParm) {upperLimits <- upperc[notFixed]} else {upperLimits <- upperc}
 
     ## Defining the ED function
     edfct <- NULL

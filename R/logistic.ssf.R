@@ -23,7 +23,6 @@
 
         ## Finding initial values for c and d parameters
         cdVal <- findcd(x, y)
-#        if (useFixed) {}  # not implemented at the moment
     
         ## Finding initial values for b and e parameters    
         beVal <- findbe(x, y, cdVal[1], cdVal[2])            

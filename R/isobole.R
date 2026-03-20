@@ -35,59 +35,27 @@ xlab, ylab, xlim, ylim, ...)
 
     parmVec <- coef(object1)
     namesPV <- names(parmVec)
-#    lenNPV <- length(namesPV)
 
     indVec <- regexpr(paste(ename, ":", sep = ""), namesPV, fixed = TRUE) > 0
     eVec <- parmVec[indVec]
     seVec <- (summary(object1)$"coefficients")[indVec, 2]
 
-#    edMat <- ED(object1, 50, display = FALSE, multcomp = TRUE)[["EDdisplay"]]
     edMat <- ED(object1, 50, display = FALSE)
     eVec <- (as.vector(edMat[, 1]))  # stripping off names
     seVec <- (as.vector(edMat[, 2]))  # stripping off names
 
     mixProp <- unique(object1$data[, 4])
     mixProp <- mixProp[ (mixProp >= 0) & (mixProp <= 100) ] / 100  # removing control level
-#    print(mixProp)
-
-#    posOnRay <- function(len, slope)
-#    {
-#        xPos <- sqrt( len^2 / (1+slope^2) )
-#        yPos <- slope*xPos
-#        
-#        yPos[!is.finite(slope)] <- len[!is.finite(slope)]
-#        
-#        list(xPos, yPos)
-#    }
-
-#    if (identical(xaxis, "0")) 
-#    {
-#        eVec <- rev(eVec)
-#        seVec <- rev(seVec)
-#        mixProp <- rev(mixProp)
-#    }
 
     Ex <- eVec * mixProp
     Ey <- eVec * (1-mixProp) * exchange
-#    print(Ex)
-#    print(Ey)
 
     lowerE <- eVec - cifactor * seVec
-#    lowerEx <- lowerE*mixProp
-#    lowerEx <- lowerE*cos(mixProp*pi/2)
-#    lowerEy <- lowerE*(1-mixProp)*exchange    
-#    lowerEy <- lowerE*sin(mixProp*pi/2)*exchange    
 
     upperE <- eVec + cifactor * seVec
-#    upperEx <- upperE*mixProp
-#    upperEx <- upperE*cos(mixProp*pi/2)
-#    upperEy <- upperE*(1-mixProp)*exchange
-#    upperEy <- upperE*sin(mixProp*pi/2)*exchange
 
-#    lowerE <- eVec - 2 * seVec
     lowerEx <- lowerE * mixProp
     lowerEy <- lowerE * (1 - mixProp) * exchange
-#    upperE <- eVec + 2 * seVec
     upperEx <- upperE * mixProp
     upperEy <- upperE * (1 - mixProp) * exchange
 
@@ -126,30 +94,12 @@ xlab, ylab, xlim, ylim, ...)
     
     ## Plotting rays in first quadrant
     raySlopes <- (1 - mixProp) / mixProp
-#    raySlopes <- mixProp/(1 - mixProp) 
-#    raySlopes <- tan(mixProp * pi/2)
     for (i in raySlopes[is.finite(raySlopes)]) {abline(0, exchange*i, lty = 3)}
     abline(v = 0, lty = 3)  # adding vertical line (for infinite slope)       
-
-#    raySlopes <- mixProp/(1 - mixProp)
-#    for (i in raySlopes[is.finite(raySlopes)]) 
-#    {
-#        abline(0, exchange * i, lty = 3)
-#    }
 
     ## Plotting ED50 values with confidence intervals  
     points(Ex, Ey, pch = 19)
     segments(lowerEx, lowerEy, upperEx, upperEy, lwd = 2)    
-    
-#    points(eVec*cos(mixProp*pi/2), eVec*sin(mixProp*pi/2)*exchange, pch = 19)
-
-#    katx <- function(eVal, slope) {cos(atan(slope))*eVal}
-#    katy <- function(eVal, slope) {sin(atan(slope))*eVal}    
-
-#    points(katx(eVec, raySlopes), katy(eVec, raySlopes)*exchange, pch = 19)
-#    segments(lowerEx, lowerEy, upperEx, upperEy, lwd = 2)
-# old    segments(katx(lowerE, raySlopes), katy(lowerE, raySlopes)*exchange, 
-#        katx(upperE, raySlopes), katy(upperE, raySlopes)*exchange, lwd = 2)
 
     if (!missing(object2))
     {
@@ -157,7 +107,6 @@ xlab, ylab, xlim, ylim, ...)
         ## Retrieving parameter estimates from fit of Hewlett's model
         parmVec <- coef(object2)
         namesPV <- names(parmVec)
-#        lenNPV <- length(namesPV)
 
         curveStr1 <- paste("I(1/(", object1$curveVarNam, "/100))", sep = "")
         curveStr2 <- paste("I(1/(1 - ", object1$curveVarNam, "/100))", sep = "")
@@ -220,5 +169,4 @@ xlab, ylab, xlim, ylim, ...)
         }    
         lines(xVal, yVal, ...)        
     }
-#    invisible()
 }
