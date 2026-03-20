@@ -129,12 +129,18 @@ test_that("logistic.ssf respects fixed parameters (L.4 style: f=1)", {
 test_that("logistic.ssf defaults to method '1'", {
   ssfct_default <- drc:::logistic.ssf(fixed = c(NA, NA, NA, NA, NA))
   ssfct_explicit <- drc:::logistic.ssf(method = "1", fixed = c(NA, NA, NA, NA, NA))
+  ssfct_method2 <- drc:::logistic.ssf(method = "2", fixed = c(NA, NA, NA, NA, NA))
   dframe <- make_logistic_data()
 
   result_default <- ssfct_default(dframe)
   result_explicit <- ssfct_explicit(dframe)
+  result_method2 <- ssfct_method2(dframe)
+
+  # Default should match method "1" exactly
 
   expect_equal(result_default, result_explicit)
+  # And differ from method "2" to confirm method "1" is truly the default
+  expect_false(isTRUE(all.equal(result_default, result_method2)))
 })
 
 # ==============================================================================
@@ -172,8 +178,10 @@ test_that("logistic.ssf c and d initial values bracket the response range", {
 
   result <- ssfct(dframe)
 
-  # result[2] = c (lower asymptote), result[3] = d (upper asymptote)
+  # result order is: b, c, d, e, f
+  c_value <- result[2]  # lower asymptote
+  d_value <- result[3]  # upper asymptote
   y <- dframe[, 2]
-  expect_true(result[2] <= min(y))
-  expect_true(result[3] >= max(y))
+  expect_true(c_value <= min(y))
+  expect_true(d_value >= max(y))
 })
