@@ -123,7 +123,7 @@ test_that("rss is consistent with the numerator in Rsq calculation", {
   m1 <- drm(rootl ~ conc, data = ryegrass_test, fct = LL.4())
   rss_val <- as.numeric(rss(m1))
 
-  # RSS should equal sum of squared residuals, which is the numerator in Rsq
+  # RSS should equal sum of squared residuals (used in R² = 1 - RSS/TSS)
   expected <- sum(residuals(m1)^2)
   expect_equal(rss_val, expected, tolerance = 1e-10)
 })
