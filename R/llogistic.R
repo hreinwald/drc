@@ -153,14 +153,24 @@ fctName, fctText)
     {
         parmVec[notFixed] <- parm
         p <- EDhelper(parmVec, respl, reference, type)
-    
-        tempVal <- log((100-p)/100)
-        EDp <- parmVec[4]*(exp(-tempVal/parmVec[5])-1)^(1/parmVec[1])
 
-        EDder <- 
-        EDp*c(-log(exp(-tempVal/parmVec[5])-1)/(parmVec[1]^2), 
-        0, 0, 1/parmVec[4], 
-        exp(-tempVal/parmVec[5])*tempVal/(parmVec[5]^2)*(1/parmVec[1])*((exp(-tempVal/parmVec[5])-1)^(-1)))
+        tempVal <- log((100-p)/100)
+        expTerm <- exp(-tempVal/parmVec[5])
+
+        # Check if expTerm - 1 is valid (must be positive for log)
+        # Handle NaN from tempVal or expTerm being invalid
+        if (is.na(expTerm) || expTerm <= 1) {
+            # ED value is outside the valid range or model is ill-conditioned
+            EDp <- Inf
+            EDder <- rep(NA, 5)
+        } else {
+            EDp <- parmVec[4]*(expTerm-1)^(1/parmVec[1])
+
+            EDder <-
+            EDp*c(-log(expTerm-1)/(parmVec[1]^2),
+            0, 0, 1/parmVec[4],
+            expTerm*tempVal/(parmVec[5]^2)*(1/parmVec[1])*((expTerm-1)^(-1)))
+        }
 
         return(list(EDp, EDder[notFixed]))
     }

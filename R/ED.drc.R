@@ -168,11 +168,20 @@ ED <- function(object, ...) UseMethod("ED", object)
   
   indexMat <- object[["indexMat"]]
   parmMat  <- object[["parmMat"]]
-  
+
+  # Ensure indexMat is always a matrix, even if it's a single column vector
+  if (!is.matrix(indexMat)) {
+    indexMat <- as.matrix(indexMat)
+    # Set column names to match parmMat if they exist
+    if (!is.null(colnames(parmMat))) {
+      colnames(indexMat) <- colnames(parmMat)
+    }
+  }
+
   ## --- Determine curve ordering -----------------------------------------------
-  
+
   curveNames <- colnames(parmMat)
-  
+
   # When curve names are numeric, retain their original order rather than
   # sorting lexicographically. tryCatch is used to detect coercion failures
   # without suppressing warnings globally.
@@ -181,7 +190,7 @@ ED <- function(object, ...) UseMethod("ED", object)
     warning = function(w) FALSE
   )
   curveOrder <- if (!namesAreNumeric) order(curveNames) else seq_along(curveNames)
-  
+
   strParm0 <- curveNames[curveOrder]
   indexMat <- indexMat[, curveOrder, drop = FALSE]
   parmMat  <- parmMat[, curveOrder, drop = FALSE]

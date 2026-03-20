@@ -8,6 +8,9 @@
 * Fixed inverted `otrace`/`silentVal` logic in `drmOpt()` where `otrace=TRUE` incorrectly caused `silent=TRUE` in `try(optim())`, suppressing error messages instead of displaying them.
 * Fixed `searchdrc()` regex error and convergence failure behavior.
 * Fixed citation URL: reordered URLs in DESCRIPTION so `citation('drc')` returns the GitHub repository URL instead of r-project.org.
+* Fixed `ED()` "incorrect number of dimensions" error for models with few estimated parameters (e.g., EXD.3 with fixed c and d): ensured `indexMat` is always treated as a matrix before column subsetting.
+* Fixed `ED()` returning NaN with warning for LL.5 models with ill-conditioned parameters: added validity check to return `Inf` (indicating EC50 is outside valid range) instead of NaN when `exp(-tempVal/parmVec[5]) - 1` is non-positive. Also fixed NaN handling in the check condition to prevent "missing value where TRUE/FALSE needed" errors in `backfit()` and other functions.
+* Added warning to `noEffect()` when degrees of freedom difference is ≤ 0, clarifying that the likelihood ratio test may not be meaningful when the dose-response model has no additional parameters compared to the null model (e.g., when most parameters are fixed).
 
 ## Changes
 * Added `NEWS.md` version control log. Reformatted legacy news file into properly formatted `NEWS.md` with categorized sections.
