@@ -52,7 +52,7 @@ bread.drc, estfun.drc,
 ED_robust, maED_robust,
 
 backfit, CIcomp, CIcompX, comped, compParm, confint.basic, drm, drmc, ED, EDcomp, getInitial, getMeanFunctions, isobole, 
-lin.test, MAX, maED, mixture, modelFit, mr.test, mselect, neill.test, noEffect, plotFACI, PR, rdrm, relpot, searchdrc, 
+lin.test, MAX, maED, mixture, modelFit, mr.test, mselect, neill.test, noEffect, plotFACI, PR, rdrm, relpot, rss, searchdrc, 
 simDR, yieldLoss)
 
 importFrom(car, deltaMethod)
