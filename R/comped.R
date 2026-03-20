@@ -56,19 +56,13 @@
     {
         if (identical(operator, "-"))
         {
-#            resList <- compute.delta.method(vcMat, expression(b1-b2), est, c("b1", "b2"), print = FALSE)
-            
             derivVec <- c(1, -1)
             estVal <- est[1] - est[2]
         } else { 
-#            resList <- compute.delta.method(vcMat, expression(b1/b2), est, c("b1", "b2"), print = FALSE)
-            
-            derivVec <- c(1 / est[2], -est[1] / (est[2]^2))           
+            derivVec <- c(1 / est[2], -est[1] / (est[2]^2))
             estVal <- est[1] / est[2]
         }
     } else {
- #       resList <- compute.delta.method(vcMat, expression(b1-b2), est, c("b1", "b2"), print = FALSE)
- 
         derivVec <- c(1, -1)
         estVal <- est[1] - est[2]
     }

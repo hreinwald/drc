@@ -71,7 +71,6 @@ xlab, ylab, ylim, ...)
     {
         eta[, i] <- cumsum(derVec[, i])  # /lenxv
     }
-#    term2 <- eta %*% vcov(object) %*% t(matrix(resVec/resVar, 1, lenxv) %*% derVec)
 
     ## Adjusting in case of replicates
     lenuxv <- length(unique(xVec))
@@ -97,16 +96,12 @@ xlab, ylab, ylim, ...)
     for (i in 1:noksSim)
     {
         rnVec <- rnorm(noObs)
-#        wtMat[, i] <- (cumsum(resVec * rnVec) - term2 * rnVec)/sqrt(noObs)
         if (repAdjust)
         {
             term1 <- as.vector(unlist(tapply(cumsum(resVec * rnVec), xVec, tail, 1)))
         } else {
             term1 <- cumsum(resVec * rnVec)
         }
-#        print(dim(tempMat))
-#        print(dim(matrix(resVec*rnVec/resVar, 1, noObs)))
-#        print(dim(derVec))
         term2 <- tempMat %*% t(matrix(resVec*rnVec/resVar, 1, noObs) %*% derVec)
         wti <- (term1 - term2)/sqrt(noObs) 
         wtMat[, i] <- wti

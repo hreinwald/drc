@@ -82,12 +82,10 @@ xlab = expression(lambda), ylab = "log-Likelihood", ...)
             if (!inherits(drcTemp, "try-error")) 
             {
                 llVec[i] <- llFct(drcTemp, lambda[i])  # logLik(drcTemp)
-#                print(llVec[i])
             }
         }
         lv <- lambda[which.max(llVec)]
         ci <- boxcoxCI(lambda, llVec, level)    
-#        llv <- max(llVec, na.rm = TRUE)
 
         ## Plotting the profile log-likelihood
         if (plotit)  # based on boxcox.default
@@ -142,8 +140,7 @@ xlab = expression(lambda), ylab = "log-Likelihood", ...)
     retFit$"boxcox" <- list(lambda = lv, ci = ci, bcAdd = bcAdd)
     retFit$call$bcVal <- lv
     retFit$call$bcAdd <- bcAdd    
-#    retFit$boxcox[c(2, 3)] <- ci
-    ## future: make boxcox and lambda into one component in the fit     
+    ## future: make boxcox and lambda into one component in the fit
      
     ## Returning the result 
     invisible(retFit)

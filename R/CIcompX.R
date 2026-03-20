@@ -66,7 +66,6 @@ CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
         }
         derivVec <- derivFct(eseVec[1:3])
         diagVec <- diag(eseVec[4:6]^2)
- #       seCI <- sqrt(as.vector((-derivVec[2:3]) %*% (diagVec[2:3, 2:3]) %*% (-derivVec[2:3])))
         seDiff <- sqrt(as.vector(derivVec %*% diagVec %*% derivVec))
 
         derivFct2 <- function(ecVec)
@@ -79,7 +78,6 @@ CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
         dfRes2 <- derivFct2(eseVec[1:3])
         derivVec2 <- dfRes2[2:4]
         seDiff2 <- sqrt(as.vector(derivVec2 %*% diagVec %*% derivVec2))
-#        print(seDiff2)
 
         retVec <- c(combInd, seDiff, c(combInd - 1.96 * seDiff, combInd + 1.96 * seDiff), 
                     caDiff, 2 * (1 - pnorm(abs(caDiff / seDiff))), dfRes2[1], seDiff2)
@@ -109,7 +107,6 @@ CIcompX <- function(mixProp, modelList, EDvec, EDonly = FALSE)
         }
         derivVec <- derivFct(eseVec[1:3])
         diagVec <- diag(eseVec[4:6]^2)
- #       seCI <- sqrt(as.vector((-derivVec[2:3]) %*% (diagVec[2:3, 2:3]) %*% (-derivVec[2:3])))
         seDiff <- sqrt(as.vector(derivVec %*% diagVec %*% derivVec))
 
         derivFct2 <- function(ecVec)
@@ -221,13 +218,10 @@ plotFACI <- function(effList, indAxis = c("ED", "EF"), caRef = TRUE,
                      showPoints = FALSE, add = FALSE, ylim, ...)
 {
     indAxis <- match.arg(indAxis)
-#    indMat <- CIcompX(mixProp, modelList, faValues)
-  
     faValues <- effList[["EDvec"]]
     minfa <- min(faValues)
     faValues[faValues < 0] <- -(100 - abs(faValues[faValues < 0])) 
     
-#    if (indAxis == "x") {plotMat <- indMat[[1]]} else {plotMat <- indMat[[2]]}
     plotMat <- switch(indAxis, ED = effList[["CAx"]], EF = effList[["CAy"]])
     xVec <- as.numeric(rownames(plotMat))
     xVec[faValues < 0] <- rev(xVec[faValues < 0])
