@@ -22,7 +22,6 @@
             keep2[i] <- paste(rep(sep[i], nchar(keep[i])), collapse="")
             substr(strVal, cutFrom[i], cutTo[i]) <- keep2[i]
         }
-        #print(strVal)
     
         for (i in 1:lenN)
         {
@@ -46,16 +45,14 @@
     "buildFct" <- function(bodyStr, names, fixed)
     {
         argNames <- paste(names[is.na(fixed)], collapse=",")
-        headerStr <- paste("function(DOSE," , argNames, "){(")
+        headerStr <- paste("function(DOSE,", argNames, "){(")
     
         fctStr <- paste(headerStr, bodyStr, "^lambda - 1)/lambda}")
         
         
         formStr <- paste("formula(respVar ~ opfct(doseVar,", argNames, "))")
         
-#        print(fctStr)
         return(list(fctStr, formStr))        
-#        return(eval(parse(text=fctStr)))
     }
 
     bodyS <- replaceChar(str, names, fixed, keep)
