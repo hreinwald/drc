@@ -226,10 +226,10 @@ if (FALSE) {  ## will work once plotFct does not depend on drcFct
     edfct <- function(parm, respl, reference, type, ...)
     {
         parmVec[notFixed] <- parm
-#        if (type == "absolute") 
+#        if (type == "absolute")
 #        {
 #            p <- 100*((parmVec[3] - respl)/(parmVec[3] - parmVec[2]))
-#        } else {  
+#        } else {
 #            p <- respl
 #        }
 #        ## Swapping p for increasing curve
@@ -238,14 +238,23 @@ if (FALSE) {  ## will work once plotFct does not depend on drcFct
 #            p <- 100 - p
 #        }
         p <- EDhelper(parmVec, respl, reference, type)
-    
-        tempVal <- log((100-p)/100)
-        EDp <- parmVec[4]*(exp(-tempVal/parmVec[5])-1)^(1/parmVec[1])
 
-        EDder <- 
-        EDp*c(-log(exp(-tempVal/parmVec[5])-1)/(parmVec[1]^2), 
-        0, 0, 1/parmVec[4], 
-        exp(-tempVal/parmVec[5])*tempVal/(parmVec[5]^2)*(1/parmVec[1])*((exp(-tempVal/parmVec[5])-1)^(-1)))
+        tempVal <- log((100-p)/100)
+        expTerm <- exp(-tempVal/parmVec[5])
+
+        # Check if expTerm - 1 is valid (must be positive for log)
+        if (expTerm <= 1) {
+            # ED value is outside the valid range or model is ill-conditioned
+            EDp <- Inf
+            EDder <- rep(NA, 5)
+        } else {
+            EDp <- parmVec[4]*(expTerm-1)^(1/parmVec[1])
+
+            EDder <-
+            EDp*c(-log(expTerm-1)/(parmVec[1]^2),
+            0, 0, 1/parmVec[4],
+            expTerm*tempVal/(parmVec[5]^2)*(1/parmVec[1])*((expTerm-1)^(-1)))
+        }
 
 # The next lines are not needed because the lower/upper limits are independent of the parameters
 # governing the ED values     
