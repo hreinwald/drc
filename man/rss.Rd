@@ -4,10 +4,12 @@
 \alias{rss}
 \title{Residual sum of squares for dose-response models}
 \usage{
-rss(object)
+rss(object, print = TRUE)
 }
 \arguments{
 \item{object}{an object of class 'drc'.}
+
+\item{print}{logical. If \code{TRUE} (the default), the RSS values are printed.}
 }
 \value{
 Invisibly returns a matrix of RSS values. For single-curve models, a 1x1 matrix.
@@ -16,6 +18,9 @@ For multi-curve models, includes per-curve values and a total RSS.
 \description{
 Calculates and displays the residual sum of squares (RSS) for a fitted dose-response model.
 For models with multiple curves, per-curve and total RSS values are returned.
+}
+\seealso{
+\code{\link[=Rsq]{Rsq()}} which uses this function to compute R-squared.
 }
 \author{
 Christian Ritz

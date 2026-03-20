@@ -128,6 +128,36 @@ test_that("rss is consistent with the numerator in Rsq calculation", {
   expect_equal(rss_val, expected, tolerance = 1e-10)
 })
 
+test_that("Rsq uses rss internally and produces correct R-squared", {
+  m1 <- drm(rootl ~ conc, data = ryegrass_test, fct = LL.4())
+  rss_val <- as.numeric(rss(m1))
+  rsq_val <- as.numeric(Rsq(m1))
+
+  response <- ryegrass_test$rootl
+  tss <- sum((response - mean(response))^2)
+  expected_rsq <- 1 - rss_val / tss
+
+  expect_equal(rsq_val, expected_rsq, tolerance = 1e-10)
+})
+
+# --- print parameter ---
+
+test_that("rss suppresses output when print = FALSE", {
+  m1 <- drm(rootl ~ conc, data = ryegrass_test, fct = LL.4())
+  output <- capture.output(result <- rss(m1, print = FALSE))
+
+  expect_true(is.matrix(result))
+  expect_equal(length(output), 0)
+})
+
+test_that("rss with print = FALSE returns same values as print = TRUE", {
+  m1 <- drm(rootl ~ conc, data = ryegrass_test, fct = LL.4())
+  r1 <- rss(m1, print = FALSE)
+  r2 <- rss(m1, print = FALSE)
+
+  expect_equal(r1, r2)
+})
+
 # --- Different model types ---
 
 test_that("rss works with LL.3 model", {

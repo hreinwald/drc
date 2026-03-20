@@ -4,15 +4,18 @@
 #' For models with multiple curves, per-curve and total RSS values are returned.
 #'
 #' @param object an object of class 'drc'.
+#' @param print logical. If `TRUE` (the default), the RSS values are printed.
 #'
 #' @return Invisibly returns a matrix of RSS values. For single-curve models, a 1x1 matrix.
 #'   For multi-curve models, includes per-curve values and a total RSS.
+#'
+#' @seealso [Rsq()] which uses this function to compute R-squared.
 #'
 #' @author Christian Ritz
 #'
 #' @keywords models nonlinear
 #' @export
-"rss" <- function(object)
+"rss" <- function(object, print = TRUE)
 {
     curve <- object$data[,4]
     uniCurve <- unique(curve)
@@ -33,7 +36,10 @@
     }
     colnames(rssMat) <- ""
 
-    cat(hText)
-    printCoefmat(rssMat)
+    if (print)
+    {
+        cat(hText)
+        printCoefmat(rssMat)
+    }
     invisible(rssMat)
 }
