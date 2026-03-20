@@ -153,7 +153,7 @@ test_that("rss suppresses output when print = FALSE", {
 test_that("rss with print = FALSE returns same values as print = TRUE", {
   m1 <- drm(rootl ~ conc, data = ryegrass_test, fct = LL.4())
   r1 <- rss(m1, print = FALSE)
-  r2 <- rss(m1, print = FALSE)
+  capture.output(r2 <- rss(m1, print = TRUE))
 
   expect_equal(r1, r2)
 })
