@@ -70,6 +70,7 @@ function(object, fctList = NULL, nested = FALSE, sorted = c("IC", "Res var", "La
         } else {
             retMat[1, 4] <- NA
         }
+    }
     if (nested) {retMat[1, nestedInd] <- NA}
 
     fctList2 <- rep("", lenFL + 1)        
@@ -98,6 +99,7 @@ function(object, fctList = NULL, nested = FALSE, sorted = c("IC", "Res var", "La
                     } else {
                         retMat[i + 1, 4] <- NA
                     }                
+                }
                 
                 if (nested) 
                 {
