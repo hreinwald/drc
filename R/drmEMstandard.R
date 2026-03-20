@@ -5,20 +5,11 @@ function(dose, resp, multCurves, doseScaling = 1)
     len0 <- sum(zeroDose)
     vcFct2 <- function(beta0, betaVec)
     {
-#        len0 <- weightVec[1]  # in case len0 is a vector
-    
         vc <- (1 / len0) * (betaVec %o% betaVec) / (beta0^4)
         diag(vc) <- diag(vc) + (1 / (beta0^2))
         
-#        zeroDose <- dose < doseTol
-#        print(vc[!zeroDose, zeroDose])
-#        print((1 / len0) * (-betaVec / (beta0^3)))
-#        print(vc[!zeroDose, zeroDose] + (1 / len0) * (-betaVec[!zeroDose] / (beta0^3)))
-        
         vc[!zeroDose, zeroDose] <- vc[!zeroDose, zeroDose] + (1 / len0) * (-betaVec[!zeroDose] / (beta0^3)) 
         vc[zeroDose, !zeroDose] <- vc[zeroDose, !zeroDose] + (1 / len0) * (-betaVec[!zeroDose] / (beta0^3))
-#        print(vc[zeroDose, zeroDose])
-#        print(diag(vc[zeroDose, zeroDose]) + (1 / (len0 * beta0^2)) - (1 / (beta0^2)))
         diag(vc[zeroDose, zeroDose]) <- diag(vc[zeroDose, zeroDose]) + (1 / (len0 * beta0^2)) - (1 / (beta0^2))
 
         return(vc)
@@ -43,10 +34,6 @@ function(dose, resp, multCurves, doseScaling = 1)
     ## Defining the log likelihood function
     llfct <- function(object)
     {
-#        total <- (object$"data")[iv, 5]
-#        success <- total*(object$"data")[iv, 2]    
-#        c( sum(log(choose(total, success))) - object$"fit"$"ofvalue", object$"sumList"$"df.residual" )
-        
         c(
         -object$"fit"$value + sum(log(gamma(resp+1))),
         object$"sumList"$"df.residual"
@@ -55,17 +42,6 @@ function(dose, resp, multCurves, doseScaling = 1)
     
        
     ## Defining functions returning the residual variance, the variance-covariance matrix, and the parameter estimates
-#    rvfct <- function(object)
-#    {
-#        object$"fit"$"value" / df.residual(object)  # object$"sumList"$"df.residual"
-#    }
-#
-#    vcovfct <- function(object)
-#    {
-#        solve(object$fit$hessian)    
-#    }
-#
-
     # copied from drmEMls.R
     rvfct <- function(object)
     {

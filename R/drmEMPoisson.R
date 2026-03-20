@@ -2,10 +2,6 @@
 function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1)
 {
 
-    ## Finding indices for doses that give contribution to likelihood function
-#    iv <- ( (multCurves(dose, startVec) > zeroTol) & (multCurves(dose, startVec) < 1-zeroTol) )
-
-
     ## Defining the objective function                
     opfct <- function(c)  # dose, resp and weights are fixed
     {                      
@@ -21,10 +17,6 @@ function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1)
     ## Defining the log likelihood function
     llfct <- function(object)
     {
-#        total <- (object$"data")[iv, 5]
-#        success <- total*(object$"data")[iv, 2]    
-#        c( sum(log(choose(total, success))) - object$"fit"$"ofvalue", object$"sumList"$"df.residual" )
-        
         c(
         -object$"fit"$value + sum(log(gamma(resp+1))),
         object$"sumList"$"df.residual"

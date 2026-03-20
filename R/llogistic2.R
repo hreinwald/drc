@@ -87,7 +87,6 @@ fctName, fctText)
             # only estimate of upper limit if a single unique dose value 
 
             indexT2 <- (x > 0 & is.finite(x))
-#            if (!any(indexT2)) {return((rep(NA, numParm))[notFixed])}  # for negative dose value
             x2 <- x[indexT2]
             y2 <- y[indexT2]
 
@@ -226,27 +225,12 @@ fctName, fctText)
     }
 
 
-#    ## Setting the limits
-#    if (length(lowerc) == numParm) {lowerLimits <- lowerc[notFixed]} else {lowerLimits <- lowerc}
-#    if (length(upperc) == numParm) {upperLimits <- upperc[notFixed]} else {upperLimits <- upperc}
-
-
     ## Defining the ED function
     ## (returning ED values and corresponding standard errors on log scale)
     edfct <- function(parm, respl, reference, type, ...)
     {
         parmVec[notFixed] <- parm
-#        if (type == "absolute") 
-#        {
-#            p <- 100*((parmVec[3] - respl)/(parmVec[3] - parmVec[2]))
-#        } else {  
-#            p <- respl
-#        }
-#        if ( (parmVec[1] < 0) && (reference == "control") )
-#        {
-#            p <- 100 - p
-#        }
-        p <- EDhelper(parmVec, respl, reference, type)        
+        p <- EDhelper(parmVec, respl, reference, type)
     
         tempVal1 <- 100/(100-p)
         tempVal2 <- log(tempVal1^(1/parmVec[5]) - 1)
@@ -288,7 +272,6 @@ fctName, fctText)
     returnList <- 
     list(fct = fct, ssfct = ssfct, names = names, deriv1 = deriv1, deriv2 = deriv2, derivx = derivx,
     edfct = edfct, bfct = bfct, inversion = invfct,
-#    lowerc=lowerLimits, upperc=upperLimits,
     name = fctName, 
     text = fctText, 
     noParm = sum(is.na(fixed)),

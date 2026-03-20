@@ -25,27 +25,12 @@
 "summary.drc" <-
 function(object, od = FALSE, pool = TRUE, ...)
 {
-    ## Producing a summary of a model fit
-#    sumVec1 <- object$fit  # object[[2]]
-#    sumVec2 <- object$summary  # object[[4]]
-#    parNames <- object$"parNames"[[1]]  # object[[6]]
-
     ## Calculating variance-covariance matrix from Hessian
-#    em <- object$"estMethod"
-#    parVec <- (em$parmfct)(object$fit, fixed = FALSE)
     parVec <- as.vector(coef(object))
-#    notNA <- !is.na(parVec) 
-#    varMat <- (object$"scaleFct")( (em$vcovfct)(object) )
     varMat <- vcov(object, od = od, pool = pool)
         
     ## Calculating estimated residual variance 
     ## and unscaled variance-covariance matrix
-#    if (!is.null(em$rvfct)) 
-#    {
-#        resVar <- (em$rvfct)(object)
-#    } else {
-#        resVar <- NULL
-#    }    
     resVar <- rse(object, TRUE)
     if (!is.na(resVar))
     {
@@ -75,11 +60,6 @@ function(object, od = FALSE, pool = TRUE, ...)
     }
     colnames(rseMat) <- c("rse", "df")
     
-#    ## Adjusting for over-dispersion using the Pearson statistic
-#    if (od && (!is.null(object$"gofTest"))) 
-#    { 
-#        varMat <- varMat*(object$"gofTest"[1]/object$"gofTest"[2])
-#    }
     diagVar <- diag(varMat)
     estSE <- numeric(length(diagVar))
     validVar <- diagVar >= 0
@@ -97,9 +77,6 @@ function(object, od = FALSE, pool = TRUE, ...)
 
 
     ## Forming a matrix of results        
-#    resultMat <- matrix(0, sum(notNA), 4, dimnames = list(parNames, c("Estimate", "Std. Error", "t-value", "p-value")))    
-#    resultMat[, 1] <- parVec[notNA]
-    
     parNames <- object$"parNames"[[1]]    
     resultMat <- matrix(NA, length(parVec), 4, 
     dimnames = list(parNames, c("Estimate", "Std. Error", "t-value", "p-value")))    

@@ -12,19 +12,12 @@ function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1, multCurv
     ## Defining the objective function  
     opfct <- function(cVal)
     {
-#        -sum(log(multCurves(dose / doseScaling, cVal)))
-        # not using resp   
- 
       # Handling censoring 
       if (censYes)
       {
         fValues <- multCurves(dose1 / doseScaling, cVal)[notCens]
         Fvalues1 <- multCurves2(dose1 / doseScaling, cVal)[!notCens]
         Fvalues2 <- multCurves2(dose2 / doseScaling, cVal)[!notCens]
-        #print(multCurves(dose1 / doseScaling, cVal))
-#        print(fValues)
-#        print(Fvalues1)
-#        print(Fvalues2)
         -sum(log(fValues)) + (-sum(log(Fvalues2 - Fvalues1)))
       } else {
         -sum(log(multCurves(dose / doseScaling, cVal)))

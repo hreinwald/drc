@@ -48,11 +48,6 @@
     blstr <- paste(bListEl, collapse = "")
     el1str <- paste(eListEl1, collapse = "")
     el2str <- paste(eListEl2, collapse = "")
-#
-#    print(bListEl)
-#    print(eListEl1) 
-#    print(eListEl2)
-
     fct <- object$"fct"
     if (model == "CA")
     {
@@ -154,9 +149,6 @@
         if (missing(startm)) {startm <- c(3, 0.3)}
     }    
         
-#    assign("collapseNew2", collapseNew2, envir = .GlobalEnv)    
-
-
     ## Checking if levels 0 and 100 are present 
     assayNo <- object$"dataList"$"curveid"   
     if (all(regexpr("0", as.character(unique(assayNo))) < 0 ))
@@ -173,20 +165,6 @@
     
     parNames1 <- object$"parNames"[[1]]
     parNames2 <- object$"parNames"[[3]]
-#    eNames <- as.character(parNames2[regexpr(paste(eName, ":", sep=""), parNames1, fixed = TRUE) > 0])
-#    eInd <- grep(paste(eName, ":", sep = ""), parNames1)
-#    eNames <- as.character(parNames2[eInd])
-
-#    pos0 <- match(paste("factor(", curveid, ")0", sep = ""), eNames)
-#    pos1 <- match(paste("factor(", curveid, ")100", sep = ""), eNames)
-#    if (is.na(pos0)) {pos0 <- 1}  # it is the intercept
-#    if (is.na(pos1)) {pos1 <- 1}
-#
-#    noED50 <- length(eNames)
-#    noB <- length(coef(object)) - noED50 - noLim
-#    sv2 <- sv[c(1:(noB + noLim), noB + noLim + pos0, noB + noLim + pos1)]
-#    sv2[noB+noLim+2] <- sv2[noB+noLim+1] + sv2[noB+noLim+2]
-    
     if (missing(start))
     {
         sv2 <- c(sv[-grep(paste(eName, ":", sep = ""), parNames1)], 
@@ -197,12 +175,7 @@
         sv3 <- start
     } 
    
-#    print(mixtfct)
-#    print(collapseNew2)
-#    print(sv3)
     mModel <- update(object, fct = mixtfct, pmodels = collapseNew2, start = sv3, control = control)
-    
-#    rm(collapseNew2, envir = .GlobalEnv)    
 
     mModel$deviance <- object$"fit"$"value"
     

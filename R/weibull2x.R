@@ -54,8 +54,7 @@ fctName, fctText)
         parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
         parmMat[, notFixed] <- parm
     
-#        parmMat[,2] + (parmMat[,3] - parmMat[,2]) * (1 - exp(-exp(parmMat[,1] *(log(dose - t0) - log(parmMat[,4])))))        
-        ifelse(dose > parmMat[,5], parmMat[,2] + (parmMat[,3] - parmMat[,2]) * (1 - exp(-exp(parmMat[,1] *(log(dose - parmMat[,5]) - log(parmMat[,4]))))), parmMat[,2]) 
+        ifelse(dose > parmMat[,5],parmMat[,2] + (parmMat[,3] - parmMat[,2]) * (1 - exp(-exp(parmMat[,1] *(log(dose - parmMat[,5]) - log(parmMat[,4]))))), parmMat[,2]) 
     }
 
 
@@ -106,10 +105,8 @@ fctName, fctText)
 
     ## Returning list of functions and values
     returnList <-
-    list(fct = fct, ssfct = ssfct, names = w2.names, deriv1 = deriv1, deriv2 = deriv2, derivx = derivx, edfct = edfct, 
-#    list(fct=fct, confct=confct, ssfct=ssfct, names=w2.names, deriv1=deriv1, deriv2=deriv2, 
-#    lowerc=lowerLimits, upperc=upperLimits, edfct=edfct, anovaYes=anovaYes,
-    name = ifelse(missing(fctName), as.character(match.call()[[1]]), fctName),
+    list(fct = fct, ssfct = ssfct, names = w2.names, deriv1 = deriv1, deriv2 = deriv2, derivx = derivx, edfct = edfct,
+    name = ifelse(missing(fctName),as.character(match.call()[[1]]), fctName),
     text = ifelse(missing(fctText), "Weibull (type 2)", fctText),     
     noParm = sum(is.na(fixed)),
     fixed = fixed)

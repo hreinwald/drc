@@ -39,22 +39,16 @@ eps = 1e-10)
     ## Defining the non-linear function
     fct <- function(dose, parm) 
     {
-#        print(parm)
-    
         parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
         parmMat[, notFixed] <- parm
 
-#        loge <- -parmMat[, 6]*log((1/parmMat[, 4])^(1/parmMat[, 6]) + (1/parmMat[, 5])^(1/parmMat[, 6]))        
-#        parmMat[, 2]+(parmMat[, 3]-parmMat[, 2])/(1+exp(parmMat[, 1]*(log(dose)-loge)))
-        
-        ratio <- parmMat[, 4]/parmMat[, 5]
+        ratio<- parmMat[, 4]/parmMat[, 5]
         tmp <- (1+ratio)^(1-parmMat[, 6])+((ratio)^parmMat[, 7])*((1+ratio)^(1-parmMat[, 7]))
         loge <- log(parmMat[, 4]/tmp)        
         
         loge[!is.finite(parmMat[, 4])] <- log(parmMat[!is.finite(parmMat[, 4]), 5])
         loge[!is.finite(parmMat[, 5])] <- log(parmMat[!is.finite(parmMat[, 5]), 4])
         
-#        parmMat[, 2]+(parmMat[, 3]-parmMat[, 2])/(1+exp(parmMat[, 1]*(log(dose)-loge)))
         retVec <- parmMat[, 2]+(parmMat[, 3]-parmMat[, 2])/(1+exp(parmMat[, 1]*(log(dose)-loge)))
         ## Handling the case dose=0 where "loge" may become NaN due to the mixture encoding (pct in glymet)
         retVec[dose < eps] <- parmMat[dose < eps, 3]

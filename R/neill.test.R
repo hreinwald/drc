@@ -114,8 +114,6 @@ object, grouping, method = c("c-finest", "finest", "percentiles"), breakp = NULL
     if (anovaDisplay)
     {
         ## Print information on grouping:
-#    tapply(polcurve$dist, grouping, function(x){paste(as.character(range(x)), collapse = "-")})
-# The above line should in the clustering function
         cat("Grouping used\n\n")
         grTable <- table(grouping)
         dimnames(grTable) <- list(dimnames(grTable)$grouping)  

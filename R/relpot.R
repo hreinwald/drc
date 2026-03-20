@@ -25,12 +25,6 @@ type = c("relative", "absolute"), scale = c("original", "percent", "unconstraine
     scale <- match.arg(scale)
     type <- match.arg(type)
 
-#    ## Checking arguments
-#    if (length(compMatch) != 2)
-#    {
-#        stop("Argument 'compMatch' should have length 2")
-#    }
-
     ## Defining range for 'percVec' 
     parmMat <- commatFct(object, compMatch)    
     lowerVec <- apply(parmMat, 2, object$"fct"$"lowerAs")

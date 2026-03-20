@@ -46,10 +46,7 @@ fctName, fctText)
     notFixed <- is.na(fixed)
     parmVec <- rep(0, numParm)
     parmVec[!notFixed] <- fixed[!notFixed]
-#    parmVec1 <- parmVec
-#    parmVec2 <- parmVec
 
-           
     ## Defining the non-linear function
     fct <- function(dose, parm) 
     {
@@ -107,13 +104,6 @@ fctName, fctText)
     {
         parmVec[notFixed] <- parm
     
-#        if (parmVec[1] > 0) 
-#        {
-#            tempVal <- (100 - p) / 100
-# old=wrong            EDp <- parmVec[4] + log( (1 + exp(-parmVec[1]*parmVec[4])) / (tempVal^(1/parmVec[5])) - 1)/parmVec[1]
-            
-# old=wrong            ## deriv(~e + log( (1 + exp(-b*e)) / (((100 - p) / 100)^(1/f)) - 1)/b, c("b", "c", "d", "e", "f"), function(b,c,d,e,f){})
-            
         ## deriv(~e + log((100/(100-p))^(1/f) - 1) / b, c("b", "c", "d", "e", "f"), function(b,c,d,e,f){})
         ## evaluated at the R prompt
         EDderFct <- 
@@ -137,62 +127,8 @@ fctName, fctText)
         EDp <- as.numeric(EDcalc)
         EDder <- attr(EDcalc, "gradient")
 
-# old = wrong            
-#            function (b, c, d, e, f) 
-#            {
-#                .expr3 <- exp(-b * e)
-#                .expr4 <- 1 + .expr3
-#                .expr6 <- (100 - p)/100
-#                .expr8 <- .expr6^(1/f)
-#                .expr10 <- .expr4/.expr8 - 1
-#                .expr11 <- log(.expr10)
-#                .value <- e + .expr11/b
-#                .grad <- array(0, c(length(.value), 5L), list(NULL, c("b", "c", "d", "e", "f")))
-#                .grad[, "b"] <- -(.expr3 * e/.expr8/.expr10/b + .expr11/b^2)
-#                .grad[, "c"] <- 0
-#                .grad[, "d"] <- 0
-#                .grad[, "e"] <- 1 - .expr3 * b/.expr8/.expr10/b
-#                .grad[, "f"] <- .expr4 * (.expr8 * (log(.expr6) * (1/f^2)))/.expr8^2/.expr10/b
-#                attr(.value, "gradient") <- .grad
-#                .value
-#            }
-#            EDder <- attr(EDderFct(parmVec[1], parmVec[2], parmVec[3], parmVec[4], parmVec[5]), "gradient")
-
-    
-#        }  else {
-#            tempVal1 <- p / 100
-#            tempVal2 <- (1 / (tempVal1 / ((1 + exp(-parmVec[1]*parmVec[4]))^parmVec[5]) + 1 - tempVal1))^(1/parmVec[5])
-#            EDp <- parmVec[4] + log(tempVal2 - 1) / parmVec[1]
-#            EDder <- NULL
-#        }
-    
-#        tempVal <- -log((100-p)/100)
-#        EDp <- parmVec[4] + log(exp(tempVal/parmVec[5])-1)/parmVec[1]
-#
-#        EDder <- c(-log(exp(tempVal/parmVec[5])-1)/(parmVec[1]^2), 
-#                   0, 
-#                   0, 
-#                   1, 
-#                   -exp(tempVal/parmVec[5])*tempVal/(parmVec[5]^2)*(1/parmVec[1])*((exp(tempVal/parmVec[5])-1)^(-1)))
-#    
         return(list(EDp, EDder[notFixed]))
     }
-
-#    ## Defining the SI function
-#    sifct <- function(parm1, parm2, pair)
-#    {
-#        ED1 <- edfct(parm1, pair[1])
-#        ED2 <- edfct(parm2, pair[2])
-#        SIpair <- ED1[[1]] - ED2[[1]]  # SI value on log scale
-#        SIder1 <- ED1[[2]]
-#        SIder2 <- ED2[[2]]
-#
-##        SIpair <- ED1[[1]]/ED2[[1]]  # calculating the SI value
-##        SIder1 <- ED1[[2]]/ED1[[1]]*SIpair
-##        SIder2 <- ED2[[2]]/ED2[[1]]*SIpair
-#
-#        return(list(SIpair, SIder1, SIder2))
-#    }
 
     ## Defining the inverse function
     invfct <- function(y, parm) 
@@ -213,8 +149,6 @@ fctName, fctText)
     class(returnList) <- "Boltzmann"
     invisible(returnList)
 }
-
-#"boltzmann" <- logistic
 
 #' Three-parameter logistic model
 #'
@@ -250,9 +184,6 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
     fctText = "Logistic (ED50 as parameter) with lower limit fixed at 0", ...))
 }
 
-#b3 <- B.3
-#L.3 <- B.3
-
 #' Four-parameter logistic model
 #'
 #' A four-parameter logistic model (symmetric, with \code{f = 1}), given by
@@ -287,9 +218,6 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
     fctText = "Logistic (ED50 as parameter)", ...))
 }
 
-#b4 <- B.4
-#L.4 <- B.4
-
 #' Five-parameter generalized logistic model
 #'
 #' A five-parameter generalized logistic model (asymmetric when \code{f != 1}),
@@ -319,6 +247,3 @@ function(fixed = c(NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f"), ...)
     fctName = as.character(match.call()[[1]]), 
     fctText = "Generalised logistic (ED50 as parameter)", ...))
 }
-
-#b5 <- B.5
-#L.5 <- B.5

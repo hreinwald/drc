@@ -15,15 +15,11 @@ leaveOneOut <- function(object1, object2, dose, dataSet, resp, fixedEnd)
     for (i in 1:lenUd)
     {
         reFit1 <- update(object1, data = subset(dataSet, dose != uniDose[i]))
-#        pred1[[i]] <- as.vector(predict(reFit1, newdata = subset(dataSet[, 1, drop = FALSE], dose == uniDose[i]), 
         pred1[[i]] <- as.vector(predict(reFit1, newdata = subset(doseDF, dose == uniDose[i]), 
         se.fit = FALSE))
-#        print(pred1[[i]])
         
         reFit2 <- update(object2, data = subset(dataSet, dose != uniDose[i]))
-#        control = loess.control(surface = "direct"))
         pred2[[i]] <- predict(reFit2, newdata = subset(doseDF, dose == uniDose[i]))
-#        pred2[[i]] <- predict(reFit2, newdata = subset(dataSet[, 1, drop = FALSE], dose == uniDose[i]))
     }
     
     # Avoiding overflow problems
@@ -54,11 +50,6 @@ pressWeights <- function(w, lenData, nVec, object1, resp, object2)
         pVec <- rVec / nVec
         nVec / (pVec * (1 - pVec))
     },
-#    "inverse" = 
-#    {
-#        predVec1 <- as.vector(predict(object1, se.fit = FALSE))  # se.fit = FALSE not needed 
-#        (predVec1 * (1 - predVec1)) / nVec
-#    },    
     "none" = rep(1, lenData),            
     "nonpar" = 
     {
@@ -91,7 +82,6 @@ dfFct <- function(object1, object2)  # , trace1 = traceHat.drc, trace2 = traceHa
     
     function(lambda)
     {
-#        lenUd - ( (1 - lambda) * traceHat.drc(object1) + lambda * traceHat.loess(object2))
          lenData - ( (1 - lambda) * traceHat.drc(object1) + lambda * traceHat.loess(object2))
     }
 }
@@ -138,9 +128,6 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
     dataSet <- object1$"origData"
     dataSet2 <- object1$"data"
     dose <- dataSet2[, 1]
-#    uniDose <- unique(dose)
-#    lenUd <- length(uniDose)    
-#    lenData <- length(dose)  
     resp <- dataSet2[, 2]    
     lenData <- object1$"sumList"$lenData
 
@@ -167,34 +154,6 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
     pressFct <- switch(critFct,
     "ls" =  # least squares criterion function
     {
-        ## Weights
-#        varVec <- weightFct(w, lenData, nVec, object1, resp) 
-#        varVec <- switch(w,
-#        "ad hoc" =  # similar to what Nottingham and Birch (2000) did
-#        {
-#            rVec <- resp * nVec
-#            any01 <- abs(rVec - nVec) < 1
-#            if (any(any01)) {rVec[any01] <- rVec[any01] - 0.5}
-#            pVec <- rVec / nVec
-#            nVec / (pVec * (1 - pVec))
-#        }, 
-#        "model-based" = 
-#        {
-#            predVec1 <- as.vector(predict(object1, se.fit = FALSE))  
-#            nVec / (predVec1 * (1 - predVec1))
-#        }, 
-#        "none" = rep(1, lenData),   
-#        "response" = nVec / (resp * (1 - resp)))
-##        wVec <- object1$"weights" / (resp * (1 - resp))
-##        wVec <- object1$"weights" / varVec
-#        print(varVec)
-
-        ## Degrees of freedom
-#        dfVal <- lenUd - (lambda * traceHat.drc(object1) + (1 - lambda) * traceHat.loess(object2))
-    
-        ## Press value
-#        pressFct1(resp - predVec, varVec, dfVal)  
-        
         switch(criterion,
         "gcv" = {  ## Using GCV
             looList <- NULL
@@ -231,7 +190,6 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
             pressFct2(nVec, resp * nVec, pFct(lambda))
         }
     })    
-#    sum ( wVec * (resp - predVec)^2 / dfVal, na.rm = TRUE )  # lenUd - trace()
 
     vPressFct <- Vectorize(pressFct, "lambda")
     

@@ -41,10 +41,8 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
     ## Retrieving the estimated variance-covariance matrix for the parameter estimates
     if (!corr)
     {
-#        summary(object)$"varMat"
         if (!is.null(object$"objList"))
         {
-#            require(magic, quietly = TRUE)
 
             if ((contData) && (pool))
             {
@@ -60,14 +58,7 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
             } else {
                 vcMat <- do.call("adiag", lapply(object$"objList", vcovfct))
             }
-#            do.call("adiag", lapply(object$"objList", object$"estMethod"$"vcovfct"))
-#            vcMat <- do.call("adiag", lapply(object$"objList", vcovfct))
-#            if (contPool)
-#            {
-#                vcMat <- vcMat * (2 * (object$"minval" / df.residual(object)))
-#                # scaling based on all fits
-#            }        
-            return(vcMat)     
+            return(vcMat)
         } else {
             if ((contData) && (unscaled))
             {
@@ -97,8 +88,7 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
         }
         if (!is.null(object$"objList"))
         {
-#            require(magic, quietly = TRUE)        
-            do.call("adiag", lapply(object$"objList", corrFct)) 
+            do.call("adiag", lapply(object$"objList", corrFct))
         } else {
             corrFct(object)
         }       
@@ -107,19 +97,16 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
 
 "vcCont" <- function(object)
 {
-#    scaledH <- (object$"fit"$"hessian") / (2 * rvfct(object))
     scaledH <- (object$"fit"$"hessian") / (2 * rse(object, TRUE))
     invMat <- try(solve(scaledH), silent = TRUE)
     
     if (inherits(invMat, "try-error"))
     {
-#        cat("Note: Variance-covariance matrix regularized\n")
         ## More stable than 'solve' (suggested by Nicholas Lewin-Koh - 2007-02-12)
         ch <- try(chol(scaledH), silent = TRUE)  
         ## "silent" argument added after report by Xuesong Yu - 2010-03-09
         if (inherits(ch, "try-error")) 
         {
-#            ch <- try(chol(0.99 * object$fit$hessian + 0.01 * diag(dim(object$fit$hessian)[1])), silent = TRUE)
             ch <- try(chol(0.99 * scaledH + 0.01 * diag(dim(scaledH)[1])), silent = TRUE)  # 2012-06-22
         }
         ## Try regularizing if the varcov is unstable

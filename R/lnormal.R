@@ -69,7 +69,6 @@ fctName, fctText, loge = FALSE)
             tempVec <- .expr9 * .expr4
             tempVec[!is.finite(tempVec)] <- 0            
             .grad[, "b"] <- .expr1 * tempVec
-#            .grad[, "b"] <- .expr1 * (.expr9 * .expr4)
             .grad[, "c"] <- 1 - .expr6
             .grad[, "d"] <- .expr6
             .grad[, "e"] <- -(.expr1 * (.expr9 * (b * (1/e))))
@@ -95,7 +94,6 @@ fctName, fctText, loge = FALSE)
             tempVec <- .expr8 * .expr3
             tempVec[!is.finite(tempVec)] <- 0
             .grad[, "b"] <- .expr1 * tempVec            
-#            .grad[, "b"] <- .expr1 * (.expr8 * .expr3)
             .grad[, "c"] <- 1 - .expr5
             .grad[, "d"] <- .expr5
             .grad[, "e"] <- -(.expr1 * (.expr8 * b))
@@ -112,54 +110,10 @@ fctName, fctText, loge = FALSE)
         parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
         parmMat[, notFixed] <- parm
 
-#        parmMat[,2] + (parmMat[,3] - parmMat[,2]) * exp(-exp(parmMat[,1] *(dose - parmMat[,4])))
         fd(dose, parmMat[, 1], parmMat[, 2], parmMat[, 3], parmMat[, 4])
     }
 
     ## Defining the self starter function
-#if (FALSE)
-#{   
-#    ssfct <- function(dframe)
-#    {
-#        x <- dframe[, 1]
-#        y <- dframe[, 2]    
-#
-#        zeroVal <- 1e-12
-#        cVal <- 0.99 * ifelse(notFixed[2], min(y), fixed[2])    
-#        dVal <- 1.01 * ifelse(notFixed[3], max(y), fixed[3])
-#        
-#        ## Finding b and e based on linear regression
-#        findbe <- function(x, y, 
-#        transx = function(x)
-#        {
-#            xVec <- log(x)
-#            xVec[!is.finite(xVec)] <- NA
-#            xVec
-#       },
-#        transy = function(y) 
-#        {
-#            denomVal <- 1.01 * max(dVal - y)
-#            qnorm((dVal - y) / denomVal)             
-##            qnorm((dVal - y)/(dVal - cVal))
-#        })
-#        {
-#            transY <- transy(y)  
-#            transX <- transx(x)
-#
-#            lmFit <- lm(transY ~ transX)
-#            coefVec <- coef(lmFit)
-##            bVal <- coefVec[2]        
-#            bVal <- ifelse(notFixed[1], -coefVec[2], fixed[1]) 
-##            eVal <- -coefVec[1] / bVal    
-#            eVal <- ifelse(notFixed[4], backe(coefVec[1] / bVal), fixed[4]) 
-#    
-#            return(as.vector(c(bVal, eVal)))
-#        }
-#        beVec <- findbe(x, y)
-#        
-#        c(beVec[1], cVal, dVal, beVec[2])[notFixed]
-#    }
-#}   
     if (!is.null(ssfct))
     {
         ssfct <- ssfct  # in case it is explicitly provided
@@ -203,16 +157,6 @@ fctName, fctText, loge = FALSE)
     edfct <- function(parm, respl, reference, type, ...)
     {
         parmVec[notFixed] <- parm
-#        if (type == "absolute") 
-#        {
-#            p <- 100*((parmVec[3] - respl)/(parmVec[3] - parmVec[2]))
-#        } else {  
-#            p <- respl
-#        }
-#        if ( (parmVec[1] < 0) && (reference == "control") )
-#        {
-#            p <- 100 - p
-#        }
         p <- absToRel(parmVec, respl, type)
     
         ## Reversing p
@@ -226,7 +170,6 @@ fctName, fctText, loge = FALSE)
         }
     
         pProp <- 1 - (100-p) / 100
-#        EDp <- parmVec[4] * exp(qnorm(1-p) / parmVec[1])
 
         if (!loge)
         {
@@ -245,24 +188,6 @@ fctName, fctText, loge = FALSE)
                 .value
             }
         } else {
-#
-#            ## Calculating ED on the original scale
-#            ## deriv(~exp(e) * exp(22 / b), c("b", "c", "d", "e"), function(b,c,d,e){})
-#            ## using "22" instead of qnorm(pProp)
-#            EDfct <- function (b, c, d, e) 
-#            {
-#                .expr1 <- exp(e)
-#                .expr3 <- exp(qnorm(pProp) / b)
-#                .expr4 <- .expr1 * .expr3
-#                .value <- .expr4
-#                .grad <- array(0, c(length(.value), 4L), list(NULL, c("b", "c", "d", "e")))
-#                .grad[, "b"] <- -(.expr1 * (.expr3 * (qnorm(pProp) / (b^2))))
-#                .grad[, "c"] <- 0
-#                .grad[, "d"] <- 0
-#                .grad[, "e"] <- .expr4
-#                attr(.value, "gradient") <- .grad
-#                .value
-#            }
             ## Calculating ED on the log scale
             ## deriv(~e + 22 / b, c("b", "c", "d", "e"), function(b,c,d,e){})
             ## using "22" instead of qnorm(pProp)
