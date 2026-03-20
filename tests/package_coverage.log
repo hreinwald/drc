@@ -1,24 +1,22 @@
 # OUTPUT from covr::package_coverage() 
-drc Coverage: 89.08%
-R/max.R: 0.00%
-R/pr.R: 0.00%
-R/weibull1.R: 43.36%
+drc Coverage: 90.55%
 R/logistic.ssf.R: 44.44%
 R/ED.lin.R: 47.22%
 R/modelFunction.R: 51.61%
 R/drmOpt.R: 54.29%
+R/weibull1.R: 60.84%
 R/modelFit.R: 64.62%
-R/vcov.drc.R: 65.91%
 R/anova.drclist.R: 66.30%
 R/EDcomp.R: 67.48%
 R/searchdrc.R: 68.18%
-R/llogistic.R: 68.90%
 R/drm_legacy.R: 68.97%
 R/logLik.drc.R: 70.00%
 R/mselect.R: 71.19%
 R/cooks.distance.drc.R: 75.00%
+R/llogistic.R: 75.00%
 R/compParm.R: 78.43%
 R/plot.drc.R: 79.08%
+R/vcov.drc.R: 79.55%
 R/comped.R: 80.00%
 R/drmLOFbinomial.R: 81.82%
 R/braincousens.R: 83.19%
@@ -87,6 +85,7 @@ R/lin.test.R: 100.00%
 R/llogistic2.R: 100.00%
 R/logistic.R: 100.00%
 R/maED.R: 100.00%
+R/max.R: 100.00%
 R/mixture.R: 100.00%
 R/mr.test.R: 100.00%
 R/mrdrm.R: 100.00%
@@ -96,6 +95,7 @@ R/neill.test.R: 100.00%
 R/noEffect.R: 100.00%
 R/onAttach.R: 100.00%
 R/pickParm.R: 100.00%
+R/pr.R: 100.00%
 R/print.drc.R: 100.00%
 R/rdrm.R: 100.00%
 R/relpot.R: 100.00%
