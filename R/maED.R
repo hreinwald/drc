@@ -237,10 +237,50 @@ maED <- function(
     expVec <- as.vector(exp(-msMat[, 2] / 2))
   }
   
+  ## --- Filter out models with non-finite ED estimates -----------------------
+  
+  # Save original ED estimates for display (so excluded models still show
+  # their Inf/NaN values in the fit summary, making the reason for exclusion
+  # visible).
+  edEstDisplay <- edEst
+  
+  # Identify models where any ED estimate is non-finite (Inf or NaN).
+  # NA values from model fitting failures are NOT flagged here; those are
+  # governed by the 'na.rm' parameter instead.
+  excludeMask <- apply(edEst, 1, function(x) any(is.infinite(x) | is.nan(x)))
+  
+  if (any(excludeMask)) {
+    modelNames <- if (linreg) c(rownames(msMat), "Lin") else rownames(msMat)
+    for (k in which(excludeMask)) {
+      badIdx <- which(is.infinite(edEst[k, ]) | is.nan(edEst[k, ]))
+      warning(
+        "Model '", modelNames[k], "' excluded from model-averaging: ",
+        "non-finite ED value(s) detected (",
+        paste0("ED", respLev[badIdx], "=", edEst[k, badIdx], collapse = ", "), ")",
+        call. = FALSE
+      )
+    }
+    edEst[excludeMask, ] <- NA
+    edSe[excludeMask, ]  <- NA
+    excludeCI <- excludeMask[seq_len(numRows)]
+    edCll[excludeCI, ] <- NA
+    edClu[excludeCI, ] <- NA
+  }
+  
   ## --- AIC-based model weights ------------------------------------------------
   
-  wVec  <- expVec / sum(expVec, na.rm = na.rm)
-  edVec <- apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = na.rm)
+  # Excluded models (non-finite ED) always get zero weight, regardless of
+  # the na.rm parameter.
+  expVec[excludeMask] <- 0
+  
+  # When models were excluded, na.rm must be TRUE in downstream sums so
+  # that the NA placeholders left above do not propagate.  For the
+  # remaining (non-excluded) models, the user-supplied na.rm still governs
+  # how NA values from fitting failures are handled.
+  effectiveNaRm <- na.rm || any(excludeMask)
+  
+  wVec  <- expVec / sum(expVec, na.rm = effectiveNaRm)
+  edVec <- apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm)
   
   ## --- Construct result matrix ------------------------------------------------
   
@@ -250,10 +290,10 @@ maED <- function(
     
   } else if (identical(interval, "buckland")) {
     seVec <- apply(
-      sqrt(edSe^2 + (t(t(edEst) - apply(edEst, MARGIN = 2, FUN = mean, na.rm = na.rm)))^2) * wVec,
+      sqrt(edSe^2 + (t(t(edEst) - apply(edEst, MARGIN = 2, FUN = mean, na.rm = effectiveNaRm)))^2) * wVec,
       MARGIN = 2,
       FUN    = sum,
-      na.rm  = na.rm
+      na.rm  = effectiveNaRm
     )
     quantVal <- qnorm(1 - (1 - level) / 2) * seVec
     retMat   <- as.matrix(cbind(edVec, seVec, edVec - quantVal, edVec + quantVal))
@@ -261,9 +301,9 @@ maED <- function(
     
   } else {
     retMat <- as.matrix(cbind(
-      apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = na.rm),
-      apply(edCll * wVec, MARGIN = 2, FUN = sum, na.rm = na.rm),
-      apply(edClu * wVec, MARGIN = 2, FUN = sum, na.rm = na.rm)
+      apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
+      apply(edCll * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
+      apply(edClu * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm)
     ))
     colnames(retMat) <- colnames(edMat)[c(1, 3, 4)]
   }
@@ -272,7 +312,9 @@ maED <- function(
   
   ## --- Construct fit summary matrix -------------------------------------------
   
-  disMat           <- as.matrix(cbind(edEst, wVec))
+  # Use original (unfiltered) ED estimates for display so that excluded
+  # models show their Inf/NaN values alongside their zero weight.
+  disMat           <- as.matrix(cbind(edEstDisplay, wVec))
   colnames(disMat) <- c(paste0("ED", respLev), "Weight")
   rownames(disMat) <- if (linreg) c(rownames(msMat), "Lin") else rownames(msMat)
   
