@@ -279,8 +279,16 @@ maED <- function(
   # how NA values from fitting failures are handled.
   effectiveNaRm <- na.rm || any(excludeMask)
   
-  wVec  <- expVec / sum(expVec, na.rm = effectiveNaRm)
-  edVec <- apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm)
+  totalWeight <- sum(expVec, na.rm = effectiveNaRm)
+  
+  if (totalWeight == 0) {
+    warning("No valid models remaining for model-averaging", call. = FALSE)
+    wVec  <- rep(0, length(expVec))
+    edVec <- rep(NA_real_, lenrl)
+  } else {
+    wVec  <- expVec / totalWeight
+    edVec <- apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm)
+  }
   
   ## --- Construct result matrix ------------------------------------------------
   
@@ -289,22 +297,30 @@ maED <- function(
     colnames(retMat) <- colnames(edMat)[1]
     
   } else if (identical(interval, "buckland")) {
-    seVec <- apply(
-      sqrt(edSe^2 + (t(t(edEst) - apply(edEst, MARGIN = 2, FUN = mean, na.rm = effectiveNaRm)))^2) * wVec,
-      MARGIN = 2,
-      FUN    = sum,
-      na.rm  = effectiveNaRm
-    )
+    if (totalWeight == 0) {
+      seVec <- rep(NA_real_, lenrl)
+    } else {
+      seVec <- apply(
+        sqrt(edSe^2 + (t(t(edEst) - apply(edEst, MARGIN = 2, FUN = mean, na.rm = effectiveNaRm)))^2) * wVec,
+        MARGIN = 2,
+        FUN    = sum,
+        na.rm  = effectiveNaRm
+      )
+    }
     quantVal <- qnorm(1 - (1 - level) / 2) * seVec
     retMat   <- as.matrix(cbind(edVec, seVec, edVec - quantVal, edVec + quantVal))
     colnames(retMat) <- c(colnames(edMat)[c(1, 2)], "Lower", "Upper")
     
   } else {
-    retMat <- as.matrix(cbind(
-      apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
-      apply(edCll * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
-      apply(edClu * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm)
-    ))
+    if (totalWeight == 0) {
+      retMat <- matrix(NA_real_, lenrl, 3)
+    } else {
+      retMat <- as.matrix(cbind(
+        apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
+        apply(edCll * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
+        apply(edClu * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm)
+      ))
+    }
     colnames(retMat) <- colnames(edMat)[c(1, 3, 4)]
   }
   
