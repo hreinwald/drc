@@ -248,7 +248,7 @@ algae_data <- data.frame(
   conc = c(
     rep(10, 3), rep(10000, 3), rep(1000, 3), rep(100, 3),
     rep(10, 3), rep(1, 3),
-    rep(0, 20)
+    rep(0, 21)
   )
 )
 
