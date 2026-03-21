@@ -1,8 +1,10 @@
 #' @title Estimating effective doses
 #'
 #' @description
-#' Estimates effective concentration or doses for specified response levels.
-#' This is a generic function; see \code{\link{ED.drc}} for the default method.
+#' S3 generic function that dispatches to the appropriate method for estimating
+#' effective concentrations (EC) or effective doses (ED) at specified response
+#' levels. For objects of class \code{drc}, the default method
+#' \code{\link{ED.drc}} is called.
 #'
 #' @param object an object of class \code{drc}.
 #' @param ... additional arguments passed to the method.
@@ -19,8 +21,13 @@ ED <- function(object, ...) UseMethod("ED", object)
 #' @title Estimating effective doses
 #'
 #' @description
-#' \code{ED} estimates effective concentration or doses for one or more
-#' specified absolute or relative response levels.
+#' Default method for class \code{drc}.  \code{ED.drc} estimates effective
+#' concentrations (EC) or effective doses (ED) for one or more specified
+#' response levels.  Response levels may be given as relative percentages of
+#' the response range (e.g. ED50 = 50\% effect) or as absolute response
+#' values.  The function computes point estimates, delta-method standard
+#' errors, and optional confidence intervals for each combination of curve and
+#' response level in the fitted model.
 #'
 #' @param object an object of class \code{drc}.
 #' @param respLev a numeric vector containing the response levels.
@@ -62,16 +69,74 @@ ED <- function(object, ...) UseMethod("ED", object)
 #'   \code{parm} in the package \pkg{multcomp} (when \code{multcomp = TRUE}).
 #'
 #' @details
-#' There are several options for calculating confidence intervals through the
-#' argument \code{interval}. The option \code{"delta"} results in asymptotical
-#' Wald-type confidence intervals (using the delta method and the normal or
-#' t-distribution depending on the type of response). The option \code{"fls"}
-#' produces (possibly skewed) confidence intervals through back-transformation
-#' from the logarithm scale (only meaningful in case the parameter in the model
-#' is log(ED50) as for the \code{\link{llogistic2}} models). The option
-#' \code{"tfls"} is for transforming back and forth from log scale
-#' (experimental). The option \code{"inv"} results in confidence intervals
-#' obtained through inverse regression.
+#' The function carries out the following computational steps:
+#'
+#' \enumerate{
+#'   \item \strong{Input validation.}
+#'     Arguments are checked for correct types and ranges (e.g. \code{respLev}
+#'     must be numeric, \code{level} must be in (0, 1), and relative response
+#'     levels must lie strictly inside the interval (0, 100) when
+#'     \code{bound = TRUE}).
+#'
+#'   \item \strong{Model component extraction.}
+#'     The model-specific ED function (\code{edfct}), parameter matrix
+#'     (\code{parmMat}), and index matrix (\code{indexMat}) are retrieved from
+#'     the fitted \code{drc} object.  The variance-covariance matrix is
+#'     obtained from \code{vcov.}, which may be a function (e.g.
+#'     \code{\link{vcov}} or \code{sandwich::vcovHC}) or a pre-computed matrix.
+#'
+#'   \item \strong{Curve ordering.}
+#'     When multiple curves are present, they are sorted alphabetically by
+#'     name, unless the names are purely numeric, in which case the original
+#'     order is preserved.
+#'
+#'   \item \strong{ED estimation and delta-method standard errors.}
+#'     For each curve and each requested response level, the model-specific
+#'     \code{edfct} is called to obtain the ED point estimate and its
+#'     analytical gradient with respect to the model parameters.  Standard
+#'     errors are then computed via the delta method:
+#'     \eqn{SE = \sqrt{g' V g}}{SE = sqrt(g' V g)}, where \eqn{g} is the
+#'     gradient vector and \eqn{V} is the relevant sub-matrix of the
+#'     variance-covariance matrix.
+#'
+#'   \item \strong{Numerical gradient for absolute responses.}
+#'     When \code{type = "absolute"}, the analytical gradient returned by the
+#'     model may miss the chain-rule contribution from the asymptote parameters
+#'     involved in converting absolute to relative response levels.  In that
+#'     case a numerical central-difference gradient is computed to ensure
+#'     correct standard errors.
+#'
+#'   \item \strong{Log-base back-transformation.}
+#'     If \code{logBase} is specified (indicating that dose values were
+#'     log-transformed prior to model fitting), the ED estimates and their
+#'     derivatives are back-transformed via \eqn{ED^* = b^{ED}}{ED* = b^ED}
+#'     (where \eqn{b} is the log base) so that results are reported on the
+#'     original dose scale.
+#'
+#'   \item \strong{Confidence interval construction.}
+#'     Depending on \code{interval}:
+#'     \describe{
+#'       \item{\code{"delta"}}{Asymptotic Wald-type intervals using the delta
+#'         method, based on the normal or t-distribution (depending on the
+#'         response type).}
+#'       \item{\code{"fls"}}{Intervals obtained by back-transforming from the
+#'         log scale.  Only meaningful when the model parameterises the ED on
+#'         the log scale (e.g. \code{\link{llogistic2}}).}
+#'       \item{\code{"tfls"}}{Experimental: intervals obtained by transforming
+#'         to the log scale, computing Wald intervals there, then
+#'         back-transforming.}
+#'       \item{\code{"inv"}}{Intervals derived from inverse regression via
+#'         \code{\link[=EDinvreg]{EDinvreg}}, where confidence limits on the
+#'         predicted response are inverted to the dose axis.}
+#'     }
+#'
+#'   \item \strong{Output.}
+#'     Results are returned as an invisible matrix with columns for the
+#'     estimate, standard error, and (optionally) lower and upper confidence
+#'     limits.  When \code{multcomp = TRUE}, a list compatible with
+#'     \code{\link[multcomp]{parm}} is returned instead, enabling
+#'     multiple-comparison procedures.
+#' }
 #'
 #' For hormesis models (\code{\link{braincousens}} and
 #' \code{\link{cedergreen}}), the additional arguments \code{lower} and
