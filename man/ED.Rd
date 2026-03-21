@@ -15,8 +15,10 @@ ED(object, ...)
 See \code{\link{ED.drc}} for details on the return value.
 }
 \description{
-Estimates effective concentration or doses for specified response levels.
-This is a generic function; see \code{\link{ED.drc}} for the default method.
+S3 generic function that dispatches to the appropriate method for estimating
+effective concentrations (EC) or effective doses (ED) at specified response
+levels. For objects of class \code{drc}, the default method
+\code{\link{ED.drc}} is called.
 }
 \seealso{
 \code{\link{ED.drc}} for the default method, \code{\link{EDcomp}} for estimating differences and ratios of ED

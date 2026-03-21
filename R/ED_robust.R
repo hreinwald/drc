@@ -165,8 +165,14 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
     } else {
       # If successful, process the result into a clean data frame
       if(verbose) message("Appending info ...")
-      as.data.frame(ed_result) %>%
-        dplyr::rename(stderr = "Std. Error") %>%
+      ed_df <- as.data.frame(ed_result)
+      # Handle interval types that don't include "Std. Error" (e.g., "fls", "tfls", "inv")
+      if ("Std. Error" %in% colnames(ed_df)) {
+        ed_df <- dplyr::rename(ed_df, stderr = "Std. Error")
+      } else {
+        ed_df$stderr <- NA_real_
+      }
+      ed_df %>%
         dplyr::mutate(
           confint_level = CI_level,
           confint_method = interval,
@@ -177,7 +183,7 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
   })
   
   # Combine the list of single-row data frames into one final data frame
-  return( data.table::rbindlist(results_list) )
+  return( data.table::rbindlist(results_list, use.names = TRUE) )
 }
 
 
@@ -301,8 +307,14 @@ maED_robust <- function(mod, fct_ls = NULL, respLev = c(10, 20, 50),
     } else {
       # If successful, process the result into a clean data frame.
       if (verbose) message("Appending info ...")
-      as.data.frame(ma_ed_result) %>%
-        dplyr::rename(stderr = "Std. Error") %>%
+      ma_df <- as.data.frame(ma_ed_result)
+      # Handle interval types that don't include "Std. Error" (e.g., "fls", "tfls", "inv")
+      if ("Std. Error" %in% colnames(ma_df)) {
+        ma_df <- dplyr::rename(ma_df, stderr = "Std. Error")
+      } else {
+        ma_df$stderr <- NA_real_
+      }
+      ma_df %>%
         dplyr::mutate(
           confint_level = CI_level,
           confint_method = interval,
@@ -313,5 +325,5 @@ maED_robust <- function(mod, fct_ls = NULL, respLev = c(10, 20, 50),
   })
   
   # Combine the list of single-row data frames into one final data frame.
-  return(data.table::rbindlist(results_list))
+  return(data.table::rbindlist(results_list, use.names = TRUE))
 }
