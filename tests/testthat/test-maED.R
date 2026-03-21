@@ -252,7 +252,7 @@ algae_data <- data.frame(
   )
 )
 
-test_that("maED warns when a model produces non-finite ED values", {
+test_that("maED warns when a model produces non-finite ED values or fitting fails", {
   m_algae <- drm(yield ~ conc, data = algae_data,
                  fct = LL.4(fixed = c(NA, 1e-9, NA, NA)))
 
@@ -263,7 +263,7 @@ test_that("maED warns when a model produces non-finite ED values", {
 
   expect_warning(
     result <- maED(m_algae, fcts, 50, display = FALSE),
-    "excluded from model-averaging.*non-finite"
+    "excluded from model-averaging"
   )
 
   expect_true(is.matrix(result))
@@ -271,7 +271,7 @@ test_that("maED warns when a model produces non-finite ED values", {
   expect_true(is.finite(result[, "Estimate"]))
 })
 
-test_that("maED extended output shows original Inf values in fits with zero weight", {
+test_that("maED extended output shows excluded models with zero weight", {
   m_algae <- drm(yield ~ conc, data = algae_data,
                  fct = LL.4(fixed = c(NA, 1e-9, NA, NA)))
 
@@ -295,7 +295,7 @@ test_that("maED extended output shows original Inf values in fits with zero weig
   expect_true(is.finite(result$estimates[, "Estimate"]))
 })
 
-test_that("maED buckland interval works when models with non-finite ED are excluded", {
+test_that("maED buckland interval works when models are excluded", {
   m_algae <- drm(yield ~ conc, data = algae_data,
                  fct = LL.4(fixed = c(NA, 1e-9, NA, NA)))
 
@@ -318,11 +318,22 @@ test_that("maED buckland interval works when models with non-finite ED are exclu
 test_that("maED without non-finite values produces no exclusion warning", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
-  # These models all produce finite ED50 on ryegrass data
-  expect_no_warning(
-    result <- maED(m1, list(W1.4(), W2.4()), 50, display = FALSE)
+  # These models all produce finite ED50 on ryegrass data.
+  # Internal optimization may emit "NaNs produced" warnings which are
+  # unrelated to model exclusion, so we only check that no exclusion
+  # warning is issued.
+  exclusion_warned <- FALSE
+  result <- withCallingHandlers(
+    maED(m1, list(W1.4(), W2.4()), 50, display = FALSE),
+    warning = function(w) {
+      if (grepl("excluded from model-averaging", conditionMessage(w))) {
+        exclusion_warned <<- TRUE
+      }
+      invokeRestart("muffleWarning")
+    }
   )
 
+  expect_false(exclusion_warned)
   expect_true(is.matrix(result))
   expect_true(is.finite(result[, "Estimate"]))
 })

@@ -173,6 +173,9 @@ maED <- function(
   edEst <- matrix(NA, numRows + linreg, lenrl)
   edSe  <- matrix(NA, numRows + linreg, lenrl)
   
+  # Track which models failed to fit (try-error in ED computation)
+  fitFailed <- logical(numRows + linreg)
+  
   # Confidence limit matrices are always initialised to avoid undefined
   # variable errors in the 'kang' result-construction block.
   edCll <- matrix(NA, numRows, lenrl)
@@ -212,6 +215,7 @@ maED <- function(
     
     if (inherits(edMati, "try-error")) {
       edMati <- matrix(NA, length(respLev), 4)
+      fitFailed[i + 1L] <- TRUE
     }
     
     edEst[i + 1L, ] <- edMati[, 1]
@@ -237,28 +241,37 @@ maED <- function(
     expVec <- as.vector(exp(-msMat[, 2] / 2))
   }
   
-  ## --- Filter out models with non-finite ED estimates -----------------------
+  ## --- Filter out models with non-finite ED estimates or fitting failures ----
   
   # Save original ED estimates for display (so excluded models still show
-  # their Inf/NaN values in the fit summary, making the reason for exclusion
-  # visible).
+  # their Inf/NaN/NA values in the fit summary, making the reason for
+  # exclusion visible).
   edEstDisplay <- edEst
   
   # Identify models where any ED estimate is non-finite (Inf or NaN).
-  # NA values from model fitting failures are NOT flagged here; those are
-  # governed by the 'na.rm' parameter instead.
-  excludeMask <- apply(edEst, 1, function(x) any(is.infinite(x) | is.nan(x)))
+  nonFiniteMask <- apply(edEst, 1, function(x) any(is.infinite(x) | is.nan(x)))
+  
+  # Combined exclusion mask: non-finite ED values OR model fitting failures.
+  excludeMask <- nonFiniteMask | fitFailed
   
   if (any(excludeMask)) {
     modelNames <- if (linreg) c(rownames(msMat), "Lin") else rownames(msMat)
     for (k in which(excludeMask)) {
-      badIdx <- which(is.infinite(edEst[k, ]) | is.nan(edEst[k, ]))
-      warning(
-        "Model '", modelNames[k], "' excluded from model-averaging: ",
-        "non-finite ED value(s) detected (",
-        paste0("ED", respLev[badIdx], "=", edEst[k, badIdx], collapse = ", "), ")",
-        call. = FALSE
-      )
+      if (fitFailed[k]) {
+        warning(
+          "Model '", modelNames[k], "' excluded from model-averaging: ",
+          "model fitting or ED estimation failed",
+          call. = FALSE
+        )
+      } else {
+        badIdx <- which(is.infinite(edEst[k, ]) | is.nan(edEst[k, ]))
+        warning(
+          "Model '", modelNames[k], "' excluded from model-averaging: ",
+          "non-finite ED value(s) detected (",
+          paste0("ED", respLev[badIdx], "=", edEst[k, badIdx], collapse = ", "), ")",
+          call. = FALSE
+        )
+      }
     }
     edEst[excludeMask, ] <- NA
     edSe[excludeMask, ]  <- NA
@@ -269,8 +282,8 @@ maED <- function(
   
   ## --- AIC-based model weights ------------------------------------------------
   
-  # Excluded models (non-finite ED) always get zero weight, regardless of
-  # the na.rm parameter.
+  # Excluded models (non-finite ED or fitting failures) always get zero
+  # weight, regardless of the na.rm parameter.
   expVec[excludeMask] <- 0
   
   # When models were excluded, na.rm must be TRUE in downstream sums so
