@@ -18,6 +18,50 @@
 ED <- function(object, ...) UseMethod("ED", object)
 
 
+# FIX #7: internal helper with relative step and absolute fallback
+.centralDiffGradient <- function(parmChosen, k, EDlist, respLev, j,
+                                  reference, type, ...) {
+  eps  <- .Machine$double.eps
+  p    <- parmChosen[k]
+  h    <- if (abs(p) > sqrt(eps)) abs(p) * eps^(1/3) else eps^(1/3)
+  pUp   <- replace(parmChosen, k, p + h)
+  pDown <- replace(parmChosen, k, p - h)
+  edUp   <- EDlist(pUp,   respLev[j], reference = reference,
+                   type = type, ...)[[1]]
+  edDown <- EDlist(pDown, respLev[j], reference = reference,
+                   type = type, ...)[[1]]
+  (edUp - edDown) / (2 * h)
+}
+
+# FIX #8: safe wrapper that validates df before calling confint.basic
+.safeConfintBasic <- function(mat, level, type, object) {
+  df <- tryCatch(df.residual(object), error = function(e) Inf)
+  if (is.null(df) || length(df) != 1L || !is.finite(df) || df <= 0) {
+    message(
+      "ED: 'df.residual' returned ", df,
+      " \u2014 falling back to z-distribution (df = Inf)."
+    )
+    df <- Inf
+  }
+  confint.basic(mat, level, type, df, FALSE)
+}
+
+# FIX #10: guard against non-positive-definite vcMat slices
+.computeSE <- function(grad, varCov) {
+  tryCatch({
+    val <- as.numeric(grad %*% varCov %*% grad)
+    if (!is.finite(val) || val < 0) {
+      warning("Non-positive variance estimate; SE set to NA.")
+      return(NA_real_)
+    }
+    sqrt(val)
+  }, error = function(e) {
+    warning("SE computation failed: ", conditionMessage(e))
+    NA_real_
+  })
+}
+
+
 #' @title Estimating effective doses
 #'
 #' @description
@@ -256,10 +300,18 @@ ED <- function(object, ...) UseMethod("ED", object)
   )
   curveOrder <- if (!namesAreNumeric) order(curveNames) else seq_along(curveNames)
 
-  strParm0 <- curveNames[curveOrder]
+  # FIX #9: single structure with explicit match and display fields
+  curveLabels <- list(
+    match   = curveNames[curveOrder],
+    display = if (length(unique(curveNames)) == 1L) {
+                rep("", length(curveNames[curveOrder]))
+              } else {
+                paste0(curveNames[curveOrder], ":")
+              }
+  )
+
   indexMat <- indexMat[, curveOrder, drop = FALSE]
   parmMat  <- parmMat[, curveOrder, drop = FALSE]
-  strParm  <- strParm0
   
   ## --- Resolve variance-covariance matrix -------------------------------------
   
@@ -279,18 +331,12 @@ ED <- function(object, ...) UseMethod("ED", object)
   oriMat   <- matrix(0, noRows, 2)
   dEdMat   <- matrix(0, lenPV * length(indexVec), nrow(vcMat))
   
+  # FIX #2: track which rows were actually computed
+  filledRowFlags <- logical(lenPV * length(indexVec))
+
   # Always initialise confidence limit matrices to avoid undefined variable
   # errors in the 'kang' / 'inv' result-construction blocks.
   intMat <- NULL
-  
-  ## --- Label curves -----------------------------------------------------------
-  
-  # When only a single unique curve is present, omit the curve label prefix.
-  if (identical(length(unique(strParm)), 1L)) {
-    strParm[indexVec] <- rep("", ncolIM)
-  } else {
-    strParm <- paste0(strParm, ":")
-  }
   
   ## --- Interval type for per-model ED calls -----------------------------------
   
@@ -300,90 +346,107 @@ ED <- function(object, ...) UseMethod("ED", object)
   
   ## --- Compute ED estimates and standard errors for each curve ----------------
   
-  invMatList <- vector("list", length(indexVec))
+  # FIX #3: use a growing list to avoid NULL holes
+  invMatList <- list()
   rowIndex <- 0L
   
   for (i in indexVec) {
     parmChosen <- parmMat[, i]
     parmInd    <- indexMat[, i]
-    varCov     <- vcMat[parmInd, parmInd]
+    # FIX #10: always return a matrix slice regardless of dimensions
+    varCov     <- vcMat[parmInd, parmInd, drop = FALSE]
     
-    if (is.null(clevel) || strParm0[i] %in% clevel) {
+    # FIX #1: always iterate over all curves — filter after loop
+    for (j in seq_len(lenPV)) {
+      rowIndex <- rowIndex + 1L
       
-      for (j in seq_len(lenPV)) {
-        rowIndex <- rowIndex + 1L
-        
-        EDeval <- EDlist(parmChosen, respLev[j], reference = reference, type = type, ...)
-        EDval  <- EDeval[[1]]
-        dEDval <- EDeval[[2]]
-        
-        # When type is "absolute", the model-specific gradient typically
-        # treats the (converted) relative response level as a constant,
-        # missing the chain-rule contribution from the lower and upper
-        # asymptote parameters (c and d) that enter via the
-        # absolute-to-relative conversion (absToRel / EDhelper).  Use
-        # numerical central differences to obtain the complete gradient.
-        if (identical(type, "absolute") && is.finite(EDval)) {
-          eps <- .Machine$double.eps^(1/3)
-          numGrad <- numeric(length(parmChosen))
-          for (k in seq_along(parmChosen)) {
-            h <- max(abs(parmChosen[k]), 1) * eps
-            pUp   <- replace(parmChosen, k, parmChosen[k] + h)
-            pDown <- replace(parmChosen, k, parmChosen[k] - h)
-            edUp   <- EDlist(pUp,   respLev[j], reference = reference,
-                             type = type, ...)[[1]]
-            edDown <- EDlist(pDown, respLev[j], reference = reference,
-                             type = type, ...)[[1]]
-            numGrad[k] <- (edUp - edDown) / (2 * h)
-          }
-          dEDval <- numGrad
-        }
-        
-        dEdMat[rowIndex, parmInd] <- dEDval
-        
-        oriMat[rowIndex, 1] <- EDval
-        oriMat[rowIndex, 2] <- sqrt(dEDval %*% varCov %*% dEDval)
-        
-        # Apply log-base transformation to the ED value and its derivative if
-        # a log-transformed dose axis is in use.
-        if (!is.null(logBase)) {
-          EDval  <- logBase^EDval
-          dEDval <- EDval * log(logBase) * dEDval
-        }
-        
-        edMat[rowIndex, 1] <- EDval
-        edMat[rowIndex, 2] <- sqrt(dEDval %*% varCov %*% dEDval)
-        
-        dimNames[rowIndex] <- paste0(strParm[i], respLev[j])
-      }
+      EDeval <- EDlist(parmChosen, respLev[j], reference = reference, type = type, ...)
+      EDval  <- EDeval[[1]]
+      dEDval <- EDeval[[2]]
       
-      # Inverse regression intervals are computed per-curve, outside the inner
-      # loop, because EDinvreg1 handles all response levels at once.
-      if (identical(interval, "inv")) {
-        invMatList[[i]] <- t(
-          EDinvreg1(
-            object,
-            respLev,
-            strParm0[i],
-            intType = intType,
-            level   = level,
-            type    = type
-          )
+      # When type is "absolute", the model-specific gradient typically
+      # treats the (converted) relative response level as a constant,
+      # missing the chain-rule contribution from the lower and upper
+      # asymptote parameters (c and d) that enter via the
+      # absolute-to-relative conversion (absToRel / EDhelper).  Use
+      # numerical central differences to obtain the complete gradient.
+      if (identical(type, "absolute") && is.finite(EDval)) {
+        # FIX #7: use helper function with improved step size
+        dEDval <- vapply(
+          seq_along(parmChosen),
+          function(k) .centralDiffGradient(
+            parmChosen, k, EDlist, respLev, j, reference, type, ...
+          ),
+          numeric(1L)
         )
       }
       
-    } else {
-      # Remove pre-allocated rows corresponding to excluded curves.
-      rowsToRemove <- (rowIndex + 1L):(rowIndex + lenPV)
-      edMat    <- edMat[-rowsToRemove, , drop = FALSE]
-      oriMat   <- oriMat[-rowsToRemove, , drop = FALSE]
-      dimNames <- dimNames[-rowsToRemove]
+      dEdMat[rowIndex, parmInd] <- dEDval
+      
+      oriMat[rowIndex, 1] <- EDval
+      # FIX #10: use .computeSE helper
+      oriMat[rowIndex, 2] <- .computeSE(dEDval, varCov)
+      
+      # Apply log-base transformation to the ED value and its derivative if
+      # a log-transformed dose axis is in use.
+      if (!is.null(logBase)) {
+        EDval  <- logBase^EDval
+        dEDval <- EDval * log(logBase) * dEDval
+      }
+      
+      edMat[rowIndex, 1] <- EDval
+      # FIX #10: use .computeSE helper
+      edMat[rowIndex, 2] <- .computeSE(dEDval, varCov)
+      
+      # FIX #9: use curveLabels instead of strParm
+      dimNames[rowIndex] <- paste0(curveLabels$display[i], respLev[j])
+      
+      # FIX #2: mark this row as computed
+      filledRowFlags[rowIndex] <- TRUE
+    }
+    
+    # Inverse regression intervals are computed per-curve, outside the inner
+    # loop, because EDinvreg1 handles all response levels at once.
+    if (identical(interval, "inv")) {
+      # FIX #4: key by curve name so assembly order is explicit
+      invMatList[[curveLabels$match[i]]] <- t(
+        EDinvreg1(
+          object,
+          respLev,
+          curveLabels$match[i],
+          intType = intType,
+          level   = level,
+          type    = type
+        )
+      )
     }
   }
   
-  # Combine per-curve inverse regression matrices collected during the loop.
+  # FIX #1: filter excluded curves after the loop, not during it
+  if (!is.null(clevel)) {
+    curveIncludedVec <- rep(curveLabels$match %in% clevel, each = lenPV)
+    edMat    <- edMat[curveIncludedVec,  , drop = FALSE]
+    oriMat   <- oriMat[curveIncludedVec, , drop = FALSE]
+    dimNames <- dimNames[curveIncludedVec]
+    dEdMat   <- dEdMat[curveIncludedVec, , drop = FALSE]
+    filledRowFlags <- filledRowFlags[curveIncludedVec]  # FIX #2
+  }
+  
+  # FIX #4: reconstruct in the same order as edMat rows
   if (identical(interval, "inv")) {
-    intMat <- do.call(rbind, invMatList)
+    orderedCurves <- if (!is.null(clevel)) {
+      curveLabels$match[curveLabels$match %in% clevel]
+    } else {
+      curveLabels$match
+    }
+    intMat <- do.call(rbind, invMatList[orderedCurves])
+    # FIX #3: row-count safety check
+    if (nrow(intMat) != nrow(edMat)) {
+      stop(
+        "Internal error: inverse regression result rows (", nrow(intMat),
+        ") do not match ED estimate rows (", nrow(edMat), ")."
+      )
+    }
   }
   
   ## --- Column names -----------------------------------------------------------
@@ -397,27 +460,33 @@ ED <- function(object, ...) UseMethod("ED", object)
   intLabel <- NULL
   
   if (identical(interval, "delta")) {
-    intMat   <- confint.basic(edMat, level, object[["type"]], df.residual(object), FALSE)
+    # FIX #8: use safe wrapper
+    intMat   <- .safeConfintBasic(edMat, level, object[["type"]], object)
     intLabel <- "Delta method"
     
   } else if (identical(interval, "tfls")) {
+    # FIX #8: use safe wrapper
     intMat <- exp(
-      confint.basic(
+      .safeConfintBasic(
         matrix(c(log(oriMat[, 1]), oriMat[, 2] / oriMat[, 1]), ncol = 2),
         level,
         object[["type"]],
-        df.residual(object),
-        FALSE
+        object
       )
     )
     intLabel <- "To and from log scale"
     
+    # FIX #6: drop SE column — it is on the linear scale and inconsistent
+    #         with the back-transformed confidence limits
+    edMat      <- edMat[, -2, drop = FALSE]
+    edColNames <- edColNames[-2]
+    
   } else if (identical(interval, "fls")) {
-    if (is.null(logBase)) {
-      logBase      <- exp(1)
-      edMat[, 1]   <- exp(edMat[, 1])
-    }
-    intMat     <- logBase^(confint.basic(oriMat, level, object[["type"]], df.residual(object), FALSE))
+    # FIX #5: always derive point estimate from oriMat to avoid double-transformation
+    flsBase    <- if (is.null(logBase)) exp(1) else logBase
+    edMat[, 1] <- flsBase^oriMat[, 1]
+    # FIX #8: use safe wrapper
+    intMat     <- flsBase^(.safeConfintBasic(oriMat, level, object[["type"]], object))
     intLabel   <- "Back-transformed from log scale"
     
     # Drop standard errors as they are not meaningful after back-transformation.
@@ -439,7 +508,10 @@ ED <- function(object, ...) UseMethod("ED", object)
   
   dimnames(edMat) <- list(paste0("e:", dimNames), edColNames)
   
-  resPrint(edMat, "Estimated effective doses", interval, intLabel, display = display)
+  # FIX #11: suppress printing entirely when multcomp = TRUE
+  if (!multcomp) {
+    resPrint(edMat, "Estimated effective doses", interval, intLabel, display = display)
+  }
   
   ## --- Return -----------------------------------------------------------------
   
@@ -447,10 +519,8 @@ ED <- function(object, ...) UseMethod("ED", object)
     EDmat1 <- edMat[, 1]
     namesVec <- names(EDmat1)
     
-    # Only use the rows of dEdMat that were actually populated to avoid
-    # artefacts from the zero-padded pre-allocation.
-    filledRows  <- which(rowSums(dEdMat != 0) > 0)
-    dEdMatFilled <- dEdMat[filledRows, , drop = FALSE]
+    # FIX #2: use explicit tracking vector instead of zero-row heuristic
+    dEdMatFilled <- dEdMat[filledRowFlags, , drop = FALSE]
     EDmat1VC     <- dEdMatFilled %*% vcMat %*% t(dEdMatFilled)
     
     colnames(EDmat1VC) <- namesVec

@@ -102,10 +102,11 @@ compute_numgrad_se <- function(model, absResp) {
   vc <- vcov(model)
   edfct <- model$fct$edfct
   parms <- coef(model)
-  eps <- .Machine$double.eps^(1/3)
+  eps <- .Machine$double.eps
   numGrad <- numeric(length(parms))
   for (k in seq_along(parms)) {
-    h <- max(abs(parms[k]), 1) * eps
+    p <- parms[k]
+    h <- if (abs(p) > sqrt(eps)) abs(p) * eps^(1/3) else eps^(1/3)
     pu <- replace(parms, k, parms[k] + h)
     pd <- replace(parms, k, parms[k] - h)
     eu <- edfct(pu, absResp, reference = "control", type = "absolute")[[1]]
@@ -267,7 +268,8 @@ test_that("ED.drc with tfls interval (to and from log scale)", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- ED(m1, 50, interval = "tfls", display = FALSE)
 
-  expect_equal(ncol(result), 4)
+  # FIX #6: SE column is now dropped, leaving Estimate + Lower + Upper
+  expect_equal(ncol(result), 3)
   expect_true(result[, "Lower"] < result[, "Estimate"])
   expect_true(result[, "Upper"] > result[, "Estimate"])
 })
@@ -447,4 +449,28 @@ test_that("ED.drc confidence intervals contain the estimate", {
 
   expect_true(result[, "Lower"] < result[, "Estimate"])
   expect_true(result[, "Upper"] > result[, "Estimate"])
+})
+
+# --- Acceptance criteria tests for FIX #1 through #11 -----------------------
+
+test_that("FIX #1: clevel filtering does not corrupt row indices (multi-curve)", {
+  m_multi <- drm(resp ~ dose, curveid = group, data = multi_data, fct = LL.4())
+  result_A <- ED(m_multi, 50, interval = "delta", clevel = "A", display = FALSE)
+
+  expect_equal(nrow(result_A), 1)
+  expect_true(grepl("A:", rownames(result_A)))
+  expect_true(result_A[, "Lower"] < result_A[, "Estimate"])
+  expect_true(result_A[, "Upper"] > result_A[, "Estimate"])
+
+  # Multiple response levels with clevel filtering
+  result_A3 <- ED(m_multi, c(10, 50, 90), clevel = "A", display = FALSE)
+  expect_equal(nrow(result_A3), 3)
+  expect_true(all(grepl("A:", rownames(result_A3))))
+})
+
+test_that("FIX #11: multcomp = TRUE with display = FALSE is fully silent", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_silent(result <- ED(m1, 50, multcomp = TRUE, display = FALSE))
+  expect_true(is.list(result))
+  expect_true("EDmultcomp" %in% names(result))
 })
