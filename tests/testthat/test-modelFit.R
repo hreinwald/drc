@@ -97,7 +97,6 @@ test_that("modelFit returns 'No test available' when ANOVA has 0 residual df", {
 test_that("modelFit method argument is validated", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   # Valid methods
-
   result_gof <- modelFit(m1, method = "gof")
   expect_s3_class(result_gof, "anova")
   result_cum <- modelFit(m1, method = "cum")
@@ -168,7 +167,6 @@ test_that("lofTest with F-test and NaN test statistic returns NA p-value", {
       df.residual = 0L  # Force 0 residual df
     )
     class(mock_fit) <- "lm"
-    # Override deviance and df.residual methods via attributes
     list(test = "F", anovaFit = mock_fit)
   }
 
