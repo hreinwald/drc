@@ -243,3 +243,49 @@ test_that("W1.3 works in drm model fitting", {
   expect_s3_class(m1, "drc")
   expect_equal(length(coef(m1)), 3)
 })
+
+# --- EXD.2 wrapper ---
+
+test_that("EXD.2 returns correct class and structure", {
+  exd2 <- EXD.2()
+  expect_s3_class(exd2, "Weibull-1")
+  expect_equal(exd2$noParm, 2)
+  expect_equal(exd2$names, c("d", "e"))
+})
+
+test_that("EXD.2 text indicates lower limit fixed", {
+  exd2 <- EXD.2()
+  expect_true(grepl("lower limit at 0", exd2$text))
+})
+
+test_that("EXD.2 errors on invalid names", {
+  expect_error(EXD.2(names = c("x")), "Not correct 'names' argument")
+  expect_error(EXD.2(names = 99), "Not correct 'names' argument")
+})
+
+test_that("EXD.2 errors on invalid fixed", {
+  expect_error(EXD.2(fixed = c(NA)), "Not correct length of 'fixed' argument")
+})
+
+# --- EXD.3 wrapper ---
+
+test_that("EXD.3 returns correct class and structure", {
+  exd3 <- EXD.3()
+  expect_s3_class(exd3, "Weibull-1")
+  expect_equal(exd3$noParm, 3)
+  expect_equal(exd3$names, c("c", "d", "e"))
+})
+
+test_that("EXD.3 text is correct", {
+  exd3 <- EXD.3()
+  expect_equal(exd3$text, "Shifted exponential decay")
+})
+
+test_that("EXD.3 errors on invalid fixed", {
+  expect_error(EXD.3(fixed = c(NA, NA)), "Not correct length of 'fixed' argument")
+})
+
+test_that("EXD.3 errors on invalid names", {
+  expect_error(EXD.3(names = c("a", "b")), "Not correct 'names' argument")
+  expect_error(EXD.3(names = 123), "Not correct 'names' argument")
+})
