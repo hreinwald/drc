@@ -144,3 +144,120 @@ test_that("modelFit does not produce NaN p-values", {
       info = "modelFit p-value should be between 0 and 1")
   }
 })
+
+# --- Tests for uncovered code paths ---
+
+test_that("mselect errors when nested is not logical", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(
+    mselect(m1, nested = "yes"),
+    "'nested' argument takes only the values: FALSE, TRUE"
+  )
+  expect_error(
+    mselect(m1, nested = 1),
+    "'nested' argument takes only the values: FALSE, TRUE"
+  )
+})
+
+test_that("mselect with linreg = TRUE includes polynomial fits", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  result <- mselect(m1, fctList = list(LL.3()), linreg = TRUE)
+
+  # Should have rows for Lin, Quad, Cubic in addition to DRC models
+  expect_true("Lin" %in% rownames(result))
+  expect_true("Quad" %in% rownames(result))
+  expect_true("Cubic" %in% rownames(result))
+
+  # Result should be a matrix with correct columns
+  expect_true(is.matrix(result))
+  expect_true("logLik" %in% colnames(result))
+  expect_true("IC" %in% colnames(result))
+  expect_true("Lack of fit" %in% colnames(result))
+  expect_true("Res var" %in% colnames(result))
+
+  # Polynomial fit rows should have NA for "Lack of fit"
+  expect_true(is.na(result["Lin", "Lack of fit"]))
+  expect_true(is.na(result["Quad", "Lack of fit"]))
+  expect_true(is.na(result["Cubic", "Lack of fit"]))
+
+  # logLik, IC, and Res var should be numeric for polynomial fits
+  expect_true(is.finite(result["Lin", "logLik"]))
+  expect_true(is.finite(result["Quad", "IC"]))
+  expect_true(is.finite(result["Cubic", "Res var"]))
+})
+
+test_that("mselect with linreg = TRUE and nested = TRUE drops Nested F test column", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  result <- mselect(m1, fctList = list(LL.3()), linreg = TRUE, nested = TRUE)
+
+  # When linreg = TRUE, the Nested F test column should be removed
+  expect_false("Nested F test" %in% colnames(result))
+  # Should still have the first 4 columns
+  expect_equal(ncol(result), 4)
+  expect_equal(colnames(result), c("logLik", "IC", "Lack of fit", "Res var"))
+})
+
+test_that("mselect handles model fitting failure gracefully (line 109)", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  # Create a dose-response function whose starting values always error,
+  # guaranteeing update() returns a try-error
+  bad_fct <- LL.3()
+  bad_fct$name <- "BadModel"
+  bad_fct$ssfct <- function(...) stop("Cannot compute starting values")
+
+  result <- suppressWarnings(
+    mselect(m1, fctList = list(bad_fct), nested = FALSE)
+  )
+
+  expect_true(is.matrix(result))
+  # The first model (LL.4) should always have valid values
+  expect_true(is.finite(result["LL.4", "logLik"]))
+  # The bad model should have all NA values
+  expect_true(all(is.na(result["BadModel", ])))
+})
+
+test_that("mselect handles summary failure for initial model resVar (line 71)", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  # Corrupt the initial model so summary.drc fails on it:
+  # Setting robust to "Tukey's biweight" triggers a code path in summary.drc
+  # that calls solve(hessian); a zero hessian causes solve() to error
+  m1$robust <- "Tukey's biweight"
+  m1$fit$hessian <- matrix(0, 4, 4)
+
+  result <- mselect(m1, nested = FALSE, sorted = "no")
+
+  expect_true(is.matrix(result))
+  # The initial model's Res var should be NA because summary failed
+  expect_true(is.na(result[1, "Res var"]))
+})
+
+test_that("mselect handles summary failure for updated model resVar (line 100)", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  # Use namespace-level mock to make summary.drc fail only on the second call
+  # (first call is for the initial model, second is for the updated model)
+  orig_summary <- drc:::summary.drc
+  call_count <- 0L
+  mock_summary <- function(object, ...) {
+    call_count <<- call_count + 1L
+    if (call_count > 1L) {
+      stop("Simulated summary failure for updated model")
+    }
+    orig_summary(object, ...)
+  }
+
+  assignInNamespace("summary.drc", mock_summary, ns = "drc")
+  on.exit(assignInNamespace("summary.drc", orig_summary, ns = "drc"), add = TRUE)
+
+  result <- mselect(m1, fctList = list(LL.3()), nested = FALSE, sorted = "no")
+
+  expect_true(is.matrix(result))
+  # The initial model's Res var should be valid (first summary call succeeds)
+  expect_true(is.finite(result["LL.4", "Res var"]))
+  # The updated model's Res var should be NA (second summary call fails)
+  expect_true(is.na(result["LL.3", "Res var"]))
+})
