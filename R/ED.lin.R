@@ -37,21 +37,11 @@
     {
         if (parCoef[3] < 0) {respLev <- 100 - respLev}
      
-        print(c(max(xVal), (-parCoef[2] / (2*parCoef[3]))))
-
         ## Deciding which leg of parabola 
         if ((-parCoef[2] / (2*parCoef[3])) > max(xVal) && (parCoef[3] < 0))
         {
             signVal <- 1
-        }
-
-        if ((-parCoef[2] / (2*parCoef[3])) > max(xVal) && (parCoef[3] < 0))
-        {
-            signVal <- 1
-        }
-        
-        
-         else {
+        } else {
             signVal <- -1 
         }
         
@@ -69,7 +59,8 @@
         appFct <- function(respLev)
         {
             deltaMethod(object, paste("(-b1+", signVal, "*sqrt(b1*b1 - 4*b2*(b0-", cVal + ((100 - respLev)/100) * (dVal - cVal), ")))/(2*b2)",
-            collapse = ""))
+            collapse = ""),
+            parameterNames=c("b0", "b1", "b2"))
         }
     }
     t(sapply(respLev, appFct))
