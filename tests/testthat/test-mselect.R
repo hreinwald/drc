@@ -238,22 +238,23 @@ test_that("mselect handles summary failure for initial model resVar (line 71)", 
 test_that("mselect handles summary failure for updated model resVar (line 100)", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
-  # Use namespace-level mock to make summary.drc fail only on the second call
-  # (first call is for the initial model, second is for the updated model)
-  orig_summary <- drc:::summary.drc
+  # Capture the original summary.drc before mocking
+  orig_summary_drc <- drc:::summary.drc
   call_count <- 0L
-  mock_summary <- function(object, ...) {
-    call_count <<- call_count + 1L
-    if (call_count > 1L) {
-      stop("Simulated summary failure for updated model")
-    }
-    orig_summary(object, ...)
-  }
 
-  assignInNamespace("summary.drc", mock_summary, ns = "drc")
-  on.exit(assignInNamespace("summary.drc", orig_summary, ns = "drc"), add = TRUE)
-
-  result <- mselect(m1, fctList = list(LL.3()), nested = FALSE, sorted = "no")
+  # Use with_mocked_bindings to make summary.drc fail only on the second call
+  # (first call processes the initial model, second processes the updated model)
+  result <- with_mocked_bindings(
+    mselect(m1, fctList = list(LL.3()), nested = FALSE, sorted = "no"),
+    summary.drc = function(object, ...) {
+      call_count <<- call_count + 1L
+      if (call_count > 1L) {
+        stop("Simulated summary failure for updated model")
+      }
+      orig_summary_drc(object, ...)
+    },
+    .package = "drc"
+  )
 
   expect_true(is.matrix(result))
   # The initial model's Res var should be valid (first summary call succeeds)
