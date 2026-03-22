@@ -14,10 +14,6 @@
 
 # drc — Dose-Response Curve Analysis in R
 
-## Documentation
-
-📖 The full package documentation, function reference, and vignettes are available at **[hreinwald.github.io/drc](https://hreinwald.github.io/drc/)**.
-
 ## Note
 
 This repository contains a refactored development version of the [*drc*](https://github.com/DoseResponse/drc) R package first published by **Christian Ritz, Florent Baty, Jens C. Streibig und Daniel Gerhard** [(2015)](https://doi.org/10.1371/journal.pone.0146021). Their foundational work on dose–response modeling in R is gratefully acknowledged and inspired the present refactoring.
