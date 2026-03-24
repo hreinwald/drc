@@ -142,9 +142,11 @@ vignette("nec-models", package = "drc")
 | Function      | Purpose                                            |
 |---------------|----------------------------------------------------|
 | `drm()`       | Fit dose-response models                           |
-| `ED()`        | Estimate effective doses (ED10, ED50, ED90, etc.)  |
+| `ED()`        | Estimate effective doses (ED10, ED50, ...)  |
+| `maED()`      | Model averaged estimate effective doses (ED10, ED50, ...)  |
 | `EDcomp()`    | Compare ED values between curves                   |
 | `compParm()`  | Compare model parameters between curves            |
+| `noEffect()`  | Testing if there is a dose effect at all           |
 | `plot()`      | Plot fitted dose-response curves                   |
 | `summary()`   | Model summary with parameter estimates             |
 | `anova()`     | ANOVA and lack-of-fit tests                        |
