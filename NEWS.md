@@ -15,7 +15,7 @@
 ## Changes
 * Added `NEWS.md` version control log. Reformatted legacy news file into properly formatted `NEWS.md` with categorized sections.
 * Improved documentation for Weibull starting value `method` parameter across `weibull1()`, `weibull2()`, and all wrapper functions (`W1.2`, `W1.3`, `W1.4`, `W2.2`, `W2.3`, `W2.4`, `AR.2`, `AR.3`, `EXD.2`, `EXD.3`).
-* Added comprehensive test suites for `summary.drc`, `print.summary.drc`, `noEffect`, `searchdrc`, `backfit`, `getInitial`, `drmEMeventtime`, `repChar`, `rdrm`, `gompertzd`, `MAX()`, and `PR()` functions.
+* Added comprehensive test suites for `summary.drc`, `print.summary.drc`, `noEffect`, `searchdrc`, `backfit`, `getInitial`, `drmEMeventtime`, `repChar`, `rdrm`, `gompertzd`, `MAX()`, `PR()`, and `anova.drclist()` functions.
 * Removed dead code `iband.R` and all associated references.
 * Removed unused `inst/citation` file, superseded by `CITATION.cff` at repository root.
 * Deleted `build_pkgdown.R` build script.
