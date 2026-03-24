@@ -47,20 +47,41 @@ Feature requests or ideas?
 
 ## Installation
 
-To install the outdated version from CRAN:
+**⚠️ Important:** We **do not recommend** installing the currently heavily outdated CRAN version of this package. Instead, we recommend installing the development (`dev`) or stable beta (`main_beta`) version from GitHub.
 
-``` r
-install.packages("drc")
-```
-
-Install the bug-fix development version from GitHub:
+### Install from GitHub (Recommended)
 
 ``` r
 # install.packages("devtools")
 
-# devtools::install_github("DoseResponse/drc")      # <- unmaintained version 3.2-0 
-devtools::install_github("hreinwald/drc")           # <- re-factored development version 3.3.0
-devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
+# Install the re-factored development version 3.3.0
+devtools::install_github("hreinwald/drc")
+
+# Install the re-factored stable beta version 3.3.0
+devtools::install_github("hreinwald/drc@main_beta")
+```
+
+### Local Installation from tar.gz
+
+If GitHub installation is failing, you can run the installation from the local tar.gz file. [Click here to download the latest release](https://github.com/hreinwald/drc/releases/latest).
+
+After downloading the file, run the following:
+
+``` r
+file_path <- file.path("~/Downloads")
+setwd(file_path)
+list.files()  # Find the drc_*.tar.gz file
+
+# Local installation with base R
+install.packages("drc_3.3.0.02.tar.gz", repos = NULL, type = "source")
+```
+
+### Outdated CRAN Version (Not Recommended)
+
+To install the outdated version from CRAN:
+
+``` r
+install.packages("drc")
 ```
 
 ## Quick Start
