@@ -24,8 +24,8 @@
 ## Changes
 * Added `NEWS.md` version control log. Reformatted legacy news file into properly formatted `NEWS.md` with categorized sections.
 * Improved documentation for Weibull starting value `method` parameter across `weibull1()`, `weibull2()`, and all wrapper functions (`W1.2`, `W1.3`, `W1.4`, `W2.2`, `W2.3`, `W2.4`, `AR.2`, `AR.3`, `EXD.2`, `EXD.3`).
-* Enhanced roxygen2 documentation for `ED()` and `ED.drc` functions with improved parameter descriptions and examples.
-* Added comprehensive test suites for `summary.drc`, `print.summary.drc`, `noEffect`, `searchdrc`, `backfit`, `getInitial`, `drmEMeventtime`, `repChar`, `rdrm`, `gompertzd`, `MAX()`, and `PR()` functions.
+* Enhanced roxygen2 documentation for `ED` and `ED.drc` functions with improved parameter descriptions and examples.
+* Added comprehensive test suites for ``anova.drclist``,`summary.drc`, `print.summary.drc`, `noEffect`, `searchdrc`, `backfit`, `getInitial`, `drmEMeventtime`, `repChar`, `rdrm`, `gompertzd`, `MAX()`, and `PR()` functions.
 * Added comprehensive test suites for `llogistic`/LL.x models, `weibull1`/W1.x/EXD.x models, `logistic.ssf`, `gammadr`, `EDcomp`, `mselect`, `drmOpt`, `modelFunction`, `modelFit`, `anova.drclist`, `rss`, and `ED.lin`.
 * Large-scale dead code removal across 70+ R source files: removed commented-out function implementations, stray `print()` debug statements, old code paths, and `if(FALSE){...}` blocks. No logic changes; all roxygen2 documentation and meaningful explanatory comments were preserved.
 * Removed dead code `iband.R` and all associated references.
