@@ -20,12 +20,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Christian Ritz \email{ritz@bioassay.dk}
+\strong{Maintainer}: Hannes Reinwald \email{hannes.reinwald@bayer.com}
 
 Authors:
 \itemize{
+  \item Christian Ritz \email{ritz@bioassay.dk}
   \item Jens C. Streibig \email{streibig@bioassay.dk}
-  \item Hannes Reinwald \email{hannes.reinwald@bayer.com}
 }
 
 }

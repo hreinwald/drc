@@ -19,10 +19,10 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Christian Ritz <ritz@bioassay.dk>
+**Maintainer**: Hannes Reinwald <hannes.reinwald@bayer.com>
 
 Authors:
 
-- Jens C. Streibig <streibig@bioassay.dk>
+- Christian Ritz <ritz@bioassay.dk>
 
-- Hannes Reinwald <hannes.reinwald@bayer.com>
+- Jens C. Streibig <streibig@bioassay.dk>
