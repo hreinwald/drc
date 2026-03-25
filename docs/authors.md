@@ -2,11 +2,11 @@
 
 ## Authors
 
-- **Christian Ritz**. Author, maintainer.
+- **Christian Ritz**. Author.
 
 - **Jens C. Streibig**. Author.
 
-- **Hannes Reinwald**. Author.
+- **Hannes Reinwald**. Author, maintainer.
 
 ## Citation
 
