@@ -1,6 +1,8 @@
 url: https://hreinwald.github.io/drc
 destination: docs
 
+logo: man/figures/logo.png
+
 template:
   bootstrap: 5
 
