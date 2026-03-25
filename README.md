@@ -69,11 +69,10 @@ After downloading the file, run the following:
 
 ``` r
 file_path <- file.path("~/Downloads")
-setwd(file_path)
-list.files()  # Find the drc_*.tar.gz file
+targz <- list.files(file_path, pattern = "drc.*\\.tar\\.gz", full.names = TRUE)
 
 # Local installation with base R
-install.packages("drc_3.3.0.02.tar.gz", repos = NULL, type = "source")
+install.packages(targz, repos = NULL, type = "source")
 ```
 
 ### Outdated CRAN Version (Not Recommended)
