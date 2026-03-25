@@ -1,25 +1,19 @@
 # OUTPUT from covr::package_coverage() 
-drc Coverage: 90.55%
-R/logistic.ssf.R: 44.44%
-R/ED.lin.R: 47.22%
+drc Coverage: 93.05%
 R/modelFunction.R: 51.61%
 R/drmOpt.R: 54.29%
-R/weibull1.R: 60.84%
-R/modelFit.R: 64.62%
 R/anova.drclist.R: 66.30%
-R/EDcomp.R: 67.48%
-R/searchdrc.R: 68.18%
 R/drm_legacy.R: 68.97%
 R/logLik.drc.R: 70.00%
 R/mselect.R: 71.19%
 R/cooks.distance.drc.R: 75.00%
-R/llogistic.R: 75.00%
 R/compParm.R: 78.43%
 R/plot.drc.R: 79.08%
 R/vcov.drc.R: 79.55%
 R/comped.R: 80.00%
+R/noEffect.R: 80.00%
+R/llogistic.R: 81.01%
 R/drmLOFbinomial.R: 81.82%
-R/braincousens.R: 83.19%
 R/summary.drc.R: 84.44%
 R/EDhelper.R: 84.62%
 R/predict.drc.R: 84.62%
@@ -33,14 +27,16 @@ R/weibull1.ssf.R: 88.89%
 R/weibull2.ssf.R: 88.89%
 R/llogistic.ssf.R: 89.47%
 R/drmRobust.R: 91.11%
-R/drmLOFls.R: 91.67%
-R/drmEMPoisson.R: 92.00%
+R/maED.R: 91.67%
+R/ED.drc.R: 92.63%
 R/rse.R: 93.33%
 R/drmParNames.R: 94.12%
 R/drmConvertParm.R: 94.44%
 R/ucedergreen.R: 95.12%
+R/drmEMPoisson.R: 96.00%
 R/drmEMbinomial.R: 96.43%
 R/print.summary.drc.R: 98.15%
+R/ED_robust.R: 99.04%
 R/lnormal.R: 99.38%
 R/absToRel.R: 100.00%
 R/anova.drc.R: 100.00%
@@ -48,6 +44,7 @@ R/arandaordaz.R: 100.00%
 R/backfit.R: 100.00%
 R/baro5.R: 100.00%
 R/boxcox.drc.R: 100.00%
+R/braincousens.R: 100.00%
 R/braincousens.ssf.R: 100.00%
 R/cedergreen.R: 100.00%
 R/cedergreen.ssf.R: 100.00%
@@ -60,9 +57,10 @@ R/drmc.R: 100.00%
 R/drmEMeventtime.R: 100.00%
 R/drmEMssd.R: 100.00%
 R/drmEMstandard.R: 100.00%
+R/drmLOFls.R: 100.00%
 R/drmPNsplit.R: 100.00%
-R/ED.drc.R: 100.00%
-R/ED_robust.R: 100.00%
+R/ED.lin.R: 100.00%
+R/EDcomp.R: 100.00%
 R/fct2list.R: 100.00%
 R/findbe.R: 100.00%
 R/findcd.R: 100.00%
@@ -84,15 +82,15 @@ R/lgaussian.R: 100.00%
 R/lin.test.R: 100.00%
 R/llogistic2.R: 100.00%
 R/logistic.R: 100.00%
-R/maED.R: 100.00%
+R/logistic.ssf.R: 100.00%
 R/max.R: 100.00%
 R/mixture.R: 100.00%
+R/modelFit.R: 100.00%
 R/mr.test.R: 100.00%
 R/mrdrm.R: 100.00%
 R/multi2.R: 100.00%
 R/nec.R: 100.00%
 R/neill.test.R: 100.00%
-R/noEffect.R: 100.00%
 R/onAttach.R: 100.00%
 R/pickParm.R: 100.00%
 R/pr.R: 100.00%
@@ -103,7 +101,9 @@ R/repChar.R: 100.00%
 R/residuals.drc.R: 100.00%
 R/resPrint.R: 100.00%
 R/Rsq.R: 100.00%
+R/rss.R: 100.00%
 R/sandwich.R: 100.00%
+R/searchdrc.R: 100.00%
 R/siInner.R: 100.00%
 R/simDR.R: 100.00%
 R/simFct.R: 100.00%
@@ -111,6 +111,7 @@ R/threephase.R: 100.00%
 R/twophase.R: 100.00%
 R/ursa.R: 100.00%
 R/voelund.R: 100.00%
+R/weibull1.R: 100.00%
 R/weibull2.R: 100.00%
 R/weibull2x.R: 100.00%
 R/xlogx.R: 100.00%
