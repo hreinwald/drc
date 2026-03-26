@@ -11,7 +11,7 @@
 <a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 
 <p align="center">
-  <img src="man/figures/logo.png" alt="drc Logo" width="250">
+  <img src="docs/logo.png" alt="drc Logo" width="250">
 </p>
 
 
