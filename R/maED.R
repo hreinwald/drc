@@ -326,15 +326,23 @@ maED <- function(
     
   } else {
     if (totalWeight == 0) {
-      retMat <- matrix(NA_real_, lenrl, 3)
+      seVec  <- rep(NA_real_, lenrl)
+      retMat <- matrix(NA_real_, lenrl, 4)
     } else {
+      seVec <- apply(
+        sqrt(edSe^2 + (t(t(edEst) - apply(edEst, MARGIN = 2, FUN = mean, na.rm = effectiveNaRm)))^2) * wVec,
+        MARGIN = 2,
+        FUN    = sum,
+        na.rm  = effectiveNaRm
+      )
       retMat <- as.matrix(cbind(
         apply(edEst * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
+        seVec,
         apply(edCll * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm),
         apply(edClu * wVec, MARGIN = 2, FUN = sum, na.rm = effectiveNaRm)
       ))
     }
-    colnames(retMat) <- colnames(edMat)[c(1, 3, 4)]
+    colnames(retMat) <- c(colnames(edMat)[c(1, 2)], "Lower", "Upper")
   }
   
   rownames(retMat) <- rownames(edMat)

@@ -500,11 +500,6 @@ ED <- function(object, ...) UseMethod("ED", object)
     )
     intLabel <- "To and from log scale"
     
-    # FIX #6: drop SE column — it is on the linear scale and inconsistent
-    #         with the back-transformed confidence limits
-    edMat      <- edMat[, -2, drop = FALSE]
-    edColNames <- edColNames[-2]
-    
   } else if (identical(interval, "fls")) {
     # FIX #5: always derive point estimate from oriMat to avoid double-transformation
     flsBase    <- if (is.null(logBase)) exp(1) else logBase
@@ -513,13 +508,7 @@ ED <- function(object, ...) UseMethod("ED", object)
     intMat     <- flsBase^(.safeConfintBasic(oriMat, level, object[["type"]], object))
     intLabel   <- "Back-transformed from log scale"
     
-    # Drop standard errors as they are not meaningful after back-transformation.
-    edMat      <- edMat[, -2, drop = FALSE]
-    edColNames <- edColNames[-2]
-    
   } else if (identical(interval, "inv")) {
-    edMat      <- edMat[, -2, drop = FALSE]
-    edColNames <- edColNames[-2]
     intLabel   <- "Inverse regression"
   }
   
