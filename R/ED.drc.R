@@ -326,7 +326,7 @@ ED <- function(object, ...) UseMethod("ED", object)
     if (is.numeric(vcMat) && length(vcMat) == 1L) {
       vcMat <- matrix(vcMat, 1L, 1L)
     } else if (is.numeric(vcMat)) {
-      n <- as.integer(sqrt(length(vcMat)))
+      n <- round(sqrt(length(vcMat)))
       if (n * n == length(vcMat)) {
         vcMat <- matrix(vcMat, n, n)
       } else {
