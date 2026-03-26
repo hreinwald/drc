@@ -101,8 +101,8 @@ test_that("maED returns matrix with correct structure for interval='kang'", {
 
   expect_true(is.matrix(result))
   expect_equal(nrow(result), 2)
-  expect_equal(ncol(result), 3)
-  expect_true(all(c("Estimate", "Lower", "Upper") %in% colnames(result)))
+  expect_equal(ncol(result), 4)
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
 })
 
 test_that("maED works with a single response level", {

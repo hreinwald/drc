@@ -259,17 +259,17 @@ test_that("ED.drc with fls interval (from log scale)", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- ED(m1, 50, interval = "fls", display = FALSE)
 
-  expect_equal(ncol(result), 3)  # Estimate, Lower, Upper (no Std. Error)
-  expect_true(all(c("Estimate", "Lower", "Upper") %in% colnames(result)))
-  expect_false("Std. Error" %in% colnames(result))
+  expect_equal(ncol(result), 4)  # Estimate, Std. Error, Lower, Upper
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
 })
 
 test_that("ED.drc with tfls interval (to and from log scale)", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- ED(m1, 50, interval = "tfls", display = FALSE)
 
-  # FIX #6: SE column is now dropped, leaving Estimate + Lower + Upper
-  expect_equal(ncol(result), 3)
+  # SE column is now retained alongside Lower and Upper
+  expect_equal(ncol(result), 4)
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
   expect_true(result[, "Lower"] < result[, "Estimate"])
   expect_true(result[, "Upper"] > result[, "Estimate"])
 })
@@ -278,8 +278,8 @@ test_that("ED.drc with inverse regression interval", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- ED(m1, 50, interval = "inv", display = FALSE)
 
-  expect_equal(ncol(result), 3)  # Estimate, Lower, Upper (no Std. Error)
-  expect_true(all(c("Estimate", "Lower", "Upper") %in% colnames(result)))
+  expect_equal(ncol(result), 4)  # Estimate, Std. Error, Lower, Upper
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
 })
 
 # Tests for different model types
