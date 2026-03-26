@@ -507,9 +507,8 @@ test_that("EXD.3 with one fixed param: ED() works", {
 
 test_that("EXD.3 with two fixed params: ED() works (1x1 vcov regression)", {
   # This is the key regression test: when both c and d are fixed, only e is
-
   # estimated, producing a 1x1 vcov matrix and a scalar indexMat.  The legacy
- # code failed with "incorrect number of dimensions" because indexMat was not
+  # code failed with "incorrect number of dimensions" because indexMat was not
   # coerced to a matrix and vcMat subsetting dropped dimensions.
   res2 <- drm(yield ~ conc, data = exd_data,
               fct = EXD.3(fixed = c(0, 199553, NA)))
