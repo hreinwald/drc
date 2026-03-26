@@ -86,10 +86,10 @@ ED(M.bahia.m2, c(10,20,50), ci="fls")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error
-#> e:1:10  0.21900    0.11667
-#> e:1:20  0.58881    0.24576
-#> e:1:50  3.90572    0.88329
+#>      Estimate Std. Error
+#> e:10  0.21900    0.11667
+#> e:20  0.58881    0.24576
+#> e:50  3.90572    0.88329
 
 ## A better fit
 M.bahia.m3 <- boxcox(update(M.bahia.m1, fct = LN.4()), method = "anova")
@@ -100,8 +100,8 @@ ED(M.bahia.m3, c(10,20,50), ci="fls")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error
-#> e:1:10  0.95677    0.18697
-#> e:1:20  1.17193    0.19303
-#> e:1:50  1.72756    0.19818
+#>      Estimate Std. Error
+#> e:10  0.95677    0.18697
+#> e:20  1.17193    0.19303
+#> e:50  1.72756    0.19818
 ```

@@ -158,8 +158,8 @@ anova(mecter.voe, mecter.free)  # accepted
 #> ANOVA table
 #> 
 #>           ModelDf      RSS Df F value p value
-#> 1st model      95 0.065482                   
-#> 2nd model      94 0.063801  1  2.4769  0.1189
+#> 1st model      95 0.065481                   
+#> 2nd model      94 0.063801  1  2.4755  0.1190
 
 ## Plotting isobole based on the Voelund model
 isobole(mecter.free, mecter.voe, exchange = 0.02)  # good fit

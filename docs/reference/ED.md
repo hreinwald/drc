@@ -1,9 +1,10 @@
 # Estimating effective doses
 
-Estimates effective concentration or doses for specified response
-levels. This is a generic function; see
-[`ED.drc`](https://hreinwald.github.io/drc/reference/ED.drc.md) for the
-default method.
+S3 generic function that dispatches to the appropriate method for
+estimating effective concentrations (EC) or effective doses (ED) at
+specified response levels. For objects of class `drc`, the default
+method [`ED.drc`](https://hreinwald.github.io/drc/reference/ED.drc.md)
+is called.
 
 ## Usage
 

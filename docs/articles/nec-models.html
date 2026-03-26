@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Understanding NEC Models in the drc Package • drc</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -20,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.02</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.03</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,12 +61,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Understanding NEC Models in the drc Package</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Understanding NEC Models in the drc Package</h1>
                         <h4 data-toc-skip class="author">Hannes
 Reinwald</h4>
             
-            <h4 data-toc-skip class="date">2026-03-19</h4>
+            <h4 data-toc-skip class="date">2026-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/vignettes/nec-models.Rmd" class="external-link"><code>vignettes/nec-models.Rmd</code></a></small>
       <div class="d-none name"><code>nec-models.Rmd</code></div>
@@ -226,7 +230,6 @@ response with variable maximum.</p>
 <span><span class="co"># Assumes zero baseline response</span></span>
 <span><span class="va">nec3.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.3.html">NEC.3</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">nec3.model</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in sqrt(diag(varMat)): NaNs produced</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model fitted: NEC with lower limit at 0 (3 parms)</span></span>
 <span><span class="co">#&gt; </span></span>

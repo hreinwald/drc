@@ -80,10 +80,10 @@ ED(s.cap.m2, c(10, 20, 50), interval="delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error    Lower    Upper
-#> e:1:10  3.45448    0.49164  2.40656  4.50239
-#> e:1:20  5.36110    0.66213  3.94980  6.77241
-#> e:1:50 12.42816    1.10092 10.08162 14.77471
+#>      Estimate Std. Error    Lower    Upper
+#> e:10  3.45448    0.49164  2.40656  4.50239
+#> e:20  5.36110    0.66213  3.94980  6.77241
+#> e:50 12.42816    1.10092 10.08162 14.77471
 
 ## Fitting model with ED50 as parameter
 ## (for comparison)
@@ -116,8 +116,8 @@ ED(s.cap.m4, c(10, 20, 50), interval = "fls")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate   Lower   Upper
-#> e:1:10   3.4545  2.5506  4.6788
-#> e:1:20   5.3612  4.1203  6.9757
-#> e:1:50  12.4283 10.2899 15.0110
+#>      Estimate   Lower   Upper
+#> e:10   3.4545  2.5506  4.6788
+#> e:20   5.3612  4.1203  6.9757
+#> e:50  12.4283 10.2899 15.0110
 ```
