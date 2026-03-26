@@ -178,7 +178,7 @@ The following table summarizes the key differences between the NEC functions:
 
 Let's compare the three exported NEC variants on the ryegrass dataset:
 
-```{r model-comparison, fig.alt="Three panels comparing NEC.2, NEC.3, and NEC.4 model fits to ryegrass data showing different parameter constraint effects"}
+```{r model-comparison, fig.alt=c("NEC.2 model fitted to ryegrass data with both asymptotes constrained", "NEC.3 model fitted to ryegrass data with lower asymptote fixed at zero", "NEC.4 model fitted to ryegrass data with all parameters estimated")}
 # Fit all three models
 nec2.fit <- drm(rootl ~ conc, data = ryegrass, fct = NEC.2(upper = max(ryegrass$rootl)))
 nec3.fit <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
