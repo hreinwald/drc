@@ -67,7 +67,7 @@ devtools::install_github("hreinwald/drc@main_beta")
 ### Local Installation from tar.gz
 
 If GitHub installation is failing, you can run the installation from the local tar.gz file. 
-[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.0.02.tar.gz).
+[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.0.03.tar.gz).
 
 After downloading the file, run the following:
 
