@@ -91,6 +91,7 @@ reference:
   contents:
   - modelFit
   - Rsq
+  - rss
   - rdrm
   - anova.drc
   - lin.test

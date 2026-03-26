@@ -2,23 +2,48 @@
 
 ## drc 3.3.0.02
 
+### New Features
+
+- Added [`rss()`](https://hreinwald.github.io/drc/reference/rss.md)
+  function for computing the residual sum of squares of a fitted `drc`
+  model. Refactored
+  [`Rsq()`](https://hreinwald.github.io/drc/reference/Rsq.md) to reuse
+  [`rss()`](https://hreinwald.github.io/drc/reference/rss.md)
+  internally; both functions are now exported.
+
 ### Bug Fixes
 
+- Fixed [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) for
+  exponential decay models (EXD.2, EXD.3, AR.2, AR.3, W1.x, W2.x) with
+  two fixed parameters: when only one parameter is estimated (1×1
+  variance-covariance matrix), the function previously failed with
+  “incorrect number of dimensions” errors. Enhanced `ED.drc` to
+  defensively coerce scalar/vector `vcov` inputs to proper matrices and
+  to always strip names from gradients for consistent matrix algebra.
+  This fix now allows retrieving ED values from exponential decay models
+  with two fixed parameters, which was previously impossible.
+- Fixed gradient handling in
+  [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) to ensure
+  model-specific derivative functions always return unnamed numeric
+  vectors, preventing dimension errors in delta-method standard error
+  calculations.
 - Fixed boundary detection bugs in
   [`MAX()`](https://hreinwald.github.io/drc/reference/MAX.md): used
-  `unname()` so named return values from cedergreen models are compared
-  correctly with unnamed lower/upper scalars, and added tolerance in
-  boundary check since numerical optimizers return values near but not
-  exactly at boundaries.
-- Fixed
-  [`PR()`](https://hreinwald.github.io/drc/reference/PR.md) dropping
-  `...` arguments for single-curve models.
-- Fixed all 17 issues in `ucedergreen()` function: missing `+c` term in
-  model formula, `edfct` signature mismatch with the drc framework,
-  undefined `xlogx` function call in `deriv1`, missing `match.arg()`
-  validation for `method`, vectorized `|` operators in scalar `if()`
-  guards, missing `useFixed` flag computation, `maxfct` signature
-  mismatch and unsafe parameter indexing, broken self-starter ignoring
+  [`unname()`](https://rdrr.io/r/base/unname.html) so named return
+  values from cedergreen models are compared correctly with unnamed
+  lower/upper scalars, and added tolerance in boundary check since
+  numerical optimizers return values near but not exactly at boundaries.
+- Fixed [`PR()`](https://hreinwald.github.io/drc/reference/PR.md)
+  dropping `...` arguments for single-curve models.
+- Fixed all 17 issues in
+  [`ucedergreen()`](https://hreinwald.github.io/drc/reference/ucedergreen.md)
+  function: missing `+c` term in model formula, `edfct` signature
+  mismatch with the drc framework, undefined `xlogx` function call in
+  `deriv1`, missing
+  [`match.arg()`](https://rdrr.io/r/base/match.arg.html) validation for
+  `method`, vectorized `|` operators in scalar `if()` guards, missing
+  `useFixed` flag computation, `maxfct` signature mismatch and unsafe
+  parameter indexing, broken self-starter ignoring
   `alpha`/`method`/`useFixed`, missing `fctName`/`fctText` parameters,
   `deriv1` excluded from return list, and documentation issues.
 - Fixed SE calculation for absolute type
@@ -26,28 +51,107 @@
   model-specific `edfct` gradient functions treated asymptote parameters
   as constants when `type="absolute"`, missing the chain-rule
   contribution from the `absToRel` conversion and underestimating the
-  standard error. Now uses numerical central differences for the
-  complete gradient.
-- Fixed inverted `otrace`/`silentVal` logic in `drmOpt()` where
-  `otrace=TRUE` incorrectly caused `silent=TRUE` in `try(optim())`,
-  suppressing error messages instead of displaying them.
-- Fixed `searchdrc()` regex error and convergence failure behavior.
-- Fixed citation URL: reordered URLs in DESCRIPTION so
-  `citation('drc')` returns the GitHub repository URL instead of
-  r-project.org.
+  standard error. Now uses numerical central differences with an
+  improved adaptive step size. Added internal helpers
+  `.centralDiffGradient()`, `.safeConfintBasic()`, and `.computeSE()` to
+  make SE computation more robust: `.computeSE()` guards against
+  non-positive-definite variance-covariance matrix slices (returning
+  `NA` instead of erroring), and `.safeConfintBasic()` validates
+  residual degrees of freedom before calling
+  [`confint.basic()`](https://hreinwald.github.io/drc/reference/confint.basic.md),
+  falling back to a z-distribution when
+  [`df.residual()`](https://rdrr.io/r/stats/df.residual.html) returns an
+  invalid value.
+- Fixed inverted `otrace`/`silentVal` logic in
+  [`drmOpt()`](https://hreinwald.github.io/drc/reference/drmOpt.md)
+  where `otrace=TRUE` incorrectly caused `silent=TRUE` in
+  `try(optim())`, suppressing error messages instead of displaying them.
+- Fixed
+  [`searchdrc()`](https://hreinwald.github.io/drc/reference/searchdrc.md)
+  regex error and convergence failure behavior.
+- Fixed citation URL: reordered URLs in DESCRIPTION so `citation('drc')`
+  returns the GitHub repository URL instead of r-project.org.
+- Fixed [`ED()`](https://hreinwald.github.io/drc/reference/ED.md)
+  “incorrect number of dimensions” error for models with few estimated
+  parameters (e.g., EXD.3 with fixed c and d): ensured `indexMat` is
+  always treated as a matrix before column subsetting.
+- Fixed [`ED()`](https://hreinwald.github.io/drc/reference/ED.md)
+  returning NaN with warning for LL.5 models with ill-conditioned
+  parameters: added validity check to return `Inf` (indicating EC50 is
+  outside valid range) instead of NaN when
+  `exp(-tempVal/parmVec[5]) - 1` is non-positive. Also fixed NaN
+  handling in the check condition to prevent “missing value where
+  TRUE/FALSE needed” errors in
+  [`backfit()`](https://hreinwald.github.io/drc/reference/backfit.md)
+  and other functions.
+- Fixed additional robustness issues in
+  [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) / `ED.drc`:
+  loop now always iterates over all curves and all response levels,
+  filtering by `clevel` after computation rather than before;
+  `invMatList` is grown dynamically to avoid NULL holes; curve label
+  construction uses a single structured object with explicit `match` and
+  `display` fields; variance-covariance matrix slices always use
+  `drop = FALSE` to remain matrices.
+- Fixed
+  [`mselect()`](https://hreinwald.github.io/drc/reference/mselect.md)
+  missing two closing braces that caused a parse error when the function
+  was sourced directly.
+- Fixed `ED.lin.R` bugs: removed a duplicate `if`-block (dead code that
+  evaluated the same condition twice), removed a stray debug
+  [`print()`](https://rdrr.io/r/base/print.html) statement, and added
+  the missing `parameterNames = c("b0", "b1", "b2")` argument to the
+  `deltaMethod()` call for quadratic models (the omission caused
+  incorrect parameter mapping and wrong confidence intervals).
+- Fixed
+  [`CRS.4b()`](https://hreinwald.github.io/drc/reference/CRS.4b.md)
+  display text: `fctText` incorrectly showed `"alpha="` instead of
+  `"alpha=0.5"`.
+- Fixed
+  [`gammadr()`](https://hreinwald.github.io/drc/reference/gammadr.md)
+  first-derivative (`deriv1`) calculation: the gradient with respect to
+  the dose parameter incorrectly used `parmMat[, 1]` (the rate
+  parameter) where `dose` was required, producing wrong gradient values.
+- Fixed [`maED()`](https://hreinwald.github.io/drc/reference/maED.md)
+  model-averaging: models whose ED estimates are non-finite (`Inf` or
+  `NaN`) are now detected and excluded from the weighted average (with a
+  warning naming the model and the offending values); models that
+  returned a `try-error` during fitting are also excluded. When all
+  candidate models are excluded, the function returns `NA` for all
+  estimates instead of `0` or `NaN`.
+- Added warning to
+  [`noEffect()`](https://hreinwald.github.io/drc/reference/noEffect.md)
+  when degrees of freedom difference is ≤ 0, clarifying that the
+  likelihood ratio test may not be meaningful when the dose-response
+  model has no additional parameters compared to the null model (e.g.,
+  when most parameters are fixed).
 
 ### Changes
 
 - Added `NEWS.md` version control log. Reformatted legacy news file into
   properly formatted `NEWS.md` with categorized sections.
 - Improved documentation for Weibull starting value `method` parameter
-  across `weibull1()`, `weibull2()`, and all wrapper functions (`W1.2`,
-  `W1.3`, `W1.4`, `W2.2`, `W2.3`, `W2.4`, `AR.2`, `AR.3`, `EXD.2`,
-  `EXD.3`).
-- Added comprehensive test suites for `summary.drc`,
-  `print.summary.drc`, `noEffect`, `searchdrc`, `backfit`,
-  `getInitial`, `drmEMeventtime`, `repChar`, `rdrm`, `gompertzd`,
-  `MAX()`, and `PR()` functions.
+  across
+  [`weibull1()`](https://hreinwald.github.io/drc/reference/weibull1.md),
+  [`weibull2()`](https://hreinwald.github.io/drc/reference/weibull2.md),
+  and all wrapper functions (`W1.2`, `W1.3`, `W1.4`, `W2.2`, `W2.3`,
+  `W2.4`, `AR.2`, `AR.3`, `EXD.2`, `EXD.3`).
+- Enhanced roxygen2 documentation for `ED` and `ED.drc` functions with
+  improved parameter descriptions and examples.
+- Added comprehensive test suites for `anova.drclist`,`summary.drc`,
+  `print.summary.drc`, `noEffect`, `searchdrc`, `backfit`, `getInitial`,
+  `drmEMeventtime`, `repChar`, `rdrm`, `gompertzd`,
+  [`MAX()`](https://hreinwald.github.io/drc/reference/MAX.md), and
+  [`PR()`](https://hreinwald.github.io/drc/reference/PR.md) functions.
+- Added comprehensive test suites for `llogistic`/LL.x models,
+  `weibull1`/W1.x/EXD.x models, `logistic.ssf`, `gammadr`, `EDcomp`,
+  `mselect`, `drmOpt`, `modelFunction`, `modelFit`, `anova.drclist`,
+  `rss`, and `ED.lin`.
+- Large-scale dead code removal across 70+ R source files: removed
+  commented-out function implementations, stray
+  [`print()`](https://rdrr.io/r/base/print.html) debug statements, old
+  code paths, and `if(FALSE){...}` blocks. No logic changes; all
+  roxygen2 documentation and meaningful explanatory comments were
+  preserved.
 - Removed dead code `iband.R` and all associated references.
 - Removed unused `inst/citation` file, superseded by `CITATION.cff` at
   repository root.
@@ -126,7 +230,7 @@
 - Fixed unsafe global state modification via `options(warn)`, incorrect
   `compParm` od/pool handling, and residuals division by zero.
 - Fixed NaN warning in `summary.drc` for robust estimation methods
-  (metric trimming, Winsorizing, Tukey's biweight).
+  (metric trimming, Winsorizing, Tukey’s biweight).
 - Improved `predict.drc` and `vcov.drc` to resolve 23 test failures.
 - Fixed
   [`mselect()`](https://hreinwald.github.io/drc/reference/mselect.md) to

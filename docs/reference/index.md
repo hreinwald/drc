@@ -263,6 +263,8 @@ Model diagnostics and helper functions
   : Assessing the model fit
 - [`Rsq()`](https://hreinwald.github.io/drc/reference/Rsq.md) :
   R-squared for dose-response models
+- [`rss()`](https://hreinwald.github.io/drc/reference/rss.md) : Residual
+  sum of squares for dose-response models
 - [`rdrm()`](https://hreinwald.github.io/drc/reference/rdrm.md) :
   Simulating a dose-response curve
 - [`anova(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/anova.drc.md)

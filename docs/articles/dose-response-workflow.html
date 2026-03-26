@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>A Practical Workflow for Dose-Response Analysis • drc</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -20,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.02</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.03</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,12 +61,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>A Practical Workflow for Dose-Response Analysis</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>A Practical Workflow for Dose-Response Analysis</h1>
                         <h4 data-toc-skip class="author">Hannes
 Reinwald</h4>
             
-            <h4 data-toc-skip class="date">2026-03-19</h4>
+            <h4 data-toc-skip class="date">2026-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/vignettes/dose-response-workflow.Rmd" class="external-link"><code>vignettes/dose-response-workflow.Rmd</code></a></small>
       <div class="d-none name"><code>dose-response-workflow.Rmd</code></div>
@@ -319,15 +323,15 @@ produce a specified level of effect.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:10  1.46371    0.18677 1.07411 1.85330</span></span>
-<span><span class="co">#&gt; e:1:20  1.92109    0.17774 1.55032 2.29186</span></span>
-<span><span class="co">#&gt; e:1:50  3.05795    0.18573 2.67053 3.44538</span></span>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:10  1.46371    0.18677 1.07411 1.85330</span></span>
+<span><span class="co">#&gt; e:20  1.92109    0.17774 1.55032 2.29186</span></span>
+<span><span class="co">#&gt; e:50  3.05795    0.18573 2.67053 3.44538</span></span>
 <span><span class="va">ed_values</span></span>
-<span><span class="co">#&gt;        Estimate Std. Error    Lower    Upper</span></span>
-<span><span class="co">#&gt; e:1:10 1.463706  0.1867704 1.074109 1.853302</span></span>
-<span><span class="co">#&gt; e:1:20 1.921091  0.1777432 1.550325 2.291857</span></span>
-<span><span class="co">#&gt; e:1:50 3.057955  0.1857313 2.670526 3.445384</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate Std. Error    Lower    Upper</span></span>
+<span><span class="co">#&gt; e:10 1.463706  0.1867704 1.074109 1.853302</span></span>
+<span><span class="co">#&gt; e:20 1.921091  0.1777432 1.550325 2.291857</span></span>
+<span><span class="co">#&gt; e:50 3.057955  0.1857313 2.670526 3.445384</span></span></code></pre></div>
 <p><strong>Understanding ED Values:</strong> - <strong>EC10</strong>:
 Concentration causing 10% effect (reduction in root length) -
 <strong>EC20</strong>: Concentration causing 20% effect -
@@ -350,8 +354,8 @@ precise estimates</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:50  3.05795    0.18573 2.67053 3.44538</span></span>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:50  3.05795    0.18573 2.67053 3.44538</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nFieller method:\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -360,8 +364,8 @@ precise estimates</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate  Lower  Upper</span></span>
-<span><span class="co">#&gt; e:1:50   21.284 14.448 31.355</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate  Lower  Upper</span></span>
+<span><span class="co">#&gt; e:50   21.284 14.448 31.355</span></span></code></pre></div>
 <p>The Fieller method is often preferred for ED50 estimation as it
 accounts for the ratio nature of the parameter.</p>
 </div>
@@ -404,13 +408,13 @@ model</li>
 <span> <span class="op">)</span></span>
 <span><span class="va">model_comparison</span></span>
 <span><span class="co">#&gt;          logLik       IC Lack of fit   Res var</span></span>
-<span><span class="co">#&gt; W2.4  -15.91352 41.82703           0 0.2646283</span></span>
-<span><span class="co">#&gt; LL.4  -16.15514 42.31029           0 0.2700107</span></span>
-<span><span class="co">#&gt; LN.4  -16.29214 42.58429           0 0.2731110</span></span>
-<span><span class="co">#&gt; LL.5  -15.87828 43.75656           0 0.2777393</span></span>
-<span><span class="co">#&gt; BC.4  -17.05120 44.10241           0 0.2909448</span></span>
-<span><span class="co">#&gt; W1.4  -17.46720 44.93439           0 0.3012075</span></span>
-<span><span class="co">#&gt; EXD.3 -28.22358 64.44717           0 0.7030127</span></span></code></pre></div>
+<span><span class="co">#&gt; W2.4  -15.91352 41.82703 0.945071314 0.2646283</span></span>
+<span><span class="co">#&gt; LL.4  -16.15514 42.31029 0.866483043 0.2700107</span></span>
+<span><span class="co">#&gt; LN.4  -16.29214 42.58429 0.818641010 0.2731110</span></span>
+<span><span class="co">#&gt; LL.5  -15.87828 43.75656 0.853847582 0.2777393</span></span>
+<span><span class="co">#&gt; BC.4  -17.05120 44.10241 0.565407254 0.2909448</span></span>
+<span><span class="co">#&gt; W1.4  -17.46720 44.93439 0.450567622 0.3012075</span></span>
+<span><span class="co">#&gt; EXD.3 -28.22358 64.44717 0.000886637 0.7030127</span></span></code></pre></div>
 <p><strong>Understanding the Output:</strong></p>
 <p>The table shows: - <strong>logLik</strong>: Log-likelihood (higher is
 better, but penalized for parameters) - <strong>IC</strong>: Information
@@ -455,15 +459,15 @@ top.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:10  1.40598    0.25357 0.87705 1.93491</span></span>
-<span><span class="co">#&gt; e:1:20  1.92374    0.23477 1.43403 2.41346</span></span>
-<span><span class="co">#&gt; e:1:50  3.08896    0.17331 2.72744 3.45048</span></span>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:10  1.40598    0.25357 0.87705 1.93491</span></span>
+<span><span class="co">#&gt; e:20  1.92374    0.23477 1.43403 2.41346</span></span>
+<span><span class="co">#&gt; e:50  3.08896    0.17331 2.72744 3.45048</span></span>
 <span><span class="va">ed_best</span></span>
-<span><span class="co">#&gt;        Estimate Std. Error     Lower    Upper</span></span>
-<span><span class="co">#&gt; e:1:10 1.405979  0.2535663 0.8770491 1.934909</span></span>
-<span><span class="co">#&gt; e:1:20 1.923744  0.2347672 1.4340283 2.413460</span></span>
-<span><span class="co">#&gt; e:1:50 3.088964  0.1733114 2.7274422 3.450485</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate Std. Error     Lower    Upper</span></span>
+<span><span class="co">#&gt; e:10 1.405979  0.2535663 0.8770491 1.934909</span></span>
+<span><span class="co">#&gt; e:20 1.923744  0.2347672 1.4340283 2.413460</span></span>
+<span><span class="co">#&gt; e:50 3.088964  0.1733114 2.7274422 3.450485</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="visual-comparison-of-models">Visual Comparison of Models<a class="anchor" aria-label="anchor" href="#visual-comparison-of-models"></a>
@@ -498,8 +502,8 @@ fit:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:50  3.05795    0.18573 2.67053 3.44538</span></span>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:50  3.05795    0.18573 2.67053 3.44538</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nEC50 from W1.4 model:\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -508,8 +512,8 @@ fit:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:50  3.08896    0.17331 2.72744 3.45048</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:50  3.08896    0.17331 2.72744 3.45048</span></span></code></pre></div>
 <p><strong>Important Notes:</strong> - Different models may yield
 different ED estimates - Model selection should be based on both
 statistical criteria (AIC) and biological plausibility - Small
@@ -541,8 +545,8 @@ AIC-based weights.</p>
 <span><span class="co">#&gt; LL.5 3.023549 0.16025686</span></span>
 <span></span>
 <span><span class="va">ma_results</span></span>
-<span><span class="co">#&gt;        Estimate Std. Error    Lower    Upper</span></span>
-<span><span class="co">#&gt; e:1:50 3.029528  0.1969989 2.643417 3.415639</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate Std. Error    Lower    Upper</span></span>
+<span><span class="co">#&gt; e:50 3.029528  0.1969989 2.643417 3.415639</span></span></code></pre></div>
 <p><strong>Understanding Model Averaging:</strong></p>
 <ul>
 <li>Each model receives a weight based on its AIC value</li>
@@ -563,15 +567,15 @@ model uncertainty</li>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:50  3.08896    0.17331 2.72744 3.45048</span></span>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:50  3.08896    0.17331 2.72744 3.45048</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nModel-averaged EC50 (top 3 models):\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model-averaged EC50 (top 3 models):</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ma_results</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        Estimate Std. Error    Lower    Upper</span></span>
-<span><span class="co">#&gt; e:1:50 3.029528  0.1969989 2.643417 3.415639</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate Std. Error    Lower    Upper</span></span>
+<span><span class="co">#&gt; e:50 3.029528  0.1969989 2.643417 3.415639</span></span></code></pre></div>
 <p><strong>When to Use Model Averaging:</strong> - Multiple models have
 similar AIC values (ΔAIC &lt; 2-4) - You want robust estimates that
 don’t depend on selecting a single model - Regulatory or risk assessment
@@ -728,8 +732,8 @@ comparison/selection workflow</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:50  3.05795    0.18573 2.67053 3.44538</span></span>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:50  3.05795    0.18573 2.67053 3.44538</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nEC50 with LL.3 (lower asymptote = 0):\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -738,8 +742,8 @@ comparison/selection workflow</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        Estimate Std. Error   Lower   Upper</span></span>
-<span><span class="co">#&gt; e:1:50  3.26336    0.19641 2.85491 3.67181</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate Std. Error   Lower   Upper</span></span>
+<span><span class="co">#&gt; e:50  3.26336    0.19641 2.85491 3.67181</span></span></code></pre></div>
 <p><strong>Important Note:</strong> The choice of asymptote constraints
 can substantially affect ED estimates, especially for EC10 and EC20
 values which depend more heavily on the asymptote values than EC50.</p>
