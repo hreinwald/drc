@@ -1,3 +1,17 @@
+# drc 3.3.0.03
+
+## Changes
+* Updated package version and date in `DESCRIPTION` and website documentation to `3.3.0.03`.
+* Updated logo path in `README.md` to point to `man/figures/logo.png` for consistency with package structure.
+* Added favicon and manifest links to HTML documentation files for improved branding and browser integration.
+* Added the package website (`https://hreinwald.github.io/drc`) as the primary URL in the `DESCRIPTION` file for better discoverability.
+* Added the `rss()` function to the reference index in `_pkgdown.yml`.
+* Added logo image to the dose-response workflow vignette and updated the vignette date.
+* Simplified labeling of effective dose (ED) estimates in the workflow vignette outputs for clarity, removing the `e:1:` prefix.
+* Updated model comparison output in the vignette to include additional columns and more precise values.
+
+---
+
 # drc 3.3.0.02
 
 ## New Features
