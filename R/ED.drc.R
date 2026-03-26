@@ -319,6 +319,24 @@ ED <- function(object, ...) UseMethod("ED", object)
   # pre-computed matrix. Both are supported.
   vcMat <- if (is.function(vcov.)) vcov.(object) else vcov.
   
+  # FIX #12: coerce vcov to a matrix when it arrives as a scalar or bare
+  # numeric vector (e.g. user passes `as.numeric(vcov(obj))` or a scalar
+  # variance for a single-parameter model).
+  if (!is.matrix(vcMat)) {
+    if (is.numeric(vcMat) && length(vcMat) == 1L) {
+      vcMat <- matrix(vcMat, 1L, 1L)
+    } else if (is.numeric(vcMat)) {
+      n <- round(sqrt(length(vcMat)))
+      if (n * n == length(vcMat)) {
+        vcMat <- matrix(vcMat, n, n)
+      } else {
+        stop("'vcov.' must be a square matrix or a function returning one")
+      }
+    } else {
+      stop("'vcov.' must be a numeric matrix or a function returning one")
+    }
+  }
+  
   ## --- Pre-allocate result matrices -------------------------------------------
   
   ncolIM  <- ncol(indexMat)
@@ -363,6 +381,12 @@ ED <- function(object, ...) UseMethod("ED", object)
       EDeval <- EDlist(parmChosen, respLev[j], reference = reference, type = type, ...)
       EDval  <- EDeval[[1]]
       dEDval <- EDeval[[2]]
+      
+      # FIX #13: ensure gradient is always an unnamed numeric vector.
+      # Model-specific edfct functions return EDder[notFixed] which may be a
+      # named scalar when only one parameter is free.  Strip names and
+      # guarantee vector type for consistent matrix algebra downstream.
+      dEDval <- as.numeric(dEDval)
       
       # When type is "absolute", the model-specific gradient typically
       # treats the (converted) relative response level as a constant,
