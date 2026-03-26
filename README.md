@@ -73,9 +73,8 @@ After downloading the file, run the following:
 
 ``` r
 # Specify the path to the directory where you saved the downloaded tar.gz file.
-dir   <- file.path("~/../Downloads")
-stopifnot(dir.exists(dir))
-targz <- list.files(dir, pattern = "drc-[1-9].*[.]tar[.]gz", full.names = TRUE)[1]
+# Make sure to specify the correct file path below.
+targz  <- file.path("~/Downloads/3.3.0.03.tar.gz")
 
 # Local installation with base R
 install.packages(targz, repos = NULL, type = "source")
