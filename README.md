@@ -1,14 +1,14 @@
 [![GitHub dev version](https://img.shields.io/github/r-package/v/hreinwald/drc)](https://github.com/hreinwald/drc)
 [![Documentation](https://img.shields.io/static/v1?style=flat-square&message=ReadTheDocs&color=2C4AA8&logo=ReadTheDocs&logoColor=FFFFFF&label=Documentation)](https://hreinwald.github.io/drc/)
-<a href="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml/badge.svg"></a>
-<a href="https://app.codecov.io/gh/hreinwald/drc"><img src="https://codecov.io/gh/hreinwald/drc/branch/dev/graph/badge.svg"></a>
-<a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg"></a>
+<a href="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/hreinwald/drc/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check status"></a>
+<a href="https://app.codecov.io/gh/hreinwald/drc"><img src="https://codecov.io/gh/hreinwald/drc/branch/dev/graph/badge.svg" alt="Code coverage status"></a>
+<a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg" alt="Lifecycle: stable"></a>
 
-<a href="https://cran.r-project.org/package=drc"><img src="https://www.r-pkg.org/badges/version/drc"></a>
+<a href="https://cran.r-project.org/package=drc"><img src="https://www.r-pkg.org/badges/version/drc" alt="CRAN version"></a>
 [![Downloads](https://cranlogs.r-pkg.org/badges/drc)](https://cranlogs.r-pkg.org/)
-<a href="https://github.com/hreinwald/drc/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/hreinwald/drc"></a>
-<a href="https://github.com/hreinwald/drc/commits/dev"><img src="https://img.shields.io/github/last-commit/hreinwald/drc"></a>
-<a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+<a href="https://github.com/hreinwald/drc/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/hreinwald/drc" alt="License: GPL-2.0"></a>
+<a href="https://github.com/hreinwald/drc/commits/dev"><img src="https://img.shields.io/github/last-commit/hreinwald/drc" alt="Last commit date"></a>
+<a href="https://github.com/hreinwald/drc/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome"></a>
 
 <p align="center">
   <img src="man/figures/logo.png" alt="drc Logo" width="250">

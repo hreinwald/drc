@@ -82,7 +82,7 @@ This function is called internally by all the numbered variants (NEC.2, NEC.3, N
 
 **Example:**
 
-```{r nec2-example}
+```{r nec2-example, fig.alt="NEC.2 model fitted to normalized ryegrass proportion data showing threshold dose-response relationship"}
 # Example with proportion data (bounded 0-1)
 # Using ryegrass data, normalizing to 0-1 scale
 data(ryegrass)
@@ -117,7 +117,7 @@ summary(nec2.model)
 
 **Example:**
 
-```{r nec3-example}
+```{r nec3-example, fig.alt="NEC.3 model for ryegrass root length showing threshold effect at low concentrations followed by exponential decline"}
 # Fit NEC.3 model - most common case
 # Assumes zero baseline response
 nec3.model <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
@@ -178,7 +178,7 @@ The following table summarizes the key differences between the NEC functions:
 
 Let's compare the three exported NEC variants on the ryegrass dataset:
 
-```{r model-comparison}
+```{r model-comparison, fig.alt=c("NEC.2 model fitted to ryegrass data with both asymptotes constrained", "NEC.3 model fitted to ryegrass data with lower asymptote fixed at zero", "NEC.4 model fitted to ryegrass data with all parameters estimated")}
 # Fit all three models
 nec2.fit <- drm(rootl ~ conc, data = ryegrass, fct = NEC.2(upper = max(ryegrass$rootl)))
 nec3.fit <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
