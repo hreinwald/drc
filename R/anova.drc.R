@@ -1,34 +1,57 @@
-#' @title ANOVA for dose-response model fits
+#' @title ANOVA Model Comparison for Dose-Response Models
 #'
 #' @description
-#' \code{anova} produces an analysis of variance table for one or two
-#' non-linear model fits.
+#' Compares two nested dose-response model fits using a likelihood-ratio test
+#' (for binomial data) or an F-test (for continuous data). Two \code{drc}
+#' objects must be provided. For a lack-of-fit test of a single model, use
+#' \code{\link{modelFit}} instead.
 #'
-#' @param object an object of class 'drc'.
-#' @param ... additional arguments.
+#' @param object an object of class \sQuote{drc}.
+#' @param ... a second object of class \sQuote{drc} to compare against
+#'   \code{object}. Exactly two models must be supplied; passing a single
+#'   model will result in an error directing the user to
+#'   \code{\link{modelFit}}.
 #' @param details logical indicating whether or not details on the models
-#'   compared should be displayed. Default is TRUE (details are displayed).
+#'   compared should be displayed. Default is \code{TRUE} (details are
+#'   displayed).
 #' @param test a character string specifying the test statistic to be applied.
-#'   Use \code{"od"} to assess overdispersion for binomial data.
+#'   For continuous data the default is \code{"F"} (F-test); for binomial data
+#'   the default is \code{"Chisq"} (likelihood-ratio test). Use \code{"Chisq"}
+#'   to force a likelihood-ratio test for continuous data.
 #'
-#' @return An object of class 'anova'.
+#' @return An object of class \sQuote{anova} (inheriting from
+#'   \code{data.frame}) with columns for model degrees of freedom, residual
+#'   sum of squares (or log-likelihood), the difference in degrees of freedom,
+#'   the test statistic, and the p-value.
 #'
 #' @details
-#' Specifying only a single object gives a test for lack-of-fit, comparing the
-#' non-linear regression model to a more general one-way or two-way ANOVA
-#' model.
+#' Two \code{drc} objects must be specified. The function performs a test for
+#' reduction from the larger to the smaller model. This only makes statistical
+#' sense if the models are nested, that is: one model is a submodel of the
+#' other model.
 #'
-#' If two objects are specified a test for reduction from the larger to the
-#' smaller model is given. (This only makes statistical sense if the models are
-#' nested, that is: one model is a submodel of the other model.)
+#' For continuous data an F-test is used by default. For binomial data a
+#' likelihood-ratio (chi-square) test is used by default.
+#'
+#' If a single model is passed, the function raises an error. To assess the
+#' fit of a single dose-response model (lack-of-fit test comparing the model
+#' to a more general ANOVA model), use \code{\link{modelFit}} instead.
 #'
 #' @examples
-#' ## Comparing Weibull three- and four-parameter models using an F test
+#' ## Comparing two nested models (two-model comparison)
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
 #' ryegrass.m2 <- drm(rootl ~ conc, data = ryegrass, fct = W1.3())
 #' anova(ryegrass.m2, ryegrass.m1)
 #'
 #' anova(ryegrass.m2, ryegrass.m1, details = FALSE)  # without details
+#'
+#' ## For a lack-of-fit test on a single model, use modelFit():
+#' modelFit(ryegrass.m1)
+#'
+#' @seealso \code{\link{modelFit}} for lack-of-fit testing of a single model,
+#'   \code{\link{drm}} for fitting dose-response models,
+#'   \code{\link{logLik.drc}} for log-likelihood extraction,
+#'   \code{\link{summary.drc}} for model summaries.
 #'
 #' @author Christian Ritz
 #'
