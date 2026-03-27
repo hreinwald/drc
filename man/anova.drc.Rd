@@ -67,7 +67,7 @@ modelFit(ryegrass.m1)
 \code{\link{summary.drc}} for model summaries.
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}
