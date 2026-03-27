@@ -53,7 +53,7 @@
 #'   \code{\link{logLik.drc}} for log-likelihood extraction,
 #'   \code{\link{summary.drc}} for model summaries.
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #'
 #' @keywords models nonlinear
 "anova.drc" <-
@@ -63,6 +63,6 @@ function(object, ..., details = TRUE, test = NULL)
     {
         return(anova.drclist(object, ..., details = details, test = test))
     } else {
-        stop("Use the function modelFit()")
+        stop("Only a single model provided! This function requires at least two model objects. Use the function modelFit() instead")
     }
 }
