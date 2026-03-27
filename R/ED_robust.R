@@ -174,10 +174,10 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
       }
       ed_df %>%
         dplyr::mutate(
-          confint_level = CI_level,
-          confint_method = interval,
-          model = drm_name(mod),
-          EC = as.numeric(sub("^e.*[:]", "", rownames(ed_result)))
+          confint_level = .env$CI_level,
+          confint_method = .env$interval,
+          model = drm_name(.env$mod),
+          EC = as.numeric(sub("^e.*[:]", "", rownames(.env$ed_result)))
         )
     }
   })
@@ -316,10 +316,10 @@ maED_robust <- function(mod, fct_ls = NULL, respLev = c(10, 20, 50),
       }
       ma_df %>%
         dplyr::mutate(
-          confint_level = CI_level,
-          confint_method = interval,
-          model = model_name,
-          EC = as.numeric(sub("^e.*[:]", "", rownames(ma_ed_result)))
+          confint_level = .env$CI_level,
+          confint_method = .env$interval,
+          model = .env$model_name,
+          EC = as.numeric(sub("^e.*[:]", "", rownames(.env$ma_ed_result)))
         )
     }
   })
