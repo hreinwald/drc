@@ -42,6 +42,8 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        env:
+          PKG_CPPFLAGS: ${{ matrix.config.r == 'devel' && '-DPREXPR=PRCODE' || '' }}
         with:
           extra-packages: |
             any::rcmdcheck
