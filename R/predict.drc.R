@@ -121,6 +121,14 @@
     ## Defining index matrix for parameter estimates
     indexMat <- object[["indexMat"]]
     
+    ## Ensure indexMat is always a matrix, even with many fixed parameters
+    if (!is.matrix(indexMat)) {
+        indexMat <- as.matrix(indexMat)
+        if (!is.null(colnames(parmMat))) {
+            colnames(indexMat) <- colnames(parmMat)
+        }
+    }
+    
     ## Calculating predicted values  
     retMat <- matrix(0, noNewData, 4)
     colnames(retMat) <- c("Prediction", "SE", "Lower", "Upper")
