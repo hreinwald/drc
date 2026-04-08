@@ -44,7 +44,7 @@ This vignette demonstrates a complete workflow including:
 
 We will use the `ryegrass` dataset, which contains measurements of root length in perennial ryegrass (*Lolium perenne L.*) exposed to different concentrations of ferulic acid, a phenolic compound that inhibits plant growth.
 
-```{r load-data}
+```{r load-data, fig.alt="Scatter plot showing ryegrass root length (cm) versus ferulic acid concentration (mM), displaying a decreasing dose-response relationship"}
 # Load the ryegrass dataset
 data(ryegrass)
 
@@ -111,7 +111,7 @@ Visual diagnostics are crucial for assessing whether the fitted model adequately
 
 ### Standard Dose-Response Plot
 
-```{r basic-plot}
+```{r basic-plot, fig.alt="Dose-response curve showing LL.4 model fit to ryegrass data with observed data points and fitted sigmoid curve"}
 # Plot the fitted model with data points
 plot(ryegrass.LL4, type = "all",
      main = "LL.4 Model Fit to Ryegrass Data",
@@ -134,7 +134,7 @@ The plot shows:
 
 Q-Q plots assess whether the model residuals follow a normal distribution, which is an assumption of the fitting procedure.
 
-```{r qq-plot}
+```{r qq-plot, fig.alt="Normal Q-Q plot of residuals from LL.4 model showing points approximately along the diagonal reference line"}
 # Create Q-Q plot for residual diagnostics
 qqnorm(residuals(ryegrass.LL4),
        main = "Normal Q-Q Plot of Residuals (LL.4)",
@@ -152,7 +152,7 @@ qqline(residuals(ryegrass.LL4), col = "red", lwd = 2)
 
 An additional useful diagnostic is plotting residuals against fitted values:
 
-```{r residual-plot}
+```{r residual-plot, fig.alt="Residual plot showing residuals versus fitted values with random scatter around zero horizontal line"}
 # Residuals vs. Fitted values
 plot(fitted(ryegrass.LL4), residuals(ryegrass.LL4),
      xlab = "Fitted values",
@@ -292,7 +292,7 @@ ed_best
 
 Plotting multiple models together helps visualize differences in fit:
 
-```{r model-comparison-plot}
+```{r model-comparison-plot, fig.alt="Comparison of LL.4 and W1.4 model fits showing two overlapping dose-response curves in blue (LL.4) and red dashed line (W1.4)"}
 # Plot initial LL.4 model
 plot(ryegrass.LL4, type = "all",
      main = "Comparison: LL.4 vs W1.4 Models",
@@ -411,7 +411,7 @@ cat("LL.3 (3 params):", AIC(ryegrass.LL3), "\n")
 
 ### Visual Comparison of Constrained Models
 
-```{r asymptote-plot}
+```{r asymptote-plot, fig.alt="Comparison of LL.4 and LL.3 models showing effect of asymptote constraints with black solid line (LL.4) and blue dashed line (LL.3)"}
 # Plot models with different constraints
 plot(ryegrass.LL4, type = "all",
      main = "Effect of Asymptote Constraints",
@@ -495,7 +495,7 @@ Monotonic models describe dose-response relationships that are either strictly i
 - EC50/ED50 estimation
 
 **Example:**
-```{r ll-example}
+```{r ll-example, fig.alt="Log-logistic model (LL.4) fitted to ryegrass data showing typical S-shaped dose-response curve"}
 # Standard application of log-logistic model
 example.LL <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 plot(example.LL, main = "Log-Logistic Model (LL.4)")
@@ -519,7 +519,7 @@ plot(example.LL, main = "Log-Logistic Model (LL.4)")
 - Germination/mortality studies
 
 **Example:**
-```{r weibull-example}
+```{r weibull-example, fig.alt="Comparison of Weibull Type 1 (blue) and Type 2 (red dashed) models showing asymmetric dose-response curves"}
 # Weibull models often fit plant growth data well
 example.W1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
 example.W2 <- drm(rootl ~ conc, data = ryegrass, fct = W2.4())

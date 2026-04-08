@@ -29,10 +29,6 @@ backfit <- function(drcObject)
     backfitValues <- ED(drcObject, meansVec, type = "absolute", 
                         display = FALSE, multcomp = FALSE)[, 1, drop = FALSE]
 
-#     colnames(backfitValues) <- "backfit"
-#     rownames(backfitValues) <- sort(unique(DLdose))
-#     backfitValues
-    
     retMat <- cbind(dose = sort(unique(DLdose)), backfit = backfitValues)
     rownames(retMat) <- NULL
     return(retMat)

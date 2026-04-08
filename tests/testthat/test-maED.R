@@ -101,8 +101,8 @@ test_that("maED returns matrix with correct structure for interval='kang'", {
 
   expect_true(is.matrix(result))
   expect_equal(nrow(result), 2)
-  expect_equal(ncol(result), 3)
-  expect_true(all(c("Estimate", "Lower", "Upper") %in% colnames(result)))
+  expect_equal(ncol(result), 4)
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
 })
 
 test_that("maED works with a single response level", {
@@ -225,4 +225,115 @@ test_that("maED handles try-error from failed model in fctList", {
 
   expect_true(is.matrix(result))
   expect_equal(nrow(result), 3)
+})
+
+
+# --- Non-finite ED value filtering ---
+
+# Algae dataset from the debug folder that causes LL.5 to return Inf for ED50
+# due to a negative f parameter estimate.
+algae_data <- data.frame(
+  yield = c(
+    824948.1, 874756.3, 818722.1,  # conc = 10
+    289510.1, 345544.3, 280171.1,  # conc = 10000
+    1077102.1, 653732.5, 824948.1, # conc = 1000
+    905886.4, 753348.9, 756461.9,  # conc = 100
+    697314.7, 691088.6, 762687.9,  # conc = 10  (second batch)
+    880982.4, 747122.8, 803157.1,  # conc = 1   (second batch)
+    295736.1, 295736.1, 255267.0, 283284.1, 286397.1, 273945.0,  # controls
+    1503584.7, 1388403.3, 946355.6, 1195396.5, 1410194.4,        # controls
+    407804.6, 485629.8, 678636.6, 809383.1, 582133.2,            # controls
+    1049085.0, 884095.4, 715992.7, 986824.8, 905886.4            # controls
+  ),
+  conc = c(
+    rep(10, 3), rep(10000, 3), rep(1000, 3), rep(100, 3),
+    rep(10, 3), rep(1, 3),
+    rep(0, 21)
+  )
+)
+
+test_that("maED warns when a model produces non-finite ED values or fitting fails", {
+  m_algae <- drm(yield ~ conc, data = algae_data,
+                 fct = LL.4(fixed = c(NA, 1e-9, NA, NA)))
+
+  fcts <- list(
+    LL.5(fixed = c(NA, 1e-9, NA, NA, NA)),
+    W1.4(fixed = c(NA, 1e-9, NA, NA))
+  )
+
+  expect_warning(
+    result <- maED(m_algae, fcts, 50, display = FALSE),
+    "excluded from model-averaging"
+  )
+
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 1)
+  expect_true(is.finite(result[, "Estimate"]))
+})
+
+test_that("maED extended output shows excluded models with zero weight", {
+  m_algae <- drm(yield ~ conc, data = algae_data,
+                 fct = LL.4(fixed = c(NA, 1e-9, NA, NA)))
+
+  fcts <- list(
+    LL.5(fixed = c(NA, 1e-9, NA, NA, NA)),
+    W1.4(fixed = c(NA, 1e-9, NA, NA))
+  )
+
+  result <- suppressWarnings(
+    maED(m_algae, fcts, 50, display = FALSE, extended = TRUE)
+  )
+
+  expect_true(is.list(result))
+  fits <- result$fits
+
+  # Check that the excluded model has zero weight
+  # At least one model should have weight == 0 (the excluded one)
+  expect_true(any(fits[, "Weight"] == 0))
+
+  # The model-averaged estimate should be finite
+  expect_true(is.finite(result$estimates[, "Estimate"]))
+})
+
+test_that("maED buckland interval works when models are excluded", {
+  m_algae <- drm(yield ~ conc, data = algae_data,
+                 fct = LL.4(fixed = c(NA, 1e-9, NA, NA)))
+
+  fcts <- list(
+    LL.5(fixed = c(NA, 1e-9, NA, NA, NA)),
+    W1.4(fixed = c(NA, 1e-9, NA, NA))
+  )
+
+  result <- suppressWarnings(
+    maED(m_algae, fcts, 50, interval = "buckland", display = FALSE)
+  )
+
+  expect_true(is.matrix(result))
+  expect_equal(ncol(result), 4)
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
+  # Result should be finite
+  expect_true(all(is.finite(result)))
+})
+
+test_that("maED without non-finite values produces no exclusion warning", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  # These models all produce finite ED50 on ryegrass data.
+  # Internal optimization may emit "NaNs produced" warnings which are
+  # unrelated to model exclusion, so we only check that no exclusion
+  # warning is issued.
+  exclusion_warned <- FALSE
+  result <- withCallingHandlers(
+    maED(m1, list(W1.4(), W2.4()), 50, display = FALSE),
+    warning = function(w) {
+      if (grepl("excluded from model-averaging", conditionMessage(w))) {
+        exclusion_warned <<- TRUE
+      }
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  expect_false(exclusion_warned)
+  expect_true(is.matrix(result))
+  expect_true(is.finite(result[, "Estimate"]))
 })

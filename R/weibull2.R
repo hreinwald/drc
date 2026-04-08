@@ -60,9 +60,6 @@ fctName, fctText)
     if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
     if (!(length(fixed)==numParm)) {stop("Not correct 'fixed' argument")}    
     
-#    if (!is.logical(useD)) {stop("Not logical useD argument")}
-#    if (useD) {stop("Derivatives not available")}
-
     notFixed <- is.na(fixed)
     parmVec <- rep(0, numParm)
     parmVec[!notFixed] <- fixed[!notFixed]
@@ -80,24 +77,6 @@ fctName, fctText)
     }
 
 
-#    ## Defining value for control measurements (dose=0)
-#    confct <- function(drcSign)
-#    {
-#        if (drcSign>0) {conPos <- 2} else {conPos <- 3}
-#        confct2 <- function(parm)
-#        { 
-#            parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
-#            parmMat[, notFixed] <- parm
-#            parmMat[, conPos]
-#        }
-#        return(list(pos=conPos, fct=confct2))
-#    }
-#
-#
-#    ## Defining flag to indicate if more general ANOVA model
-#    anovaYes <- TRUE
-
-
     ## Defining the self starter function
     if (!is.null(ssfct))
     {
@@ -111,15 +90,6 @@ fctName, fctText)
     w2.names <- names[notFixed]
 
 
-#    ## Defining parameter to be scaled
-#    if ( (scaleDose) && (is.na(fixed[4])) ) 
-#    {
-#        scaleInd <- sum(is.na(fixed[1:4]))
-#    } else {
-#        scaleInd <- NULL
-#    }
-    
-    
     ## Defining derivatives
     deriv1 <- function(dose, parm)
               {
@@ -130,12 +100,10 @@ fctName, fctText)
                   t2 <- exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
                   t3 <- exp(-t2)
 
-#                  derMat <- as.matrix(cbind( t1*t3*t2*(log(dose) - log(parmMat[, 4])), 
                   derMat <- as.matrix(cbind( t1*xexplogx(dose/parmMat[, 4], parmMat[, 1]), 
                                              1 - (1 - t3), 
                                              1 - t3, 
-                                             -t1*xexpx(dose/parmMat[, 4], parmMat[, 1])*parmMat[, 1]/parmMat[, 4] ))                                             
-#                                             -t1*t3*t2*parmMat[, 1]/parmMat[, 4] ))
+                                             -t1*xexpx(dose/parmMat[, 4], parmMat[, 1])*parmMat[, 1]/parmMat[, 4] ))
                   return(derMat[, notFixed])
               }
     deriv2 <- NULL
@@ -158,23 +126,7 @@ fctName, fctText)
     }
     
 
-    ## Limits
-#    if (length(lowerc)==numParm) {lowerLimits <- lowerc[notFixed]} else {lowerLimits <- lowerc}
-#    if (length(upperc)==numParm) {upperLimits <- upperc[notFixed]} else {upperLimits <- upperc}
-
-
     ## Defining the ED function
-#    edfct <- function(parm, p, upper=NULL)  # upper argument not used in 'gompertz'
-#    {
-#        parmVec[notFixed] <- parm
-#    
-#        tempVal <- log(-log(p/100))
-#        EDp <- exp(tempVal/parmVec[1] + log(parmVec[4]))
-#
-#        EDder <- EDp*c( -tempVal/(parmVec[1]*parmVec[1]), 0, 0, 1/parmVec[4])
-#    
-#        return(list(EDp, EDder[notFixed]))
-#    }
     edfct <- function(parm, p, reference, type, ...)
     {   
         parmVec[notFixed] <- parm
@@ -182,61 +134,18 @@ fctName, fctText)
         p <- absToRel(parmVec, p, type)
 
         ## Reversing p
-#        if (identical(type, "absolute"))
-#        {
-#            p <- 100 - p
-#            type <- "relative"
-#        }
-        
         if (identical(type, "absolute") && (parmVec[1] > 0) && (reference == "control"))
         {
             p <- 100 - p
         }
                
-#        if ( (parmVec[1] > 0) && (reference == "control") ) 
-#        {
-#            p <- 100 - p
-#            reference <- "upper"  # to avoid resetting of p in weibull1() called below    
-#        }
-#        if ( (parmVec[1] < 0) && (reference == "control") ) 
-#        {
-#            p <- 100 - p
-#        }
-    
-                
-#        weibull1(fixed, names)$edfct(parm, 100 - p, reference, type, ...) 
         weibull1(fixed, names)$edfct(parm, p, reference, "relative", ...) 
     }
 
 
-    ## Defining the SI function
-#    sifct <- function(parm1, parm2, pair)
-#    {
-#        parmVec1[notFixed] <- parm1
-#        parmVec2[notFixed] <- parm2
-#
-#        tempVal1 <- log(-log(pair[1]/100))
-#        tempVal2 <- log(-log(pair[2]/100))
-#    
-#        SIpair <- exp(tempVal1/parmVec1[1] + log(parmVec1[4]))/exp(tempVal2/parmVec2[1] + log(parmVec2[4]))
-#    
-#        SIder1 <- SIpair*c(-tempVal1/(parmVec1[1]*parmVec1[1]), 0, 0, 1/parmVec1[4])
-#        SIder2 <- SIpair*c(tempVal2/(parmVec2[1]*parmVec2[1]), 0, 0, -1/parmVec2[4])
-#    
-#        return(list(SIpair, SIder1[notFixed], SIder2[notFixed]))
-#    }
-
-##    sifct <- function(parm1, parm2, pair)
-##    {
-##        weibull(lowerc, upperc, fixed, names, scaleDose, useDer)$sifct(parm1, parm2, 100-pair)
-##    }    
-
-
     returnList <-
-    list(fct = fct, ssfct = ssfct, names = w2.names, deriv1 = deriv1, deriv2 = deriv2, derivx = derivx, edfct = edfct, 
-#    list(fct=fct, confct=confct, ssfct=ssfct, names=w2.names, deriv1=deriv1, deriv2=deriv2, 
-#    lowerc=lowerLimits, upperc=upperLimits, edfct=edfct, anovaYes=anovaYes,
-    name = ifelse(missing(fctName), as.character(match.call()[[1]]), fctName),
+    list(fct = fct, ssfct = ssfct, names = w2.names, deriv1 = deriv1, deriv2 = deriv2, derivx = derivx, edfct = edfct,
+    name = ifelse(missing(fctName),as.character(match.call()[[1]]), fctName),
     text = ifelse(missing(fctText), "Weibull (type 2)", fctText),     
     noParm = sum(is.na(fixed)),
     fixed = fixed)

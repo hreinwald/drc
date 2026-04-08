@@ -139,7 +139,6 @@ variable maximum.
 # Assumes zero baseline response
 nec3.model <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
 summary(nec3.model)
-#> Warning in sqrt(diag(varMat)): NaNs produced
 #> 
 #> Model fitted: NEC with lower limit at 0 (3 parms)
 #> 

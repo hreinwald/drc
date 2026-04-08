@@ -91,8 +91,7 @@ ssfct = NULL, fctName, fctText)
         ssfct <- function(dframe)
         {  
             first4 <- llogistic.ssf(fixed = c(NA, NA, NA, NA, 1))(dframe)    
-#            c(0, -first4[1], 0, first4[2:3])[is.na(fixed)]
-            c(0, -first4[1] / (mean(dframe[, 1]) * 0.7), 0, first4[2:3])[notFixed]            
+            c(0, -first4[1] / (mean(dframe[, 1]) * 0.7), 0, first4[2:3])[notFixed]
         }
     }    
    
@@ -130,7 +129,6 @@ ssfct = NULL, fctName, fctText)
         {
             p <- 100 - p
         }
-#        pProp <- log(1 - (100 - p) / 100)
         pProp <- log((100 - p) / 100)
         
         ## deriv(~ (-b2+sqrt(b2*b2-4*b3*(b1+22)))/(2*b3), c("b1", "b2", "b3", "c", "d"), function(b1, b2, b3, c, d){})

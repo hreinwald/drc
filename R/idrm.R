@@ -90,39 +90,4 @@
     return(retList)
 }
 
-#
-#"summary.idrm" <- function(object)
-#{
-#    
-#
-#}
-#
-#
-#"coef.idrm" <- function(object)
-#{
-#    lappFct <- function(t)
-#    {
-#        coefVec <- coef(t) 
-#        retVec <- c(coefVec, summary(t)$resVar)
-#        names(retVec) <- c(names(coefVec), "Res var")
-#        
-#        retVec
-#    }
-#
-##    coefList <- lapply(object$"fitList", function(t) {c(coef(t), summary(t)$resVar)})
-#    coefList <- lapply(object$"fitList", lappFct)
-#
-#    if (!is.list(object$"fctList"[[1]]))
-#    {
-#        cl1 <- coefList[[1]]
-#        coefMat <- matrix(unlist(coefList), ncol = length(cl1), byrow = TRUE)
-#        colnames(coefMat) <- names(cl1)
-#        rownames(coefMat) <- object$"curveId"
-#    
-#        return(coefMat)
-#    } else {
-#        names(coefList) <- object$"curveId"
-#        return(coefList)
-#    }
-#}
 

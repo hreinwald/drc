@@ -1,7 +1,12 @@
 # Estimating effective doses
 
-`ED` estimates effective concentration or doses for one or more
-specified absolute or relative response levels.
+Default method for class `drc`. `ED.drc` estimates effective
+concentrations (EC) or effective doses (ED) for one or more specified
+response levels. Response levels may be given as relative percentages of
+the response range (e.g. ED50 = 50\\ values. The function computes point
+estimates, delta-method standard errors, and optional confidence
+intervals for each combination of curve and response level in the fitted
+model.
 
 ## Usage
 
@@ -118,17 +123,77 @@ directly into `parm` in the package multcomp (when `multcomp = TRUE`).
 
 ## Details
 
-There are several options for calculating confidence intervals through
-the argument `interval`. The option `"delta"` results in asymptotical
-Wald-type confidence intervals (using the delta method and the normal or
-t-distribution depending on the type of response). The option `"fls"`
-produces (possibly skewed) confidence intervals through
-back-transformation from the logarithm scale (only meaningful in case
-the parameter in the model is log(ED50) as for the
-[`llogistic2`](https://hreinwald.github.io/drc/reference/llogistic2.md)
-models). The option `"tfls"` is for transforming back and forth from log
-scale (experimental). The option `"inv"` results in confidence intervals
-obtained through inverse regression.
+The function carries out the following computational steps:
+
+1.  **Input validation.** Arguments are checked for correct types and
+    ranges (e.g. `respLev` must be numeric, `level` must be in (0, 1),
+    and relative response levels must lie strictly inside the interval
+    (0, 100) when `bound = TRUE`).
+
+2.  **Model component extraction.** The model-specific ED function
+    (`edfct`), parameter matrix (`parmMat`), and index matrix
+    (`indexMat`) are retrieved from the fitted `drc` object. The
+    variance-covariance matrix is obtained from `vcov.`, which may be a
+    function (e.g. [`vcov`](https://rdrr.io/r/stats/vcov.html) or
+    [`sandwich::vcovHC`](https://sandwich.R-Forge.R-project.org/reference/vcovHC.html))
+    or a pre-computed matrix.
+
+3.  **Curve ordering.** When multiple curves are present, they are
+    sorted alphabetically by name, unless the names are purely numeric,
+    in which case the original order is preserved.
+
+4.  **ED estimation and delta-method standard errors.** For each curve
+    and each requested response level, the model-specific `edfct` is
+    called to obtain the ED point estimate and its analytical gradient
+    with respect to the model parameters. Standard errors are then
+    computed via the delta method: \\SE = \sqrt{g' V g}\\, where \\g\\
+    is the gradient vector and \\V\\ is the relevant sub-matrix of the
+    variance-covariance matrix.
+
+5.  **Numerical gradient for absolute responses.** When
+    `type = "absolute"`, the analytical gradient returned by the model
+    may miss the chain-rule contribution from the asymptote parameters
+    involved in converting absolute to relative response levels. In that
+    case a numerical central-difference gradient is computed to ensure
+    correct standard errors.
+
+6.  **Log-base back-transformation.** If `logBase` is specified
+    (indicating that dose values were log-transformed prior to model
+    fitting), the ED estimates and their derivatives are
+    back-transformed via \\ED^\* = b^{ED}\\ (where \\b\\ is the log
+    base) so that results are reported on the original dose scale.
+
+7.  **Confidence interval construction.** Depending on `interval`:
+
+    - `"delta"`:
+
+      Asymptotic Wald-type intervals using the delta method, based on
+      the normal or t-distribution (depending on the response type).
+
+    - `"fls"`:
+
+      Intervals obtained by back-transforming from the log scale. Only
+      meaningful when the model parameterises the ED on the log scale
+      (e.g.
+      [`llogistic2`](https://hreinwald.github.io/drc/reference/llogistic2.md)).
+
+    - `"tfls"`:
+
+      Experimental: intervals obtained by transforming to the log scale,
+      computing Wald intervals there, then back-transforming.
+
+    - `"inv"`:
+
+      Intervals derived from inverse regression via
+      [`EDinvreg`](https://hreinwald.github.io/drc/reference/EDinvreg.md),
+      where confidence limits on the predicted response are inverted to
+      the dose axis.
+
+8.  **Output.** Results are returned as an invisible matrix with columns
+    for the estimate, standard error, and (optionally) lower and upper
+    confidence limits. When `multcomp = TRUE`, a list compatible with
+    [`parm`](https://rdrr.io/pkg/multcomp/man/parm.html) is returned
+    instead, enabling multiple-comparison procedures.
 
 For hormesis models
 ([`braincousens`](https://hreinwald.github.io/drc/reference/braincousens.md)
@@ -161,38 +226,38 @@ ED(ryegrass.m1, c(10, 50, 90))
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error
-#> e:1:10  1.46371    0.18677
-#> e:1:50  3.05795    0.18573
-#> e:1:90  6.38864    0.84510
+#>      Estimate Std. Error
+#> e:10  1.46371    0.18677
+#> e:50  3.05795    0.18573
+#> e:90  6.38864    0.84510
 
 ## Displaying 95% confidence intervals using the delta method
 ED(ryegrass.m1, c(10, 50, 90), interval = "delta")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:10  1.46371    0.18677 1.07411 1.85330
-#> e:1:50  3.05795    0.18573 2.67053 3.44538
-#> e:1:90  6.38864    0.84510 4.62580 8.15148
+#>      Estimate Std. Error   Lower   Upper
+#> e:10  1.46371    0.18677 1.07411 1.85330
+#> e:50  3.05795    0.18573 2.67053 3.44538
+#> e:90  6.38864    0.84510 4.62580 8.15148
 
 ## Displaying 95% confidence intervals using back-transformation
 ED(ryegrass.m1, c(10, 50, 90), interval = "fls")
 #> 
 #> Estimated effective doses
 #> 
-#>         Estimate     Lower     Upper
-#> e:1:10    4.3219    2.9274    6.3809
-#> e:1:50   21.2840   14.4476   31.3553
-#> e:1:90  595.0468  102.0842 3468.5164
+#>       Estimate     Lower     Upper
+#> e:10    4.3219    2.9274    6.3809
+#> e:50   21.2840   14.4476   31.3553
+#> e:90  595.0468  102.0842 3468.5164
 
 ## Displaying 95% confidence intervals using inverse regression
 ED(ryegrass.m1, c(10, 50, 90), interval = "inv")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate  Lower  Upper
-#> e:1:10   1.4637 1.1423 1.8225
-#> e:1:50   3.0580 2.7490 3.4017
-#> e:1:90   6.3886 5.1514 8.1965
+#>      Estimate  Lower  Upper
+#> e:10   1.4637 1.1423 1.8225
+#> e:50   3.0580 2.7490 3.4017
+#> e:90   6.3886 5.1514 8.1965
 ```

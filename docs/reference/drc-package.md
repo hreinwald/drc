@@ -7,6 +7,8 @@ flexible and versatile model fitting and after-fitting functions.
 
 Useful links:
 
+- <https://hreinwald.github.io/drc>
+
 - <https://github.com/hreinwald/drc>
 
 - <https://www.bioassay.dk>
@@ -19,10 +21,10 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Christian Ritz <ritz@bioassay.dk>
+**Maintainer**: Hannes Reinwald <hannes.reinwald@bayer.com>
 
 Authors:
 
-- Jens C. Streibig <streibig@bioassay.dk>
+- Christian Ritz <ritz@bioassay.dk>
 
-- Hannes Reinwald <hannes.reinwald@bayer.com>
+- Jens C. Streibig <streibig@bioassay.dk>

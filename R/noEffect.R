@@ -29,7 +29,7 @@ noEffect <- function(object)
         weiVec <- object$"dataList"$weights
         llNull <- logLik(glm(cbind(respVec*weiVec, (1-respVec)*weiVec) ~ 1, family = binomial))
     }
-    
+
     if (identical(object$"type", "Poisson"))
     {
         respVec <- object$"dataList"$resp
@@ -43,6 +43,14 @@ noEffect <- function(object)
     lldrc <- logLik(object)
     lrt <- -2*(llNull - lldrc)
     dfDiff <- attr(lldrc, "df") - attr(llNull, "df")
+
+    # Check if degrees of freedom difference is valid
+    if (dfDiff <= 0) {
+        warning("Degrees of freedom difference is ", dfDiff,
+                ". This may indicate that the dose-response model has no additional ",
+                "parameters compared to the null model (e.g., when parameters are fixed). ",
+                "The likelihood ratio test may not be meaningful in this case.")
+    }
 
     retVec <- c(lrt, dfDiff, 1 - pchisq(lrt, dfDiff))
     names(retVec) <- c("Chi-square test", "Df", "p-value")

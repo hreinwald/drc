@@ -87,11 +87,9 @@ Hannes Reinwald
 ``` r
 # Create a CRS.5 model specification
 crs_model_a <- CRS.5()
-#> Error in CRS.5(): could not find function "CRS.5"
 
 # Fix the lower limit to 0 and use a custom numeric alpha
 crs_model_custom <- CRS.5(
   fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75
 )
-#> Error in CRS.5(fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75): could not find function "CRS.5"
 ```

@@ -6,11 +6,14 @@
 \alias{drc-package}
 \title{drc: Analysis of Dose-Response Data}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Analysis of dose-response data is made available through a suite of flexible and versatile model fitting and after-fitting functions.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://hreinwald.github.io/drc}
   \item \url{https://github.com/hreinwald/drc}
   \item \url{https://www.bioassay.dk}
   \item \url{https://www.r-project.org}
@@ -20,12 +23,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Christian Ritz \email{ritz@bioassay.dk}
+\strong{Maintainer}: Hannes Reinwald \email{hannes.reinwald@bayer.com}
 
 Authors:
 \itemize{
+  \item Christian Ritz \email{ritz@bioassay.dk}
   \item Jens C. Streibig \email{streibig@bioassay.dk}
-  \item Hannes Reinwald \email{hannes.reinwald@bayer.com}
 }
 
 }

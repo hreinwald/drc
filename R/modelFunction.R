@@ -10,12 +10,10 @@ modelFunction <- function(dose, parm2mat, drcFct, cm, assayNoOld, upperPos, retF
     drcFct1 <- function(dose, parm)
     {
         parmVal <- parm2mat(parm)
-#        print(c(dim(pshifts), dim(parmVal)))
         if ((!is.null(pshifts)) & all(dim(pshifts) == dim(parmVal))) 
         {
             parmVal <- parmVal + pshifts
         }     
-#        drcFct(dose, (parm2mat(parm))[isFinite, , drop = FALSE])
         drcFct(dose, parmVal[isFinite, , drop = FALSE])
     }
 
@@ -33,7 +31,6 @@ modelFunction <- function(dose, parm2mat, drcFct, cm, assayNoOld, upperPos, retF
         multCurves <- function(dose, parm)
         {
             parmVal <- (parm2mat(parm))[isFinite, , drop = FALSE]
-#            print(c(dim(pweights), dim(parmVal)))
             if ((!is.null(pshifts)) & all(dim(pshifts) == dim(parmVal))) 
             {
                 parmVal <- parmVal + pshifts

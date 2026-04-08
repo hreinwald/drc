@@ -17,6 +17,13 @@ For multi-curve models, includes per-curve values and a total R-squared.
 Calculates and displays R-squared values for a fitted dose-response model. For models
 with multiple curves, per-curve and total R-squared values are returned.
 }
+\details{
+R-squared is computed as \eqn{1 - RSS / TSS} where RSS is the residual sum of squares
+(obtained via \code{\link[=rss]{rss()}}) and TSS is the total sum of squares.
+}
+\seealso{
+\code{\link[=rss]{rss()}} for the underlying residual sum of squares.
+}
 \author{
 Christian Ritz
 }

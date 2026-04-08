@@ -57,10 +57,10 @@ ED(finney71.m1, c(10, 20, 50), interval = "delta", reference = "control")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error   Lower   Upper
-#> e:1:10  2.37896    0.25164 1.88576 2.87217
-#> e:1:20  3.08932    0.24372 2.61163 3.56700
-#> e:1:50  4.82890    0.24958 4.33974 5.31806
+#>      Estimate Std. Error   Lower   Upper
+#> e:10  2.37896    0.25164 1.88576 2.87217
+#> e:20  3.08932    0.24372 2.61163 3.56700
+#> e:50  4.82890    0.24958 4.33974 5.31806
 
 ## Model fitted with 'glm'
 #fitl.glm <- glm(cbind(affected, total-affected) ~ log(dose),
@@ -83,8 +83,8 @@ ED(finney71.m2, c(10, 20, 50), interval = "fls", reference = "control")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate  Lower  Upper
-#> e:1:10   2.3789 1.9335 2.9270
-#> e:1:20   3.0893 2.6467 3.6059
-#> e:1:50   4.8289 4.3637 5.3437
+#>      Estimate  Lower  Upper
+#> e:10   2.3789 1.9335 2.9270
+#> e:20   3.0893 2.6467 3.6059
+#> e:50   4.8289 4.3637 5.3437
 ```

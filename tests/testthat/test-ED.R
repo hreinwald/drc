@@ -102,10 +102,11 @@ compute_numgrad_se <- function(model, absResp) {
   vc <- vcov(model)
   edfct <- model$fct$edfct
   parms <- coef(model)
-  eps <- .Machine$double.eps^(1/3)
+  eps <- .Machine$double.eps
   numGrad <- numeric(length(parms))
   for (k in seq_along(parms)) {
-    h <- max(abs(parms[k]), 1) * eps
+    p <- parms[k]
+    h <- if (abs(p) > sqrt(eps)) abs(p) * eps^(1/3) else eps^(1/3)
     pu <- replace(parms, k, parms[k] + h)
     pd <- replace(parms, k, parms[k] - h)
     eu <- edfct(pu, absResp, reference = "control", type = "absolute")[[1]]
@@ -258,16 +259,17 @@ test_that("ED.drc with fls interval (from log scale)", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- ED(m1, 50, interval = "fls", display = FALSE)
 
-  expect_equal(ncol(result), 3)  # Estimate, Lower, Upper (no Std. Error)
-  expect_true(all(c("Estimate", "Lower", "Upper") %in% colnames(result)))
-  expect_false("Std. Error" %in% colnames(result))
+  expect_equal(ncol(result), 4)  # Estimate, Std. Error, Lower, Upper
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
 })
 
 test_that("ED.drc with tfls interval (to and from log scale)", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- ED(m1, 50, interval = "tfls", display = FALSE)
 
+  # SE column is now retained alongside Lower and Upper
   expect_equal(ncol(result), 4)
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
   expect_true(result[, "Lower"] < result[, "Estimate"])
   expect_true(result[, "Upper"] > result[, "Estimate"])
 })
@@ -276,8 +278,8 @@ test_that("ED.drc with inverse regression interval", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   result <- ED(m1, 50, interval = "inv", display = FALSE)
 
-  expect_equal(ncol(result), 3)  # Estimate, Lower, Upper (no Std. Error)
-  expect_true(all(c("Estimate", "Lower", "Upper") %in% colnames(result)))
+  expect_equal(ncol(result), 4)  # Estimate, Std. Error, Lower, Upper
+  expect_true(all(c("Estimate", "Std. Error", "Lower", "Upper") %in% colnames(result)))
 })
 
 # Tests for different model types
@@ -447,4 +449,200 @@ test_that("ED.drc confidence intervals contain the estimate", {
 
   expect_true(result[, "Lower"] < result[, "Estimate"])
   expect_true(result[, "Upper"] > result[, "Estimate"])
+})
+
+# --- Acceptance criteria tests for FIX #1 through #11 -----------------------
+
+test_that("FIX #1: clevel filtering does not corrupt row indices (multi-curve)", {
+  m_multi <- drm(resp ~ dose, curveid = group, data = multi_data, fct = LL.4())
+  result_A <- ED(m_multi, 50, interval = "delta", clevel = "A", display = FALSE)
+
+  expect_equal(nrow(result_A), 1)
+  expect_true(grepl("A:", rownames(result_A)))
+  expect_true(result_A[, "Lower"] < result_A[, "Estimate"])
+  expect_true(result_A[, "Upper"] > result_A[, "Estimate"])
+
+  # Multiple response levels with clevel filtering
+  result_A3 <- ED(m_multi, c(10, 50, 90), clevel = "A", display = FALSE)
+  expect_equal(nrow(result_A3), 3)
+  expect_true(all(grepl("A:", rownames(result_A3))))
+})
+
+test_that("FIX #11: multcomp = TRUE with display = FALSE is fully silent", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_silent(result <- ED(m1, 50, multcomp = TRUE, display = FALSE))
+  expect_true(is.list(result))
+  expect_true("EDmultcomp" %in% names(result))
+})
+
+# --- Regression test for EXD.3 with two fixed parameters --------------------
+
+# Exponential decay dataset (from GitHub issue: ED() fails with 1x1 vcov)
+exd_data <- data.frame(
+  conc = c(1e+01, 1e+00, 1e-01, 1e+04, 1e+03, 1e+02, 1e+01, 1e+00,
+           1e-01, 1e+04, 1e+03, 1e+02, 1e+01, 1e+00, 1e-01, 1e+04,
+           1e+03, 1e+02, 0e+00, 0e+00, 0e+00, 0e+00, 0e+00, 0e+00,
+           0e+00, 0e+00, 0e+00, 0e+00, 0e+00, 0e+00, 0e+00, 0e+00,
+           0e+00, 0e+00, 0e+00, 0e+00),
+  yield = c(15083.677, 142275.764, 197718.468, 0.000, 0.000, 0.000,
+            67265.046, 197718.468, 266206.515, 28129.019, 5299.695,
+            47697.033, 0.000, 139014.428, 178150.455, 0.000, 0.000,
+            28129.019, 181411.790, 142275.764, 329394.891, 156544.107,
+            230331.770, 256422.508, 112923.744, 187934.462, 321649.219,
+            158582.442, 189157.384, 109662.408, 155321.106, 158582.442,
+            311865.213, 259683.844, 152059.728, 178150.455)
+)
+
+test_that("EXD.3 with one fixed param: ED() works", {
+  res <- drm(yield ~ conc, data = exd_data,
+             fct = EXD.3(fixed = c(0, NA, NA)))
+  result <- ED(res, c(10, 20, 50), interval = "tfls", display = FALSE)
+
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 3)
+  expect_true(all(result[, "Estimate"] > 0))
+  expect_true(all(result[, "Lower"] < result[, "Estimate"]))
+  expect_true(all(result[, "Upper"] > result[, "Estimate"]))
+})
+
+test_that("EXD.3 with two fixed params: ED() works (1x1 vcov regression)", {
+  # This is the key regression test: when both c and d are fixed, only e is
+  # estimated, producing a 1x1 vcov matrix and a scalar indexMat.  The legacy
+  # code failed with "incorrect number of dimensions" because indexMat was not
+  # coerced to a matrix and vcMat subsetting dropped dimensions.
+  res2 <- drm(yield ~ conc, data = exd_data,
+              fct = EXD.3(fixed = c(0, 199553, NA)))
+
+  # Basic model checks
+  expect_equal(length(coef(res2)), 1)
+  expect_true(is.matrix(vcov(res2)))
+  expect_equal(dim(vcov(res2)), c(1, 1))
+
+  # ED without interval
+  result_none <- ED(res2, c(10, 20, 50), interval = "none", display = FALSE)
+  expect_true(is.matrix(result_none))
+  expect_equal(nrow(result_none), 3)
+  expect_true(all(result_none[, "Estimate"] > 0))
+  expect_true(all(result_none[, "Std. Error"] > 0))
+
+  # ED with delta interval
+  result_delta <- ED(res2, c(10, 20, 50), interval = "delta", display = FALSE)
+  expect_equal(ncol(result_delta), 4)
+  expect_true(all(result_delta[, "Lower"] < result_delta[, "Estimate"]))
+  expect_true(all(result_delta[, "Upper"] > result_delta[, "Estimate"]))
+
+  # ED with tfls interval (the original failing case)
+  result_tfls <- ED(res2, c(10, 20, 50), interval = "tfls", display = FALSE)
+  expect_true(is.matrix(result_tfls))
+  expect_equal(nrow(result_tfls), 3)
+  expect_true(all(result_tfls[, "Lower"] < result_tfls[, "Estimate"]))
+  expect_true(all(result_tfls[, "Upper"] > result_tfls[, "Estimate"]))
+
+  # Verify estimates match analytical formula: ED_p = -e * ln(1 - p/100)
+  e_hat <- coef(res2)[["e:(Intercept)"]]
+  p <- c(10, 20, 50)
+  ED_manual <- -e_hat * log(1 - p / 100)
+  expect_equal(as.numeric(result_none[, "Estimate"]), ED_manual, tolerance = 1e-6)
+
+  # Verify SE matches analytical delta-method: SE(ED_p) = |ln(1 - p/100)| * SE(e)
+  se_e <- sqrt(vcov(res2)[1, 1])
+  SE_manual <- abs(log(1 - p / 100)) * se_e
+  expect_equal(as.numeric(result_none[, "Std. Error"]), SE_manual, tolerance = 1e-6)
+})
+
+# --- Additional stability tests for fixed-parameter edge cases ---------------
+
+test_that("FIX #12: ED() handles pre-computed vcov as scalar for 1-param model", {
+  res2 <- drm(yield ~ conc, data = exd_data,
+              fct = EXD.3(fixed = c(0, 199553, NA)))
+  v_scalar <- as.numeric(vcov(res2))  # accidentally convert to scalar
+  result <- ED(res2, c(10, 50), vcov. = v_scalar, display = FALSE)
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 2)
+  expect_true(all(result[, "Std. Error"] > 0))
+})
+
+test_that("FIX #12: ED() rejects non-square numeric vcov", {
+  res2 <- drm(yield ~ conc, data = exd_data,
+              fct = EXD.3(fixed = c(0, 199553, NA)))
+  expect_error(ED(res2, 50, vcov. = c(1, 2, 3), display = FALSE),
+               "square matrix")
+})
+
+test_that("FIX #12: ED() rejects non-numeric vcov", {
+  res2 <- drm(yield ~ conc, data = exd_data,
+              fct = EXD.3(fixed = c(0, 199553, NA)))
+  expect_error(ED(res2, 50, vcov. = "not_a_matrix", display = FALSE),
+               "numeric matrix")
+})
+
+test_that("FIX #13: ED() with logBase transform and single free param", {
+  res2 <- drm(yield ~ conc, data = exd_data,
+              fct = EXD.3(fixed = c(0, 199553, NA)))
+  result <- ED(res2, c(10, 50), logBase = 10, display = FALSE)
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 2)
+  expect_true(all(result[, "Estimate"] > 0))
+})
+
+test_that("ED() works with LL.4 and 3 fixed params (only e free)", {
+  m_full <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  cf <- coef(m_full)
+  m_1free <- drm(rootl ~ conc, data = ryegrass,
+                  fct = LL.4(fixed = c(cf[1], cf[2], cf[3], NA)))
+
+  expect_equal(length(coef(m_1free)), 1)
+  expect_true(is.matrix(vcov(m_1free)))
+  expect_equal(dim(vcov(m_1free)), c(1, 1))
+
+  # All interval types should work
+  for (int in c("none", "delta", "tfls", "fls")) {
+    result <- ED(m_1free, c(10, 50), interval = int, display = FALSE)
+    expect_true(is.matrix(result), info = paste("interval =", int))
+    expect_equal(nrow(result), 2, info = paste("interval =", int))
+    expect_true(all(result[, "Estimate"] > 0), info = paste("interval =", int))
+  }
+})
+
+test_that("ED() works with W1.4 and 3 fixed params", {
+  m_full <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
+  cf <- coef(m_full)
+  m_1free <- drm(rootl ~ conc, data = ryegrass,
+                  fct = W1.4(fixed = c(cf[1], cf[2], cf[3], NA)))
+
+  result <- ED(m_1free, c(10, 50), interval = "delta", display = FALSE)
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 2)
+  expect_true(all(result[, "Estimate"] > 0))
+  expect_true(all(result[, "Std. Error"] > 0))
+})
+
+test_that("ED() works with W2.4 and 3 fixed params", {
+  m_full <- drm(rootl ~ conc, data = ryegrass, fct = W2.4())
+  cf <- coef(m_full)
+  m_1free <- drm(rootl ~ conc, data = ryegrass,
+                  fct = W2.4(fixed = c(cf[1], cf[2], cf[3], NA)))
+
+  result <- ED(m_1free, c(10, 50), interval = "delta", display = FALSE)
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 2)
+  expect_true(all(result[, "Estimate"] > 0))
+  expect_true(all(result[, "Std. Error"] > 0))
+})
+
+test_that("ED() multcomp output works with single free param", {
+  res2 <- drm(yield ~ conc, data = exd_data,
+              fct = EXD.3(fixed = c(0, 199553, NA)))
+  result <- ED(res2, c(10, 50), multcomp = TRUE, display = FALSE)
+  expect_true(is.list(result))
+  expect_true("EDmultcomp" %in% names(result))
+})
+
+test_that("ED() absolute type works with single free param", {
+  res2 <- drm(yield ~ conc, data = exd_data,
+              fct = EXD.3(fixed = c(0, 199553, NA)))
+  result <- ED(res2, 100000, type = "absolute", display = FALSE)
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 1)
+  expect_true(result[, "Estimate"] > 0)
 })

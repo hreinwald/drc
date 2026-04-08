@@ -222,9 +222,9 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
   useFixed <- !all(is.na(fixed))
   
   # Match the method argument
-  method   = match.arg(method)
-  notFixed = is.na(fixed)
-  parmVec  = rep(0, numParm)
+  method <- match.arg(method)
+  notFixed <- is.na(fixed)
+  parmVec <- rep(0, numParm)
   parmVec[!notFixed] <- fixed[!notFixed]
   
   ## Defining the non-linear function
@@ -250,14 +250,14 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
   ## Specifying the derivatives (derivatives code is kept as is)
   deriv1 <- function(dose, parm)
   {
-    parmMat <- matrix(parmVec, nrow(parm), numParm, byrow=TRUE)
+    parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
     parmMat[, notFixed] <- parm
     
-    t0 = exp(-1/(dose^alpha))
-    t1 = parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*t0
-    t2 = exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
-    t3 = 1 + t2                          
-    t4 = (1 + t2)^(-2)
+    t0 <- exp(-1/(dose^alpha))
+    t1 <- parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*t0
+    t2 <- exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
+    t3 <- 1 + t2                          
+    t4 <- (1 + t2)^(-2)
     
     # A helper function 'xlogx' would need to be defined for this to work
     cbind(
@@ -361,7 +361,7 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
 #' )
 #' 
 #' @export
-CRS.5 = function(names = c("b", "c", "d", "e", "f"), 
+CRS.5 <- function(names = c("b", "c", "d", "e", "f"), 
                  fixed = c(NA, NA, NA, NA, NA), 
                  alpha_type = "a", # one of 'a', 'b' or 'c' or a numeric value specifiying alpha
                  fctName = NULL,
@@ -374,29 +374,28 @@ CRS.5 = function(names = c("b", "c", "d", "e", "f"),
   }
   
   # Specify respective alpha values 
-  alpha_value = list(a = 1, b = 0.5, c = 0.25)
+  alpha_value <- list(a = 1, b = 0.5, c = 0.25)
   
   # Check alpha_type and calculate the numeric alpha value 'a'
-  if(!is.numeric(alpha_type)){
+  if (!is.numeric(alpha_type)){
     # --- STABILITY IMPROVEMENT ---
     # Check if the provided character is a valid key before trying to access it
     if (!(alpha_type %in% names(alpha_value))) {
       stop("Invalid 'alpha_type'. Must be one of 'a', 'b', 'c', or a numeric value.")
     }
-    a = alpha_value[[alpha_type]]
+    a <- alpha_value[[alpha_type]]
   } else {
-    a = alpha_type
-    # Modify alpha_type for unique function naming if a numeric is given
-    alpha_type = paste0(".alpha:", alpha_type)
+    a <- alpha_type
+    alpha_type <- paste0(".alpha:", alpha_type)
   }
   stopifnot(is.numeric(a)) # This check is now safe
   
   # Propper variable handling for optional arguments
-  if(is.null(fctName)) fctName = paste0(as.character(match.call()[[1]]), alpha_type)
-  if(is.null(fctText)) fctText = paste0("Cedergreen-Ritz-Streibig (alpha=", a, ")")
+  if (is.null(fctName)) fctName <- paste0(as.character(match.call()[[1]]), alpha_type)
+  if (is.null(fctText)) fctText <- paste0("Cedergreen-Ritz-Streibig (alpha=", a, ")")
   
   # Run cedergreen() within tryCatch for proper error handling
-  res = tryCatch({
+  res <- tryCatch({
     drc::cedergreen(fixed = fixed, names = names, alpha = a, 
                     fctName = fctName, fctText = fctText, ...)
   }, error = function(e) {
@@ -614,7 +613,7 @@ ml3a <- CRS.4a
     cedergreen(
       fixed = fixed, names = names, alpha = 0.5, 
       fctName = as.character(match.call()[[1]]), 
-      fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=)", 
+      fctText = "Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.5)", 
       ...
     )
   )

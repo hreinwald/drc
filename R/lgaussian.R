@@ -119,16 +119,6 @@ fctName, fctText, loge = FALSE)
     edfct <- function(parm, respl, reference, type, ...)
     {
         parmVec[notFixed] <- parm
-#        if (type == "absolute")
-#        {
-#            p <- 100*((parmVec[3] - respl)/(parmVec[3] - parmVec[2]))
-#        } else {
-#            p <- respl
-#        }
-#        if ( (parmVec[1] < 0) && (reference == "control") )
-#        {
-#            p <- 100 - p
-#        }
         p <- absToRel(parmVec, abs(respl), type)
 
         ## Reversing p
@@ -147,7 +137,6 @@ fctName, fctText, loge = FALSE)
         ## using "22" instead of log(pProp)
         EDfct <- function (b, c, d, e, f)
         {
-#            .expr2 <- -2 * 22
             .expr2 <- -2 * log(pProp)
             .expr4 <- .expr2^(1/f)
             .expr6 <- exp(sign(respl) * b * .expr4)
@@ -181,65 +170,4 @@ fctName, fctText, loge = FALSE)
 
     class(returnList) <- "lgaussian"
     invisible(returnList)
-}
-
-
-if (FALSE)
-{
-
-"LN.2" <-
-function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
-{
-    ## Checking arguments
-    numParm <- 2
-    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
-    if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
-
-    return( lnormal(fixed = c(fixed[1], 0, upper, fixed[2]),
-    names = c(names[1], "c", "d", names[2]),
-    fctName = as.character(match.call()[[1]]),
-    fctText = lowupFixed("Log-normal", upper), ...) )
-}
-
-"LN.3" <-
-function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
-{
-    ## Checking arguments
-    numParm <- 3
-    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
-    if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
-
-    return( lnormal(fixed = c(fixed[1], 0, fixed[2:3]),
-    names = c(names[1], "c", names[2:3]),
-    fctName = as.character(match.call()[[1]]),
-    fctText = lowFixed("Log-normal"), ...) )
-}
-
-"LN.3u" <-
-function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
-{
-    ## Checking arguments
-    numParm <- 3
-    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct 'names' argument")}
-    if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
-
-    return( lnormal(fixed = c(fixed[1:2], upper, fixed[3]),
-    names = c(names[1:2], "d", names[3]),
-    fctName = as.character(match.call()[[1]]),
-    fctText = upFixed("Log-normal", upper),
-    ...) )
-}
-
-"LN.4" <-
-function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
-{
-    ## Checking arguments
-    numParm <- 4
-    if (!is.character(names) | !(length(names)==numParm)) {stop("Not correct names argument")}
-    if (!(length(fixed)==numParm)) {stop("Not correct length of 'fixed' argument")}
-
-    return( lnormal(fixed = fixed, names = names,
-    fctName = as.character(match.call()[[1]]), ...) )
-}
-
 }

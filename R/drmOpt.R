@@ -34,11 +34,8 @@ matchCall)
             nlsFit <- nlsObj
             nlsFit$convergence <- TRUE
         } else {
-#            stop("Convergence failed")
             warning("Convergence failed. The model was not fitted!", call. = FALSE)
 
-#            callDetail <- match.call()
-#            if (is.null(callDetail$fct)) {callDetail$fct <- substitute(l4())}
             return(list(call = matchCall, parNames = parmVec, startVal = startVec, convergence = FALSE))
         }
         if (!hes) {nlsFit$hessian <- opdfct2(nlsFit$par)}
@@ -48,26 +45,13 @@ matchCall)
 
         if (constrained)
         {
-#            print(lowerLimits)
-#            print(upperLimits)
-#            print(startVec)
-#            print(opfct)
-#            print(opfct(startVec))                    
             nlsObj <- try(optim(startVec, opfct, hessian = TRUE, method = "L-BFGS-B", 
             lower = lowerLimits, upper = upperLimits, 
             control = list(maxit = maxIt, parscale = psVec, reltol = relTol, trace = traceVal)), silent = silentVal)
             # parscale is needed for the example in methionine.Rd
         } else {
-#            psVec <- abs(startVec)
-#            psVec[psVec<1e-4] <- 1
-
             nlsObj <- try(optim(startVec, opfct, hessian = TRUE, method = optMethod, 
             control = list(maxit = maxIt, reltol = relTol, parscale = psVec, trace = traceVal)), silent = silentVal)
-
-#            nlsObj0 <- try(optim(startVec, opfct, method=optMethod, 
-#            control=list(maxit=maxIt, reltol=relTol, parscale=psVec)), silent=TRUE)
-#            nlsObj <- try(optim(nlsObj0$par, opfct, hessian=TRUE, method=optMethod, 
-#            control=list(maxit=maxIt, reltol=relTol)), silent=TRUE)
         }
         options(warn = 0)
         
@@ -83,15 +67,11 @@ matchCall)
                 warning("Convergence failed. The model was not fitted!", call. = FALSE)
             }
 
-#            callDetail <- match.call()
-#            if (is.null(callDetail$fct)) {callDetail$fct <- substitute(LL.4())}
             return(list(call = matchCall, parNames = parmVec, startVal = startVec, convergence = FALSE))
         }
     }}
     
-#    nlsFit$ofvalue <- nlsFit$value
     nlsFit$ovalue <- nlsFit$value  # used in the var-cov matrix ... check
-#    nlsFit$value <- opfct(nlsFit$par, scaling = FALSE)  # used in the residual variance ... check    
     nlsFit$value <- opfct(nlsFit$par)
 
     ## Returning the fit

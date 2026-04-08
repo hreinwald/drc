@@ -35,7 +35,6 @@
 #'
 #' @keywords models nonlinear
 "estfun.drc" <- function (x, ...)
-#"estfun.drc" <- function (x, cvar = NULL, ...)  
 {
     ## Extending the matrix of derivatives to have one column per parameter (not only per model parameter)
     ##  only relevant in case several curves (with different parameters) were fitted
@@ -47,25 +46,13 @@
     } else {
         indMat <- t(matrix(indexMat0, nrow = 1))
     }
-#    print(indMat)
     colnames(indMat) <- colnames(x$indexMat)
     curveID <- x$dataList[["curveid"]]
-#    xderiv2 <- xderiv1[, rep(1:ncol(xderiv1), apply(indMat, 1, length))]
-
-#    xderiv2 <- xderiv1[, rep(1:ncol(xderiv1), apply(indMat, 1, function(x){length(unique(x))}))]
-#    cnInd <- colnames(indMat)
-#    for (i in 1:ncol(indMat))
-#    {
-#        xderiv2[curveID != cnInd[i], indMat[, i]] <- 0
-#    }
-##    xderiv2[curveID != colnames(indMat)[2], indMat[, 2]] <- 0
-##    print(xderiv2)
 
     ## Defining a helper function for making a wide version of the mattrix of parameter estimates
     xderiv2Fct <- function(xderiv1, indMat, curveID)
     {
         xderiv2 <- xderiv1[, rep(1:ncol(xderiv1), apply(indMat, 1, function(x){length(unique(x))}))]    
-#        print(xderiv2)
         
         cnInd <- colnames(indMat)
         for (i in 1:ncol(indMat))
@@ -78,7 +65,6 @@
     if (identical(x$type, "continuous"))
     {
         xderiv2 <- xderiv2Fct(xderiv1, indMat, curveID)    
-#        rval <- (weights(x) * residuals(x)) * x$deriv1
         rval <- (weights(x) * residuals(x)) * xderiv2
     }
     
@@ -89,7 +75,6 @@
         fittedVal <- fitted(x)
         rval0 <- nObs/fittedVal + (nObs - nTotal)/(1 - fittedVal)
         rval0[!is.finite(rval0)] <- 0  # handling fitted values equal to 0 or 1
-#        rval <- x$deriv1 * rval0
         xderiv2 <- xderiv2Fct(xderiv1, indMat, curveID)
         rval <- xderiv2 * rval0    
         rval
@@ -99,8 +84,7 @@
         resp <- x[["dataList"]][["resp"]]
         fittedVal <- fitted(x)
         rval0 <- resp / fittedVal - 1
-#        rval <- x$deriv1 * rval0
-        xderiv2 <- xderiv2Fct(xderiv1, indMat, curveID)  
+        xderiv2 <- xderiv2Fct(xderiv1, indMat, curveID)
         rval <- xderiv2 * rval0  
         rval
     }    
@@ -120,15 +104,8 @@
          
         rval <- (x$data[, 3] / diffF) * diffDF  
     }
-#    ## Summing up according to specified clusters (the variable "cvar")
-#    if (!is.null(cvar))
-#    {
-#        rval <- rowsum(rval, cvar)
-#    }    
         
-#    print(rval)
     colnames(rval) <- names(coef(x))
-#    colnames(rval) <- x$fct$names       
     rval
 }
 
@@ -154,13 +131,8 @@
 #' @keywords models nonlinear
 "bread.drc" <- function (x, ...) 
 {
-#    if (identical(x$type, "binomial"))
-#    {
-#        breadMat <- vcov(x) * unlist(x$sumList[1])
-#    }
     if (identical(x$type, "continuous"))
     {
-#        breadMat <- summary(x)$cov.unscaled * unlist(x$sumList[1])
         breadMat <- vcov(x) / (summary(x)$rse[1]^2) * unlist(x$sumList[1])
     } else { ## Note: not checked for event time data!
         breadMat <- vcov(x) * unlist(x$sumList[1])

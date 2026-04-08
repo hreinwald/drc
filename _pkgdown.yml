@@ -1,6 +1,9 @@
 url: https://hreinwald.github.io/drc
 destination: docs
 
+logo: docs/logo.png
+favicon: docs/logo.png
+
 template:
   bootstrap: 5
 
@@ -88,6 +91,7 @@ reference:
   contents:
   - modelFit
   - Rsq
+  - rss
   - rdrm
   - anova.drc
   - lin.test

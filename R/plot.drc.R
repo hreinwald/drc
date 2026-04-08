@@ -157,26 +157,17 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     }
 
     ## Constructing the plot data
-#    origData<-object$"data"
-#    doseDim <- ncol(origData) - 4  # subtracting 4 because the data frame also contains columns with response, 
-                                   # curve no. (in new and old enumeration) and weights
-#    if (doseDim > 1) {stop("No plot features for plots in more than two dimensions")}
-#    dose1 <- origData[, 1:doseDim]
-#    resp1 <- origData[, doseDim+1]
-    
     dataList <- object[["dataList"]]
     dose <- dataList[["dose"]]
     resp <- dataList[["origResp"]]
     curveid <- dataList[["curveid"]]
     plotid <- dataList[["plotid"]]    
-#    levels(curveid) <- unique(dataList[["curveid"]])  # commented out 12/2-2014
     
     ## Modifying "response" in case of SSD
     if (identical(object[["type"]], "ssd")) 
     {
         dose <- unlist(with(dataList, tapply(dose, curveid, function(x){sort(x)}))[unique(dataList[["curveid"]])])
         resp <- unlist(with(dataList, tapply(dose, curveid, function(x){ppoints(x, 0.5)}))[unique(dataList[["curveid"]])])
-#        print(resp)
     }
     
     ## Normalizing the response values
@@ -190,41 +181,17 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
                            normRef = normRef, SIMPLIFY = F)
         
         resp <- do.call(c, unname(respNorm))[as.character(seq(length(resp)))]
-#        respNew <- unlist(mapply(normalizeLU, respList, as.list(as.data.frame(getLU(object)))))    
-#        print(respNew)
-#        print(resp)
     }
-    
-#    assayNo <- origData[, 3]
-#    assayNoOld <- as.vector(origData[, 4])  # as.vector() to remove factor structure
-
-#    if (!is.null(dataList[["plotid"]]))
-#    {
-#        assayNoOld <- dataList[["plotid"]]
-#        uniAss <- unique(assayNoOld)        
-#    } else {
-#        assayNoOld <- as.vector(curveid)  # as.vector() to remove factor structure
-#        uniAss <- unique(curveid)
-#    }   
-# commented out 3/3-'14 
     
     if (!is.null(plotid))           
     {  # used for event-time data
     
-#        piVec <- dataList[["plotid"]]
-#        levels(piVec) <- as.vector(unique(curveid))
-#        assayNoOld <- as.vector(piVec)  # used for event-time data         
         assayNoOld <- as.vector(plotid)  
     } else {
         assayNoOld <- as.vector(curveid)
     }
     uniAss <- unique(assayNoOld) 
     numAss <- length(uniAss) 
-
-#    print(uniAss)
-    
-#    numAss <- length(unique(assayNoOld))
-#    doPlot <- is.null(level) || any(unique(assayNoOld) %in% level)
 
     doPlot <- is.null(level) || any(uniAss %in% level)
     if (!doPlot) {stop("Nothing to plot")}
@@ -233,20 +200,11 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     logDose <- (object$"curve")[[2]]
     naPlot <- ifelse(is.null(object$"curve"$"naPlot"), FALSE, TRUE)
 
-#    if (missing(conName)) 
-#    {
-#        if (is.null(logDose)) {conName <- expression(0)} else {conName <- expression(-infinity)}
-#    }
-
     ## Assigning axis names
-#    varNames <- colnames(origData)[1:(doseDim+1)]  
-
     dlNames <- dataList[["names"]]
     doseName <- dlNames[["dName"]]
     respName <- dlNames[["orName"]]
     # axis names are the names of the dose variable and response variable in the original data set
-#    if (missing(xlab)) {if (varNames[1] == "") {xlab <- "Dose"} else {xlab <- varNames[1]}}
-#    if (missing(ylab)) {if (varNames[2] == "") {ylab <- "Response"} else {ylab <- varNames[2]}}
     if (missing(xlab)) {if (doseName == "") {xlab <- "Dose"} else {xlab <- doseName}}
     if (missing(ylab)) {if (respName == "") {ylab <- "Response"} else {ylab <- respName}}     
 
@@ -261,7 +219,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     ## Handling small dose values
     if (missing(bp)) 
     {
-#        conLevel <- ifelse(is.null(logDose), 1e-2, log(1e-2))
         
         ## Constructing appropriate break on dose axis
         if (!is.null(logDose))  # natural logarithm
@@ -283,16 +240,12 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         { 
             if (is.null(logDose)) {conName <- expression(0)} else {conName <- expression(-infinity)}
         }
-#        conNameYes <- TRUE 
     } else {
-#        conNameYes <- FALSE
         conName <- NULL
     }
     if (xLimits[1] >= xLimits[2]) {stop("Argument 'conLevel' is set too high")}
 
     ## Constructing dose values for plotting
-#    if (doseDim == 1) 
-#    {
     if ((is.null(logDose)) && (logX))
     {
        dosePts <- exp(seq(log(xLimits[1]), log(xLimits[2]), length = gridsize))
@@ -303,8 +256,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     } else {
        dosePts <- seq(xLimits[1], xLimits[2], length = gridsize)
     }
-#    } else {}  # No handling of multi-dimensional dose values
-
 
     ## Finding minimum and maximum on response scale
     if (is.null(logDose)) 
@@ -320,11 +271,7 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         plotMat <- mapply(normalizeLU, as.list(as.data.frame(plotMat)), 
                           as.list(as.data.frame(getLU(object))), 
                           normRef = normRef)            
-#        pmNew <- mapply(normalizeLU, as.list(as.data.frame(plotMat)), as.list(as.data.frame(getLU(object))))    
-#        print(pmNew)
-#        print(plotMat)
     }    
-#    numCol <- ncol(plotMat)
 
     maxR <- max(resp)
     maxPM <- suppressWarnings(apply(plotMat, 2, max, na.rm = TRUE))
@@ -342,18 +289,7 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         yLimits <- ylim
     }
 
-
     ## Cutting away y values (determined by the fitted model) outside the limits
-###    naPlot <- FALSE  # remove naPlot further down
-#    for (i in 1:numCol)
-#    {
-#        logVec <- !(plotMat[, i] >= yLimits[1]  & plotMat[, i] <= yLimits[2])
-#        if ( any(!is.na(logVec)) && any(logVec) )
-#        {
-#            plotMat[logVec, i] <- NA
-#            naPlot <- TRUE
-#        }
-#    }
 
     ## Setting a few graphical parameters
     par(las = 1)
@@ -368,14 +304,11 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     logVec <- !( (dose < xLimits[1] - eps1) | (dose > xLimits[2] + eps1) )
     dose <- dose[logVec]
     resp <- resp[logVec]
-#    assayNo <- assayNo[logVec]
     assayNoOld <- assayNoOld[logVec]    
      
     ## Calculating predicted values for error bars
     if (identical(type, "bars"))
     {
-#        predictMat <- predict(object, interval = "confidence")[, 3:4]
-#        predictMat <- predict(object, interval = "confidence")[, c("Lower", "Upper")]
         predictMat <- predict(object, interval = "confidence",
                               level = confidence.level)[, c("Lower", "Upper")]
         
@@ -389,7 +322,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
           predictMatNorm <- do.call(c, unname(predictMatListNorm))[as.character(seq(length(predictMat)))]
           predictMat<- matrix(predictMatNorm, ncol = 2)
         }
-#        print(predictMat)
     
         barFct <- function(plotPoints)
         {
@@ -435,7 +367,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         }
     }                
 
-
     ## Setting the plot type
     if ( (identical(type, "none")) || (identical(type, "bars")) )
     {
@@ -445,7 +376,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     }
 
     ## Determining levels to be plotted
-#    uniAss <- unique(assayNoOld)
     if (is.null(level)) 
     {
         level <- uniAss
@@ -483,9 +413,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     for (i in levelInd)
     {
         indVec <- level[i] == assayNoOld
-#        print(indVec)
-#        print(level[i])
-#        print(assayNoOld)
         plotPoints <- 
         switch(
             type, 
@@ -503,21 +430,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
             "all"     = cbind(dose[indVec], resp[indVec]),
             "obs"     = cbind(dose[indVec], resp[indVec])
         )
-#        print(plotPoints)
-        ## New approach
-#        plotPointsRaw <- ppList[uniAss2[i]]
-#        plotPoints <- with(plotPointsRaw,
-#        switch(
-#            type, 
-#            "average" = cbind(as.numeric(names(tapVec <- tapply(resp, 
-#            dose, mean))), tapVec),
-#            "bars"    = cbind(as.numeric(names(tapVec <- tapply(resp, 
-#            dose, mean))), tapVec, tapply(predictMat[indVec, 1], dose[indVec], head, 1),
-#            tapply(predictMat[indVec, 2], dose[indVec], head, 1)),
-#            "none"    = cbind(dose[indVec], resp[indVec]),
-#            "all"     = cbind(dose[indVec], resp[indVec]),
-#            "obs"     = cbind(dose[indVec], resp[indVec])
-#        ))     
         
         if ( (!add) && (i == 1) )
         {
@@ -571,23 +483,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         }
     }
     
-
-#    ## Plotting pointwise prediction intervals
-#    if (identical(type, "predict"))
-#    {
-#        for (i in levelInd)
-#        {
-#            indVal <- uniAss %in% level[i]
-#            if ( (!naPlot) && (any(is.na(plotMat[, indVal]))) ) 
-#            {
-#                noPlot[i] <- TRUE
-#                next
-#            }
-#            lines(dosePts[ivMid], plotMat[ivMid, indVal], lty = ltyVec[i], col = colourVec[i], ...)
-#        }
-#    }
-
-    
     ## Adding legend
     makeLegend(colourVec, legend, cex.legend, legendPos, legendText, lenlev, level, ltyVec, 
     noPlot, pchVec, type, xLimits, yLimits)
@@ -596,101 +491,16 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     par(las = 0) 
 
     retData <- data.frame(dosePts, as.data.frame(plotMat))
-#    colnames(retData) <- c(colnames(origData)[1:doseDim], as.character(unique(assayNoOld)))
     colnames(retData) <- c(doseName, dlNames[["cNames"]])
     
     invisible(retData)
 }
-
 
 "getRange" <- function(x, y, xlim)
 {
     logVec <- ((x >= xlim[1]) & (x <= xlim[2]))
     return(range(y[logVec]))
 }
-
-# if (FALSE)
-# {
-# "addAxes" <- function(axes, cex.axis, conLevel, conName, conNameYes, xt, xtlab, xsty, yt, ytlab)
-# {
-#     if (!axes) {return(invisible(NULL))}  # doing nothing
-#     
-#     ## Concerning the y axis
-#     yaxisTicks <- axTicks(2)
-#     yLabels <- TRUE
-#     if (!is.null(yt)) {yaxisTicks <- yt; yLabels <- yt}
-#     if (!is.null(ytlab)) {yLabels <- ytlab}                
-#                 
-#     ## Concerning the x axis                
-#     xaxisTicks <- axTicks(1)
-#     
-#     
-#     
-#     
-#     if (conNameYes)
-#     {
-#         xaxisTicks[1] <- conName
-#     }
-#     xaxisTicksOrig <- xaxisTicks
-#     xLabels <- xaxisTicks
-#     
-#     if ((conNameYes) && (min(xt) < conLevel)) 
-#     {
-#         xLimits[1] <- conLevel
-#         smallDoses <- dose<conLevel
-#         dose[smallDoses] <- conLevel
-#         conNameYes <- TRUE 
-#     }
-#     
-# #    print(xaxisTicks)
-# 
-# #    ## Avoiding too many tick marks on the x axis
-# #    lenXT <- length(xaxisTicks)
-# #    if (lenXT > 6) 
-# #    {
-# #        halfLXT <- floor(lenXT/2) - 1
-# #        chosenInd <- 1 + 2*(0:halfLXT)  # ensuring that control always is present
-# #        xaxisTicks <- xaxisTicks[chosenInd]
-# #        xLabels <- xLabels[chosenInd]
-# #    }    
-# #    
-#     if (identical(xsty, "base10"))
-#     {    
-#         ceilingxTicks <- ceiling(log10(xaxisTicks[-1]))
-#         xaxisTicks <- c(xaxisTicks[1], 10^(unique(ceilingxTicks)))
-#         xLabels <- c(xLabels[1], unlist(tapply(xLabels[-1], ceilingxTicks, head, 1)))
-# 
-#         ## Reverting to original tick marks in case too few were created
-#         if (length(xaxisTicks) < 3)
-#         { 
-#             xaxisTicks <- xaxisTicksOrig
-#         }
-#     }
-#                 
-#     if (!is.null(xt)) 
-#     {
-#         if (as.character(xt[1]) == as.character(eval(conName))) 
-#         {
-#              xaxisTicks <- c(xaxisTicks[1], xt[-1])
-#              xLabels <- c(conName, xt[-1])                        
-#         } else {
-#              xaxisTicks <- xt
-#              xLabels <- xt
-#              conNameYes <- FALSE
-#         }
-#     }
-#     if (!is.null(xtlab)) {xLabels <- xtlab}
-# #    print(xaxisTicks)
-# 
-#     ## Updating x axis labels
-#     xLabels <- as.expression(xaxisTicks)
-#     if (conNameYes) {xLabels[1] <- conName}                                                
-# 
-#     axis(1, at = xaxisTicks, labels = xLabels, cex.axis = cex.axis)
-#     axis(2, at = yaxisTicks, labels = yLabels, cex.axis = cex.axis)        
-# }
-# }
-
 
 "addAxes" <- function(axes, cex.axis, conName, xt, xtlab, xtsty, xttrim, logX, yt, ytlab, conLevel, logDose)
 {
@@ -725,14 +535,12 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
                 ceilingxTicks <- ceiling(log10(xaxisTicks[-1]))
                 xaxisTicksOrig <- xaxisTicks
                 xaxisTicks <- c(xaxisTicks[1], 10^(unique(ceilingxTicks)))
-#        xLabels <- c(xLabels[1], unlist(tapply(xLabels[-1], ceilingxTicks, head, 1)))
             }
 
             ## Reverting to original tick marks in case too few were created
             if (length(xaxisTicks) < 3)
             { 
                 xaxisTicks <- xaxisTicksOrig
-#                xLabels <- as.character(xaxisTicks)
             }
         }
     }
@@ -770,14 +578,10 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     xLabels <- as.expression(xLabels)
 
     ## Updating x axis labels
-#    xLabels <- as.expression(xaxisTicks)
-#    if (conNameYes) {xLabels[1] <- conName}                                                
 
     axis(1, at = xaxisTicks, labels = xLabels, cex.axis = cex.axis)
     axis(2, at = yaxisTicks, labels = yLabels, cex.axis = cex.axis)        
 }
-
-
 
 ## Creating a broken axis
 "brokenAxis" <- function(bcontrol, broken, bp, dosePts, gridsize, log, logX, logDose, plotit = TRUE)
@@ -805,7 +609,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         } else {
             brokenx <- clFactor * bp
         }             
-#        brokenx <- clFactor * bp                   
         if ( (log == "x") || (log == "xy") || (log == "yx") )
         {
             ivMid <- dosePts > brokenx            
@@ -814,7 +617,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         }
         if (plotit)
         {
-#            require(plotrix, quietly = TRUE)
             axis.break(1, brokenx, style = breakStyle, brw = breakWidth)        
         }
         
@@ -823,7 +625,6 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     }
     return(ivMid)
 }
-
 
 ## Adding legend and legend text
 "makeLegend" <- function(colourVec, legend, legendCex, legendPos, legendText, lenlev, level, ltyVec, noPlot, pchVec, type,
@@ -886,7 +687,6 @@ xLimits, yLimits)
     }
 }
 
-
 getLU <- function(object)
 {
     parmMat <- object$"parmMat"
@@ -900,7 +700,6 @@ getLU <- function(object)
     colnames(parmMatExt) <- colnames(parmMat)
     parmMatExt
 }
-
 
 normalizeLU <- function(x, y, normRef = 1)
 {

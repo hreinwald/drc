@@ -67,10 +67,6 @@
     ## Assigning dataset from object if no data frame is provided
     if (missing(newdata)) 
     {
-#        predValues <- fitted(object)  # not used
-#        newdata <- data.frame(object$data[, 1], object$data[, 3])
-#        dataList <- object[["dataList"]]
-
         ## New part (25/6-2014)
         doseVec <- dataList[["dose"]]
         if (identical(respType, "event"))
@@ -79,13 +75,6 @@
         } else {
             groupLevels <- as.character(dataList[["curveid"]])
         }        
-#                
-#        if (identical(respType, "event"))
-#        {
-#            newdata <- data.frame(dataList[["dose"]], dataList[["plotid"]])
-#        } else {
-#            newdata <- data.frame(dataList[["dose"]], dataList[["curveid"]])
-#        }
     } else {
         
         if (checkND)
@@ -96,7 +85,6 @@
                 doseVec <- newdata[, dName]  
             } else {
                 doseVec <- newdata[, 1]
-#                warning("Dose variable not in 'newdata'")
             }
         } else {
             doseVec <- newdata
@@ -112,26 +100,9 @@
             nRows <- if (is.data.frame(newdata) || is.matrix(newdata)) nrow(newdata) else length(newdata)
             groupLevels <- rep(1, nRows)
         }
-#         
-#         
-#         if (ncol(newdata) < (doseDim + 1)) {newdata <- data.frame(newdata, rep(1, nrow(newdata)))}
-# #        ndncol <- ncol(newdata)
-# #        doseVec <- newdata[, 1:(ndncol-1)]
-#         doseVec <- newdata[, 1:doseDim]
-# #        groupLevels <- as.character(newdata[, ndncol])  # 'as.character()' used to suppress factor levels         
-#         groupLevels <- as.character(newdata[, doseDim + 1])  # 'as.character()' used to suppress factor levels         
     }
     noNewData <- length(groupLevels)
     
-#    if (ncol(newdata) < 2) {newdata <- data.frame(newdata, rep(1, nrow(newdata)))}
-#    if (ncol(newdata) > 2) {stop("More than 2 variables in 'newdata' argument")}
-    
-    ## Defining dose values -- dose in the first column!   
-#    doseVec <- newdata[, 1]
-#    groupLevels <- as.character(newdata[, 2])  # 'as.character()' used to suppress factor levels 
-#    noNewData <- length(doseVec)
-
-
     ## Transforming to dose scale if necessary
     powerExp <- (object$"curve")[[2]]
     if (!is.null(powerExp))
@@ -142,62 +113,27 @@
     ## Retrieving matrix of parameter estimates
     parmMat <- object[["parmMat"]] 
     pm <- t(parmMat[, groupLevels, drop = FALSE])
-           
-#    parmNames <- colnames(parmMat)
-#    lenCN <- length(parmNames)
-#    indVec <- 1:lenCN
-#    names(indVec) <- parmNames
-#    if (lenCN > 1)
-#    {
-#        indVec <- indVec[as.character(newdata[, 2])]
-#        
-##        groupLevels <- newdata[, 2]
-#        if (!all(is.numeric(groupLevels)))
-#        {
-##            pm <- parmMat[, as.character(groupLevels)]  # 'as.character()' used to suppress factor levels            
-#            pm <- parmMat[, groupLevels]            
-#        } else {
-#            pm <- parmMat[, groupLevels]
-#        }
-#        pm <- parmMat[, groupLevels]
-#        
-#    } else {
-#        lenDV <- length(doseVec)
-##        indVec <- rep(1, lenDV)
-#        pm <- matrix(parmMat[, 1], length(parmMat[, 1]), lenDV)
-#    }    
-
-#    ## Checking for NAs in matrix of parameter estimates
-#    naVec <- rep(FALSE, lenCN)
-#    for (i in 1:lenCN)
-#    {
-#        naVec[i] <- any(is.na(parmMat[, i]))
-#    }
-#    parmMat <- parmMat[, !naVec, drop = FALSE] 
-
 
     ## Retrieving variance-covariance matrix
     sumObj <- summary(object, od = od)
-#    varMat <- sumObj[["varMat"]]  
     vcovMat <- vcov.(object)      
 
     ## Defining index matrix for parameter estimates
     indexMat <- object[["indexMat"]]
     
+    ## Ensure indexMat is always a matrix, even with many fixed parameters
+    if (!is.matrix(indexMat)) {
+        indexMat <- as.matrix(indexMat)
+        if (!is.null(colnames(parmMat))) {
+            colnames(indexMat) <- colnames(parmMat)
+        }
+    }
+    
     ## Calculating predicted values  
-#    indexVec <- as.vector(indVec)  
-#    print(indexVec)  
-#    lenIV <- length(indexVec)    
-    
-    
-#    retMat <- matrix(0, lenIV, 4)
     retMat <- matrix(0, noNewData, 4)
     colnames(retMat) <- c("Prediction", "SE", "Lower", "Upper")
     objFct <- object[["fct"]]
-#    print(pm)
-#    print(doseVec)
     retMat[, 1] <- objFct$"fct"(doseVec, pm)
-#    print(pm)
     
     ## Checking if derivatives are available
     deriv1 <- objFct$"deriv1"
@@ -228,16 +164,12 @@
             
             if (is.null(ssdSEfct)) 
             {
-#                lmObj <- lm(seVec ~ estVec)  # linear, not great
                 lmObj <- lm(log(seVec) ~ log(estVec))
                 sePred <- exp(predict(lmObj, data.frame(estVec = doseVec)))
             } else {
                 sePred <- ssdSEfct(estVec, seVec, doseVec)
             }
-#            print(sePred)
-#            print(object[["fct"]][["derivx"]](doseVec, pm))
             derivxRes <- object[["fct"]][["derivx"]](doseVec, pm)
-#            print(derivxRes)
             # if (is.finite(derivxRes))
             # {
             #     sumObjRV <- (derivxRes * sePred)^2  
@@ -247,48 +179,20 @@
             sumObjRV <- rep(0, length(derivxRes))
             isFinDR <- is.finite(derivxRes) 
             sumObjRV[isFinDR] <- ((derivxRes * sePred)^2)[isFinDR]
-            
-#            print(sumObjRV)
         } 
         if (identical(interval, "prediction"))
         {
             sumObjRV <- rep(sumObj$"resVar", noNewData)
         } 
-        #else {
-        #     sumObjRV <- 0
-        #  }
-#        rowIndex <- 1    
-#        for (i in indexVec)
-#        for (i in 1:ncol(indexMat))
-
-#        groupLevels <- newdata[, 2]
         piMat <- indexMat[, groupLevels, drop = FALSE]
-#        print(piMat)
-#        print(groupLevels)
         for (rowIndex in 1:noNewData)
         {
-#            parmInd <- indexMat[, i]
-#            print(indexVec) 
-#            print(varMat)
-#            print(parmInd)       
-            
-#            varCov <- varMat[parmInd, parmInd]
-#            print(varCov)
-#            groupLevels <- newdata[, 2]
-#            parmInd <- indexMat[, groupLevels[rowIndex]]
-#            varCov <- varMat[parmInd, parmInd]
-
             parmInd <- piMat[, rowIndex] 
             varCov <- vcovMat[parmInd, parmInd]
-
-#            parmChosen <- t(parmMat[, i, drop = FALSE])
-#            parmChosen <- t(pm[, rowIndex, drop = FALSE])
-#            dfEval <- deriv1(doseVec[rowIndex], parmChosen)
 
             dfEval <- deriv1(doseVec[rowIndex], pm[rowIndex, , drop = FALSE])
             varVal <- dfEval %*% varCov %*% dfEval
             retMat[rowIndex, 2] <- sqrt(varVal)  
-#            retMat[rowIndex, 2] <- sqrt(dfEval %*% varCov %*% dfEval)  
 
             if (!se.fit)
             {
@@ -297,18 +201,6 @@
                 retMat[rowIndex, 3] <- retMat[rowIndex, 1] - tquan * sqrt(varVal + sumObjRV[rowIndex])
                 retMat[rowIndex, 4] <- retMat[rowIndex, 1] + tquan * sqrt(varVal + sumObjRV[rowIndex])   
             }    
-#            if (identical(interval, "confidence"))
-#            {
-#                retMat[rowIndex, 3] <- retMat[rowIndex, 1] - tquan * sqrt(varVal)
-#                retMat[rowIndex, 4] <- retMat[rowIndex, 1] + tquan * sqrt(varVal)            
-#            }
-#            if (identical(interval, "prediction"))
-#            {
-#                sumObjRV <- sumObj$"resVar"
-#                retMat[rowIndex, 3] <- retMat[rowIndex, 1] - tquan * sqrt(varVal + sumObjRV)
-#                retMat[rowIndex, 4] <- retMat[rowIndex, 1] + tquan * sqrt(varVal + sumObjRV)                        
-#            }          
-#            rowIndex <- rowIndex + 1        
         }
     }
     ## Imposing constraints on predicted values

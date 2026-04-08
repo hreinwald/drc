@@ -44,10 +44,8 @@ eps = 1e-10
         parmMat[, notFixed] <- parm
 
         loge <- -parmMat[, 6] * log((1/parmMat[, 4])^(1/parmMat[, 6]) + (1/parmMat[, 5])^(1/parmMat[, 6]))        
-#        loge <- -parm[, 6]*log((1/parm[, 4])^(1/parm[, 6]) + (1/parm[, 5])^(1/parm[, 6]))
-## old        loge <- -parm[, 6]*log((parm[, 4])^(1/parm[, 6]) + (parm[, 5])^(1/parm[, 6]))
 
-        retVec <- parmMat[, 2] + (parmMat[, 3] - parmMat[, 2]) / (1 + exp(parmMat[, 1] * (log(dose) - loge)))
+        retVec<- parmMat[, 2] + (parmMat[, 3] - parmMat[, 2]) / (1 + exp(parmMat[, 1] * (log(dose) - loge)))
         ## Handling the case dose=0 where "loge" may become NaN due to the mixture encoding (pct in glymet)
         zeroInd <- dose < eps
         retVec[zeroInd] <- ifelse(parmMat[zeroInd, 1] < 0, parmMat[zeroInd, 2],  parmMat[zeroInd, 3])

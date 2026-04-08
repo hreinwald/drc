@@ -3,15 +3,10 @@
 [![](https://www.r-pkg.org/badges/version/drc)](https://cran.r-project.org/package=drc)
 [![Downloads](https://cranlogs.r-pkg.org/badges/drc)](https://cranlogs.r-pkg.org/)
 [![](https://img.shields.io/github/license/hreinwald/drc)](https://github.com/hreinwald/drc/blob/dev/LICENSE)
-
 [![](https://img.shields.io/github/last-commit/hreinwald/drc)](https://github.com/hreinwald/drc/commits/dev)
 [![](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/hreinwald/drc/issues)
 
-## Documentation
-
-📖 The full package documentation, function reference, and vignettes are
-available at
-**[hreinwald.github.io/drc](https://hreinwald.github.io/drc/)**.
+![drc Logo](docs/logo.png)
 
 ## Note
 
@@ -73,20 +68,47 @@ Feature requests or ideas?
 
 ## Installation
 
-To install the outdated version from CRAN:
+**⚠️ Important:** We **do not recommend** installing the currently
+heavily outdated CRAN version of this package. Instead, we recommend
+installing the development (`dev`) or stable beta (`main_beta`) version
+from GitHub.
 
-``` r
-install.packages("drc")
-```
-
-Install the bug-fix development version from GitHub:
+### Install from GitHub (Recommended)
 
 ``` r
 # install.packages("devtools")
 
-# devtools::install_github("DoseResponse/drc")      # <- unmaintained version 3.2-0 
-devtools::install_github("hreinwald/drc")           # <- re-factored development version 3.3.0
-devtools::install_github("hreinwald/drc@main_beta") # <- re-factored stable beta version 3.3.0
+# Install the re-factored development version 3.3.0
+devtools::install_github("hreinwald/drc")
+
+# Install the re-factored stable beta version 3.3.0
+devtools::install_github("hreinwald/drc@main_beta")
+```
+
+### Local Installation from tar.gz
+
+If GitHub installation is failing, you can run the installation from the
+local tar.gz file. [Download the latest
+release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.0.02.tar.gz).
+
+After downloading the file, run the following:
+
+``` r
+# Specify the path to the directory where you saved the downloaded tar.gz file.
+dir   <- file.path("~/../Downloads")
+stopifnot(dir.exists(dir))
+targz <- list.files(dir, pattern = "drc-[1-9].*[.]tar[.]gz", full.names = TRUE)[1]
+
+# Local installation with base R
+install.packages(targz, repos = NULL, type = "source")
+```
+
+### Outdated CRAN Version (Not Recommended)
+
+To install the outdated version from CRAN:
+
+``` r
+install.packages("drc")
 ```
 
 ## Quick Start
@@ -169,9 +191,11 @@ vignette("nec-models", package = "drc")
 | Function | Purpose |
 |----|----|
 | [`drm()`](https://hreinwald.github.io/drc/reference/drm.md) | Fit dose-response models |
-| [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) | Estimate effective doses (ED10, ED50, ED90, etc.) |
+| [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) | Estimate effective doses (ED10, ED50, …) |
+| [`maED()`](https://hreinwald.github.io/drc/reference/maED.md) | Model averaged estimate effective doses (ED10, ED50, …) |
 | [`EDcomp()`](https://hreinwald.github.io/drc/reference/EDcomp.md) | Compare ED values between curves |
 | [`compParm()`](https://hreinwald.github.io/drc/reference/compParm.md) | Compare model parameters between curves |
+| [`noEffect()`](https://hreinwald.github.io/drc/reference/noEffect.md) | Testing if there is a dose effect at all |
 | [`plot()`](https://rdrr.io/r/graphics/plot.default.html) | Plot fitted dose-response curves |
 | [`summary()`](https://rdrr.io/r/base/summary.html) | Model summary with parameter estimates |
 | [`anova()`](https://rdrr.io/r/stats/anova.html) | ANOVA and lack-of-fit tests |
