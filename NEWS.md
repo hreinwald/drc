@@ -3,10 +3,18 @@
 ## New Features
 * Enhanced `plot.drc()`: error bars in `type = "bars"` plots now match curve colors by default. Added `errbar.col` parameter to allow manual control of error bar colors. Set `errbar.col = "black"` to restore the previous behavior of black error bars.
 
+---
+
+# drc 3.3.0.03
+
+## New Features
+* Enhanced `plot.drc()`: error bars in `type = "bars"` plots now match curve colors by default. Added `errbar.col` parameter to allow manual control of error bar colors. Set `errbar.col = "black"` to restore the previous behavior of black error bars.
+
 ## Bug Fixes
 * Fixed `predict()` "incorrect number of dimensions" error for models with many fixed parameters (e.g., `EXD.3(fixed = c(lower, upper, NA))`): when only one parameter is estimated, `indexMat` in the fitted model object is a vector rather than a matrix, causing `predict.drc()` to fail when computing standard errors or confidence intervals. Ensured `indexMat` is always coerced to a matrix before column subsetting.
 
 ## Changes
+* Updated package version and date in `DESCRIPTION` and website documentation to `3.3.0.03`.
 * Updated logo path in `README.md` to point to `man/figures/logo.png` for consistency with package structure.
 * Added favicon and manifest links to HTML documentation files for improved branding and browser integration.
 * Added the package website (`https://hreinwald.github.io/drc`) as the primary URL in the `DESCRIPTION` file for better discoverability.
