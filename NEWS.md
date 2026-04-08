@@ -1,5 +1,8 @@
 # drc 3.3.0.03
 
+## New Features
+* Enhanced `plot.drc()`: error bars in `type = "bars"` plots now match curve colors by default. Added `errbar.col` parameter to allow manual control of error bar colors. Set `errbar.col = "black"` to restore the previous behavior of black error bars.
+
 ## Bug Fixes
 * Fixed `predict()` "incorrect number of dimensions" error for models with many fixed parameters (e.g., `EXD.3(fixed = c(lower, upper, NA))`): when only one parameter is estimated, `indexMat` in the fitted model object is a vector rather than a matrix, causing `predict.drc()` to fail when computing standard errors or confidence intervals. Ensured `indexMat` is always coerced to a matrix before column subsetting.
 
