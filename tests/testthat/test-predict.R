@@ -383,3 +383,40 @@ test_that("predict.drc standard errors increase at extreme doses", {
   expect_true(is.matrix(middle))
   expect_true(is.matrix(extreme))
 })
+
+# Tests for models with fixed parameters
+
+test_that("predict.drc works with EXD.3 model with two fixed parameters", {
+  df <- data.frame(
+    conc = c(10, 1, 10000, 10, 1000, 100, 1, 0, 0, 0),
+    growthrate_d = c(1.525017, 4.232832, 0.000000, 1.006102, 0.000000,
+                     2.578778, 3.202289, 2.723128, 2.202485, 1.667510)
+  )
+  lower <- 0
+  upper <- mean(df[df$conc == 0, "growthrate_d"])
+
+  m2 <- drm(
+    formula = growthrate_d ~ conc,
+    data = df,
+    fct = EXD.3(fixed = c(lower, upper, NA))
+  )
+
+  newdata <- data.frame(conc = c(0.5, 5, 50, 500, 5000))
+
+  # Plain prediction should work
+  pred <- predict(m2, newdata = newdata)
+  expect_true(is.numeric(pred))
+  expect_equal(length(pred), 5)
+
+  # Prediction with confidence interval should work (was failing before fix)
+  result <- predict(m2, newdata = newdata, interval = "confidence")
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 5)
+  expect_equal(ncol(result), 3)
+  expect_true(all(c("Prediction", "Lower", "Upper") %in% colnames(result)))
+
+  # Prediction with se.fit should work
+  result_se <- predict(m2, newdata = newdata, se.fit = TRUE)
+  expect_true(is.matrix(result_se))
+  expect_equal(ncol(result_se), 2)
+})
