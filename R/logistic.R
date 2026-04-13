@@ -100,9 +100,10 @@ fctName, fctText)
     }
 
     ## Defining the ED function
-    edfct <- function(parm, p, ...)
+    edfct <- function(parm, respl, reference = "control", type = "relative", ...)
     {
         parmVec[notFixed] <- parm
+        p <- EDhelper(parmVec, respl, reference, type)
     
         ## deriv(~e + log((100/(100-p))^(1/f) - 1) / b, c("b", "c", "d", "e", "f"), function(b,c,d,e,f){})
         ## evaluated at the R prompt
@@ -126,6 +127,26 @@ fctName, fctText)
         EDcalc <- EDderFct(parmVec[1], parmVec[2], parmVec[3], parmVec[4], parmVec[5])
         EDp <- as.numeric(EDcalc)
         EDder <- attr(EDcalc, "gradient")
+
+        ## Fix: correct c and d derivatives for absolute type using central differences.
+        ## The analytical derivatives above miss the chain-rule contribution from
+        ## the absolute-to-relative conversion (EDhelper), where p depends on c and d.
+        if (identical(type, "absolute")) {
+            .edval <- function(pv) {
+                p0 <- EDhelper(pv, respl, reference, type)
+                .expr2 <- 100 / p0
+                .expr4 <- .expr2^(1 / pv[5])
+                .expr5 <- .expr4 - 1
+                pv[4] + log(.expr5) / pv[1]
+            }
+            .eps <- .Machine$double.eps
+            for (.i in c(2, 3)) {
+                .h <- if (abs(parmVec[.i]) > sqrt(.eps)) abs(parmVec[.i]) * .eps^(1/3) else .eps^(1/3)
+                .pvUp <- replace(parmVec, .i, parmVec[.i] + .h)
+                .pvDn <- replace(parmVec, .i, parmVec[.i] - .h)
+                EDder[.i] <- (.edval(.pvUp) - .edval(.pvDn)) / (2 * .h)
+            }
+        }
 
         return(list(EDp, EDder[notFixed]))
     }
