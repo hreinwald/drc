@@ -83,8 +83,8 @@ ED(finney71.m2, c(10, 20, 50), interval = "fls", reference = "control")
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate  Lower  Upper
-#> e:10   2.3789 1.9335 2.9270
-#> e:20   3.0893 2.6467 3.6059
-#> e:50   4.8289 4.3637 5.3437
+#>      Estimate Std. Error    Lower    Upper
+#> e:10 2.378930   0.105781 1.933486 2.926996
+#> e:20 3.089292   0.078893 2.646700 3.605896
+#> e:50 4.828919   0.051685 4.363709 5.343725
 ```

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.03</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@
                         <h4 data-toc-skip class="author">Hannes
 Reinwald</h4>
             
-            <h4 data-toc-skip class="date">2026-03-26</h4>
+            <h4 data-toc-skip class="date">2026-04-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/vignettes/nec-models.Rmd" class="external-link"><code>vignettes/nec-models.Rmd</code></a></small>
       <div class="d-none name"><code>nec-models.Rmd</code></div>
@@ -251,7 +251,7 @@ response with variable maximum.</p>
 <span>     main <span class="op">=</span> <span class="st">"NEC.3 Model for Ryegrass Root Length"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"Ferulic acid concentration (mM)"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Root length (cm)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nec-models_files/figure-html/nec3-example-1.png" class="r-plt" width="672"></p>
+<p><img src="nec-models_files/figure-html/nec3-example-1.png" class="r-plt" alt="NEC.3 model for ryegrass root length showing threshold effect at low concentrations followed by exponential decline" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="nec-4-four-parameter-nec-model">NEC.4: Four-Parameter NEC Model<a class="anchor" aria-label="anchor" href="#nec-4-four-parameter-nec-model"></a>
@@ -408,13 +408,13 @@ dataset:</p>
 <span>     ylab <span class="op">=</span> <span class="st">"Root length (cm)"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">my_plot</span><span class="op">(</span><span class="va">nec2.fit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nec-models_files/figure-html/model-comparison-1.png" class="r-plt" width="672"></p>
+<p><img src="nec-models_files/figure-html/model-comparison-1.png" class="r-plt" alt="NEC.2 model fitted to ryegrass data with both asymptotes constrained" width="672"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">my_plot</span><span class="op">(</span><span class="va">nec3.fit</span>, col <span class="op">=</span> <span class="st">"darkblue"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nec-models_files/figure-html/model-comparison-2.png" class="r-plt" width="672"></p>
+<p><img src="nec-models_files/figure-html/model-comparison-2.png" class="r-plt" alt="NEC.3 model fitted to ryegrass data with lower asymptote fixed at zero" width="672"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">my_plot</span><span class="op">(</span><span class="va">nec4.fit</span>, col <span class="op">=</span> <span class="st">"darkred"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nec-models_files/figure-html/model-comparison-3.png" class="r-plt" width="672"></p>
+<p><img src="nec-models_files/figure-html/model-comparison-3.png" class="r-plt" alt="NEC.4 model fitted to ryegrass data with all parameters estimated" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="design-pattern-in-the-drc-package">Design Pattern in the drc Package<a class="anchor" aria-label="anchor" href="#design-pattern-in-the-drc-package"></a>

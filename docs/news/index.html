@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.03</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,27 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.3.1" id="drc-331">drc 3.3.1<a class="anchor" aria-label="anchor" href="#drc-331"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-3-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-3-3-1"></a></h3>
+<ul><li>Enhanced <code><a href="../reference/plot.drc.html">plot.drc()</a></code>: error bars in <code>type = "bars"</code> plots now match curve colors by default. Added <code>errbar.col</code> parameter to allow manual control of error bar colors. Set <code>errbar.col = "black"</code> to restore the previous behavior of black error bars.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-3-3-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-1"></a></h3>
+<ul><li>Fixed <code><a href="../reference/logistic.html">logistic()</a></code> model ED calculation with <code>type="absolute"</code>: the <code>edfct</code> function now correctly handles absolute-to-relative conversion without applying the incorrect p-swap from <code><a href="../reference/EDhelper.html">EDhelper()</a></code>. The logistic model has opposite b-sign convention from log-logistic (b &lt; 0 means increasing, not decreasing), so <code>EDhelper</code>’s p-swap for b &lt; 0 would incorrectly swap ED values. The fix uses inline absolute-to-relative conversion (<code>p = 100·(d−respl)/(d−c)</code>) for absolute type and <code>p = respl</code> directly for relative type.</li>
+<li>Fixed model-level <code>edfct</code> derivatives for absolute ED type in <code><a href="../reference/braincousens.html">braincousens()</a></code>, <code><a href="../reference/fplogistic.html">fplogistic()</a></code>, <code><a href="../reference/llogistic.html">llogistic()</a></code>, <code><a href="../reference/llogistic2.html">llogistic2()</a></code>, <code><a href="../reference/lnormal.html">lnormal()</a></code>, <code><a href="../reference/weibull1.html">weibull1()</a></code>, and <code><a href="../reference/weibull2.html">weibull2()</a></code>: when <code>type = "absolute"</code>, the gradient functions previously set ∂ED/∂c and ∂ED/∂d to 0, which was incorrect because the absolute-to-relative conversion makes p a function of c and d. The chain rule requires non-zero partials. Now compute ∂ED/∂c and ∂ED/∂d via central differences on a closure that captures the chain-rule contribution through the full ED computation path.</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.3.0.03" id="drc-33003">drc 3.3.0.03<a class="anchor" aria-label="anchor" href="#drc-33003"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-3-0-03">New Features<a class="anchor" aria-label="anchor" href="#new-features-3-3-0-03"></a></h3>
+<ul><li>Enhanced <code><a href="../reference/plot.drc.html">plot.drc()</a></code>: error bars in <code>type = "bars"</code> plots now match curve colors by default. Added <code>errbar.col</code> parameter to allow manual control of error bar colors. Set <code>errbar.col = "black"</code> to restore the previous behavior of black error bars.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-3-3-0-03">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-0-03"></a></h3>
+<ul><li>Fixed <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> “incorrect number of dimensions” error for models with many fixed parameters (e.g., <code>EXD.3(fixed = c(lower, upper, NA))</code>): when only one parameter is estimated, <code>indexMat</code> in the fitted model object is a vector rather than a matrix, causing <code><a href="../reference/predict.drc.html">predict.drc()</a></code> to fail when computing standard errors or confidence intervals. Ensured <code>indexMat</code> is always coerced to a matrix before column subsetting.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="changes-3-3-0-03">Changes<a class="anchor" aria-label="anchor" href="#changes-3-3-0-03"></a></h3>
 <ul><li>Updated package version and date in <code>DESCRIPTION</code> and website documentation to <code>3.3.0.03</code>.</li>

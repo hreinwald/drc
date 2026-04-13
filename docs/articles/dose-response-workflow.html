@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.03</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@
                         <h4 data-toc-skip class="author">Hannes
 Reinwald</h4>
             
-            <h4 data-toc-skip class="date">2026-03-26</h4>
+            <h4 data-toc-skip class="date">2026-04-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/vignettes/dose-response-workflow.Rmd" class="external-link"><code>vignettes/dose-response-workflow.Rmd</code></a></small>
       <div class="d-none name"><code>dose-response-workflow.Rmd</code></div>
@@ -147,7 +147,7 @@ compound that inhibits plant growth.</p>
 <span>     ylab <span class="op">=</span> <span class="st">"Root length (cm)"</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Ryegrass Root Growth vs. Ferulic Acid Concentration"</span>,</span>
 <span>     pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/load-data-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/load-data-1.png" class="r-plt" alt="Scatter plot showing ryegrass root length (cm) versus ferulic acid concentration (mM), displaying a decreasing dose-response relationship" width="672"></p>
 <p>The dataset contains 24 observations with: - <code>conc</code>:
 Ferulic acid concentration in millimolar (mM) - <code>rootl</code>: Root
 length in centimeters (cm)</p>
@@ -225,7 +225,7 @@ dose-response plot and quantile-quantile (Q-Q) plots.</p>
 <span>     xlab <span class="op">=</span> <span class="st">"Ferulic acid concentration (mM)"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Root length (cm)"</span>,</span>
 <span>     lwd <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/basic-plot-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/basic-plot-1.png" class="r-plt" alt="Dose-response curve showing LL.4 model fit to ryegrass data with observed data points and fitted sigmoid curve" width="672"></p>
 <p>The plot shows: - Observed data points - Fitted dose-response curve -
 Overall pattern of fit</p>
 <p><strong>What to Look For:</strong> - Do the fitted values follow the
@@ -244,7 +244,7 @@ distribution, which is an assumption of the fitting procedure.</p>
 <span>       main <span class="op">=</span> <span class="st">"Normal Q-Q Plot of Residuals (LL.4)"</span>,</span>
 <span>       pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">ryegrass.LL4</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/qq-plot-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/qq-plot-1.png" class="r-plt" alt="Normal Q-Q plot of residuals from LL.4 model showing points approximately along the diagonal reference line" width="672"></p>
 <p><strong>Interpretation:</strong> - Points should fall approximately
 along the diagonal line - Systematic deviations suggest non-normality of
 residuals - Deviations at the extremes are common and often acceptable -
@@ -263,7 +263,7 @@ values:</p>
 <span>     main <span class="op">=</span> <span class="st">"Residual Plot (LL.4)"</span>,</span>
 <span>     pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/residual-plot-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/residual-plot-1.png" class="r-plt" alt="Residual plot showing residuals versus fitted values with random scatter around zero horizontal line" width="672"></p>
 <p><strong>What to Look For:</strong> - Random scatter around zero (no
 systematic pattern) - Constant variance across fitted values
 (homoscedasticity) - No obvious outliers or influential points</p>
@@ -364,8 +364,8 @@ precise estimates</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated effective doses</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      Estimate  Lower  Upper</span></span>
-<span><span class="co">#&gt; e:50   21.284 14.448 31.355</span></span></code></pre></div>
+<span><span class="co">#&gt;      Estimate Std. Error    Lower    Upper</span></span>
+<span><span class="co">#&gt; e:50 21.28399    0.18573 14.44757 31.35531</span></span></code></pre></div>
 <p>The Fieller method is often preferred for ED50 estimation as it
 accounts for the ratio nature of the parameter.</p>
 </div>
@@ -489,7 +489,7 @@ fit:</p>
 <span><span class="co"># Add legend</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LL.4 (initial)"</span>, <span class="st">"W1.4 (best)"</span><span class="op">)</span>,</span>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/model-comparison-plot-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/model-comparison-plot-1.png" class="r-plt" alt="Comparison of LL.4 and W1.4 model fits showing two overlapping dose-response curves in blue (LL.4) and red dashed line (W1.4)" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="comparing-ed-estimates-between-models">Comparing ED Estimates Between Models<a class="anchor" aria-label="anchor" href="#comparing-ed-estimates-between-models"></a>
@@ -690,7 +690,7 @@ effect)</li>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"blue"</span><span class="op">)</span>,</span>
 <span>       lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>       cex <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/asymptote-plot-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/asymptote-plot-1.png" class="r-plt" alt="Comparison of LL.4 and LL.3 models showing effect of asymptote constraints with black solid line (LL.4) and blue dashed line (LL.3)" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="implications-of-fixing-asymptotes">Implications of Fixing Asymptotes<a class="anchor" aria-label="anchor" href="#implications-of-fixing-asymptotes"></a>
@@ -780,7 +780,7 @@ studies - EC50/ED50 estimation</p>
 <code class="sourceCode R"><span><span class="co"># Standard application of log-logistic model</span></span>
 <span><span class="va">example.LL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/LL.4.html">LL.4</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">example.LL</span>, main <span class="op">=</span> <span class="st">"Log-Logistic Model (LL.4)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/ll-example-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/ll-example-1.png" class="r-plt" alt="Log-logistic model (LL.4) fitted to ryegrass data showing typical S-shaped dose-response curve" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="weibull-models-w1-and-w2-families">Weibull Models (W1 and W2 families)<a class="anchor" aria-label="anchor" href="#weibull-models-w1-and-w2-families"></a>
@@ -806,7 +806,7 @@ curves - Time-to-event data - Germination/mortality studies</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">example.W2</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"none"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"W1.4"</span>, <span class="st">"W2.4"</span><span class="op">)</span>,</span>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dose-response-workflow_files/figure-html/weibull-example-1.png" class="r-plt" width="672"></p>
+<p><img src="dose-response-workflow_files/figure-html/weibull-example-1.png" class="r-plt" alt="Comparison of Weibull Type 1 (blue) and Type 2 (red dashed) models showing asymmetric dose-response curves" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="log-normal-models-ln-family">Log-Normal Models (LN family)<a class="anchor" aria-label="anchor" href="#log-normal-models-ln-family"></a>

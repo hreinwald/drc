@@ -1,12 +1,16 @@
 # drc — Dose-Response Curve Analysis in R
 
-[![](https://www.r-pkg.org/badges/version/drc)](https://cran.r-project.org/package=drc)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/drc)](https://cran.r-project.org/package=drc)
 [![Downloads](https://cranlogs.r-pkg.org/badges/drc)](https://cranlogs.r-pkg.org/)
-[![](https://img.shields.io/github/license/hreinwald/drc)](https://github.com/hreinwald/drc/blob/dev/LICENSE)
-[![](https://img.shields.io/github/last-commit/hreinwald/drc)](https://github.com/hreinwald/drc/commits/dev)
-[![](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/hreinwald/drc/issues)
+[![License:
+GPL-2.0](https://img.shields.io/github/license/hreinwald/drc)](https://github.com/hreinwald/drc/blob/dev/LICENSE)
+[![Last commit
+date](https://img.shields.io/github/last-commit/hreinwald/drc)](https://github.com/hreinwald/drc/commits/dev)
+[![Contributions
+welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/hreinwald/drc/issues)
 
-![drc Logo](docs/logo.png)
+![drc Logo](reference/figures/logo.png)
 
 ## Note
 
@@ -78,10 +82,10 @@ from GitHub.
 ``` r
 # install.packages("devtools")
 
-# Install the re-factored development version 3.3.0
+# Install the re-factored development version 
 devtools::install_github("hreinwald/drc")
 
-# Install the re-factored stable beta version 3.3.0
+# Install the re-factored stable beta version
 devtools::install_github("hreinwald/drc@main_beta")
 ```
 
@@ -89,15 +93,14 @@ devtools::install_github("hreinwald/drc@main_beta")
 
 If GitHub installation is failing, you can run the installation from the
 local tar.gz file. [Download the latest
-release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.0.02.tar.gz).
+release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.0.03.tar.gz).
 
 After downloading the file, run the following:
 
 ``` r
 # Specify the path to the directory where you saved the downloaded tar.gz file.
-dir   <- file.path("~/../Downloads")
-stopifnot(dir.exists(dir))
-targz <- list.files(dir, pattern = "drc-[1-9].*[.]tar[.]gz", full.names = TRUE)[1]
+# Make sure to specify the correct file path below.
+targz  <- file.path("~/Downloads/3.3.0.03.tar.gz")
 
 # Local installation with base R
 install.packages(targz, repos = NULL, type = "source")
