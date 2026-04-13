@@ -205,6 +205,30 @@ fctName, fctText, loge = FALSE)
         }
         EDp <- EDfct(parmVec[1], parmVec[2], parmVec[3], parmVec[4])
         EDder <- attr(EDfct(parmVec[1], parmVec[2], parmVec[3], parmVec[4]), "gradient")
+
+        ## Fix: correct c and d derivatives for absolute type using central differences.
+        ## The analytical derivatives above miss the chain-rule contribution from
+        ## the absolute-to-relative conversion (absToRel), where p depends on c and d.
+        if (identical(type, "absolute")) {
+            .edval <- function(pv) {
+                p0 <- absToRel(pv, respl, type)
+                p0 <- 100 - p0  # reversal for absolute type
+                pProp0 <- 1 - (100 - p0) / 100
+                if (!loge) {
+                    pv[4] * exp(qnorm(pProp0) / pv[1])
+                } else {
+                    pv[4] + qnorm(pProp0) / pv[1]
+                }
+            }
+            .eps <- .Machine$double.eps
+            for (.i in c(2, 3)) {
+                .h <- if (abs(parmVec[.i]) > sqrt(.eps)) abs(parmVec[.i]) * .eps^(1/3) else .eps^(1/3)
+                .pvUp <- replace(parmVec, .i, parmVec[.i] + .h)
+                .pvDn <- replace(parmVec, .i, parmVec[.i] - .h)
+                EDder[.i] <- (.edval(.pvUp) - .edval(.pvDn)) / (2 * .h)
+            }
+        }
+
         return(list(EDp, EDder[notFixed]))
     }
 

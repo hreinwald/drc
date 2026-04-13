@@ -170,6 +170,26 @@ fctName, fctText)
             EDp*c(-log(expTerm-1)/(parmVec[1]^2),
             0, 0, 1/parmVec[4],
             expTerm*tempVal/(parmVec[5]^2)*(1/parmVec[1])*((expTerm-1)^(-1)))
+
+            ## Fix: correct c and d derivatives for absolute type using central differences.
+            ## The analytical derivatives above miss the chain-rule contribution from
+            ## the absolute-to-relative conversion (EDhelper), where p depends on c and d.
+            if (identical(type, "absolute")) {
+                .edval <- function(pv) {
+                    p0 <- EDhelper(pv, respl, reference, type)
+                    tv0 <- log((100 - p0) / 100)
+                    et0 <- exp(-tv0 / pv[5])
+                    if (is.na(et0) || et0 <= 1) return(Inf)
+                    pv[4] * (et0 - 1)^(1 / pv[1])
+                }
+                .eps <- .Machine$double.eps
+                for (.i in c(2, 3)) {
+                    .h <- if (abs(parmVec[.i]) > sqrt(.eps)) abs(parmVec[.i]) * .eps^(1/3) else .eps^(1/3)
+                    .pvUp <- replace(parmVec, .i, parmVec[.i] + .h)
+                    .pvDn <- replace(parmVec, .i, parmVec[.i] - .h)
+                    EDder[.i] <- (.edval(.pvUp) - .edval(.pvDn)) / (2 * .h)
+                }
+            }
         }
 
         return(list(EDp, EDder[notFixed]))

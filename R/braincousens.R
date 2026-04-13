@@ -126,7 +126,34 @@ fctName, fctText)
         derDose <- tempVal*tempVal1*parmVec[1]/EDdose-parmVec[5]/tempVal2 
 
         EDder <- derParm/derDose
-        
+
+        ## Fix: correct c and d derivatives for absolute type using central differences.
+        ## The analytical derivatives above miss the chain-rule contribution from
+        ## the absolute-to-relative conversion (EDhelper), where p depends on c and d.
+        if (identical(type, "absolute")) {
+            .edval <- function(pv) {
+                p0 <- EDhelper(pv, respl, reference, type)
+                tv0 <- (100 - p0) / 100
+                helpEqn0 <- function(dose) {
+                    ev <- exp(pv[1] * (log(dose) - log(pv[4])))
+                    pv[5] * (1 + ev * (1 - pv[1])) - (pv[3] - pv[2]) * ev * pv[1] / dose
+                }
+                maxAt0 <- uniroot(helpEqn0, interval)$root
+                eqn0 <- function(dose) {
+                    tv0 * (1 + exp(pv[1] * (log(dose) - log(pv[4])))) -
+                        (1 + pv[5] * dose / (pv[3] - pv[2]))
+                }
+                uniroot(eqn0, lower = maxAt0, upper = upper)$root
+            }
+            .eps <- .Machine$double.eps
+            for (.i in c(2, 3)) {
+                .h <- if (abs(parmVec[.i]) > sqrt(.eps)) abs(parmVec[.i]) * .eps^(1/3) else .eps^(1/3)
+                .pvUp <- replace(parmVec, .i, parmVec[.i] + .h)
+                .pvDn <- replace(parmVec, .i, parmVec[.i] - .h)
+                EDder[.i] <- (.edval(.pvUp) - .edval(.pvDn)) / (2 * .h)
+            }
+        }
+
         return(list(EDp, EDder[notFixed]))
     }
 
