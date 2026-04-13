@@ -30,6 +30,7 @@
   cex,
   cex.axis = 1,
   col = FALSE,
+  errbar.col = NULL,
   lty,
   pch,
   legend,
@@ -120,6 +121,11 @@ axis annotation relative to the current setting of cex.}
 
 \item{col}{either logical or a vector of colours. If TRUE default colours are
 used. If FALSE (default) no colours are used.}
+
+\item{errbar.col}{colour(s) for error bars when using \code{type = "bars"}.
+If \code{NULL} (default), error bars will match the curve colours specified
+by \code{col}. Use \code{errbar.col = "black"} to restore the previous
+behaviour of black error bars.}
 
 \item{lty}{a numeric vector specifying the line types.}
 
