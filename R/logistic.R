@@ -103,7 +103,17 @@ fctName, fctText)
     edfct <- function(parm, respl, reference = "control", type = "relative", ...)
     {
         parmVec[notFixed] <- parm
-        p <- EDhelper(parmVec, respl, reference, type)
+
+        ## Convert absolute response level to relative.
+        ## Note: unlike log-logistic models where b < 0 means decreasing,
+        ## the logistic model has b < 0 = increasing.  EDhelper's p-swap
+        ## (for b < 0, relative type) would be wrong here, so we perform
+        ## only the absolute-to-relative conversion inline.
+        if (identical(type, "absolute")) {
+            p <- 100 * ((parmVec[3] - respl) / (parmVec[3] - parmVec[2]))
+        } else {
+            p <- respl
+        }
     
         ## deriv(~e + log((100/(100-p))^(1/f) - 1) / b, c("b", "c", "d", "e", "f"), function(b,c,d,e,f){})
         ## evaluated at the R prompt
@@ -130,10 +140,10 @@ fctName, fctText)
 
         ## Fix: correct c and d derivatives for absolute type using central differences.
         ## The analytical derivatives above miss the chain-rule contribution from
-        ## the absolute-to-relative conversion (EDhelper), where p depends on c and d.
+        ## the absolute-to-relative conversion, where p depends on c and d.
         if (identical(type, "absolute")) {
             .edval <- function(pv) {
-                p0 <- EDhelper(pv, respl, reference, type)
+                p0 <- 100 * ((pv[3] - respl) / (pv[3] - pv[2]))
                 .expr2 <- 100 / p0
                 .expr4 <- .expr2^(1 / pv[5])
                 .expr5 <- .expr4 - 1
