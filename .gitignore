@@ -49,3 +49,6 @@ Thumbs.db
 # Reference/backup files
 _gitignore
 _Rbuildignore
+
+# YAML Package build tests and artifacts
+/docs_old/
