@@ -67,14 +67,14 @@ devtools::install_github("hreinwald/drc@main_beta")
 ### Local Installation from tar.gz
 
 If GitHub installation is failing, you can run the installation from the local tar.gz file. 
-[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.0.03.tar.gz).
+[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.1.tar.gz).
 
 After downloading the file, run the following:
 
 ``` r
 # Specify the path to the directory where you saved the downloaded tar.gz file.
 # Make sure to specify the correct file path below.
-targz  <- file.path("~/Downloads/3.3.0.03.tar.gz")
+targz  <- file.path("~/Downloads/drc-3.3.1.tar.gz") # adjust file path here accordingly
 
 # Local installation with base R
 install.packages(targz, repos = NULL, type = "source")
