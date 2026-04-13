@@ -57,10 +57,10 @@ Feature requests or ideas?
 ``` r
 # install.packages("devtools")
 
-# Install the re-factored development version 3.3.0
+# Install the re-factored development version 
 devtools::install_github("hreinwald/drc")
 
-# Install the re-factored stable beta version 3.3.0
+# Install the re-factored stable beta version
 devtools::install_github("hreinwald/drc@main_beta")
 ```
 
