@@ -149,7 +149,10 @@ fctName, fctText)
         if (identical(type, "absolute")) {
             .edval <- function(pv) {
                 p0 <- absToRel(pv, respl, type)
+                # Replicate weibull2's reversal (for b > 0 and absolute type)
                 if (pv[1] > 0 && identical(reference, "control")) p0 <- 100 - p0
+                # Replicate weibull1's EDhelper swap (for b < 0 and relative type)
+                if (pv[1] < 0 && identical(reference, "control")) p0 <- 100 - p0
                 tv0 <- log(-log((100 - p0) / 100))
                 exp(tv0 / pv[1] + log(pv[4]))
             }
