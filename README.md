@@ -73,8 +73,7 @@ After downloading the file, run the following:
 
 ``` r
 # Specify the path to the directory where you saved the downloaded tar.gz file.
-# Make sure to specify the correct file path below.
-targz  <- file.path("~/Downloads/drc-3.3.1.tar.gz") # adjust file path here accordingly
+targz  <- file.path("~/Downloads/drc-3.3.1.tar.gz")
 
 # Local installation with base R
 install.packages(targz, repos = NULL, type = "source")
