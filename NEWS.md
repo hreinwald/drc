@@ -1,4 +1,18 @@
+# drc 3.3.1
+
+## New Features
+* Enhanced `plot.drc()`: error bars in `type = "bars"` plots now match curve colors by default. Added `errbar.col` parameter to allow manual control of error bar colors. Set `errbar.col = "black"` to restore the previous behavior of black error bars.
+
+## Bug Fixes
+* Fixed `logistic()` model ED calculation with `type="absolute"`: the `edfct` function now correctly handles absolute-to-relative conversion without applying the incorrect p-swap from `EDhelper()`. The logistic model has opposite b-sign convention from log-logistic (b < 0 means increasing, not decreasing), so `EDhelper`'s p-swap for b < 0 would incorrectly swap ED values. The fix uses inline absolute-to-relative conversion (`p = 100·(d−respl)/(d−c)`) for absolute type and `p = respl` directly for relative type.
+* Fixed model-level `edfct` derivatives for absolute ED type in `braincousens()`, `fplogistic()`, `llogistic()`, `llogistic2()`, `lnormal()`, `weibull1()`, and `weibull2()`: when `type = "absolute"`, the gradient functions previously set ∂ED/∂c and ∂ED/∂d to 0, which was incorrect because the absolute-to-relative conversion makes p a function of c and d. The chain rule requires non-zero partials. Now compute ∂ED/∂c and ∂ED/∂d via central differences on a closure that captures the chain-rule contribution through the full ED computation path.
+
+---
+
 # drc 3.3.0.03
+
+## New Features
+* Enhanced `plot.drc()`: error bars in `type = "bars"` plots now match curve colors by default. Added `errbar.col` parameter to allow manual control of error bar colors. Set `errbar.col = "black"` to restore the previous behavior of black error bars.
 
 ## Bug Fixes
 * Fixed `predict()` "incorrect number of dimensions" error for models with many fixed parameters (e.g., `EXD.3(fixed = c(lower, upper, NA))`): when only one parameter is estimated, `indexMat` in the fitted model object is a vector rather than a matrix, causing `predict.drc()` to fail when computing standard errors or confidence intervals. Ensured `indexMat` is always coerced to a matrix before column subsetting.

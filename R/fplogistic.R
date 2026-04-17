@@ -152,6 +152,24 @@ fctName, fctText)
         denVal <- parmVec[1] * p1 * (logEDp)^(p1-1) + parmVec[4] * p2 * (logEDp)^(p2-1)
         derVec <- (EDp+1) * c(logEDp^p1, logEDp^p2) / denVal
         EDder <- c(derVec[1], 0, 0, derVec[2])
+
+        ## Fix: correct c and d derivatives for absolute type using central differences.
+        ## The analytical derivatives above miss the chain-rule contribution from
+        ## the absolute-to-relative conversion (EDhelper2), where p depends on c and d.
+        if (identical(type, "absolute")) {
+            .edval <- function(pv) {
+                p0 <- EDhelper2(pv, respl, reference, type, pv[1] > 0)
+                invfp(log((100 - p0) / p0), pv[1], pv[4])
+            }
+            .eps <- .Machine$double.eps
+            for (.i in c(2, 3)) {
+                .h <- if (abs(parmVec[.i]) > sqrt(.eps)) abs(parmVec[.i]) * .eps^(1/3) else .eps^(1/3)
+                .pvUp <- replace(parmVec, .i, parmVec[.i] + .h)
+                .pvDn <- replace(parmVec, .i, parmVec[.i] - .h)
+                EDder[.i] <- (.edval(.pvUp) - .edval(.pvDn)) / (2 * .h)
+            }
+        }
+
         if (loged) 
         {
             EDder <- EDder / EDp

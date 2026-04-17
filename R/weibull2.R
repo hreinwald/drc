@@ -130,6 +130,7 @@ fctName, fctText)
     edfct <- function(parm, p, reference, type, ...)
     {   
         parmVec[notFixed] <- parm
+        respl <- p  # save original response level
 
         p <- absToRel(parmVec, p, type)
 
@@ -139,7 +140,37 @@ fctName, fctText)
             p <- 100 - p
         }
                
-        weibull1(fixed, names)$edfct(parm, p, reference, "relative", ...) 
+        result <- weibull1(fixed, names)$edfct(parm, p, reference, "relative", ...) 
+
+        ## Fix: correct c and d derivatives for absolute type using central differences.
+        ## The delegation to weibull1 with type="relative" produces zero derivatives
+        ## for c and d, missing the chain-rule contribution from the
+        ## absolute-to-relative conversion (absToRel) where p depends on c and d.
+        if (identical(type, "absolute")) {
+            .edval <- function(pv) {
+                p0 <- absToRel(pv, respl, type)
+                # Replicate weibull2's reversal (for b > 0 and absolute type)
+                if (pv[1] > 0 && identical(reference, "control")) p0 <- 100 - p0
+                # Replicate weibull1's EDhelper swap (for b < 0 and relative type)
+                if (pv[1] < 0 && identical(reference, "control")) p0 <- 100 - p0
+                tv0 <- log(-log((100 - p0) / 100))
+                exp(tv0 / pv[1] + log(pv[4]))
+            }
+            .eps <- .Machine$double.eps
+            .nfIdx <- which(notFixed)
+            for (.i in c(2, 3)) {
+                if (!notFixed[.i]) next
+                .h <- if (abs(parmVec[.i]) > sqrt(.eps)) abs(parmVec[.i]) * .eps^(1/3) else .eps^(1/3)
+                .pvUp <- replace(parmVec, .i, parmVec[.i] + .h)
+                .pvDn <- replace(parmVec, .i, parmVec[.i] - .h)
+                .pos <- which(.nfIdx == .i)
+                if (length(.pos) == 1L) {
+                    result[[2]][.pos] <- (.edval(.pvUp) - .edval(.pvDn)) / (2 * .h)
+                }
+            }
+        }
+
+        result
     }
 
 

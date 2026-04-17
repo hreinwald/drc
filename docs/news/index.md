@@ -1,5 +1,91 @@
 # Changelog
 
+## drc 3.3.1
+
+### New Features
+
+- Enhanced
+  [`plot.drc()`](https://hreinwald.github.io/drc/reference/plot.drc.md):
+  error bars in `type = "bars"` plots now match curve colors by default.
+  Added `errbar.col` parameter to allow manual control of error bar
+  colors. Set `errbar.col = "black"` to restore the previous behavior of
+  black error bars.
+
+### Bug Fixes
+
+- Fixed
+  [`logistic()`](https://hreinwald.github.io/drc/reference/logistic.md)
+  model ED calculation with `type="absolute"`: the `edfct` function now
+  correctly handles absolute-to-relative conversion without applying the
+  incorrect p-swap from
+  [`EDhelper()`](https://hreinwald.github.io/drc/reference/EDhelper.md).
+  The logistic model has opposite b-sign convention from log-logistic (b
+  \< 0 means increasing, not decreasing), so `EDhelper`’s p-swap for b
+  \< 0 would incorrectly swap ED values. The fix uses inline
+  absolute-to-relative conversion (`p = 100·(d−respl)/(d−c)`) for
+  absolute type and `p = respl` directly for relative type.
+- Fixed model-level `edfct` derivatives for absolute ED type in
+  [`braincousens()`](https://hreinwald.github.io/drc/reference/braincousens.md),
+  [`fplogistic()`](https://hreinwald.github.io/drc/reference/fplogistic.md),
+  [`llogistic()`](https://hreinwald.github.io/drc/reference/llogistic.md),
+  [`llogistic2()`](https://hreinwald.github.io/drc/reference/llogistic2.md),
+  [`lnormal()`](https://hreinwald.github.io/drc/reference/lnormal.md),
+  [`weibull1()`](https://hreinwald.github.io/drc/reference/weibull1.md),
+  and
+  [`weibull2()`](https://hreinwald.github.io/drc/reference/weibull2.md):
+  when `type = "absolute"`, the gradient functions previously set ∂ED/∂c
+  and ∂ED/∂d to 0, which was incorrect because the absolute-to-relative
+  conversion makes p a function of c and d. The chain rule requires
+  non-zero partials. Now compute ∂ED/∂c and ∂ED/∂d via central
+  differences on a closure that captures the chain-rule contribution
+  through the full ED computation path.
+
+------------------------------------------------------------------------
+
+## drc 3.3.0.03
+
+### New Features
+
+- Enhanced
+  [`plot.drc()`](https://hreinwald.github.io/drc/reference/plot.drc.md):
+  error bars in `type = "bars"` plots now match curve colors by default.
+  Added `errbar.col` parameter to allow manual control of error bar
+  colors. Set `errbar.col = "black"` to restore the previous behavior of
+  black error bars.
+
+### Bug Fixes
+
+- Fixed [`predict()`](https://rdrr.io/r/stats/predict.html) “incorrect
+  number of dimensions” error for models with many fixed parameters
+  (e.g., `EXD.3(fixed = c(lower, upper, NA))`): when only one parameter
+  is estimated, `indexMat` in the fitted model object is a vector rather
+  than a matrix, causing
+  [`predict.drc()`](https://hreinwald.github.io/drc/reference/predict.drc.md)
+  to fail when computing standard errors or confidence intervals.
+  Ensured `indexMat` is always coerced to a matrix before column
+  subsetting.
+
+### Changes
+
+- Updated package version and date in `DESCRIPTION` and website
+  documentation to `3.3.0.03`.
+- Updated logo path in `README.md` to point to `man/figures/logo.png`
+  for consistency with package structure.
+- Added favicon and manifest links to HTML documentation files for
+  improved branding and browser integration.
+- Added the package website (`https://hreinwald.github.io/drc`) as the
+  primary URL in the `DESCRIPTION` file for better discoverability.
+- Added the [`rss()`](https://hreinwald.github.io/drc/reference/rss.md)
+  function to the reference index in `_pkgdown.yml`.
+- Added logo image to the dose-response workflow vignette and updated
+  the vignette date.
+- Simplified labeling of effective dose (ED) estimates in the workflow
+  vignette outputs for clarity, removing the `e:1:` prefix.
+- Updated model comparison output in the vignette to include additional
+  columns and more precise values.
+
+------------------------------------------------------------------------
+
 ## drc 3.3.0.02
 
 ### New Features

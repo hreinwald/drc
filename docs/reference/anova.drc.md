@@ -1,9 +1,10 @@
 # ANOVA Model Comparison for Dose-Response Models
 
-Compares two nested dose-response model fits using a likelihood-ratio test
-(for binomial data) or an F-test (for continuous data). Two `drc`
+Compares two nested dose-response model fits using a likelihood-ratio
+test (for binomial data) or an F-test (for continuous data). Two `drc`
 objects must be provided. For a lack-of-fit test of a single model, use
-`modelFit()` instead.
+[`modelFit`](https://hreinwald.github.io/drc/reference/modelFit.md)
+instead.
 
 ## Usage
 
@@ -16,14 +17,14 @@ anova(object, ..., details = TRUE, test = NULL)
 
 - object:
 
-  an object of class 'drc'.
+  an object of class ‘drc’.
 
 - ...:
 
-  a second object of class 'drc' to compare against
-  `object`. Exactly two models must be supplied; passing a single
-  model will result in an error directing the user to
-  `modelFit()`.
+  a second object of class ‘drc’ to compare against `object`. Exactly
+  two models must be supplied; passing a single model will result in an
+  error directing the user to
+  [`modelFit`](https://hreinwald.github.io/drc/reference/modelFit.md).
 
 - details:
 
@@ -32,14 +33,14 @@ anova(object, ..., details = TRUE, test = NULL)
 
 - test:
 
-  a character string specifying the test statistic to be applied.
-  For continuous data the default is `"F"` (F-test); for binomial data
-  the default is `"Chisq"` (likelihood-ratio test). Use `"Chisq"`
-  to force a likelihood-ratio test for continuous data.
+  a character string specifying the test statistic to be applied. For
+  continuous data the default is `"F"` (F-test); for binomial data the
+  default is `"Chisq"` (likelihood-ratio test). Use `"Chisq"` to force a
+  likelihood-ratio test for continuous data.
 
 ## Value
 
-An object of class 'anova' (inheriting from `data.frame`) with columns
+An object of class ‘anova’ (inheriting from `data.frame`) with columns
 for model degrees of freedom, residual sum of squares (or
 log-likelihood), the difference in degrees of freedom, the test
 statistic, and the p-value.
@@ -55,19 +56,25 @@ For continuous data an F-test is used by default. For binomial data a
 likelihood-ratio (chi-square) test is used by default.
 
 If a single model is passed, the function raises an error. To assess the
-fit of a single dose-response model (lack-of-fit test comparing the model
-to a more general ANOVA model), use `modelFit()` instead.
+fit of a single dose-response model (lack-of-fit test comparing the
+model to a more general ANOVA model), use
+[`modelFit`](https://hreinwald.github.io/drc/reference/modelFit.md)
+instead.
 
-## See Also
+## See also
 
-`modelFit()` for lack-of-fit testing of a single model,
-`drm()` for fitting dose-response models,
-`logLik.drc()` for log-likelihood extraction,
-`summary.drc()` for model summaries.
+[`modelFit`](https://hreinwald.github.io/drc/reference/modelFit.md) for
+lack-of-fit testing of a single model,
+[`drm`](https://hreinwald.github.io/drc/reference/drm.md) for fitting
+dose-response models,
+[`logLik.drc`](https://hreinwald.github.io/drc/reference/logLik.drc.md)
+for log-likelihood extraction,
+[`summary.drc`](https://hreinwald.github.io/drc/reference/summary.drc.md)
+for model summaries.
 
 ## Author
 
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 
 ## Examples
 
@@ -97,4 +104,9 @@ anova(ryegrass.m2, ryegrass.m1, details = FALSE)  # without details
 
 ## For a lack-of-fit test on a single model, use modelFit():
 modelFit(ryegrass.m1)
+#> Lack-of-fit test
+#> 
+#>           ModelDf    RSS Df F value p value
+#> ANOVA          17 5.1799                   
+#> DRC model      20 6.0242  3  0.9236  0.4506
 ```

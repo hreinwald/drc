@@ -33,6 +33,7 @@ plot(
   cex,
   cex.axis = 1,
   col = FALSE,
+  errbar.col = NULL,
   lty,
   pch,
   legend,
@@ -173,6 +174,13 @@ plot(
 
   either logical or a vector of colours. If TRUE default colours are
   used. If FALSE (default) no colours are used.
+
+- errbar.col:
+
+  colour(s) for error bars when using `type = "bars"`. If `NULL`
+  (default), error bars will match the curve colours specified by `col`.
+  Use `errbar.col = "black"` to restore the previous behaviour of black
+  error bars.
 
 - lty:
 

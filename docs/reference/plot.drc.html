@@ -9,7 +9,7 @@ distinguishing between curves by different plot symbols and line types."><meta p
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.03</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +73,7 @@ distinguishing between curves by different plot symbols and line types.</p>
 <span>  <span class="va">cex</span>,</span>
 <span>  cex.axis <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  col <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  errbar.col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">lty</span>,</span>
 <span>  <span class="va">pch</span>,</span>
 <span>  <span class="va">legend</span>,</span>
@@ -216,6 +217,13 @@ axis annotation relative to the current setting of cex.</p></dd>
 <dt id="arg-col">col<a class="anchor" aria-label="anchor" href="#arg-col"></a></dt>
 <dd><p>either logical or a vector of colours. If TRUE default colours are
 used. If FALSE (default) no colours are used.</p></dd>
+
+
+<dt id="arg-errbar-col">errbar.col<a class="anchor" aria-label="anchor" href="#arg-errbar-col"></a></dt>
+<dd><p>colour(s) for error bars when using <code>type = "bars"</code>.
+If <code>NULL</code> (default), error bars will match the curve colours specified
+by <code>col</code>. Use <code>errbar.col = "black"</code> to restore the previous
+behaviour of black error bars.</p></dd>
 
 
 <dt id="arg-lty">lty<a class="anchor" aria-label="anchor" href="#arg-lty"></a></dt>

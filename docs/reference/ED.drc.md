@@ -246,18 +246,18 @@ ED(ryegrass.m1, c(10, 50, 90), interval = "fls")
 #> 
 #> Estimated effective doses
 #> 
-#>       Estimate     Lower     Upper
-#> e:10    4.3219    2.9274    6.3809
-#> e:50   21.2840   14.4476   31.3553
-#> e:90  595.0468  102.0842 3468.5164
+#>        Estimate Std. Error      Lower      Upper
+#> e:10    4.32195    0.18677    2.92738    6.38085
+#> e:50   21.28399    0.18573   14.44757   31.35531
+#> e:90  595.04680    0.84510  102.08419 3468.51638
 
 ## Displaying 95% confidence intervals using inverse regression
 ED(ryegrass.m1, c(10, 50, 90), interval = "inv")
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate  Lower  Upper
-#> e:10   1.4637 1.1423 1.8225
-#> e:50   3.0580 2.7490 3.4017
-#> e:90   6.3886 5.1514 8.1965
+#>      Estimate Std. Error   Lower   Upper
+#> e:10  1.46371    0.18677 1.14225 1.82253
+#> e:50  3.05795    0.18573 2.74905 3.40172
+#> e:90  6.38864    0.84510 5.15138 8.19648
 ```

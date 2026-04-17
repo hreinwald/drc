@@ -37,6 +37,8 @@ ryegrass.LL.4 <- drm(rootl~conc, data=ryegrass, fct=LL.4())
 
 backfit(ryegrass.LL.4)
 #> Warning: NaNs produced
+#> Warning: Non-positive variance estimate; SE set to NA.
+#> Warning: Non-positive variance estimate; SE set to NA.
 #>       dose   Estimate
 #> [1,]  0.00  0.5500692
 #> [2,]  0.94  0.7743783
@@ -44,5 +46,5 @@ backfit(ryegrass.LL.4)
 #> [4,]  3.75  3.7830500
 #> [5,]  7.50  7.0811832
 #> [6,] 15.00 10.1667582
-#> [7,] 30.00        NaN
+#> [7,] 30.00        Inf
 ```

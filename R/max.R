@@ -75,16 +75,14 @@
 #' @keywords models nonlinear
 "MAX" <- function(object, lower = 1e-3, upper = 1000, pool = TRUE)
 {
-  # ------------------------------------------------------------------ #
+
   #  1. Validate class of 'object'
-  # ------------------------------------------------------------------ #
   if (!inherits(object, "drc")) {
     stop("'object' must be of class 'drc'. Please supply a model fitted with drm().")
   }
+
   
-  # ------------------------------------------------------------------ #
   #  2. Check that the model supports MAX (braincousens / cedergreen)
-  # ------------------------------------------------------------------ #
   MAXlist <- object[["fct"]][["maxfct"]]
   if (is.null(MAXlist)) {
     stop(paste(
@@ -92,10 +90,9 @@
       "MAX() is only supported for 'braincousens' and 'cedergreen' model classes."
     ))
   }
+
   
-  # ------------------------------------------------------------------ #
   #  3. Validate lower / upper bounds
-  # ------------------------------------------------------------------ #
   if (!is.numeric(lower) || length(lower) != 1 || !is.finite(lower)) {
     stop("'lower' must be a single finite numeric value.")
   }
@@ -107,10 +104,9 @@
       "'lower' (", lower, ") must be strictly less than 'upper' (", upper, ")."
     ))
   }
+
   
-  # ------------------------------------------------------------------ #
   #  4. Retrieve relevant model components
-  # ------------------------------------------------------------------ #
   indexMat <- object[["indexMat"]]
   parmMat  <- object[["parmMat"]]
   strParm  <- colnames(parmMat)
@@ -124,17 +120,15 @@
     }
   )
   
-  # ------------------------------------------------------------------ #
+
   #  5. Initialise output — use NA to distinguish failure from zero
-  # ------------------------------------------------------------------ #
   ncolIM   <- ncol(indexMat)
   indexVec <- seq_len(ncolIM)
   dimNames <- vector("character", ncolIM)
   MAXmat   <- matrix(NA_real_, nrow = ncolIM, ncol = 2)
   
-  # ------------------------------------------------------------------ #
+
   #  6. Loop over each curve
-  # ------------------------------------------------------------------ #
   for (i in indexVec)
   {
     # Curve label — fall back gracefully if missing
@@ -172,10 +166,9 @@
       }
     )
   }
+
   
-  # ------------------------------------------------------------------ #
   #  7. Format and return
-  # ------------------------------------------------------------------ #
   dimnames(MAXmat) <- list(dimNames, c("Dose", "Response"))
   printCoefmat(MAXmat, na.print = "NA")
   invisible(MAXmat)

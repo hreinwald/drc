@@ -162,7 +162,9 @@ plot(nec3.model, type = "all", log = "",
      ylab = "Root length (cm)")
 ```
 
-![](nec-models_files/figure-html/nec3-example-1.png)
+![NEC.3 model for ryegrass root length showing threshold effect at low
+concentrations followed by exponential
+decline](nec-models_files/figure-html/nec3-example-1.png)
 
 ### NEC.4: Four-Parameter NEC Model
 
@@ -258,19 +260,22 @@ my_plot = function(mod, col = "black", lwd = 2, pch = 16) {
 my_plot(nec2.fit)
 ```
 
-![](nec-models_files/figure-html/model-comparison-1.png)
+![NEC.2 model fitted to ryegrass data with both asymptotes
+constrained](nec-models_files/figure-html/model-comparison-1.png)
 
 ``` r
 my_plot(nec3.fit, col = "darkblue", lwd = 2)
 ```
 
-![](nec-models_files/figure-html/model-comparison-2.png)
+![NEC.3 model fitted to ryegrass data with lower asymptote fixed at
+zero](nec-models_files/figure-html/model-comparison-2.png)
 
 ``` r
 my_plot(nec4.fit, col = "darkred", lwd = 2)
 ```
 
-![](nec-models_files/figure-html/model-comparison-3.png)
+![NEC.4 model fitted to ryegrass data with all parameters
+estimated](nec-models_files/figure-html/model-comparison-3.png)
 
 ## Design Pattern in the drc Package
 

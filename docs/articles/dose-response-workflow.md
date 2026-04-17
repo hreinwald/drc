@@ -73,7 +73,9 @@ plot(rootl ~ conc, data = ryegrass,
      pch = 16, cex = 1.2)
 ```
 
-![](dose-response-workflow_files/figure-html/load-data-1.png)
+![Scatter plot showing ryegrass root length (cm) versus ferulic acid
+concentration (mM), displaying a decreasing dose-response
+relationship](dose-response-workflow_files/figure-html/load-data-1.png)
 
 The dataset contains 24 observations with: - `conc`: Ferulic acid
 concentration in millimolar (mM) - `rootl`: Root length in centimeters
@@ -155,7 +157,9 @@ plot(ryegrass.LL4, type = "all",
      lwd = 2, cex = 1.2)
 ```
 
-![](dose-response-workflow_files/figure-html/basic-plot-1.png)
+![Dose-response curve showing LL.4 model fit to ryegrass data with
+observed data points and fitted sigmoid
+curve](dose-response-workflow_files/figure-html/basic-plot-1.png)
 
 The plot shows: - Observed data points - Fitted dose-response curve -
 Overall pattern of fit
@@ -178,7 +182,9 @@ qqnorm(residuals(ryegrass.LL4),
 qqline(residuals(ryegrass.LL4), col = "red", lwd = 2)
 ```
 
-![](dose-response-workflow_files/figure-html/qq-plot-1.png)
+![Normal Q-Q plot of residuals from LL.4 model showing points
+approximately along the diagonal reference
+line](dose-response-workflow_files/figure-html/qq-plot-1.png)
 
 **Interpretation:** - Points should fall approximately along the
 diagonal line - Systematic deviations suggest non-normality of
@@ -200,7 +206,9 @@ plot(fitted(ryegrass.LL4), residuals(ryegrass.LL4),
 abline(h = 0, col = "red", lwd = 2, lty = 2)
 ```
 
-![](dose-response-workflow_files/figure-html/residual-plot-1.png)
+![Residual plot showing residuals versus fitted values with random
+scatter around zero horizontal
+line](dose-response-workflow_files/figure-html/residual-plot-1.png)
 
 **What to Look For:** - Random scatter around zero (no systematic
 pattern) - Constant variance across fitted values (homoscedasticity) -
@@ -308,8 +316,8 @@ ED(ryegrass.LL4, respLev = 50, interval = "fls")
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate  Lower  Upper
-#> e:50   21.284 14.448 31.355
+#>      Estimate Std. Error    Lower    Upper
+#> e:50 21.28399    0.18573 14.44757 31.35531
 ```
 
 The Fieller method is often preferred for ED50 estimation as it accounts
@@ -427,7 +435,9 @@ legend("topright", legend = c("LL.4 (initial)", "W1.4 (best)"),
        col = c("blue", "red"), lwd = 2, lty = c(1, 2), cex = 1.1)
 ```
 
-![](dose-response-workflow_files/figure-html/model-comparison-plot-1.png)
+![Comparison of LL.4 and W1.4 model fits showing two overlapping
+dose-response curves in blue (LL.4) and red dashed line
+(W1.4)](dose-response-workflow_files/figure-html/model-comparison-plot-1.png)
 
 ### Comparing ED Estimates Between Models
 
@@ -621,7 +631,9 @@ legend("topright",
        cex = 1.1)
 ```
 
-![](dose-response-workflow_files/figure-html/asymptote-plot-1.png)
+![Comparison of LL.4 and LL.3 models showing effect of asymptote
+constraints with black solid line (LL.4) and blue dashed line
+(LL.3)](dose-response-workflow_files/figure-html/asymptote-plot-1.png)
 
 ### Implications of Fixing Asymptotes
 
@@ -716,7 +728,9 @@ example.LL <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 plot(example.LL, main = "Log-Logistic Model (LL.4)")
 ```
 
-![](dose-response-workflow_files/figure-html/ll-example-1.png)
+![Log-logistic model (LL.4) fitted to ryegrass data showing typical
+S-shaped dose-response
+curve](dose-response-workflow_files/figure-html/ll-example-1.png)
 
 #### Weibull Models (W1 and W2 families)
 
@@ -751,7 +765,9 @@ legend("topright", legend = c("W1.4", "W2.4"),
        col = c("blue", "red"), lwd = 2, lty = c(1, 2))
 ```
 
-![](dose-response-workflow_files/figure-html/weibull-example-1.png)
+![Comparison of Weibull Type 1 (blue) and Type 2 (red dashed) models
+showing asymmetric dose-response
+curves](dose-response-workflow_files/figure-html/weibull-example-1.png)
 
 #### Log-Normal Models (LN family)
 

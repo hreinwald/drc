@@ -268,7 +268,7 @@ Model diagnostics and helper functions
 - [`rdrm()`](https://hreinwald.github.io/drc/reference/rdrm.md) :
   Simulating a dose-response curve
 - [`anova(`*`<drc>`*`)`](https://hreinwald.github.io/drc/reference/anova.drc.md)
-  : ANOVA for dose-response model fits
+  : ANOVA Model Comparison for Dose-Response Models
 - [`lin.test()`](https://hreinwald.github.io/drc/reference/lin.test.md)
   : Lack-of-fit test for the mean structure based on cumulated residuals
 - [`mr.test()`](https://hreinwald.github.io/drc/reference/mr.test.md) :
