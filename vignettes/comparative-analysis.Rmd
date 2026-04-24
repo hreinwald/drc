@@ -1,6 +1,23 @@
-# drc Package Comparative Analysis Report
+---
+title: "Comparative Analysis: hreinwald/drc vs DoseResponse/drc"
+author: "Hannes Reinwald"
+date: "2026-04-24"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteTitle{Comparative Analysis: hreinwald/drc vs DoseResponse/drc}
+  %\VignetteIndexEntry{Comparative Analysis: hreinwald/drc vs DoseResponse/drc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 ## For: *"Reviving drc: A corrected and modernized R package for dose-response analysis"*
-### Author: Hannes Reinwald | Date: 2026-04-24
 
 ---
 
@@ -263,10 +280,11 @@ The codebase at `DoseResponse/drc` has been effectively unmaintained since Janua
 `DoseResponse/drc` uses Roxygen2 version 6.1.1 (declared in DESCRIPTION). Most model files have minimal or no `@param`, `@return`, `@examples`, or `@details` tags — functions are defined with no Roxygen headers at all.
 
 `hreinwald/drc` uses Roxygen2 7.3.3 with markdown support (`Roxygen: list(markdown = TRUE)`). Every exported function has:
+
 - `@title` and `@description`
 - `@param` for each argument with type and purpose
 - `@return` describing the return structure
-- `@details` with the mathematical formula in LaTeX (`\deqn{...}`)
+- `@details` with the mathematical formula in LaTeX
 - `@examples` with working, runnable code
 - `@seealso` cross-references
 - `@references` with full bibliographic citations
@@ -274,8 +292,9 @@ The codebase at `DoseResponse/drc` has been effectively unmaintained since Janua
 - `@keywords`
 
 Example of improvement — `weibull1()` documentation added:
-- 4-item `\describe{...}` block explaining each of the 4 self-starter methods
-- LaTeX formula `\deqn{f(x) = c + (d - c) \exp(-\exp(b(\log(x) - \log(e))))}`
+
+- 4-item describe block explaining each of the 4 self-starter methods
+- LaTeX formula for the Weibull type 1 model
 - Complete `@param` for each of 7 arguments
 - 3 working examples across `W1.2`, `W1.3`, `W1.4`, `EXD.2`, `EXD.3`
 
@@ -384,6 +403,7 @@ Example of improvement — `weibull1()` documentation added:
 ## 6. Publication Readiness Summary
 
 ### Items That Strengthen the Submission Now:
+
 - **Bug evidence is documented and reproducible.** The `NEWS.md` provides a detailed bug report for each fix. The 79 `testthat` tests provide regression guards.
 - **The `ucedergreen()` bug** is a compelling primary justification: it is unambiguous, affects a named published model family, and affects all previous users.
 - **Breadth of fixes** across 7 model families for the absolute-type ED gradient bug provides evidence of systematic, not incidental, review.
@@ -413,6 +433,7 @@ Example of improvement — `weibull1()` documentation added:
 ---
 
 ## Source Repositories
+
 - **Refactored package (subject):** https://github.com/hreinwald/drc (branch: `dev`, commit `508f602`)
 - **Fork source (baseline):** https://github.com/DoseResponse/drc (default branch `master`, commit `8719d43`)
 - **GitHub Pages:** https://hreinwald.github.io/drc/
