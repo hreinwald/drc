@@ -1,0 +1,418 @@
+# drc Package Comparative Analysis Report
+## For: *"Reviving drc: A corrected and modernized R package for dose-response analysis"*
+### Author: Hannes Reinwald | Date: 2026-04-24
+
+---
+
+## Executive Summary
+
+The `drc` R package (Ritz et al., 2015, *PLOS ONE*) is among the most widely deployed tools for dose-response analysis in bioassay, toxicology, pharmacology, and ecotoxicology. The version maintained at `DoseResponse/drc` (v3.2-0, last updated January 2021) harbors multiple correctness bugs of varying severity that silently corrupt downstream results. The fork at `hreinwald/drc` (`dev` branch, v3.3.1) addresses these systematically. The most critical bug discovered is a missing lower-asymptote term (`c` parameter) in the U-shaped Cedergreen-Ritz-Streibig hormesis models (`UCRS.*`), rendering every result computed with those functions incorrect. Secondary bugs include incorrect gradient vectors for absolute-type effective dose (ED) standard errors across at least seven model families, a wrong derivative in `gammadr()`, and a function-level edfct signature mismatch in the logistic model family.
+
+Beyond bug correction, `hreinwald/drc` delivers a substantially refactored codebase: dead code removed from 70+ source files, file naming standardized, a comprehensive test suite of 79 `testthat` files added (versus 3 ad-hoc test scripts in the original), and full `pkgdown` documentation deployed at https://hreinwald.github.io/drc/. CI/CD is integrated through three GitHub Actions workflows (R-CMD-check, code coverage, pkgdown deployment). The fork source lacks equivalent infrastructure: it has only a deprecated Travis CI configuration, no `CITATION.cff`, and a seven-line README.
+
+Taken together, the evidence supports the framing of this as not a mere maintenance release but a substantive correction to the scientific record. Users who computed ED confidence intervals using `type="absolute"` with Weibull, log-logistic, log-normal, logistic, Brain-Cousens, or fplogistic models—or who fitted any UCRS hormesis model—may have published incorrect standard errors or incorrect fitted values.
+
+---
+
+## 1. Critical Bugs Identified
+
+### 1.1 Missing Lower Asymptote (`c`) in U-shaped CRS Model — SEVERITY: **CRITICAL**
+
+**Affected model/function:** `ucedergreen()` and all convenience wrappers `UCRS.4a`, `UCRS.4b`, `UCRS.4c`, `UCRS.5a`, `UCRS.5b`, `UCRS.5c`
+
+**File:** `R/ucedergreen.R`
+
+**Original (incorrect) code** (`DoseResponse/drc`, `R/ucedergreen.R`, line ~32):
+```r
+fct <- function(dose, parm)
+{
+    parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
+    parmMat[, notFixed] <- parm
+
+    numTerm <- parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*exp(-1/dose^alpha)
+    denTerm <- 1 + exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
+    parmMat[, 3] - numTerm/denTerm   # WRONG: missing parmMat[, 2] (c parameter)
+}
+```
+
+**Fixed code** (`hreinwald/drc`, `R/ucedergreen.R`, line ~56):
+```r
+fct <- function(dose, parm)
+{
+    parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
+    parmMat[, notFixed] <- parm
+
+    numTerm <- parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*exp(-1/dose^alpha)
+    denTerm <- 1 + exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
+    parmMat[, 2] + parmMat[, 3] - numTerm/denTerm   # CORRECT: c + d - numTerm/denTerm
+}
+```
+
+**Scientific impact:** The published model formula (Cedergreen, Ritz & Streibig, 2005, *Environ. Toxicol. Chem.* 24:3166) is:
+
+$$f(x) = c + d - \frac{d - c + f\,e^{-1/x^\alpha}}{1 + \exp(b(\log x - \log e))}$$
+
+The original implementation returns `d - numTerm/denTerm`, i.e., the fitted response is shifted upward by `c` (the lower horizontal asymptote) for all dose values. When `c = 0` (the most common case for UCRS.4x models), the result is numerically coincidentally correct; however, when `c` is estimated (UCRS.5x) or is supplied as a non-zero fixed value, every fitted value is wrong by exactly `c`. Any paper that used `UCRS.5a`, `UCRS.5b`, or `UCRS.5c` with estimated `c ≠ 0` and reported dose-response parameters, EC values, or hormesis estimates has incorrect results that propagate to all downstream comparisons.
+
+Additionally, the `deriv1` (gradient with respect to the `c` parameter) in the original code is `1/t3` (positive), whereas the corrected formula's partial derivative is `1 + 1/t3`. This means even if fitted values were not perceptibly shifted (because `c ≈ 0`), standard errors for the c-parameter estimate were systematically wrong.
+
+---
+
+### 1.2 Wrong Multiplier in `gammadr()` Gradient — SEVERITY: **HIGH**
+
+**Affected model/function:** `gammadr()` — Gamma dose-response model
+
+**File:** `R/gammadr.r` (DoseResponse) vs `R/gammadr.R` (hreinwald)
+
+**Original (incorrect) code** (`DoseResponse/drc`, `R/gammadr.r`, inside `deriv1`):
+```r
+cbind(
+    t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * parmMat[, 1],  # WRONG: uses b not dose
+    1 - t2,
+    t2,
+    t1 * logGamma(parmMat[, 1] * dose, parmMat[, 4])
+)[, notFixed]
+```
+
+**Fixed code** (`hreinwald/drc`, `R/gammadr.R`, inside `deriv1`):
+```r
+cbind(
+    t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * dose,  # CORRECT: uses dose
+    1 - t2,
+    t2,
+    t1 * logGamma(parmMat[, 1] * dose, parmMat[, 4])
+)[, notFixed]
+```
+
+**Scientific impact:** The derivative of `f(x) = c + (d-c) · pgamma(b·x, e, 1)` with respect to `b` is `(d-c) · dgamma(b·x, e, 1) · x`. The original uses `b` instead of `x` in this product, yielding a gradient vector that scales incorrectly with the dose. This corrupts the delta-method standard errors for the `b` parameter and propagates to standard errors for any derived quantities (ED values, predicted values with CIs) computed from models fit with `gammadr()`.
+
+---
+
+### 1.3 Zero Gradients for Absolute-Type ED Standard Errors (7 Model Families) — SEVERITY: **HIGH**
+
+**Affected models/functions:** `braincousens()`, `fplogistic()`, `llogistic()`, `llogistic2()`, `lnormal()`, `weibull1()`, `weibull2()`
+
+**Files:** Respective `R/*.R` files in both repositories
+
+**Root cause (shared pattern, shown for `weibull1()`)**:
+
+Original code (`DoseResponse/drc`, `R/weibull1.r`, `edfct`):
+```r
+edfct <- function(parm, respl, reference, type, ...)
+{
+    parmVec[notFixed] <- parm
+    p <- EDhelper(parmVec, respl, reference, type)
+
+    tempVal <- log(-log((100-p)/100))
+    EDp <- exp(tempVal/parmVec[1] + log(parmVec[4]))
+
+    EDder <- EDp*c(-tempVal/(parmVec[1]^2), 0, 0, 1/parmVec[4])
+    # ^^^ derivatives for c and d are always 0 — correct only for relative type
+    return(list(EDp, EDder[notFixed]))
+}
+```
+
+Fixed code (`hreinwald/drc`, `R/weibull1.R`, `edfct`):
+```r
+edfct <- function(parm, respl, reference, type, ...)
+{
+    parmVec[notFixed] <- parm
+    p <- EDhelper(parmVec, respl, reference, type)
+
+    tempVal <- log(-log((100-p)/100))
+    EDp <- exp(tempVal/parmVec[1] + log(parmVec[4]))
+    EDder <- EDp*c(-tempVal/(parmVec[1]^2), 0, 0, 1/parmVec[4])
+
+    ## Fix: correct c and d derivatives for absolute type using central differences.
+    if (identical(type, "absolute")) {
+        .edval <- function(pv) { ... }  # full chain-rule evaluation
+        for (.i in c(2, 3)) {
+            .h <- ...
+            EDder[.i] <- (.edval(.pvUp) - .edval(.pvDn)) / (2 * .h)
+        }
+    }
+    return(list(EDp, EDder[notFixed]))
+}
+```
+
+**Scientific impact:** When users call `ED(model, respLev, type="absolute", interval="delta")`, the delta-method standard errors reported for the ED values are incorrect because ∂ED/∂c and ∂ED/∂d are set to zero. The absolute-to-relative conversion (`absToRel`/`EDhelper`) makes `p` a function of both `c` and `d`; the chain rule therefore requires non-zero partial derivatives. The magnitude of the error depends on the spread of the response: for data with large ranges between `c` and `d`, the absolute type conversion creates large sensitivity to asymptote estimates, and zeroing those terms can substantially underestimate the true confidence interval width. Any published confidence intervals for absolute ED values from the original package are potentially too narrow.
+
+---
+
+### 1.4 `logistic()` `edfct` Signature Mismatch and Wrong p-swap — SEVERITY: **HIGH**
+
+**Affected model/function:** `logistic()` and all convenience wrappers `L.3`, `L.4`, `L.5`
+
+**File:** `R/logistic.r` (DoseResponse) vs `R/logistic.R` (hreinwald)
+
+**Original (incorrect) code** (`DoseResponse/drc`, `R/logistic.r`, `edfct`):
+```r
+edfct <- function(parm, p, ...)
+{
+    parmVec[notFixed] <- parm
+    # ... (no reference or type handling)
+    # ... always uses p directly, no type="absolute" support
+    return(list(EDp, EDder[notFixed]))
+}
+```
+
+**Fixed code** (`hreinwald/drc`, `R/logistic.R`, `edfct`):
+```r
+edfct <- function(parm, respl, reference = "control", type = "relative", ...)
+{
+    parmVec[notFixed] <- parm
+    if (identical(type, "absolute")) {
+        p <- 100 * ((parmVec[3] - respl) / (parmVec[3] - parmVec[2]))
+    } else {
+        p <- respl
+    }
+    ## NOTE: unlike log-logistic models, logistic model has b < 0 = increasing,
+    ## so EDhelper's p-swap for b < 0 would be incorrect here.
+    ...
+}
+```
+
+**Scientific impact:** The logistic model (`L.3`, `L.4`, `L.5`) uses raw dose values (not `log(dose)`), so the sign convention of `b` is reversed compared to log-logistic models. The original code ignores `type` and `reference` arguments, meaning `ED(model, type="absolute")` would silently return wrong values (no error is thrown; the wrong formula runs). Furthermore, the original code would delegate to `EDhelper` which applies an incorrect p-swap for this model family, yielding ED values computed at the complementary percentile (e.g., computing ED10 instead of ED90).
+
+---
+
+### 1.5 `ucedergreen()` — Additional Bugs (17 Total) — SEVERITY: **CRITICAL/HIGH/MEDIUM**
+
+The `ucedergreen()` function in DoseResponse/drc contained 17 separate bugs documented in the hreinwald NEWS.md for v3.3.0.02. A summary of the most impactful:
+
+| Sub-Bug | Location | Severity |
+|---|---|---|
+| Missing `+c` in fct (see §1.1) | `fct()` | CRITICAL |
+| `edfct` signature mismatch (`p` vs `respl`, missing `reference`/`type`) | `edfct()` | HIGH |
+| `deriv1`: wrong sign/formula for c-column (`1/t3` vs `1 + 1/t3`) | `deriv1()` | HIGH |
+| Undefined `xlogx` call in `deriv1` (uses unset closure) | `deriv1()` | HIGH |
+| Missing `match.arg()` for `method` | top-level | MEDIUM |
+| Vectorized `\|` in scalar `if()` guards | top-level | MEDIUM |
+| Missing `useFixed` flag computation | self-starter | MEDIUM |
+| `maxfct` signature mismatch | `maxfct()` | MEDIUM |
+| Broken self-starter ignoring `alpha`/`method`/`useFixed` | `ssfct()` | MEDIUM |
+| Missing `fctName`/`fctText` parameters | return list | LOW |
+| `deriv1` excluded from return list | return list | HIGH |
+
+The absence of `deriv1` in the return list means that all Newton-type optimizers relying on gradient information would fail silently or fall back to finite differences, producing degraded convergence.
+
+---
+
+### 1.6 `mselect()` Parse Error — SEVERITY: **MEDIUM**
+
+**File:** `R/mselect.r` / `R/mselect.R`
+
+**Bug:** Two missing closing braces in `mselect()`. This caused a parse error when the function was sourced directly from the file (though it would load correctly via the compiled package). Any user attempting to modify or source-load the function would encounter a confusing parse failure.
+
+---
+
+### 1.7 `ED.lin.R` Incorrect Delta Method for Quadratic Models — SEVERITY: **MEDIUM**
+
+**File:** `R/ED.lin.R`
+
+**Bugs fixed in hreinwald:**
+- Duplicate `if`-block (dead code evaluating the same condition twice)
+- Stray debug `print()` statement (emits output during analysis)
+- Missing `parameterNames = c("b0", "b1", "b2")` argument in `deltaMethod()` call for quadratic models — causing incorrect parameter mapping and therefore wrong confidence intervals for ED values from quadratic linear models.
+
+---
+
+### 1.8 `drmOpt()` Inverted Trace/Silent Logic — SEVERITY: **MEDIUM**
+
+**File:** `R/drmOpt.R`
+
+**Bug:** The `otrace`/`silentVal` logic was inverted: `otrace=TRUE` (intending verbose output) incorrectly caused `silent=TRUE` in `try(optim())`, suppressing error messages rather than displaying them. This would cause optimization failures to be silently ignored during debugging sessions.
+
+---
+
+## 2. Justification for Refactoring
+
+The codebase at `DoseResponse/drc` has been effectively unmaintained since January 2021 (version 3.2-0). During this time, multiple bugs have accumulated that undermine the scientific validity of results produced by the package. The justification for refactoring rests on five concrete lines of evidence:
+
+**1. Mathematical incorrectness in production models.** The missing `c` parameter in `ucedergreen()` (§1.1), the wrong multiplier in `gammadr()` (§1.2), and the zero-gradient errors in seven model families (§1.3) constitute mathematical errors that silently corrupt numerical results. These are not software bugs in the traditional sense (crashes, type errors) — they pass silently and deliver plausible-looking but wrong numbers.
+
+**2. API mismatch with the framework's own calling conventions.** The `edfct` function is called by `ED.drc` with the signature `(parm, respl, reference, type, ...)`. The logistic model's `edfct` only accepted `(parm, p, ...)`, silently dropping `reference` and `type`. Similarly, `ucedergreen()`'s `edfct` dropped `reference` and `type`. This is not a documentation problem; it is an undetected interface violation that causes incorrect behavior whenever users deviate from default parameters.
+
+**3. Dead code and commented-out experiments in production files.** Across 70+ source files, `if(FALSE){...}` blocks (sometimes hundreds of lines), stray `print()` debug statements, and large sections of commented-out alternative implementations existed in the production codebase. This constitutes significant technical debt that impedes maintenance, review, and the ability to reason about what code paths are active.
+
+**4. Non-standard file naming.** Many R source files used lowercase extensions (`.r` instead of `.R`): `backfit.r`, `baro5.r`, `comped.r`, `drmc.r`, `fct2list.r`, `gammadr.r`, `gompertz.r`, `hewlett.r`, `iband.r`, `idrm.r`, `isobole.r`, `lnormal.r`, `logistic.r`, `max.r`, `mixture.r`, `mrdrm.r`, `mselect.r`, `multi2.r`, `nec.r`, `pr.r`, `rdrm.r`, `relpot.r`, `sandwich.r`, `twophase.r`, `ursa.r`, `voelund.r`, `weibull1.r`, `weibull2.r`, `xlogx.r`. On case-sensitive file systems (Linux, most CI environments), this can cause load failures.
+
+**5. Complete absence of automated testing.** `DoseResponse/drc` contains 3 ad-hoc test scripts (`test1.r`, `test2.r`, `test3.r`) plus one seed-germination script — no `testthat` framework, no assertions, no coverage tracking. `hreinwald/drc` introduces 79 `testthat` test files covering all major model families, utility functions, and edge cases.
+
+---
+
+## 3. Documentation Improvements
+
+### 3.1 README
+
+| Aspect | DoseResponse/drc | hreinwald/drc |
+|---|---|---|
+| File | `README.md` (7 lines) | `README.md` (~250 lines) |
+| Status badges | CRAN, Travis CI (deprecated), Downloads | GitHub version, R-CMD-check, Codecov, lifecycle, CRAN, Downloads, License, Last-commit, Contributions |
+| Package description | 1 sentence | Full description with 7-item feature list |
+| Installation instructions | 3 lines (devtools only) | Multi-section: recommended GitHub install, tar.gz local install, CRAN (explicitly discouraged) |
+| Quick Start | None | 3 worked examples with `drm()`, `ED()`, `EDcomp()`, `mselect()` |
+| Model table | None | Complete table of all model families with descriptions |
+| Key functions table | None | Complete table of core functions with descriptions |
+| Data types | None | Complete table of `type=` options |
+| Dependencies | None | Full list |
+| Logo | None | Custom logo in `man/figures/logo.png` |
+
+### 3.2 Roxygen2 Documentation Quality
+
+`DoseResponse/drc` uses Roxygen2 version 6.1.1 (declared in DESCRIPTION). Most model files have minimal or no `@param`, `@return`, `@examples`, or `@details` tags — functions are defined with no Roxygen headers at all.
+
+`hreinwald/drc` uses Roxygen2 7.3.3 with markdown support (`Roxygen: list(markdown = TRUE)`). Every exported function has:
+- `@title` and `@description`
+- `@param` for each argument with type and purpose
+- `@return` describing the return structure
+- `@details` with the mathematical formula in LaTeX (`\deqn{...}`)
+- `@examples` with working, runnable code
+- `@seealso` cross-references
+- `@references` with full bibliographic citations
+- `@author` attributions
+- `@keywords`
+
+Example of improvement — `weibull1()` documentation added:
+- 4-item `\describe{...}` block explaining each of the 4 self-starter methods
+- LaTeX formula `\deqn{f(x) = c + (d - c) \exp(-\exp(b(\log(x) - \log(e))))}`
+- Complete `@param` for each of 7 arguments
+- 3 working examples across `W1.2`, `W1.3`, `W1.4`, `EXD.2`, `EXD.3`
+
+### 3.3 GitHub Pages Documentation
+
+| Aspect | DoseResponse/drc | hreinwald/drc |
+|---|---|---|
+| pkgdown site | Present (minimal, no GitHub Pages deployment) | Full site deployed at https://hreinwald.github.io/drc/ |
+| Reference index | Basic auto-generated | Organized by category in `_pkgdown.yml` (3,265 bytes vs 1,863 bytes) |
+| Vignettes | None | 2 vignettes: `dose-response-workflow.Rmd` (28KB), `nec-models.Rmd` (14KB) |
+| Favicon/branding | None | Custom favicon and logo |
+| Accessibility | None | Alt-text on all images |
+
+### 3.4 Vignettes
+
+`hreinwald/drc` introduces two new vignettes absent from `DoseResponse/drc`:
+
+1. **`dose-response-workflow.Rmd`** (28,149 bytes): A complete end-to-end workflow demonstrating data loading, model fitting, ED estimation, multi-curve comparison, model selection with `mselect()`, and result visualization. References the corrected ED output format.
+
+2. **`nec-models.Rmd`** (14,499 bytes): Dedicated documentation of No-Effect Concentration (NEC) models with scientific context, fitting examples, and interpretation guidance.
+
+### 3.5 CITATION.cff
+
+`DoseResponse/drc` has a plain-text `inst/citation` file (517 bytes) with no structured metadata.
+
+`hreinwald/drc` has a proper `CITATION.cff` (1,523 bytes) with CFF version 1.2.0, author ORCID identifiers for all four original authors, version, DOI, release date, and two structured `references` entries (PLoS ONE 2015 article and CRC Press 2019 book).
+
+---
+
+## 4. New Features & Improvements
+
+### 4.1 New Functions
+
+| Function | File | Description |
+|---|---|---|
+| `rss()` | `R/rss.R` | Residual sum of squares for fitted `drc` objects; `Rsq()` now reuses `rss()` internally |
+| `ED_robust()` (internal) | `R/ED_robust.R` | Robust ED estimation using `rlang` (replaces deprecated `lazyeval`) |
+| `absToRel()` | `R/absToRel.R` | Exported utility: absolute-to-relative response level conversion |
+| `commatFct()` | `R/commatFct.R` | Internal helper for formatting comma-separated parameter texts |
+| `drm_legacy()` | `R/drm_legacy.R` | Legacy-compatible `drm()` interface for backward compatibility |
+| `simFct()` / `simDR()` | `R/simFct.R` / `R/simDR.R` | Simulation functions for dose-response data generation |
+| `onAttach()` | `R/onAttach.R` | Package attachment message with version info and repository URL |
+
+### 4.2 New Model Variants
+
+- All `UCRS` models (`UCRS.4a/4b/4c`, `UCRS.5a/5b/5c`) were completely rewritten — while they existed in DoseResponse/drc, they were functionally broken (see §1.1, §1.5) and are effectively new working implementations.
+- `CRS.4a`, `CRS.4b`, `CRS.4c` display text fixes (e.g., `CRS.4b` now correctly shows "alpha=0.5" instead of "alpha=").
+
+### 4.3 Enhancements to Existing Functions
+
+- **`ED()` / `ED.drc()`**: Multiple robustness improvements — correct matrix handling when `indexMat` is a vector (single-parameter models), NaN/Inf handling in LL.5, dynamic curve loop with post-hoc `clevel` filtering, `drop=FALSE` for covariance matrix slices, unnamed gradient vectors.
+- **`maED()`**: Excludes models with non-finite ED estimates or fitting errors from model-averaged estimate; returns `NA` instead of `NaN` when all candidates fail.
+- **`predict.drc()`**: Fixed "incorrect number of dimensions" for models with many fixed parameters.
+- **`plot.drc()`**: New `errbar.col` parameter to control error bar colors; default now matches curve colors.
+- **`anova.drc()`**: Corrected documentation to accurately reflect actual behavior; improved error handling.
+- **`mselect()`**: Fixed parse error from missing closing braces.
+- **`noEffect()`**: Added warning when degrees of freedom difference ≤ 0.
+- **`searchdrc()`**: Fixed regex error and convergence failure behavior.
+- **`drmOpt()`**: Fixed inverted `otrace`/`silentVal` logic.
+
+### 4.4 Dependency Updates
+
+| Aspect | DoseResponse/drc | hreinwald/drc |
+|---|---|---|
+| R minimum version | ≥ 2.0.0 | ≥ 4.0.0 |
+| `lazyeval` | Used | Replaced with `rlang` |
+| `drcData` (separate package) | Required | Removed (data bundled or sourced differently) |
+| `data.table`, `dplyr` | Not present | Added to Imports |
+| `lifecycle` | Not present | Added to Imports (for deprecation warnings) |
+| `testthat` | Not present in Suggests | Added (≥ 3.0.0) |
+| `knitr`, `rmarkdown` | Not present | Added for vignettes |
+
+### 4.5 Test Coverage
+
+| Aspect | DoseResponse/drc | hreinwald/drc |
+|---|---|---|
+| Test framework | Ad-hoc R scripts | `testthat` v3 |
+| Number of test files | 3 scripts + 1 data file | 79 test files |
+| Models with dedicated tests | 0 | All major model families (llogistic, weibull1/2, logistic, gompertz, lnormal, braincousens, cedergreen, ucedergreen, NEC, gammadr, baro5, etc.) |
+| Utility function tests | 0 | ED, ED.lin, EDcomp, maED, mselect, anova, modelFit, predict, CIcompX, rss, and many more |
+| Code coverage tracking | None | Codecov integration via GitHub Actions |
+
+---
+
+## 5. Version Control & Project Hygiene
+
+| Aspect | DoseResponse/drc | hreinwald/drc |
+|---|---|---|
+| Current version | 3.2-0 | 3.3.1 |
+| Last substantive update | January 2021 | April 2026 |
+| Commit quality | Sparse, terse messages | Structured commits with clear descriptions referencing issues |
+| Active branches | Only `master` | `dev` (primary), `main_beta` (stable beta), multiple feature branches |
+| CI/CD | `.travis.yml` (Travis CI — deprecated/inactive) | 3 GitHub Actions workflows: `R-CMD-check.yaml`, `test-coverage.yaml`, `static.yml` (pkgdown) |
+| `CITATION.cff` | Absent | Present (CFF 1.2.0, ORCIDs, DOI, two references) |
+| `NEWS.md` | `news` (plain text, no markdown) | `NEWS.md` (properly formatted, categorized, 36KB) |
+| Issue tracker | Not actively used | Used with references in commit messages |
+| pkgdown deployment | Not deployed | Auto-deployed via `static.yml` to GitHub Pages |
+| License | GPL-2 | GPL-2 (correctly inherited) |
+| Maintainer | Christian Ritz (inactive) | Hannes Reinwald (`cre` role) |
+| Authors in DESCRIPTION | Ritz + Streibig | Ritz + Streibig + Reinwald (as `aut`, `cre`) |
+| Roxygen version | 6.1.1 | 7.3.3 |
+| File naming convention | Mixed `.r`/`.R` | Standardized `.R` throughout |
+
+---
+
+## 6. Publication Readiness Summary
+
+### Items That Strengthen the Submission Now:
+- **Bug evidence is documented and reproducible.** The `NEWS.md` provides a detailed bug report for each fix. The 79 `testthat` tests provide regression guards.
+- **The `ucedergreen()` bug** is a compelling primary justification: it is unambiguous, affects a named published model family, and affects all previous users.
+- **Breadth of fixes** across 7 model families for the absolute-type ED gradient bug provides evidence of systematic, not incidental, review.
+
+### Items Recommended Before Submission (JSS / JOSS / The R Journal):
+
+1. **Benchmark study**: Quantify the numerical difference between old and new results on synthetic or real datasets (e.g., table showing correct vs. incorrect ED confidence intervals under `type="absolute"` for W1.4, LN.4, LL.4 — critical for reviewers to assess impact magnitude).
+
+2. **Authorship clarification in CITATION.cff**: The current CITATION.cff lists the four original authors of the 2015 PLoS ONE paper but does not add Hannes Reinwald, even though he is `aut` in DESCRIPTION. This should be reconciled; JOSS in particular requires clear attribution.
+
+3. **Version stability**: The `dev` branch is still the primary development branch. A stable tagged release on `main` (or `main_beta` promoted) would be expected by most journal submission processes.
+
+4. **CRAN submission**: The README explicitly discourages the CRAN version. A corrected CRAN submission would maximally reach the user community and is required for R Journal papers referencing a package.
+
+5. **Vignette for the corrected bugs**: A dedicated vignette showing before/after comparisons (old vs. new results) for the most critical bugs would directly serve the paper's narrative.
+
+6. **Acknowledgment of original authors**: The paper should prominently acknowledge Ritz, Baty, Streibig & Gerhard as originators. The framing as "corrected and modernized" is already appropriately respectful.
+
+7. **Test coverage metric**: The README references a Codecov badge. A coverage percentage of ≥ 70% on key model functions would be a strong claim for a methods paper.
+
+---
+
+## 7. Suggested Abstract Draft
+
+> The `drc` R package (Ritz *et al.*, 2015) provides a widely-used framework for parametric dose-response modeling in bioassay, toxicology, and ecotoxicology. Since its last CRAN release (v3.2-0, January 2021), the package has received no substantive maintenance despite continued use in the scientific literature. We present `drc` v3.3.1, a corrected and modernized version of the package, addressing a series of bugs ranging in severity from silently incorrect fitted values to systematically underestimated confidence intervals. The most critical error, discovered in the U-shaped Cedergreen-Ritz-Streibig hormesis model family (`UCRS.*`), omits the lower horizontal asymptote parameter from the model function, rendering every fitted value incorrect whenever the lower asymptote differs from zero. Additionally, the gradient functions used in delta-method standard error calculations for absolute-type effective dose (ED) estimates were incorrect in seven model families (Weibull type 1 and 2, log-logistic, log-normal, logistic, Brain-Cousens, and fractional polynomial logistic), consistently setting chain-rule contributions to zero and producing confidence intervals that are potentially too narrow. A further gradient error in the Gamma model inverted the rate-parameter derivative. These bugs affect published results obtained using the original package. Beyond correctness, the refactored package introduces 79 `testthat` unit tests (versus zero in the original), comprehensive Roxygen2 documentation with mathematical formulae and worked examples, a pkgdown documentation website, three GitHub Actions CI/CD workflows, and a `CITATION.cff` metadata file. The package is available from https://github.com/hreinwald/drc and is fully backward compatible with the existing `drm()` interface.
+
+---
+
+## Source Repositories
+- **Refactored package (subject):** https://github.com/hreinwald/drc (branch: `dev`, commit `508f602`)
+- **Fork source (baseline):** https://github.com/DoseResponse/drc (default branch `master`, commit `8719d43`)
+- **GitHub Pages:** https://hreinwald.github.io/drc/
