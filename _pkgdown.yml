@@ -12,6 +12,16 @@ home:
   - text: Report an issue
     href: https://github.com/hreinwald/drc/issues
 
+articles:
+- title: Guides
+  navbar: ~
+  contents:
+  - dose-response-workflow
+  - nec-models
+- title: Technical Reports
+  contents:
+  - comparative-analysis
+
 reference:
 - title: Core Functions
   desc: Main functions for dose-response analysis
