@@ -2,8 +2,11 @@
 # summary() must not crash for binomial models with a singular Hessian.
 
 test_that("vcDisc returns NA matrix (not an error) for a singular Hessian", {
-  # Construct a minimal drc-like object with a zero (singular) Hessian
-  fake_obj <- list(fit = list(hessian = matrix(0, 2, 2)))
+  # Use a negative definite Hessian so that all fallback paths fail:
+  # solve() fails (singular/non-invertible in the expected sense),
+  # chol() fails (not positive definite), and the regularised
+  # chol(0.99*H + 0.01*I) also fails (still not positive definite).
+  fake_obj <- list(fit = list(hessian = matrix(c(-100, 0, 0, -100), 2, 2)))
   expect_warning(
     result <- drc:::vcDisc(fake_obj),
     "Hessian is singular"
