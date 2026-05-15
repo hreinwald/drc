@@ -124,5 +124,32 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
 
 "vcDisc" <- function(object)
 {
-    solve(object$fit$hessian)    
+    H <- object$fit$hessian
+    invMat <- try(solve(H), silent = TRUE)
+
+    if (inherits(invMat, "try-error"))
+    {
+        ## More stable than 'solve' (suggested by Nicholas Lewin-Koh - 2007-02-12)
+        ch <- try(chol(H), silent = TRUE)
+        if (inherits(ch, "try-error"))
+        {
+            ch <- try(chol(0.99 * H + 0.01 * diag(nrow(H))), silent = TRUE)
+        }
+        if (!inherits(ch, "try-error"))
+        {
+            return(chol2inv(ch))
+        } else {
+            warning(
+                "Variance-covariance matrix could not be computed: ",
+                "the Hessian is singular. Standard errors will be NA. ",
+                "Consider re-parameterising the model or using a different ",
+                "starting value or optimisation method.",
+                call. = FALSE
+            )
+            numRows <- nrow(H)
+            return(matrix(NA_real_, numRows, numRows))
+        }
+    } else {
+        return(invMat)
+    }
 }
