@@ -40,7 +40,26 @@
         }
     }
     if (evaluate)
-    { 
-        eval(call, parent.frame())
+    {
+        ## If call$data refers to a symbol that cannot be resolved in the
+        ## calling frame (e.g. .x inside purrr::map()), fall back to the
+        ## data stored in the fitted object.
+        eval_env <- parent.frame()
+        if (!is.null(call$data) && !is.null(object$origData))
+        {
+            data_resolvable <- tryCatch(
+            {
+                is.data.frame(eval(call$data, eval_env))
+            },
+            error = function(e) FALSE)
+            if (!data_resolvable)
+            {
+                eval_env <- list2env(
+                    list(.drc_stored_data__ = object$origData),
+                    parent = eval_env)
+                call$data <- quote(.drc_stored_data__)
+            }
+        }
+        eval(call, eval_env)
     } else call
 }
