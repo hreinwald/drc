@@ -20,7 +20,7 @@ articles:
   - nec-models
 - title: Technical Reports
   contents:
-  - comparative-analysis
+  - package-version-comparative-analysis
 
 reference:
 - title: Core Functions

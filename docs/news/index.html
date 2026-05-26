@@ -20,6 +20,8 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dose-response-workflow.html">A Practical Workflow for Dose-Response Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/nec-models.html">Understanding NEC Models in the drc Package</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -37,14 +39,35 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="3.3.2" id="drc-331">drc 3.3.2<a class="anchor" aria-label="anchor" href="#drc-331"></a></h2>
+<h2 class="pkg-version" data-toc-text="3.3.2" id="drc-332">drc 3.3.2<a class="anchor" aria-label="anchor" href="#drc-332"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-3-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-3-3-2"></a></h3>
+<ul><li>Enhanced <code><a href="../reference/plot.drc.html">plot.drc()</a></code>: added <code>errbar.lwd</code> parameter for independent control of error bar line width in <code>type = "bars"</code> plots. When <code>NULL</code> (default), error bars inherit the line width from the <code>lwd</code> argument or fall back to <code>par("lwd")</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-3-3-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-2"></a></h3>
+<ul><li>Fixed <code><a href="../reference/update.drc.html">update.drc()</a></code> to fall back to stored data (<code>object$origData</code>) when <code>call$data</code> cannot be resolved in the calling frame, enabling use of <code><a href="https://rdrr.io/r/stats/update.html" class="external-link">update()</a></code> inside <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>, <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code>, and other functional programming contexts.</li>
+<li>Fixed <code>vcDisc()</code> to validate that the inverse Hessian has non-negative variances before returning, preventing invalid variance-covariance matrices from propagating downstream.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-3-3-2">Changes<a class="anchor" aria-label="anchor" href="#changes-3-3-2"></a></h3>
+<ul><li>Tightened default <code>relTol</code> in <code><a href="../reference/drmc.html">drmc()</a></code> from <code>1e-7</code> to <code>1e-10</code> for improved cross-platform reproducibility of optimization results.</li>
+<li>Added comparative analysis vignette (<code>comparative-analysis.Rmd</code>) documenting differences between <code>hreinwald/drc</code> and the original <code>DoseResponse/drc</code> package.</li>
+<li>Added “Articles” section to pkgdown navigation in <code>_pkgdown.yml</code> with categorized guides and technical reports.</li>
+<li>Fixed flaky <code>maED</code> tests that depended on platform-specific convergence behavior.</li>
+<li>Added test suites for <code>boxcox.drc</code> (functional programming context), <code>update.drc</code> (data resolution fallback), and <code>vcDisc</code> (singular Hessian handling).</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.3.1" id="drc-331">drc 3.3.1<a class="anchor" aria-label="anchor" href="#drc-331"></a></h2>
 <div class="section level3">
 <h3 id="new-features-3-3-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-3-3-1"></a></h3>
 <ul><li>Enhanced <code><a href="../reference/plot.drc.html">plot.drc()</a></code>: error bars in <code>type = "bars"</code> plots now match curve colors by default. Added <code>errbar.col</code> parameter to allow manual control of error bar colors. Set <code>errbar.col = "black"</code> to restore the previous behavior of black error bars.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-3-3-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-1"></a></h3>
-<ul><li>Fixed <code><a href="../reference/logistic.html">logistic()</a></code> model ED calculation with <code>type="absolute"</code>: the <code>edfct</code> function now correctly handles absolute-to-relative conversion without applying the incorrect p-swap from <code><a href="../reference/EDhelper.html">EDhelper()</a></code>. The logistic model has opposite b-sign convention from log-logistic (b &lt; 0 means increasing, not decreasing), so <code>EDhelper</code>’s p-swap for b &lt; 0 would incorrectly swap ED values. The fix uses inline absolute-to-relative conversion (<code>p = 100·(d−respl)/(d−c)</code>) for absolute type and <code>p = respl</code> directly for relative type.</li>
+<ul><li>Fixed <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> crash for binomial <code>drm</code> models when the Hessian is singular (DoseResponse/drc#36): <code>vcDisc</code> now uses a robust fallback chain (matching <code>vcCont</code>) instead of a bare <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve()</a></code> call. When inversion fails, a warning is emitted and standard errors are reported as <code>NA</code>.</li>
+<li>Fixed <code><a href="../reference/logistic.html">logistic()</a></code> model ED calculation with <code>type="absolute"</code>: the <code>edfct</code> function now correctly handles absolute-to-relative conversion without applying the incorrect p-swap from <code><a href="../reference/EDhelper.html">EDhelper()</a></code>. The logistic model has opposite b-sign convention from log-logistic (b &lt; 0 means increasing, not decreasing), so <code>EDhelper</code>’s p-swap for b &lt; 0 would incorrectly swap ED values. The fix uses inline absolute-to-relative conversion (<code>p = 100·(d−respl)/(d−c)</code>) for absolute type and <code>p = respl</code> directly for relative type.</li>
 <li>Fixed model-level <code>edfct</code> derivatives for absolute ED type in <code><a href="../reference/braincousens.html">braincousens()</a></code>, <code><a href="../reference/fplogistic.html">fplogistic()</a></code>, <code><a href="../reference/llogistic.html">llogistic()</a></code>, <code><a href="../reference/llogistic2.html">llogistic2()</a></code>, <code><a href="../reference/lnormal.html">lnormal()</a></code>, <code><a href="../reference/weibull1.html">weibull1()</a></code>, and <code><a href="../reference/weibull2.html">weibull2()</a></code>: when <code>type = "absolute"</code>, the gradient functions previously set ∂ED/∂c and ∂ED/∂d to 0, which was incorrect because the absolute-to-relative conversion makes p a function of c and d. The chain rule requires non-zero partials. Now compute ∂ED/∂c and ∂ED/∂d via central differences on a closure that captures the chain-rule contribution through the full ED computation path.</li>
 </ul><hr></div>
 </div>
@@ -131,7 +154,7 @@
 <h3 id="bug-fixes-3-3-0-01">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-3-0-01"></a></h3>
 <ul><li>Fixed vignette build by removing vignettes from <code>.Rbuildignore</code> and correcting incorrect <code><a href="../reference/mselect.html">mselect()</a></code> usage in examples.</li>
 <li>Fixed Rd comment warning by escaping the <code>%*%</code> operator in documentation.</li>
-<li>Fixed all <code><a href="https://rdrr.io/pkg/devtools/man/check.html" class="external-link">devtools::check()</a></code> errors and warnings: added roxygen2 <code>@keywords</code> and lifecycle deprecation notices for deprecated CRS functions, expanded dataset documentation files with examples, added missing dataset aliases, and fixed Weibull model documentation.</li>
+<li>Fixed all <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> errors and warnings: added roxygen2 <code>@keywords</code> and lifecycle deprecation notices for deprecated CRS functions, expanded dataset documentation files with examples, added missing dataset aliases, and fixed Weibull model documentation.</li>
 <li>Fixed division-by-zero in <code><a href="../reference/Rsq.html">Rsq()</a></code> and <code><a href="../reference/absToRel.html">absToRel()</a></code>.</li>
 <li>Removed dead <code>scaleEst()</code> stub function.</li>
 <li>Fixed <code><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits()</a></code> bug in <code>mselect.R</code>.</li>

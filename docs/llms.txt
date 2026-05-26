@@ -99,7 +99,6 @@ After downloading the file, run the following:
 
 ``` r
 # Specify the path to the directory where you saved the downloaded tar.gz file.
-# Make sure to specify the correct file path below.
 targz  <- file.path("~/Downloads/drc-3.3.2.tar.gz")
 
 # Local installation with base R
@@ -786,9 +785,14 @@ Example datasets for dose-response analysis
 
 # Articles
 
-### All vignettes
+### Guides
 
 - [A Practical Workflow for Dose-Response
   Analysis](https://hreinwald.github.io/drc/articles/dose-response-workflow.md):
 - [Understanding NEC Models in the drc
   Package](https://hreinwald.github.io/drc/articles/nec-models.md):
+
+### Technical Reports
+
+- [Comparative Analysis: hreinwald/drc vs
+  DoseResponse/drc](https://hreinwald.github.io/drc/articles/package-version-comparative-analysis.md):

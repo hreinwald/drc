@@ -34,6 +34,7 @@ plot(
   cex.axis = 1,
   col = FALSE,
   errbar.col = NULL,
+  errbar.lwd = NULL,
   lty,
   pch,
   legend,
@@ -181,6 +182,13 @@ plot(
   (default), error bars will match the curve colours specified by `col`.
   Use `errbar.col = "black"` to restore the previous behaviour of black
   error bars.
+
+- errbar.lwd:
+
+  line width(s) for error bars when using `type = "bars"`. If `NULL`
+  (default), error bars will inherit the line width specified by `lwd`
+  (via `...`). If `lwd` is also not specified, the default graphical
+  parameter `par("lwd")` is used.
 
 - lty:
 

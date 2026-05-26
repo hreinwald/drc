@@ -53,11 +53,11 @@ drmc(
 
 - relTol:
 
-  numeric. The relative tolerance in the optimisation procedure. A tighter
-  tolerance (smaller value) improves cross-platform reproducibility of
-  results by ensuring the optimiser converges closer to the true optimum
-  regardless of platform-specific floating-point behaviour. Default is
-  `1e-10`.
+  numeric. The relative tolerance in the optimisation procedure. A
+  tighter tolerance (smaller value) improves cross-platform
+  reproducibility of results by ensuring the optimiser converges closer
+  to the true optimum regardless of platform-specific floating-point
+  behaviour. Default is `1e-10`.
 
 - rmNA:
 
@@ -130,7 +130,7 @@ drmc()
 #> [1] FALSE
 #> 
 #> $relTol
-#> [1] 1e-10
+#> [1] 1e-07
 #> 
 #> $rmNA
 #> [1] FALSE
