@@ -60,8 +60,8 @@ Feature requests or ideas?
 # Install the re-factored development version 
 devtools::install_github("hreinwald/drc")
 
-# Install the re-factored stable beta version
-devtools::install_github("hreinwald/drc@main_beta")
+# Install the re-factored stable version
+devtools::install_github("hreinwald/drc@main")
 ```
 
 ### Local Installation from tar.gz
