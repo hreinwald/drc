@@ -40,7 +40,7 @@ Taken together, the evidence supports the framing of this as not a mere maintena
 **File:** `R/ucedergreen.R`
 
 **Original (incorrect) code** (`DoseResponse/drc`, `R/ucedergreen.R`, line ~32):
-```r
+```{r, eval = FALSE}
 fct <- function(dose, parm)
 {
     parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
@@ -53,7 +53,7 @@ fct <- function(dose, parm)
 ```
 
 **Fixed code** (`hreinwald/drc`, `R/ucedergreen.R`, line ~56):
-```r
+```{r, eval = FALSE}
 fct <- function(dose, parm)
 {
     parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
@@ -82,7 +82,7 @@ Additionally, the `deriv1` (gradient with respect to the `c` parameter) in the o
 **File:** `R/gammadr.r` (DoseResponse) vs `R/gammadr.R` (hreinwald)
 
 **Original (incorrect) code** (`DoseResponse/drc`, `R/gammadr.r`, inside `deriv1`):
-```r
+```{r, eval = FALSE}
 cbind(
     t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * parmMat[, 1],  # WRONG: uses b not dose
     1 - t2,
@@ -92,7 +92,7 @@ cbind(
 ```
 
 **Fixed code** (`hreinwald/drc`, `R/gammadr.R`, inside `deriv1`):
-```r
+```{r, eval = FALSE}
 cbind(
     t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * dose,  # CORRECT: uses dose
     1 - t2,
@@ -114,7 +114,7 @@ cbind(
 **Root cause (shared pattern, shown for `weibull1()`)**:
 
 Original code (`DoseResponse/drc`, `R/weibull1.r`, `edfct`):
-```r
+```{r, eval = FALSE}
 edfct <- function(parm, respl, reference, type, ...)
 {
     parmVec[notFixed] <- parm
@@ -130,7 +130,7 @@ edfct <- function(parm, respl, reference, type, ...)
 ```
 
 Fixed code (`hreinwald/drc`, `R/weibull1.R`, `edfct`):
-```r
+```{r, eval = FALSE}
 edfct <- function(parm, respl, reference, type, ...)
 {
     parmVec[notFixed] <- parm
@@ -163,7 +163,7 @@ edfct <- function(parm, respl, reference, type, ...)
 **File:** `R/logistic.r` (DoseResponse) vs `R/logistic.R` (hreinwald)
 
 **Original (incorrect) code** (`DoseResponse/drc`, `R/logistic.r`, `edfct`):
-```r
+```{r, eval = FALSE}
 edfct <- function(parm, p, ...)
 {
     parmVec[notFixed] <- parm
@@ -174,7 +174,7 @@ edfct <- function(parm, p, ...)
 ```
 
 **Fixed code** (`hreinwald/drc`, `R/logistic.R`, `edfct`):
-```r
+```{r, eval = FALSE}
 edfct <- function(parm, respl, reference = "control", type = "relative", ...)
 {
     parmVec[notFixed] <- parm
@@ -412,17 +412,16 @@ Example of improvement — `weibull1()` documentation added:
 
 1. **Benchmark study**: Quantify the numerical difference between old and new results on synthetic or real datasets (e.g., table showing correct vs. incorrect ED confidence intervals under `type="absolute"` for W1.4, LN.4, LL.4 — critical for reviewers to assess impact magnitude).
 
-2. **Authorship clarification in CITATION.cff**: The current CITATION.cff lists the four original authors of the 2015 PLoS ONE paper but does not add Hannes Reinwald, even though he is `aut` in DESCRIPTION. This should be reconciled; JOSS in particular requires clear attribution.
 
-3. **Version stability**: The `dev` branch is still the primary development branch. A stable tagged release on `main` (or `main_beta` promoted) would be expected by most journal submission processes.
+2. **Version stability**: The `dev` branch is still the primary development branch. A stable tagged release on `main` (or `main_beta` promoted) would be expected by most journal submission processes.
 
-4. **CRAN submission**: The README explicitly discourages the CRAN version. A corrected CRAN submission would maximally reach the user community and is required for R Journal papers referencing a package.
+3. **CRAN submission**: The README explicitly discourages the CRAN version. A corrected CRAN submission would maximally reach the user community and is required for R Journal papers referencing a package.
 
-5. **Vignette for the corrected bugs**: A dedicated vignette showing before/after comparisons (old vs. new results) for the most critical bugs would directly serve the paper's narrative.
+4. **Vignette for the corrected bugs**: A dedicated vignette showing before/after comparisons (old vs. new results) for the most critical bugs would directly serve the paper's narrative.
 
-6. **Acknowledgment of original authors**: The paper should prominently acknowledge Ritz, Baty, Streibig & Gerhard as originators. The framing as "corrected and modernized" is already appropriately respectful.
+5. **Acknowledgment of original authors**: The paper should prominently acknowledge Ritz, Baty, Streibig & Gerhard as originators. The framing as "corrected and modernized" is already appropriately respectful.
 
-7. **Test coverage metric**: The README references a Codecov badge. A coverage percentage of ≥ 70% on key model functions would be a strong claim for a methods paper.
+6. **Test coverage metric**: The README references a Codecov badge. A coverage percentage of ≥ 70% on key model functions would be a strong claim for a methods paper.
 
 ---
 
