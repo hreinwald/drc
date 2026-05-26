@@ -1,3 +1,21 @@
+# drc 3.3.2
+
+## New Features
+* Enhanced `plot.drc()`: added `errbar.lwd` parameter for independent control of error bar line width in `type = "bars"` plots. When `NULL` (default), error bars inherit the line width from the `lwd` argument or fall back to `par("lwd")`.
+
+## Bug Fixes
+* Fixed `update.drc()` to fall back to stored data (`object$origData`) when `call$data` cannot be resolved in the calling frame, enabling use of `update()` inside `lapply()`, `purrr::map()`, and other functional programming contexts.
+* Fixed `vcDisc()` to validate that the inverse Hessian has non-negative variances before returning, preventing invalid variance-covariance matrices from propagating downstream.
+
+## Changes
+* Tightened default `relTol` in `drmc()` from `1e-7` to `1e-10` for improved cross-platform reproducibility of optimization results.
+* Added comparative analysis vignette (`comparative-analysis.Rmd`) documenting differences between `hreinwald/drc` and the original `DoseResponse/drc` package.
+* Added "Articles" section to pkgdown navigation in `_pkgdown.yml` with categorized guides and technical reports.
+* Fixed flaky `maED` tests that depended on platform-specific convergence behavior.
+* Added test suites for `boxcox.drc` (functional programming context), `update.drc` (data resolution fallback), and `vcDisc` (singular Hessian handling).
+
+---
+
 # drc 3.3.1
 
 ## New Features

@@ -1,6 +1,6 @@
 # Changelog
 
-## drc 3.3.1
+## drc 3.3.2
 
 ### New Features
 

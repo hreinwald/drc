@@ -6,7 +6,7 @@
         "\n===============================================\n",
         "  'drc' has been loaded\n",
         "  Analysis of Dose-Response Data\n",
-        "  Version 3.3.1\n",
+        "  Version 3.3.2\n",
         "===============================================\n\n",
         "Developers:\n",
         "  - Christian Ritz (ritz@bioassay.dk)\n",
