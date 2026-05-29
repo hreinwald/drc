@@ -31,6 +31,7 @@
   cex.axis = 1,
   col = FALSE,
   errbar.col = NULL,
+  errbar.lwd = NULL,
   lty,
   pch,
   legend,
@@ -126,6 +127,11 @@ used. If FALSE (default) no colours are used.}
 If \code{NULL} (default), error bars will match the curve colours specified
 by \code{col}. Use \code{errbar.col = "black"} to restore the previous
 behaviour of black error bars.}
+
+\item{errbar.lwd}{line width(s) for error bars when using \code{type = "bars"}.
+If \code{NULL} (default), error bars will inherit the line width specified
+by \code{lwd} (via \code{...}). If \code{lwd} is also not specified, the
+default graphical parameter \code{par("lwd")} is used.}
 
 \item{lty}{a numeric vector specifying the line types.}
 

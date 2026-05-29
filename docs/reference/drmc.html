@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,8 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dose-response-workflow.html">A Practical Workflow for Dose-Response Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/nec-models.html">Understanding NEC Models in the drc Package</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -49,7 +51,7 @@
 <span>  maxIt <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"BFGS"</span>,</span>
 <span>  noMessage <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  relTol <span class="op">=</span> <span class="fl">1e-07</span>,</span>
+<span>  relTol <span class="op">=</span> <span class="fl">1e-10</span>,</span>
 <span>  rmNA <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  useD <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  trace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -89,7 +91,10 @@ result in an error or only a warning.</p></dd>
 
 
 <dt id="arg-reltol">relTol<a class="anchor" aria-label="anchor" href="#arg-reltol"></a></dt>
-<dd><p>numeric. The relative tolerance in the optimisation procedure.</p></dd>
+<dd><p>numeric. The relative tolerance in the optimisation procedure. A tighter
+tolerance (smaller value) improves cross-platform reproducibility of results by ensuring
+the optimiser converges closer to the true optimum regardless of platform-specific
+floating-point behaviour. Default is <code>1e-10</code>.</p></dd>
 
 
 <dt id="arg-rmna">rmNA<a class="anchor" aria-label="anchor" href="#arg-rmna"></a></dt>

@@ -12,6 +12,8 @@
 *.Rcheck/
 *.Rproj
 README.Rmd
+/pkgdown/
+pkgdown/*
 
 # Caching
 .Rinst

@@ -62,6 +62,10 @@
 #'   If \code{NULL} (default), error bars will match the curve colours specified
 #'   by \code{col}. Use \code{errbar.col = "black"} to restore the previous
 #'   behaviour of black error bars.
+#' @param errbar.lwd line width(s) for error bars when using \code{type = "bars"}.
+#'   If \code{NULL} (default), error bars will inherit the line width specified
+#'   by \code{lwd} (via \code{...}). If \code{lwd} is also not specified, the
+#'   default graphical parameter \code{par("lwd")} is used.
 #' @param lty a numeric vector specifying the line types.
 #' @param pch a vector of plotting characters or symbols (see
 #'   \code{\link{points}}).
@@ -134,7 +138,7 @@ function(x, ..., add = FALSE, level = NULL, type = c("average", "all", "bars", "
 broken = FALSE, bp, bcontrol = NULL, conName = NULL, axes = TRUE, gridsize = 100,
 log = "x", xtsty, xttrim = TRUE, xt = NULL, xtlab = NULL, xlab, xlim,
 yt = NULL, ytlab = NULL, ylab, ylim,
-cex, cex.axis = 1, col = FALSE, errbar.col = NULL, lty, pch,
+cex, cex.axis = 1, col = FALSE, errbar.col = NULL, errbar.lwd = NULL, lty, pch,
 legend, legendText, legendPos, cex.legend = 1,
 normal = FALSE, normRef = 1, confidence.level = 0.95)
 {    
@@ -327,12 +331,12 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
           predictMat<- matrix(predictMatNorm, ncol = 2)
         }
     
-        barFct <- function(plotPoints, col = "black")
+        barFct <- function(plotPoints, col = "black", lwd = 1)
         {
           pp3 <- plotPoints[, 3]
           pp4 <- plotPoints[, 4]
           plotCI(plotPoints[, 1], pp3 + 0.5 * (pp4 - pp3),
-                 li = pp3, ui = pp4, add = TRUE, pch = NA, col = col)
+                 li = pp3, ui = pp4, add = TRUE, pch = NA, col = col, lwd = lwd)
         }
 
         ciFct <- function(level, ...){invisible(NULL)}
@@ -342,8 +346,8 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     } else if (identical(type, "confidence"))
     {
 
-        barFct <- function(plotPoints, col = "black"){invisible(NULL)}
-      
+        barFct <- function(plotPoints, col = "black", lwd = 1){invisible(NULL)}
+
         ciFct <- function(level, ...)
         {
             newdata <- data.frame(DOSE=dosePts, CURVE=rep(level, length(dosePts)))
@@ -361,7 +365,7 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
         
     } else {
 
-        barFct <- function(plotPoints, col = "black"){invisible(NULL)}
+        barFct <- function(plotPoints, col = "black", lwd = 1){invisible(NULL)}
 
         ciFct <- function(level, ...){invisible(NULL)}
   
@@ -413,6 +417,15 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
     } else {
       errbarColVec <- rep(errbar.col, length.out = lenlev)
     }
+    ## Resolve error bar line width
+    dots <- list(...)
+    resolved_errbar_lwd <- if (!is.null(errbar.lwd)) {
+      errbar.lwd
+    } else if (!is.null(dots$lwd)) {
+      dots$lwd
+    } else {
+      par("lwd")
+    }
 
     cexVec <- parFct(cex, lenlev, 1)
     ltyVec <- parFct(lty, lenlev)
@@ -448,7 +461,7 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
             axes = FALSE, frame.plot = TRUE, col = colourVec[i], pch = pchVec[i], cex = cexVec[i], ...)
 
             ## Adding error bars
-            barFct(plotPoints, col = errbarColVec[i])
+            barFct(plotPoints, col = errbarColVec[i], lwd = resolved_errbar_lwd)
 
             ## Add confidence regions
             ciFct(level=i, col=alpha(colourVec[i],0.25))            
@@ -469,7 +482,7 @@ normal = FALSE, normRef = 1, confidence.level = 0.95)
                 pointFct(plotPoints, cexVec[i], colourVec[i], pchVec[i], ...)
 
                 ## Adding error bars
-                barFct(plotPoints, col = errbarColVec[i])
+                barFct(plotPoints, col = errbarColVec[i], lwd = resolved_errbar_lwd)
 
                 ## Add confidence regions
                 ciFct(level=i, col=alpha(colourVec[i],0.25))

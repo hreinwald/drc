@@ -10,7 +10,7 @@ drmc(
   maxIt = 500,
   method = "BFGS",
   noMessage = FALSE,
-  relTol = 1e-07,
+  relTol = 1e-10,
   rmNA = FALSE,
   useD = FALSE,
   trace = FALSE,
@@ -35,7 +35,10 @@ result in an error or only a warning.}
 
 \item{noMessage}{logical, specifying whether or not messages should be displayed.}
 
-\item{relTol}{numeric. The relative tolerance in the optimisation procedure.}
+\item{relTol}{numeric. The relative tolerance in the optimisation procedure. A tighter
+tolerance (smaller value) improves cross-platform reproducibility of results by ensuring
+the optimiser converges closer to the true optimum regardless of platform-specific
+floating-point behaviour. Default is \code{1e-10}.}
 
 \item{rmNA}{logical. Should \code{NA}s be removed from sum of squares used for estimation?
 Default is \code{FALSE} (not removed).}

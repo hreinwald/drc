@@ -1,5 +1,49 @@
 # Changelog
 
+## drc 3.3.2
+
+### New Features
+
+- Enhanced
+  [`plot.drc()`](https://hreinwald.github.io/drc/reference/plot.drc.md):
+  added `errbar.lwd` parameter for independent control of error bar line
+  width in `type = "bars"` plots. When `NULL` (default), error bars
+  inherit the line width from the `lwd` argument or fall back to
+  `par("lwd")`.
+
+### Bug Fixes
+
+- Fixed
+  [`update.drc()`](https://hreinwald.github.io/drc/reference/update.drc.md)
+  to fall back to stored data (`object$origData`) when `call$data`
+  cannot be resolved in the calling frame, enabling use of
+  [`update()`](https://rdrr.io/r/stats/update.html) inside
+  [`lapply()`](https://rdrr.io/r/base/lapply.html),
+  [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html), and
+  other functional programming contexts.
+- Fixed `vcDisc()` to validate that the inverse Hessian has non-negative
+  variances before returning, preventing invalid variance-covariance
+  matrices from propagating downstream.
+
+### Changes
+
+- Tightened default `relTol` in
+  [`drmc()`](https://hreinwald.github.io/drc/reference/drmc.md) from
+  `1e-7` to `1e-10` for improved cross-platform reproducibility of
+  optimization results.
+- Added comparative analysis vignette (`comparative-analysis.Rmd`)
+  documenting differences between `hreinwald/drc` and the original
+  `DoseResponse/drc` package.
+- Added “Articles” section to pkgdown navigation in `_pkgdown.yml` with
+  categorized guides and technical reports.
+- Fixed flaky `maED` tests that depended on platform-specific
+  convergence behavior.
+- Added test suites for `boxcox.drc` (functional programming context),
+  `update.drc` (data resolution fallback), and `vcDisc` (singular
+  Hessian handling).
+
+------------------------------------------------------------------------
+
 ## drc 3.3.1
 
 ### New Features
@@ -13,6 +57,12 @@
 
 ### Bug Fixes
 
+- Fixed [`summary()`](https://rdrr.io/r/base/summary.html) crash for
+  binomial `drm` models when the Hessian is singular
+  (DoseResponse/drc#36): `vcDisc` now uses a robust fallback chain
+  (matching `vcCont`) instead of a bare
+  [`solve()`](https://rdrr.io/r/base/solve.html) call. When inversion
+  fails, a warning is emitted and standard errors are reported as `NA`.
 - Fixed
   [`logistic()`](https://hreinwald.github.io/drc/reference/logistic.md)
   model ED calculation with `type="absolute"`: the `edfct` function now
@@ -298,7 +348,7 @@
 - Fixed Rd comment warning by escaping the `%*%` operator in
   documentation.
 - Fixed all
-  [`devtools::check()`](https://rdrr.io/pkg/devtools/man/check.html)
+  [`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
   errors and warnings: added roxygen2 `@keywords` and lifecycle
   deprecation notices for deprecated CRS functions, expanded dataset
   documentation files with examples, added missing dataset aliases, and

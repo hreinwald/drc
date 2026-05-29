@@ -52,6 +52,8 @@ Feature requests or ideas?
 
 **⚠️ Important:** We **do not recommend** installing the currently heavily outdated CRAN version of this package. Instead, we recommend installing the development (`dev`) or stable beta (`main_beta`) version from GitHub.
 
+For details on why the CRAN and upstream fork version is heavily outdated see the [drc package comparative analysis](https://hreinwald.github.io/drc/articles/package-version-comparative-analysis.html). It also show cases the most critical bugs that were fixed in this re-factored version.
+
 ### Install from GitHub (Recommended)
 
 ``` r
@@ -60,20 +62,20 @@ Feature requests or ideas?
 # Install the re-factored development version 
 devtools::install_github("hreinwald/drc")
 
-# Install the re-factored stable beta version
-devtools::install_github("hreinwald/drc@main_beta")
+# Install the re-factored stable version
+devtools::install_github("hreinwald/drc@main")
 ```
 
 ### Local Installation from tar.gz
 
 If GitHub installation is failing, you can run the installation from the local tar.gz file. 
-[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.1.tar.gz).
+[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.2.tar.gz).
 
 After downloading the file, run the following:
 
 ``` r
 # Specify the path to the directory where you saved the downloaded tar.gz file.
-targz  <- file.path("~/Downloads/drc-3.3.1.tar.gz")
+targz  <- file.path("~/Downloads/drc-3.3.2.tar.gz")
 
 # Local installation with base R
 install.packages(targz, repos = NULL, type = "source")

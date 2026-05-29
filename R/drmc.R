@@ -10,7 +10,10 @@
 #' @param method character string. The method used in the optimisation procedure. See
 #'   \code{\link{optim}} for available methods.
 #' @param noMessage logical, specifying whether or not messages should be displayed.
-#' @param relTol numeric. The relative tolerance in the optimisation procedure.
+#' @param relTol numeric. The relative tolerance in the optimisation procedure. A tighter
+#'   tolerance (smaller value) improves cross-platform reproducibility of results by ensuring
+#'   the optimiser converges closer to the true optimum regardless of platform-specific
+#'   floating-point behaviour. Default is \code{1e-10}.
 #' @param rmNA logical. Should \code{NA}s be removed from sum of squares used for estimation?
 #'   Default is \code{FALSE} (not removed).
 #' @param useD logical. If \code{TRUE} derivatives are used for estimation (if available).
@@ -40,7 +43,7 @@
 #'
 #' @keywords models nonlinear
 "drmc" <- function(constr = FALSE, errorm = TRUE, maxIt = 500, method = "BFGS", 
-noMessage = FALSE, relTol = 1e-7, rmNA = FALSE, useD = FALSE, trace = FALSE, 
+noMessage = FALSE, relTol = 1e-10, rmNA = FALSE, useD = FALSE, trace = FALSE, 
 otrace = FALSE, warnVal = -1, dscaleThres = 1e-15, rscaleThres = 1e-15, conCheck = TRUE)
 {
     return(list(

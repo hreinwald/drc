@@ -54,6 +54,22 @@ test_that("update.drc preserves original model when nothing changed", {
   expect_equal(coef(m1), coef(m2))
 })
 
+test_that("update.drc works when model fitted inside lapply (unresolvable data symbol)", {
+  datasets <- list(ryegrass, ryegrass)
+  models <- lapply(datasets, function(.x) {
+    drm(rootl ~ conc, data = .x, fct = LL.4())
+  })
+
+  # update() should work even though .x is no longer in scope
+  m2 <- update(models[[1]], fct = LL.3())
+  expect_true(inherits(m2, "drc"))
+  expect_equal(length(coef(m2)), 3)
+
+  # update() with no changes should also work
+  m3 <- update(models[[1]])
+  expect_equal(coef(models[[1]]), coef(m3))
+})
+
 # Tests for logLik.drc()
 
 test_that("logLik.drc returns log-likelihood value", {

@@ -12,7 +12,7 @@ drmc(
   maxIt = 500,
   method = "BFGS",
   noMessage = FALSE,
-  relTol = 1e-07,
+  relTol = 1e-10,
   rmNA = FALSE,
   useD = FALSE,
   trace = FALSE,
@@ -53,7 +53,11 @@ drmc(
 
 - relTol:
 
-  numeric. The relative tolerance in the optimisation procedure.
+  numeric. The relative tolerance in the optimisation procedure. A
+  tighter tolerance (smaller value) improves cross-platform
+  reproducibility of results by ensuring the optimiser converges closer
+  to the true optimum regardless of platform-specific floating-point
+  behaviour. Default is `1e-10`.
 
 - rmNA:
 

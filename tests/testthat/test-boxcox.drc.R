@@ -240,3 +240,19 @@ test_that("anovaFormula with non-zero bcAdd", {
   expect_true(all(result$anovaData$bcc == 2))
   expect_equal(nrow(result$anovaData), 3)
 })
+
+# =========================================================================
+# Tests for functional programming usage (lapply / purrr::map)
+# =========================================================================
+
+test_that("boxcox.drc works when model fitted inside lapply", {
+  datasets <- list(ryegrass, ryegrass)
+  models <- lapply(datasets, function(.x) {
+    drm(rootl ~ conc, data = .x, fct = LL.4())
+  })
+
+  result <- boxcox(models[[1]], lambda = seq(-1, 2, by = 0.5), plotit = FALSE, method = "ml")
+  expect_true(inherits(result, "drc"))
+  expect_true(is.list(result$boxcox))
+  expect_true(is.numeric(result$boxcox$lambda))
+})
