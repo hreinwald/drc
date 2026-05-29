@@ -52,6 +52,8 @@ Feature requests or ideas?
 
 **⚠️ Important:** We **do not recommend** installing the currently heavily outdated CRAN version of this package. Instead, we recommend installing the development (`dev`) or stable beta (`main_beta`) version from GitHub.
 
+For details on why the CRAN and upstream fork version is heavily outdated see the [drc package comparative analysis](https://hreinwald.github.io/drc/articles/package-version-comparative-analysis.html). It also show cases the most critical bugs that were fixed in this re-factored version.
+
 ### Install from GitHub (Recommended)
 
 ``` r
