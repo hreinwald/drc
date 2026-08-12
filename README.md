@@ -56,13 +56,27 @@ For details on why the CRAN and upstream fork version is heavily outdated see th
 
 ### Install from GitHub (Recommended)
 
+> Install via `remotes` package:
 ``` r
-# install.packages("devtools")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 
-# Install the re-factored development version 
-devtools::install_github("hreinwald/drc")
+# Latest development version 
+remotes::install_github("hreinwald/drc@dev")
 
-# Install the re-factored stable version
+# Latest stable release version
+devtools::install_github("hreinwald/drc@main")
+```
+
+----
+
+> Install via `devtools` package:
+```r
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+
+# Latest development version 
+devtools::install_github("hreinwald/drc@dev")
+
+# Latest stable release version
 devtools::install_github("hreinwald/drc@main")
 ```
 
