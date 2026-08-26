@@ -157,6 +157,47 @@ vignette(package = "drc")
 vignette("nec-models", package = "drc")
 ```
 
+## Package workflow
+
+The diagram below illustrates how the main functions of the **drc** package relate to each other.
+Raw data and a chosen model function are passed to `drm()` to produce a `drc` object.
+That object is then the entry point for all downstream analysis.
+
+```mermaid
+flowchart LR
+    DATA([data.frame])
+    MODELS["Model functions\nLL.4&#40;&#41; · W1.4&#40;&#41; · W2.4&#40;&#41;\nG.4&#40;&#41; · LN.4&#40;&#41; · BC.5&#40;&#41; · …"]
+    DRMC["drmc&#40;&#41;\noptimisation\ncontrol"]
+
+    DRM["drm&#40;formula, data=,\nfct=, curveid=, type=&#41;"]
+    OBJ(["drc object"])
+
+    PLOT["plot&#40;&#41;"]
+    SUMM["summary&#40;&#41; · coef&#40;&#41; · confint&#40;&#41;\npredict&#40;&#41; · fitted&#40;&#41; · residuals&#40;&#41;"]
+    ED["ED&#40;&#41; · maED&#40;&#41;\nED_robust&#40;&#41; · maED_robust&#40;&#41;"]
+    COMP["EDcomp&#40;&#41; · compParm&#40;&#41;\nrelpot&#40;&#41;"]
+    SEL["mselect&#40;fctList=&#41;"]
+    GOF["modelFit&#40;&#41; · noEffect&#40;&#41;\nanova&#40;&#41; · Rsq&#40;&#41;"]
+    SIM["rdrm&#40;&#41;\nsimulate dose-response data\n&#40;power analysis / method comparison&#41;"]
+
+    DATA --> DRM
+    MODELS -->|"fct="| DRM
+    DRMC --> DRM
+    DRM --> OBJ
+
+    OBJ --> PLOT
+    OBJ --> SUMM
+    OBJ --> ED
+    OBJ --> COMP
+    OBJ --> SEL
+    OBJ --> GOF
+
+    MODELS -->|"fctList="| SEL
+
+    DATA -.-> SIM
+    MODELS -.->|"fct="| SIM
+```
+
 ## Available Models
 
 | Function  | Description                                     |
