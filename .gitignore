@@ -54,3 +54,6 @@ _Rbuildignore
 
 # YAML Package build tests and artifacts
 /docs_old/
+
+# Other artifacts from building / factory
+AGENTS.md
