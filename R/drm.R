@@ -8,6 +8,7 @@
 #' @param curveid a numeric vector or factor containing the grouping of the data.
 #' @param pmodels a data frame with as many columns as there are parameters in the non-linear
 #'   function. Or a list containing a formula for each parameter in the nonlinear function.
+#'   It is evaluated in \code{data} and, if \code{data} is \code{NULL}, in the calling environment.
 #' @param weights a numeric vector containing weights. For continuous/quantitative responses,
 #'   inverse weights are multiplied inside the squared errors (weights should have the same unit
 #'   as the response). For binomial responses weights provide information about the total number
@@ -45,7 +46,11 @@
 #' @param upperl a numeric vector of upper limits for all parameters in the model (the default
 #'   corresponds to plus infinity for all parameters).
 #' @param separate logical value indicating whether curves should be fit separately
-#'   (independent of each other).
+#'   (independent of each other). The arguments \code{robust} (except \code{"trimmed"},
+#'   \code{"winsor"} and \code{"tukey"}), \code{bcVal}, \code{bcAdd}, \code{lowerl}, \code{upperl},
+#'   \code{logDose} and \code{start} are applied to every curve; \code{varcov}, \code{pshifts} and the
+#'   three excluded \code{robust} methods are not supported and raise an error. Not combined with
+#'   \code{pmodels} (separate fitting is then switched off with a warning).
 #' @param pshifts a matrix of constants to be added to the matrix of parameters. Default is no
 #'   shift for all parameters.
 #' @param varcov an optional user-defined known variance-covariance matrix for the responses.
@@ -280,7 +285,17 @@ pshifts = NULL, varcov = NULL)
     }
     if (separate)
     {
-        return(idrm(dose, resp, assayNoOld, wVec, fct, type, control))
+        if (!is.null(varcov) || !is.null(pshifts))
+        {
+            stop("'varcov' and 'pshifts' are not supported when separate = TRUE", call. = FALSE)
+        }
+        if (robust %in% c("trimmed", "winsor", "tukey"))
+        {
+            stop("robust = '", robust, "' is not supported when separate = TRUE", call. = FALSE)
+        }
+        return(idrm(dose, resp, assayNoOld, wVec, fct, type, control, robust = robust, bcVal = bcVal, 
+                    bcAdd = bcAdd, lowerl = lowerl, upperl = upperl, logDose = logDose, 
+                    start = if (selfStart) NULL else start))
     }    
     
     ## Handling "pmodels" argument
@@ -305,7 +320,7 @@ pshifts = NULL, varcov = NULL)
         ## Handling a list or data.frame argument of "pmodels"
         if (is.null(data)) 
         {
-            pmodels <- eval(substitute(pmodels), envir = .GlobalEnv)
+            pmodels <- eval(substitute(pmodels), envir = parent.frame())
         } else {
             pmodels <- eval(substitute(pmodels), envir = data, enclos = parent.frame())
         }
