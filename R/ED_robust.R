@@ -4,9 +4,12 @@
 #' ('type' argument in drc::ED) based on the model family of a 'drc' object.
 #'
 #' @param model A drc model object or a character string specifying the model name (e.g., "LL.4").
-#' @param small_n A logical value. If TRUE, the t-distribution-based Fieller's method ("tfls")
-#'   is used for small samples for applicable models. If FALSE, the normal-distribution-based
-#'   method ("fls") is used. Defaults to TRUE.
+#' @param log_ed Logical; `TRUE` if the model returns ED on the log scale (`LL2.*`, `LN.*(loge = TRUE)`).
+#'   Detected automatically for `drc` objects and for `LL2.*` names.
+#' @param small_n A logical value. If TRUE, "tfls" (confidence limits computed on the log scale of
+#'   the ED and back-transformed) is used for models matched by `fls_pattern`; if FALSE the
+#'   delta method ("delta") is used. Models with log(ED) parameterisation (`LL2.*`) always use
+#'   "fls", the only valid choice for them. Defaults to TRUE.
 #' @param fls_pattern A regular expression character string. This pattern is used to identify
 #'   model families for which the "fls" or "tfls" method is appropriate. The default
 #'   covers standard log-logistic, log-normal, Brain-Cousens, and Cedergreen-Ritz-Streibig models.
@@ -31,12 +34,14 @@ get_ed_interval <- function(
     model,
     small_n = TRUE,
     fls_pattern = "^LL|^LN|^BC|^CRS",
-    verbose = FALSE
+    verbose = FALSE,
+    log_ed = FALSE
 ) {
   # --- Input Validation and Name Extraction ---
   if (inherits(model, "drc")) {
     # If 'model' is a drc object, extract the function name
     model_name <- as.character(model$call$fct)[1]
+    log_ed <- log_ed || .isLogEDModel(model$fct)
   } else if (is.character(model) && length(model) == 1) {
     # If 'model' is a character string
     model_name <- model
@@ -45,9 +50,12 @@ get_ed_interval <- function(
   }
   
   # --- Core Logic ---
-  if (grepl(fls_pattern, model_name, ignore.case = TRUE)) {
+  if (log_ed || .isLogEDName(model_name)) {
+    # ED returned on the log scale: only 'fls' (exp back-transformation) is valid
+    return("fls")
+  } else if (grepl(fls_pattern, model_name, ignore.case = TRUE)) {
     # Log-logistic, Log-normal, and other user-defined families
-    return(ifelse(small_n, "tfls", "fls"))
+    return(ifelse(small_n, "tfls", "delta"))
   } else if (grepl("^W", model_name, ignore.case = TRUE)) {
     # Weibull models
     return("delta")
@@ -93,8 +101,11 @@ drm_name = function(mod){
 #' @param respLev A numeric vector specifying the response levels for which to 
 #'   calculate ED values (e.g., `c(10, 50)` for ED10 and ED50).
 #' @param interval A character string specifying the method for calculating 
-#'   confidence intervals. Defaults to the output of `get_ed_interval()`. 
-#'   Common options include "delta", "tfls", or "buckland".
+#'   confidence intervals. Defaults to the output of `get_ed_interval()`: "tfls" for the
+#'   log-logistic, log-normal, Brain-Cousens and Cedergreen families, "delta" for Weibull models, and
+#'   "fls" for models returning log(ED) (`LL2.*`, `LN.*(loge = TRUE)`), for which estimates and limits
+#'   are back-transformed and the standard error is the delta-method SE of the dose. "fls" is only
+#'   accepted for such models (an error is raised otherwise).
 #' @param CI_level A numeric value between 0 and 1 indicating the confidence 
 #'   level for the intervals (e.g., 0.95 for a 95% CI).
 #' @param verbose A logical value. If `TRUE`, the function will print status 
@@ -118,12 +129,17 @@ drm_name = function(mod){
 #' ED_robust(m, respLev = c(10, 50), CI_level = 0.95)
 #'
 ED_robust <- function(mod, respLev = c(10, 20, 50), 
-                      interval = get_ed_interval(mod$fct$name, small_n = TRUE), 
+                      interval = get_ed_interval(mod$fct$name, small_n = TRUE, 
+                                                 log_ed = .isLogEDModel(mod$fct)), 
                       CI_level = 0.95, verbose = FALSE, ...) {
+  # fail loudly (not as NA rows) when 'fls' is requested for a dose-scale model
+  if (identical(interval, "fls")) {
+    .checkFlsInterval(mod$fct, list(...)$logBase, mod$logDose, list(...))
+  }
   # Use lapply to iterate over each response level.
   # This will return a list of data frames (one for each level).
+  logED <- .isLogEDModel(mod$fct)   # ED is returned as log(ED)
   results_list <- lapply(respLev, function(ec) {
-    #message("Calculating ED for response level: ", ec, "%")
     
     # This is the structure of a row for a failed calculation
     na_row <- data.frame(
@@ -144,8 +160,8 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
       res = drc::ED(mod, respLev = ec, interval = interval, 
                     level = CI_level, display = FALSE, ... )
       
-      # Additional check: Is the estimate positive or NA?
-      if (is.na(res[1, "Estimate"]) || res[1, "Estimate"] <= 0) {
+      # Additional check: is the estimate usable? (log-scale EDs may legitimately be <= 0)
+      if (is.na(res[1, "Estimate"]) || ((!logED || identical(interval, "fls")) && res[1, "Estimate"] <= 0)) {
         NULL
       } else {
         # If successful and positive, return the result
@@ -171,6 +187,10 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
         ed_df <- dplyr::rename(ed_df, stderr = "Std. Error")
       } else {
         ed_df$stderr <- NA_real_
+      }
+      # 'fls' on a log-ED model: the SE is on the log scale; report the delta-method SE of exp()
+      if (logED && identical(interval, "fls")) {
+        ed_df$stderr <- ed_df$Estimate * ed_df$stderr
       }
       ed_df %>%
         dplyr::mutate(
@@ -213,7 +233,8 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
 #'   the averaging.
 #' @param fct_ls A list of alternative dose-response functions (e.g., `LL.3()`, 
 #'   `W1.4()`) to be used in the model averaging process. The list should be 
-#'   named.
+#'   named. Models with a log(ED) parameterisation (`LL2.*`, `LN.*(loge = TRUE)`) are not allowed
+#'   in the list or as `mod` (an error is raised); use `LL.*` / `LN.*` instead.
 #' @param respLev A numeric vector specifying the response levels (in 
 #'   percentages) for which to calculate the EDs (e.g., `c(10, 50)` for EC10 
 #'   and EC50).
@@ -258,6 +279,9 @@ ED_robust <- function(mod, respLev = c(10, 20, 50),
 maED_robust <- function(mod, fct_ls = NULL, respLev = c(10, 20, 50), 
                         interval = "buckland", 
                         CI_level = 0.95, verbose = FALSE, ...) {
+  
+  # fail loudly (not as NA rows) when a log(ED) model would be averaged
+  .checkNoLogEDModels(mod, fct_ls)
   
   # Use lapply to iterate over each response level.
   # This will return a list of data frames (one for each level).
