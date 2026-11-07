@@ -66,8 +66,8 @@ summary(O.mykiss.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> d:(Intercept)   2.846794   0.092526 30.7674 < 2.2e-16 ***
-#> e:(Intercept) 111.738614  33.196876  3.3659  0.001347 ** 
+#> d:(Intercept)   2.846795   0.092526 30.7674 < 2.2e-16 ***
+#> e:(Intercept) 111.738386  33.196692  3.3659  0.001347 ** 
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -86,7 +86,7 @@ summary(O.mykiss.m2)
 #> 
 #>                 Estimate Std. Error t-value   p-value    
 #> d:(Intercept)   2.841793   0.094431 30.0937 < 2.2e-16 ***
-#> e:(Intercept) 104.115039  28.024151  3.7152  0.000453 ***
+#> e:(Intercept) 104.115035  28.024124  3.7152  0.000453 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 

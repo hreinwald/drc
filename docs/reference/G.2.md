@@ -39,3 +39,13 @@ A list (see
 [`gompertz`](https://hreinwald.github.io/drc/reference/gompertz.md),
 [`G.3`](https://hreinwald.github.io/drc/reference/G.3.md),
 [`G.4`](https://hreinwald.github.io/drc/reference/G.4.md)
+
+## Examples
+
+``` r
+## Binomial (quantal) response: fit with drm() and plot
+earthworms.m1 <- drm(number/total ~ dose, weights = total,
+  data = earthworms, fct = G.2(), type = "binomial")
+plot(earthworms.m1, main = "G.2 (upper limit fixed at 1)")
+
+```

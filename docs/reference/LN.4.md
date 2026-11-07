@@ -35,3 +35,12 @@ A list (see
 [`lnormal`](https://hreinwald.github.io/drc/reference/lnormal.md),
 [`LN.2`](https://hreinwald.github.io/drc/reference/LN.2.md),
 [`LN.3`](https://hreinwald.github.io/drc/reference/LN.3.md)
+
+## Examples
+
+``` r
+## Fit with drm() and plot
+ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4())
+plot(ryegrass.m1, type = "all", main = "LN.4")
+
+```

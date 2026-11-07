@@ -87,7 +87,20 @@ predict(
 A matrix with as many rows as there are dose values provided in
 `newdata` or in the original dataset (in case `newdata` is not
 specified) and, at most, 4 columns containing fitted values, standard
-errors, lower and upper limits of confidence/prediction intervals.
+errors, lower and upper limits of confidence/prediction intervals. If
+only fitted values are requested (`se.fit = FALSE` and
+`interval = "none"`) a numeric vector is returned.
+
+## Details
+
+Standard errors and intervals use the delta method with the analytic
+first derivatives of the mean function (`deriv1`) when the model
+provides them. For models without analytic derivatives (e.g.
+[`NEC.4`](https://hreinwald.github.io/drc/reference/NEC.4.md),
+[`CRS.6`](https://hreinwald.github.io/drc/reference/CRS.6.md),
+[`baro5`](https://hreinwald.github.io/drc/reference/baro5.md)) a
+numerical gradient is used instead. If neither `se.fit` nor `interval`
+is requested only the predicted values are computed.
 
 ## See also
 
@@ -107,23 +120,23 @@ spinach.model1 <- drm(SLOPE~DOSE, CURVE, data = spinach, fct = LL.4())
 ## Predicting values at dose=2 (with standard errors)
 predict(spinach.model1, data.frame(dose=2, CURVE=c("1", "2", "3")), se.fit = TRUE)
 #>      Prediction         SE
-#> [1,]  0.9048476 0.02496135
-#> [2,]  0.4208307 0.02924987
-#> [3,]  0.5581673 0.03067170
+#> [1,]  0.9048494 0.02496159
+#> [2,]  0.4208338 0.02924978
+#> [3,]  0.5581703 0.03067242
 
 ## Getting confidence intervals
 predict(spinach.model1, data.frame(dose=2, CURVE=c("1", "2", "3")),
 interval = "confidence")
 #>      Prediction     Lower     Upper
-#> [1,]  0.9048476 0.8552178 0.9544775
-#> [2,]  0.4208307 0.3626741 0.4789873
-#> [3,]  0.5581673 0.4971838 0.6191509
+#> [1,]  0.9048494 0.8552190 0.9544797
+#> [2,]  0.4208338 0.3626774 0.4789903
+#> [3,]  0.5581703 0.4971853 0.6191553
 
 ## Getting prediction intervals
 predict(spinach.model1, data.frame(dose=2, CURVE=c("1", "2", "3")),
 interval = "prediction")
 #>      Prediction     Lower     Upper
-#> [1,]  0.9048476 0.7504590 1.0592363
-#> [2,]  0.4208307 0.2634937 0.5781677
-#> [3,]  0.5581673 0.3997636 0.7165710
+#> [1,]  0.9048494 0.7504606 1.0592382
+#> [2,]  0.4208338 0.2634969 0.5781707
+#> [3,]  0.5581703 0.3997661 0.7165745
 ```

@@ -25,7 +25,10 @@ A four-parameter Weibull type 2 model with lag time, where \code{b} is
 fixed at 1. This is a convenience wrapper around \code{\link{weibull2x}}.
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4())
+plot(ryegrass.m1, type = "all", main = "W2x.4")
+ED(ryegrass.m1, 50)
 
 }
 \seealso{

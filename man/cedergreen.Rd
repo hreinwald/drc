@@ -54,14 +54,41 @@ The Cedergreen-Ritz-Streibig model is defined by the following equation:
 The parameter \eqn{f} determines the size of the hormetic effect (stimulation).
 If \eqn{f=0}, the model simplifies to the standard four-parameter log-logistic model.
 The parameter \eqn{\alpha} is a shape parameter that must be specified by the user.
+
+The parameters are: \code{b}, the slope; \code{c}, the lower asymptote; \code{d}, the upper
+asymptote (\code{d} is the response of the untreated control for a decreasing curve); \code{e}, the
+location of the decline; and \code{f}, the size of the hormetic stimulation. Smaller \eqn{\alpha}
+move the peak of the stimulation to lower doses. Effective doses (\code{\link{ED}}, use
+\code{bound = FALSE} if needed) are computed relative to the asymptotes \code{c} and \code{d} on the
+part of the curve beyond the peak, and the peak itself is found with \code{\link{MAX}}.
 }
 \examples{
-dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
-response <- c(100, 102, 95, 80, 40, 25, 20)
-my_data <- data.frame(dose = dose, response = response)
-model_fit <- drm(response ~ dose, data = my_data,
-                 fct = cedergreen(alpha = 0.5))
-summary(model_fit)
+## Fit with drm() and plot
+m1 <- drm(weight ~ conc, data = lettuce, fct = cedergreen(alpha = 1))
+plot(m1, type = "all", main = "Cedergreen-Ritz-Streibig model (alpha = 1)")
+MAX(m1)
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 0.3
+m.c0 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, 0, NA, NA, NA)))
+m.c3 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, 0.3, NA, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 0.3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+## Effect of the upper asymptote d: d free, fixed at 0.8 or fixed at 1.2
+m.d8 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, NA, 0.8, NA, NA)))
+m.d12 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, NA, 1.2, NA, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d8, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d12, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 0.8", "d = 1.2"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
 
 }
 \seealso{

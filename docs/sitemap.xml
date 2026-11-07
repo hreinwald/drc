@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://hreinwald.github.io/drc/404.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/AGENTS.html</loc></url>
 <url><loc>https://hreinwald.github.io/drc/articles/dose-response-workflow.html</loc></url>
 <url><loc>https://hreinwald.github.io/drc/articles/index.html</loc></url>
 <url><loc>https://hreinwald.github.io/drc/articles/nec-models.html</loc></url>
@@ -274,5 +275,6 @@
 <url><loc>https://hreinwald.github.io/drc/reference/weibull2.ssf.html</loc></url>
 <url><loc>https://hreinwald.github.io/drc/reference/weibull2x.html</loc></url>
 <url><loc>https://hreinwald.github.io/drc/reference/yieldLoss.html</loc></url>
+<url><loc>https://hreinwald.github.io/drc/TODO.html</loc></url>
 </urlset>
 

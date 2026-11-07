@@ -77,7 +77,7 @@ ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 ## Model selection
 mselect(ryegrass.m1, list(LL.3(), LL.5(), W1.3(), W1.4(), W2.4(), baro5()))
 #>          logLik       IC Lack of fit   Res var
-#> W2.4  -15.91352 41.82703  0.94507131 0.2646283
+#> W2.4  -15.91352 41.82703  0.94507135 0.2646283
 #> LL.4  -16.15514 42.31029  0.86648304 0.2700107
 #> baro5 -15.86422 43.72844  0.86239408 0.2774141
 #> LL.5  -15.87828 43.75656  0.85384758 0.2777393
@@ -88,7 +88,7 @@ mselect(ryegrass.m1, list(LL.3(), LL.5(), W1.3(), W1.4(), W2.4(), baro5()))
 ## Model selection including linear, quadratic, and cubic regression models
 mselect(ryegrass.m1, list(LL.3(), LL.5(), W1.3(), W1.4(), W2.4(), baro5()), linreg = TRUE)
 #>          logLik        IC Lack of fit   Res var
-#> W2.4  -15.91352  41.82703  0.94507131 0.2646283
+#> W2.4  -15.91352  41.82703  0.94507135 0.2646283
 #> LL.4  -16.15514  42.31029  0.86648304 0.2700107
 #> baro5 -15.86422  43.72844  0.86239408 0.2774141
 #> LL.5  -15.87828  43.75656  0.85384758 0.2777393

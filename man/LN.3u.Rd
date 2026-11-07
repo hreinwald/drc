@@ -21,6 +21,13 @@ A list (see \code{\link{lnormal}}).
 \description{
 \code{LN.3u} is a convenience function for the log-normal model with the upper limit fixed (default 1).
 }
+\examples{
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LN.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "LN.3u (upper limit fixed at 1)")
+
+}
 \seealso{
 \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.3}}, \code{\link{LN.4}}
 }

@@ -57,6 +57,7 @@ and all convenience wrappers `UCRS.4a`, `UCRS.4b`, `UCRS.4c`, `UCRS.5a`,
 line ~32):
 
 ``` r
+
 fct <- function(dose, parm)
 {
     parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
@@ -71,6 +72,7 @@ fct <- function(dose, parm)
 **Fixed code** (`hreinwald/drc`, `R/ucedergreen.R`, line ~56):
 
 ``` r
+
 fct <- function(dose, parm)
 {
     parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
@@ -119,6 +121,7 @@ Gamma dose-response model
 `deriv1`):
 
 ``` r
+
 cbind(
     t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * parmMat[, 1],  # WRONG: uses b not dose
     1 - t2,
@@ -130,6 +133,7 @@ cbind(
 **Fixed code** (`hreinwald/drc`, `R/gammadr.R`, inside `deriv1`):
 
 ``` r
+
 cbind(
     t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * dose,  # CORRECT: uses dose
     1 - t2,
@@ -168,6 +172,7 @@ parameter and propagates to standard errors for any derived quantities
 Original code (`DoseResponse/drc`, `R/weibull1.r`, `edfct`):
 
 ``` r
+
 edfct <- function(parm, respl, reference, type, ...)
 {
     parmVec[notFixed] <- parm
@@ -185,6 +190,7 @@ edfct <- function(parm, respl, reference, type, ...)
 Fixed code (`hreinwald/drc`, `R/weibull1.R`, `edfct`):
 
 ``` r
+
 edfct <- function(parm, respl, reference, type, ...)
 {
     parmVec[notFixed] <- parm
@@ -233,6 +239,7 @@ and all convenience wrappers `L.3`, `L.4`, `L.5`
 `edfct`):
 
 ``` r
+
 edfct <- function(parm, p, ...)
 {
     parmVec[notFixed] <- parm
@@ -245,6 +252,7 @@ edfct <- function(parm, p, ...)
 **Fixed code** (`hreinwald/drc`, `R/logistic.R`, `edfct`):
 
 ``` r
+
 edfct <- function(parm, respl, reference = "control", type = "relative", ...)
 {
     parmVec[notFixed] <- parm

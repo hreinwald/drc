@@ -77,9 +77,9 @@ summary(chickweed.m0a) # showing a summmary of the model fit (including paramete
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -15.715465   1.954346 -8.0413 8.886e-16 ***
-#> d:(Intercept)   0.207812   0.011541 18.0070 < 2.2e-16 ***
-#> e:(Intercept) 198.161626   2.965343 66.8259 < 2.2e-16 ***
+#> b:(Intercept) -15.712393   1.954042  -8.041 8.897e-16 ***
+#> d:(Intercept)   0.207832   0.011543  18.005 < 2.2e-16 ***
+#> e:(Intercept) 198.166835   2.966033  66.812 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -95,9 +95,9 @@ summary(chickweed.m0b)  # showing a summmary of the model fit (including paramet
 #> Parameter estimates:
 #> 
 #>                  Estimate  Std. Error t-value   p-value    
-#> b:(Intercept) -27.1427205   1.1960927 -22.693 < 2.2e-16 ***
+#> b:(Intercept) -27.1427205   1.1960928 -22.693 < 2.2e-16 ***
 #> d:(Intercept)   0.1972877   0.0012527 157.490 < 2.2e-16 ***
-#> e:(Intercept) 195.8040859   0.3479695 562.705 < 2.2e-16 ***
+#> e:(Intercept) 195.8040204   0.3479698 562.704 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -122,9 +122,9 @@ summary(chickweed.m1)  # showing a summmary of the model fit (including paramete
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -20.76747    2.94423 -7.0536 1.743e-12 ***
+#> b:(Intercept) -20.76739    2.94422 -7.0536 1.743e-12 ***
 #> d:(Intercept)   0.20011    0.02830  7.0711 1.537e-12 ***
-#> e:(Intercept) 196.05308    2.50570 78.2427 < 2.2e-16 ***
+#> e:(Intercept) 196.05294    2.50571 78.2425 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -139,9 +139,9 @@ ED(chickweed.m1, c(10, 50, 90))
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error
-#> e:10 176.3700     3.4930
-#> e:50 196.0531     2.5057
-#> e:90 217.9328     4.2730
+#> e:10 176.3698     3.4930
+#> e:50 196.0529     2.5057
+#> e:90 217.9327     4.2730
 
 ## Plotting data and fitted regression curve
 plot(chickweed.m1, xlab = "Time (hours)", ylab = "Proportion germinated", 

@@ -34,7 +34,19 @@ The model is given by the expression
 \deqn{f(x) = c + (d - c) \exp(-\exp(b(\log(x) - \log(e))))}
 }
 \examples{
+## Fit with drm() and plot
 terbuthylazin.m1 <- drm(rgr ~ dose, data = terbuthylazin, fct = W1.4())
+plot(terbuthylazin.m1, main = "W1.4")
+
+## Effect of the asymptotes on a single curve (ryegrass): fix c at 0 / d at 6
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, 0, NA, NA)))
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, NA, 6, NA)))
+plot(m1, type = "all", main = "W1.4: free and fixed asymptotes")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d6, type = "none", add = TRUE, col = "red")
+legend("topright", c("free", "c = 0", "d = 6"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
 
 }
 \references{

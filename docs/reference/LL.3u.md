@@ -52,3 +52,13 @@ given by \$\$f(x) = c + \frac{upper-c}{1+\exp(b(\log(x)-\log(e)))}\$\$
 ## Author
 
 Christian Ritz
+
+## Examples
+
+``` r
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LL.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "LL.3u (upper limit fixed at 1)")
+
+```

@@ -57,7 +57,9 @@ comped(
 
 A matrix with the estimated difference or ratio and the associated
 standard error and the resulting confidence interval (unless not
-requested).
+requested). For `log = TRUE` and `operator = "/"` the estimate, its
+(delta method) standard error and the interval are all on the original
+scale, i.e. the ratio of the two ED values.
 
 ## Author
 

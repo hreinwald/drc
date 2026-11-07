@@ -34,7 +34,8 @@ estimated and a numeric value for parameters to be fixed. Default is all
 as \code{data}.}
 }
 \value{
-A \code{drc} model object of class \code{cedergreen}. If the underlying
+A model list of class \code{mllogistic} as returned by \code{\link{cedergreen}}, for use as
+the \code{fct} argument of \code{\link{drm}}. If the underlying
 \code{drc::cedergreen} call fails, it issues a warning and returns \code{NULL}.
 }
 \description{
@@ -59,13 +60,16 @@ The function automatically generates a model name (\code{fctName}) and descripti
 (\code{fctText}) unless they are explicitly provided by the user.
 }
 \examples{
-# Create a CRS.5 model specification
-crs_model_a <- CRS.5()
+## Fit with drm() and plot (alpha = 1, i.e. alpha_type = "a")
+lettuce.crs5 <- drm(weight ~ conc, data = lettuce, fct = CRS.5(alpha_type = "a"))
+plot(lettuce.crs5, type = "all", main = "CRS.5, alpha = 1")
 
-# Fix the lower limit to 0 and use a custom numeric alpha
+## Fix the lower limit to 0 and use a custom numeric alpha
 crs_model_custom <- CRS.5(
   fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75
 )
+lettuce.custom <- drm(weight ~ conc, data = lettuce, fct = crs_model_custom)
+plot(lettuce.custom, type = "none", add = TRUE, col = "red")
 
 }
 \author{

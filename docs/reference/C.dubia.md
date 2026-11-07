@@ -52,15 +52,15 @@ summary(C.dubia.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  16.1372    61.8281  0.2610    0.7952    
-#> d:(Intercept)  28.7500     1.1123 25.8464 < 2.2e-16 ***
-#> e:(Intercept)  11.9536     2.0608  5.8004  5.39e-07 ***
+#> b:(Intercept)  18.4674   145.8889  0.1266  0.899809    
+#> d:(Intercept)  28.7500     1.1123 25.8474 < 2.2e-16 ***
+#> e:(Intercept)  12.0207     3.7191  3.2322  0.002247 ** 
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  7.03479 (47 degrees of freedom)
+#>  7.034731 (47 degrees of freedom)
 
 ## Plotting fitted curve together with the original data
 plot(C.dubia.m1, xlab = "Concentration (%)", ylab = "Number of offspring")

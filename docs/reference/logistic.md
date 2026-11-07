@@ -60,6 +60,16 @@ This model differs from the log-logistic in that it uses `x` directly
 rather than `log(x)`. It is sometimes referred to as the Boltzmann
 model.
 
+The parameters are: `b`, the slope (positive for a decreasing curve,
+negative for an increasing curve); `c`, the lower asymptote; `d`, the
+upper asymptote; `e`, the dose at the inflection point (the ED50 when
+`f = 1`); and `f`, the asymmetry parameter. Effective doses from
+[`ED`](https://hreinwald.github.io/drc/reference/ED.md) follow the same
+convention as for the log-logistic models: for a decreasing curve
+ED\\p\\ is the dose giving a response \\p\\\\ down to `c`; for an
+increasing curve it is \\p\\\\ Absolute response levels
+(`type = "absolute"`) are supported as well.
+
 ## See also
 
 [`L.3`](https://hreinwald.github.io/drc/reference/L.3.md),
@@ -74,5 +84,38 @@ Christian Ritz
 ## Examples
 
 ``` r
-ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.4())
+## Fit with drm() and plot
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = logistic(fixed = c(NA, NA, NA, NA, 1)))
+plot(m1, type = "all", main = "Four-parameter logistic model")
+
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, 0, NA, NA)))
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, 3, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+
+## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, NA, 6, NA)))
+m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, NA, 9, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d9, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+
+## Effective doses
+ED(m1, c(10, 50, 90))
+#> 
+#> Estimated effective doses
+#> 
+#>      Estimate Std. Error
+#> e:10  1.08166    0.51209
+#> e:50  3.06924    0.19638
+#> e:90  5.05682    0.38615
 ```

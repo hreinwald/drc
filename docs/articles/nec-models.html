@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Understanding NEC Models in the drc Package">
 </head>
@@ -67,7 +67,7 @@
                         <h4 data-toc-skip class="author">Hannes
 Reinwald</h4>
             
-            <h4 data-toc-skip class="date">2026-05-26</h4>
+            <h4 data-toc-skip class="date">2026-11-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/vignettes/nec-models.Rmd" class="external-link"><code>vignettes/nec-models.Rmd</code></a></small>
       <div class="d-none name"><code>nec-models.Rmd</code></div>
@@ -100,9 +100,9 @@ variant.</p>
 <h2 id="the-nec-model-equation">The NEC Model Equation<a class="anchor" aria-label="anchor" href="#the-nec-model-equation"></a>
 </h2>
 <p>The NEC model function proposed by Pires et al. (2002) is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>c</mi><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo>−</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><mi>b</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(x) = c + (d-c) \exp(-b(x-e)I(x-e))</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>c</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo>−</mo><mi>c</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="false" form="postfix">)</mo><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">f(x) = c + (d-c) \exp(-b(x-e)I(x-e))</annotation></semantics></math></p>
 <p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">I(x-e)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">I(x-e)</annotation></semantics></math>
 is an indicator function equal to 0 for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>≤</mo><mi>e</mi></mrow><annotation encoding="application/x-tex">x \leq e</annotation></semantics></math>
 and 1 for
@@ -190,14 +190,14 @@ for percentages)</li>
 <span><span class="co">#&gt; Parameter estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;               Estimate Std. Error t-value   p-value    </span></span>
-<span><span class="co">#&gt; b:(Intercept) 0.303610   0.035141  8.6397 1.609e-08 ***</span></span>
-<span><span class="co">#&gt; e:(Intercept) 0.751527   0.156092  4.8146 8.261e-05 ***</span></span>
+<span><span class="co">#&gt; b:(Intercept) 0.303600   0.035145  8.6386 1.612e-08 ***</span></span>
+<span><span class="co">#&gt; e:(Intercept) 0.751389   0.156128  4.8126 8.301e-05 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residual standard error:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  0.08003264 (22 degrees of freedom)</span></span></code></pre></div>
+<span><span class="co">#&gt;  0.08003263 (22 degrees of freedom)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="nec-3-three-parameter-nec-model">NEC.3: Three-Parameter NEC Model<a class="anchor" aria-label="anchor" href="#nec-3-three-parameter-nec-model"></a>
@@ -238,15 +238,15 @@ response with variable maximum.</p>
 <span><span class="co">#&gt; Parameter estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;               Estimate Std. Error t-value   p-value    </span></span>
-<span><span class="co">#&gt; b:(Intercept)  2.54094        NaN     NaN       NaN    </span></span>
-<span><span class="co">#&gt; d:(Intercept)  7.39655    0.23498  31.477 &lt; 2.2e-16 ***</span></span>
-<span><span class="co">#&gt; e:(Intercept)  3.39679        NaN     NaN       NaN    </span></span>
+<span><span class="co">#&gt; b:(Intercept) 0.358129   0.052191  6.8619 8.787e-07 ***</span></span>
+<span><span class="co">#&gt; d:(Intercept) 7.723988   0.191151 40.4079 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; e:(Intercept) 1.324245   0.208420  6.3537 2.673e-06 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residual standard error:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  0.81401 (21 degrees of freedom)</span></span>
+<span><span class="co">#&gt;  0.5734516 (21 degrees of freedom)</span></span>
 <span></span>
 <span><span class="co"># Plot the fitted model</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">nec3.model</span>, type <span class="op">=</span> <span class="st">"all"</span>, log <span class="op">=</span> <span class="st">""</span>,</span>
@@ -289,22 +289,22 @@ from data.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                Estimate Std. Error t-value   p-value    </span></span>
-<span><span class="co">#&gt; b:(Intercept)   3.16938  393.27265  0.0081  0.993650    </span></span>
-<span><span class="co">#&gt; c:(Intercept)   0.67201    0.23463  2.8641  0.009592 ** </span></span>
-<span><span class="co">#&gt; d:(Intercept)   7.39666    0.20260 36.5091 &lt; 2.2e-16 ***</span></span>
-<span><span class="co">#&gt; e:(Intercept)   3.41729   41.27705  0.0828  0.934842    </span></span>
+<span><span class="co">#&gt;               Estimate Std. Error t-value   p-value    </span></span>
+<span><span class="co">#&gt; b:(Intercept) 0.447556   0.072119  6.2058 4.623e-06 ***</span></span>
+<span><span class="co">#&gt; c:(Intercept) 0.498164   0.204584  2.4350   0.02438 *  </span></span>
+<span><span class="co">#&gt; d:(Intercept) 7.723988   0.173236 44.5865 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; e:(Intercept) 1.428649   0.160386  8.9076 2.132e-08 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residual standard error:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  0.7017905 (20 degrees of freedom)</span></span>
+<span><span class="co">#&gt;  0.5197084 (20 degrees of freedom)</span></span>
 <span></span>
 <span><span class="co"># Compare parameter estimates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">nec4.model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; b:(Intercept) c:(Intercept) d:(Intercept) e:(Intercept) </span></span>
-<span><span class="co">#&gt;     3.1693834     0.6720099     7.3966630     3.4172914</span></span></code></pre></div>
+<span><span class="co">#&gt;     0.4475562     0.4981639     7.7239878     1.4286490</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -397,9 +397,9 @@ dataset:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"NEC.2:"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">nec2.fit</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NEC.2: 52.70586</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"NEC.3:"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">nec3.fit</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NEC.3: 63.02673</span></span>
+<span><span class="co">#&gt; NEC.3: 46.21237</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"NEC.4:"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">nec4.fit</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NEC.4: 56.73556</span></span>
+<span><span class="co">#&gt; NEC.4: 42.31794</span></span>
 <span></span>
 <span><span class="co"># Plot all three models together</span></span>
 <span><span class="va">my_plot</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">col</span> <span class="op">=</span> <span class="st">"black"</span>, <span class="va">lwd</span> <span class="op">=</span> <span class="fl">2</span>, <span class="va">pch</span> <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">{</span></span>

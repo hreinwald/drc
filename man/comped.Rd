@@ -33,7 +33,9 @@ confidence interval (optional). By default confidence interval relies on the nor
 }
 \value{
 A matrix with the estimated difference or ratio and the associated standard error and the
-resulting confidence interval (unless not requested).
+resulting confidence interval (unless not requested). For \code{log = TRUE} and
+\code{operator = "/"} the estimate, its (delta method) standard error and the interval are all
+on the original scale, i.e. the ratio of the two ED values.
 }
 \description{
 Comparison of a pair of effective dose values from independent experiments where only the

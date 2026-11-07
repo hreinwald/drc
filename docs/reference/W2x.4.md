@@ -42,7 +42,17 @@ starter function, and parameter names.
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4())
 #> Warning: NaNs produced
 #> Warning: NaNs produced
+plot(ryegrass.m1, type = "all", main = "W2x.4")
+#> Warning: NaNs produced
+
+ED(ryegrass.m1, 50)
+#> 
+#> Estimated effective doses
+#> 
+#>      Estimate Std. Error
+#> e:50  2.97743    0.18762
 ```

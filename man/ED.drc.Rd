@@ -140,8 +140,10 @@ Depending on \code{interval}:
 method, based on the normal or t-distribution (depending on the
 response type).}
 \item{\code{"fls"}}{Intervals obtained by back-transforming from the
-log scale.  Only meaningful when the model parameterises the ED on
-the log scale (e.g. \code{\link{llogistic2}}).}
+log scale.  Only valid when the model parameterises the ED on
+the log scale (e.g. \code{\link{llogistic2}}, \code{LN.*(loge = TRUE)}) or
+when the doses were log-transformed (\code{logBase} given). For models returning
+ED on the dose scale an error with instructions is raised.}
 \item{\code{"tfls"}}{Experimental: intervals obtained by transforming
 to the log scale, computing Wald intervals there, then
 back-transforming.}
@@ -174,7 +176,12 @@ ED(ryegrass.m1, c(10, 50, 90))
 ED(ryegrass.m1, c(10, 50, 90), interval = "delta")
 
 ## Displaying 95\% confidence intervals using back-transformation
-ED(ryegrass.m1, c(10, 50, 90), interval = "fls")
+## ('fls' needs ED on the log scale, e.g. the LL2.* models)
+ryegrass.m2 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4())
+ED(ryegrass.m2, c(10, 50, 90), interval = "fls")
+
+## Displaying 95\% confidence intervals computed on the log scale
+ED(ryegrass.m1, c(10, 50, 90), interval = "tfls")
 
 ## Displaying 95\% confidence intervals using inverse regression
 ED(ryegrass.m1, c(10, 50, 90), interval = "inv")

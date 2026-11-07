@@ -28,7 +28,9 @@ The model is given by the equation
 \deqn{f(x) = c + (d - c)(1 - \exp(-x / e))}
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = AR.3())
+plot(ryegrass.m1, type = "all", main = "AR.3 (shifted asymptotic regression)")
 
 }
 \seealso{

@@ -54,8 +54,8 @@ summary(echovirus.m1)
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  -0.94621    0.20507 -4.6141 3.948e-06 ***
-#> e:(Intercept) 921.04805  215.00279  4.2839 1.837e-05 ***
+#> b:(Intercept)  -0.94620    0.20507 -4.6141 3.948e-06 ***
+#> e:(Intercept) 921.04066  215.00030  4.2839 1.836e-05 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

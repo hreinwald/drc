@@ -173,9 +173,11 @@ The function carries out the following computational steps:
     - `"fls"`:
 
       Intervals obtained by back-transforming from the log scale. Only
-      meaningful when the model parameterises the ED on the log scale
-      (e.g.
-      [`llogistic2`](https://hreinwald.github.io/drc/reference/llogistic2.md)).
+      valid when the model parameterises the ED on the log scale (e.g.
+      [`llogistic2`](https://hreinwald.github.io/drc/reference/llogistic2.md),
+      `LN.*(loge = TRUE)`) or when the doses were log-transformed
+      (`logBase` given). For models returning ED on the dose scale an
+      error with instructions is raised.
 
     - `"tfls"`:
 
@@ -228,7 +230,7 @@ ED(ryegrass.m1, c(10, 50, 90))
 #> 
 #>      Estimate Std. Error
 #> e:10  1.46371    0.18677
-#> e:50  3.05795    0.18573
+#> e:50  3.05796    0.18573
 #> e:90  6.38864    0.84510
 
 ## Displaying 95% confidence intervals using the delta method
@@ -238,18 +240,30 @@ ED(ryegrass.m1, c(10, 50, 90), interval = "delta")
 #> 
 #>      Estimate Std. Error   Lower   Upper
 #> e:10  1.46371    0.18677 1.07411 1.85330
-#> e:50  3.05795    0.18573 2.67053 3.44538
+#> e:50  3.05796    0.18573 2.67053 3.44538
 #> e:90  6.38864    0.84510 4.62580 8.15148
 
 ## Displaying 95% confidence intervals using back-transformation
-ED(ryegrass.m1, c(10, 50, 90), interval = "fls")
+## ('fls' needs ED on the log scale, e.g. the LL2.* models)
+ryegrass.m2 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4())
+ED(ryegrass.m2, c(10, 50, 90), interval = "fls")
 #> 
 #> Estimated effective doses
 #> 
-#>        Estimate Std. Error      Lower      Upper
-#> e:10    4.32195    0.18677    2.92738    6.38085
-#> e:50   21.28399    0.18573   14.44757   31.35531
-#> e:90  595.04680    0.84510  102.08419 3468.51638
+#>      Estimate Std. Error    Lower    Upper
+#> e:10 1.463710   0.127602 1.121651 1.910083
+#> e:50 3.057955   0.060737 2.694064 3.470996
+#> e:90 6.388620   0.132282 4.848085 8.418679
+
+## Displaying 95% confidence intervals computed on the log scale
+ED(ryegrass.m1, c(10, 50, 90), interval = "tfls")
+#> 
+#> Estimated effective doses
+#> 
+#>      Estimate Std. Error   Lower   Upper
+#> e:10  1.46371    0.18677 1.12165 1.91008
+#> e:50  3.05796    0.18573 2.69406 3.47100
+#> e:90  6.38864    0.84510 4.84810 8.41870
 
 ## Displaying 95% confidence intervals using inverse regression
 ED(ryegrass.m1, c(10, 50, 90), interval = "inv")
@@ -258,6 +272,6 @@ ED(ryegrass.m1, c(10, 50, 90), interval = "inv")
 #> 
 #>      Estimate Std. Error   Lower   Upper
 #> e:10  1.46371    0.18677 1.14225 1.82253
-#> e:50  3.05795    0.18573 2.74905 3.40172
-#> e:90  6.38864    0.84510 5.15138 8.19648
+#> e:50  3.05796    0.18573 2.74905 3.40172
+#> e:90  6.38864    0.84510 5.15138 8.19647
 ```

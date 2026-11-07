@@ -41,5 +41,7 @@ starter function, and parameter names.
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.3())
+plot(ryegrass.m1, type = "all", main = "L.3 (lower limit fixed at 0)")
 ```

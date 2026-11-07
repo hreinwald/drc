@@ -52,10 +52,10 @@ summary(GiantKelp.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value p-value    
-#> b:(Intercept)  1.19476    0.45955  2.5999 0.01357 *  
-#> c:(Intercept)  4.46327    3.46849  1.2868 0.20661    
-#> d:(Intercept) 18.08505    0.77922 23.2090 < 2e-16 ***
-#> e:(Intercept) 53.86481   25.46202  2.1155 0.04158 *  
+#> b:(Intercept)  1.19476    0.45955  2.5998 0.01357 *  
+#> c:(Intercept)  4.46327    3.46850  1.2868 0.20661    
+#> d:(Intercept) 18.08505    0.77923 23.2090 < 2e-16 ***
+#> e:(Intercept) 53.86476   25.46200  2.1155 0.04158 *  
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 

@@ -38,6 +38,7 @@ concentrations of ferulic acid, a phenolic compound that inhibits plant
 growth.
 
 ``` r
+
 # Load the ryegrass dataset
 data(ryegrass)
 
@@ -107,6 +108,7 @@ at zero dose, control response) - **e**: ED50 or EC50 (dose producing
 ### Fitting the Initial Model
 
 ``` r
+
 # Fit a four-parameter log-logistic model
 ryegrass.LL4 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
@@ -121,7 +123,7 @@ summary(ryegrass.LL4)
 #> b:(Intercept)  2.98222    0.46506  6.4125 2.960e-06 ***
 #> c:(Intercept)  0.48141    0.21219  2.2688   0.03451 *  
 #> d:(Intercept)  7.79296    0.18857 41.3272 < 2.2e-16 ***
-#> e:(Intercept)  3.05795    0.18573 16.4644 4.268e-13 ***
+#> e:(Intercept)  3.05796    0.18573 16.4644 4.268e-13 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -149,6 +151,7 @@ dose-response plot and quantile-quantile (Q-Q) plots.
 ### Standard Dose-Response Plot
 
 ``` r
+
 # Plot the fitted model with data points
 plot(ryegrass.LL4, type = "all",
      main = "LL.4 Model Fit to Ryegrass Data",
@@ -175,6 +178,7 @@ Q-Q plots assess whether the model residuals follow a normal
 distribution, which is an assumption of the fitting procedure.
 
 ``` r
+
 # Create Q-Q plot for residual diagnostics
 qqnorm(residuals(ryegrass.LL4),
        main = "Normal Q-Q Plot of Residuals (LL.4)",
@@ -197,6 +201,7 @@ An additional useful diagnostic is plotting residuals against fitted
 values:
 
 ``` r
+
 # Residuals vs. Fitted values
 plot(fitted(ryegrass.LL4), residuals(ryegrass.LL4),
      xlab = "Fitted values",
@@ -227,10 +232,11 @@ function performs a likelihood ratio test comparing the dose-response
 model to a null model (no dose effect).
 
 ``` r
+
 # Test whether there is a significant dose effect
 noEffect(ryegrass.LL4)
 #> Chi-square test              Df         p-value 
-#>        91.87776         3.00000         0.00000
+#>    9.187776e+01    3.000000e+00    8.653580e-20
 ```
 
 **Interpretation:** - The null hypothesis is “no dose effect” (all
@@ -247,6 +253,7 @@ function assesses whether the model adequately describes the data using
 a lack-of-fit test.
 
 ``` r
+
 # Perform goodness-of-fit test
 modelFit(ryegrass.LL4)
 #> Lack-of-fit test
@@ -269,6 +276,7 @@ outputs in dose-response analysis. They represent the dose required to
 produce a specified level of effect.
 
 ``` r
+
 # Estimate EC10, EC20, and EC50 with 95% confidence intervals
 # Using delta method for confidence intervals
 ed_values <- ED(ryegrass.LL4, respLev = c(10, 20, 50), interval = "delta")
@@ -278,12 +286,12 @@ ed_values <- ED(ryegrass.LL4, respLev = c(10, 20, 50), interval = "delta")
 #>      Estimate Std. Error   Lower   Upper
 #> e:10  1.46371    0.18677 1.07411 1.85330
 #> e:20  1.92109    0.17774 1.55032 2.29186
-#> e:50  3.05795    0.18573 2.67053 3.44538
+#> e:50  3.05796    0.18573 2.67053 3.44538
 ed_values
 #>      Estimate Std. Error    Lower    Upper
-#> e:10 1.463706  0.1867704 1.074109 1.853302
-#> e:20 1.921091  0.1777432 1.550325 2.291857
-#> e:50 3.057955  0.1857313 2.670526 3.445384
+#> e:10 1.463706  0.1867706 1.074109 1.853302
+#> e:20 1.921091  0.1777433 1.550325 2.291857
+#> e:50 3.057955  0.1857314 2.670526 3.445384
 ```
 
 **Understanding ED Values:** - **EC10**: Concentration causing 10%
@@ -292,13 +300,16 @@ effect - **EC50**: Concentration causing 50% effect (often used as a
 summary measure of potency)
 
 **Confidence Intervals:** - The `interval = "delta"` argument uses the
-delta method for CI estimation - Alternative methods include `"fls"`
-(fieller), `"tfls"` (transformed fieller) - Narrower CIs indicate more
-precise estimates
+delta method for CI estimation - Alternative methods include `"tfls"`
+(interval computed on the log scale and back-transformed) and, for
+models with a log(ED) parameter such as
+[`LL2.4()`](https://hreinwald.github.io/drc/reference/LL2.4.md),
+`"fls"` - Narrower CIs indicate more precise estimates
 
 ### Alternative Confidence Interval Methods
 
 ``` r
+
 # Compare different confidence interval methods
 cat("Delta method:\n")
 #> Delta method:
@@ -307,21 +318,26 @@ ED(ryegrass.LL4, respLev = 50, interval = "delta")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:50  3.05795    0.18573 2.67053 3.44538
+#> e:50  3.05796    0.18573 2.67053 3.44538
 
-cat("\nFieller method:\n")
+cat("\nLog-scale interval (tfls):\n")
 #> 
-#> Fieller method:
-ED(ryegrass.LL4, respLev = 50, interval = "fls")
+#> Log-scale interval (tfls):
+ED(ryegrass.LL4, respLev = 50, interval = "tfls")
 #> 
 #> Estimated effective doses
 #> 
-#>      Estimate Std. Error    Lower    Upper
-#> e:50 21.28399    0.18573 14.44757 31.35531
+#>      Estimate Std. Error   Lower   Upper
+#> e:50  3.05796    0.18573 2.69406 3.47100
 ```
 
-The Fieller method is often preferred for ED50 estimation as it accounts
-for the ratio nature of the parameter.
+The log-scale interval is often preferred for ED50 estimation because ED
+values are positive and their sampling distribution is skewed.
+(`interval = "fls"` is reserved for models that return ED on the log
+scale,
+e.g. [`LL2.4()`](https://hreinwald.github.io/drc/reference/LL2.4.md);
+for [`LL.4()`](https://hreinwald.github.io/drc/reference/LL.4.md) it
+stops with an explanatory error.)
 
 ## Step 4: Model Comparison and Selection
 
@@ -341,6 +357,7 @@ We’ll compare the initial LL.4 model with several alternatives:
 - **EXD.3**: Three-parameter exponential decay model
 
 ``` r
+
 # Use mselect() to compare multiple models
 # This fits each model and compares using AIC
 model_comparison <- suppressWarnings(
@@ -350,14 +367,14 @@ model_comparison <- suppressWarnings(
    )
  )
 model_comparison
-#>          logLik       IC Lack of fit   Res var
-#> W2.4  -15.91352 41.82703 0.945071314 0.2646283
-#> LL.4  -16.15514 42.31029 0.866483043 0.2700107
-#> LN.4  -16.29214 42.58429 0.818641010 0.2731110
-#> LL.5  -15.87828 43.75656 0.853847582 0.2777393
-#> BC.4  -17.05120 44.10241 0.565407254 0.2909448
-#> W1.4  -17.46720 44.93439 0.450567622 0.3012075
-#> EXD.3 -28.22358 64.44717 0.000886637 0.7030127
+#>          logLik       IC  Lack of fit   Res var
+#> W2.4  -15.91352 41.82703 0.9450713528 0.2646283
+#> LL.4  -16.15514 42.31029 0.8664830427 0.2700107
+#> LN.4  -16.29214 42.58429 0.8186412490 0.2731110
+#> LL.5  -15.87828 43.75656 0.8538475821 0.2777393
+#> BC.4  -17.05120 44.10241 0.5654072543 0.2909448
+#> W1.4  -17.46720 44.93439 0.4505676247 0.3012075
+#> EXD.3 -28.22358 64.44717 0.0008866376 0.7030126
 ```
 
 **Understanding the Output:**
@@ -373,6 +390,7 @@ Models are sorted by IC (AIC), with the best-fitting model at the top.
 ### Selecting the Best Model
 
 ``` r
+
 # Based on mselect results, fit the best model
 # (In this example, we'll use the model with lowest AIC from the comparison)
 # For ryegrass data, typically W1.4 or LL.4 performs well
@@ -387,10 +405,10 @@ summary(ryegrass.best)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  2.39341    0.47832  5.0038 6.813e-05 ***
-#> c:(Intercept)  0.66045    0.18857  3.5023  0.002243 ** 
-#> d:(Intercept)  7.80586    0.20852 37.4348 < 2.2e-16 ***
-#> e:(Intercept)  3.60013    0.20311 17.7250 1.068e-13 ***
+#> b:(Intercept)  2.39334    0.47830  5.0039 6.812e-05 ***
+#> c:(Intercept)  0.66045    0.18858  3.5023  0.002243 ** 
+#> d:(Intercept)  7.80587    0.20852 37.4350 < 2.2e-16 ***
+#> e:(Intercept)  3.60014    0.20312 17.7244 1.070e-13 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -404,14 +422,14 @@ ed_best <- ED(ryegrass.best, respLev = c(10, 20, 50), interval = "delta")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:10  1.40598    0.25357 0.87705 1.93491
-#> e:20  1.92374    0.23477 1.43403 2.41346
-#> e:50  3.08896    0.17331 2.72744 3.45048
+#> e:10  1.40594    0.25356 0.87703 1.93486
+#> e:20  1.92371    0.23476 1.43401 2.41342
+#> e:50  3.08895    0.17331 2.72743 3.45048
 ed_best
 #>      Estimate Std. Error     Lower    Upper
-#> e:10 1.405979  0.2535663 0.8770491 1.934909
-#> e:20 1.923744  0.2347672 1.4340283 2.413460
-#> e:50 3.088964  0.1733114 2.7274422 3.450485
+#> e:10 1.405944  0.2535591 0.8770293 1.934859
+#> e:20 1.923713  0.2347615 1.4340094 2.413417
+#> e:50 3.088955  0.1733123 2.7274315 3.450478
 ```
 
 ### Visual Comparison of Models
@@ -419,6 +437,7 @@ ed_best
 Plotting multiple models together helps visualize differences in fit:
 
 ``` r
+
 # Plot initial LL.4 model
 plot(ryegrass.LL4, type = "all",
      main = "Comparison: LL.4 vs W1.4 Models",
@@ -442,6 +461,7 @@ dose-response curves in blue (LL.4) and red dashed line
 ### Comparing ED Estimates Between Models
 
 ``` r
+
 # Compare EC50 estimates between models
 cat("EC50 from LL.4 model:\n")
 #> EC50 from LL.4 model:
@@ -450,7 +470,7 @@ ED(ryegrass.LL4, respLev = 50, interval = "delta")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:50  3.05795    0.18573 2.67053 3.44538
+#> e:50  3.05796    0.18573 2.67053 3.44538
 
 cat("\nEC50 from W1.4 model:\n")
 #> 
@@ -460,7 +480,7 @@ ED(ryegrass.best, respLev = 50, interval = "delta")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:50  3.08896    0.17331 2.72744 3.45048
+#> e:50  3.08895    0.17331 2.72743 3.45048
 ```
 
 **Important Notes:** - Different models may yield different ED
@@ -478,6 +498,7 @@ computes model-averaged ED estimates using AIC-based weights.
 ### Computing Model-Averaged EDs
 
 ``` r
+
 # Model-averaged EC50 estimation using top 3 models
 # Based on our mselect results, we'll average over several competitive models
 ma_results <- maED(ryegrass.LL4,
@@ -485,14 +506,14 @@ ma_results <- maED(ryegrass.LL4,
                    respLev = 50,
                    interval = "buckland")
 #>          ED50     Weight
-#> LL.4 3.057955 0.33027128
-#> W1.4 3.088964 0.08893096
-#> W2.4 2.996913 0.42054089
-#> LL.5 3.023549 0.16025686
+#> LL.4 3.057955 0.33027127
+#> W1.4 3.088955 0.08893096
+#> W2.4 2.996923 0.42054092
+#> LL.5 3.023550 0.16025686
 
 ma_results
 #>      Estimate Std. Error    Lower    Upper
-#> e:50 3.029528  0.1969989 2.643417 3.415639
+#> e:50 3.029532  0.1966929 2.644021 3.415043
 ```
 
 **Understanding Model Averaging:**
@@ -506,6 +527,7 @@ ma_results
 ### Comparing Single-Model vs Model-Averaged Estimates
 
 ``` r
+
 # Compare model-averaged EC50 with single-model estimates
 cat("Single model (W1.4) EC50:\n")
 #> Single model (W1.4) EC50:
@@ -514,14 +536,14 @@ ED(ryegrass.best, respLev = 50, interval = "delta")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:50  3.08896    0.17331 2.72744 3.45048
+#> e:50  3.08895    0.17331 2.72743 3.45048
 
 cat("\nModel-averaged EC50 (top 3 models):\n")
 #> 
 #> Model-averaged EC50 (top 3 models):
 print(ma_results)
 #>      Estimate Std. Error    Lower    Upper
-#> e:50 3.029528  0.1969989 2.643417 3.415639
+#> e:50 3.029532  0.1966929 2.644021 3.415043
 ```
 
 **When to Use Model Averaging:** - Multiple models have similar AIC
@@ -547,6 +569,7 @@ how to fix these parameters is crucial for proper model fitting.
 ### Models with Different Asymptote Constraints
 
 ``` r
+
 # LL.4: Both asymptotes free (4 parameters)
 ryegrass.LL4 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
@@ -575,7 +598,7 @@ summary(ryegrass.LL4)
 #> b:(Intercept)  2.98222    0.46506  6.4125 2.960e-06 ***
 #> c:(Intercept)  0.48141    0.21219  2.2688   0.03451 *  
 #> d:(Intercept)  7.79296    0.18857 41.3272 < 2.2e-16 ***
-#> e:(Intercept)  3.05795    0.18573 16.4644 4.268e-13 ***
+#> e:(Intercept)  3.05796    0.18573 16.4644 4.268e-13 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -615,6 +638,7 @@ cat("LL.3 (3 params):", AIC(ryegrass.LL3), "\n")
 ### Visual Comparison of Constrained Models
 
 ``` r
+
 # Plot models with different constraints
 plot(ryegrass.LL4, type = "all",
      main = "Effect of Asymptote Constraints",
@@ -662,6 +686,7 @@ workflow
 ### Effect on ED Estimates
 
 ``` r
+
 # Compare ED estimates with different constraints
 cat("EC50 with LL.4 (both asymptotes free):\n")
 #> EC50 with LL.4 (both asymptotes free):
@@ -670,7 +695,7 @@ ED(ryegrass.LL4, respLev = 50, interval = "delta")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:50  3.05795    0.18573 2.67053 3.44538
+#> e:50  3.05796    0.18573 2.67053 3.44538
 
 cat("\nEC50 with LL.3 (lower asymptote = 0):\n")
 #> 
@@ -723,6 +748,7 @@ EC50/ED50 estimation
 **Example:**
 
 ``` r
+
 # Standard application of log-logistic model
 example.LL <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 plot(example.LL, main = "Log-Logistic Model (LL.4)")
@@ -753,6 +779,7 @@ Time-to-event data - Germination/mortality studies
 **Example:**
 
 ``` r
+
 # Weibull models often fit plant growth data well
 example.W1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
 example.W2 <- drm(rootl ~ conc, data = ryegrass, fct = W2.4())
@@ -786,6 +813,7 @@ size distributions - Alternative to log-logistic when AIC suggests
 **Example:**
 
 ``` r
+
 example.LN <- drm(rootl ~ conc, data = ryegrass, fct = LN.4())
 ```
 
@@ -806,6 +834,7 @@ inhibition without clear asymptote
 **Example:**
 
 ``` r
+
 example.EXD <- drm(rootl ~ conc, data = ryegrass, fct = EXD.3())
 ```
 
@@ -835,6 +864,7 @@ Pharmaceutical hormesis - Toxicological hormesis
 **Example (conceptual):**
 
 ``` r
+
 # Example with hormetic data (not ryegrass which is monotonic)
 # hormetic.model <- drm(response ~ dose, data = hormetic_data, fct = BC.5())
 # plot(hormetic.model)
@@ -910,6 +940,7 @@ therapeutic responses
 ### Comprehensive Model Comparison Example
 
 ``` r
+
 # Compare a wide range of monotonic models for ryegrass data
 comprehensive <- suppressWarnings(
    mselect(ryegrass.LL4, nested = TRUE,
@@ -920,17 +951,17 @@ comprehensive <- suppressWarnings(
                                       EXD.3())) 
 )
 comprehensive
-#>          logLik       IC Lack of fit   Res var Nested F test
-#> W2.3  -16.77862 41.55725 0.794024850 0.2708671  1.000000e+00
-#> W2.4  -15.91352 41.82703 0.945071314 0.2646283  2.356418e-01
-#> LL.4  -16.15514 42.31029 0.866483043 0.2700107            NA
-#> LN.4  -16.29214 42.58429 0.818641010 0.2731110  2.899907e-02
-#> LL.5  -15.87828 43.75656 0.853847582 0.2777393  1.155597e-01
-#> W1.4  -17.46720 44.93439 0.450567622 0.3012075  5.421708e-03
-#> LL.3  -18.60413 45.20827 0.353167872 0.3153724  4.597125e-02
-#> LN.3  -19.22361 46.44721 0.254436052 0.3320803  2.032428e-02
-#> W1.3  -22.22047 52.44094 0.043791495 0.4262881  6.598584e-03
-#> EXD.3 -28.22358 64.44717 0.000886637 0.7030127  1.040468e-05
+#>          logLik       IC  Lack of fit   Res var Nested F test
+#> W2.3  -16.77862 41.55725 0.7940251373 0.2708671  1.000000e+00
+#> W2.4  -15.91352 41.82703 0.9450713528 0.2646283  2.356421e-01
+#> LL.4  -16.15514 42.31029 0.8664830427 0.2700107            NA
+#> LN.4  -16.29214 42.58429 0.8186412490 0.2731110  2.899905e-02
+#> LL.5  -15.87828 43.75656 0.8538475821 0.2777393  1.155597e-01
+#> W1.4  -17.46720 44.93439 0.4505676247 0.3012075  5.421708e-03
+#> LL.3  -18.60413 45.20827 0.3531678718 0.3153724  4.597125e-02
+#> LN.3  -19.22361 46.44721 0.2544360617 0.3320803  2.032428e-02
+#> W1.3  -22.22047 52.44094 0.0437914946 0.4262881  6.598584e-03
+#> EXD.3 -28.22358 64.44717 0.0008866376 0.7030126  1.040468e-05
 ```
 
 ## Conclusion

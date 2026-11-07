@@ -25,7 +25,9 @@ A three-parameter logistic model with the lower limit fixed at 0, given by
 \deqn{f(x) = \frac{d}{1 + \exp(b(x - e))}}
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.3())
+plot(ryegrass.m1, type = "all", main = "L.3 (lower limit fixed at 0)")
 }
 \seealso{
 \code{\link{logistic}}, \code{\link{L.4}}, \code{\link{L.5}}

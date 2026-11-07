@@ -59,5 +59,8 @@ Wiley & Sons (pp. 338–339).
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = EXD.2())
+plot(ryegrass.m1, type = "all", main = "EXD.2 (exponential decay)")
+
 ```

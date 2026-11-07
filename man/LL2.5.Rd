@@ -26,7 +26,9 @@ parameterised on the log scale. All five parameters (\code{b}, \code{c},
 \code{d}, \code{e}, \code{f}) are estimated.
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.5())
+plot(ryegrass.m1, type = "all", main = "LL2.5")
 
 }
 \seealso{

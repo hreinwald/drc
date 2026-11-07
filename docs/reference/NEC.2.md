@@ -38,3 +38,13 @@ A list (see [`NEC`](https://hreinwald.github.io/drc/reference/NEC.md)).
 [`NEC`](https://hreinwald.github.io/drc/reference/NEC.md),
 [`NEC.3`](https://hreinwald.github.io/drc/reference/NEC.3.md),
 [`NEC.4`](https://hreinwald.github.io/drc/reference/NEC.4.md)
+
+## Examples
+
+``` r
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+nec.m2 <- drm(rel ~ conc, data = ryegrass.rel, fct = NEC.2(upper = 1))
+plot(nec.m2, type = "all", main = "NEC.2 (c = 0, d = 1)")
+
+```

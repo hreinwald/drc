@@ -54,18 +54,18 @@ summary(S.alba.LL.4.1)
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:Bentazone    5.046141   1.040135  4.8514 8.616e-06 ***
-#> b:Glyphosate   2.390218   0.495959  4.8194 9.684e-06 ***
-#> c:(Intercept)  0.716559   0.089245  8.0291 3.523e-11 ***
-#> d:(Intercept)  3.854861   0.076255 50.5519 < 2.2e-16 ***
-#> e:Bentazone   28.632355   2.038098 14.0486 < 2.2e-16 ***
-#> e:Glyphosate  66.890545   5.968819 11.2067 < 2.2e-16 ***
+#> b:Bentazone    5.058358   1.045148  4.8398 8.988e-06 ***
+#> b:Glyphosate   2.385448   0.493324  4.8355 9.133e-06 ***
+#> c:(Intercept)  0.716452   0.089247  8.0278 3.542e-11 ***
+#> d:(Intercept)  3.854375   0.076249 50.5500 < 2.2e-16 ***
+#> e:Bentazone   28.638392   2.043019 14.0177 < 2.2e-16 ***
+#> e:Glyphosate  66.933054   5.979355 11.1940 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.3705151 (62 degrees of freedom)
+#>  0.370514 (62 degrees of freedom)
 
 ## Applying the optimal transform-both-sides Box-Cox transformation
 ## (using the initial model fit)  
@@ -78,12 +78,12 @@ summary(S.alba.LL.4.2)
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:Bentazone    4.838636   0.927240  5.2183 2.216e-06 ***
-#> b:Glyphosate   1.944311   0.236471  8.2222 1.630e-11 ***
-#> c:(Intercept)  0.682591   0.028768 23.7270 < 2.2e-16 ***
-#> d:(Intercept)  3.862611   0.106186 36.3760 < 2.2e-16 ***
-#> e:Bentazone   28.396147   1.874598 15.1479 < 2.2e-16 ***
-#> e:Glyphosate  65.573335   5.618945 11.6700 < 2.2e-16 ***
+#> b:Bentazone    4.838699   0.927280  5.2182 2.217e-06 ***
+#> b:Glyphosate   1.944310   0.236471  8.2222 1.630e-11 ***
+#> c:(Intercept)  0.682591   0.028768 23.7271 < 2.2e-16 ***
+#> d:(Intercept)  3.862606   0.106186 36.3760 < 2.2e-16 ***
+#> e:Bentazone   28.396254   1.874642 15.1476 < 2.2e-16 ***
+#> e:Glyphosate  65.573487   5.618957 11.6700 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 

@@ -19,6 +19,12 @@ A list (see \code{\link{lnormal}}).
 \description{
 \code{LN.3} is a convenience function for the log-normal model with the lower limit fixed at 0.
 }
+\examples{
+## Fit with drm() and plot
+ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LN.3())
+plot(ryegrass.m1, type = "all", main = "LN.3 (lower limit fixed at 0)")
+
+}
 \seealso{
 \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.4}}
 }

@@ -7,7 +7,8 @@
 ED_robust(
   mod,
   respLev = c(10, 20, 50),
-  interval = get_ed_interval(mod$fct$name, small_n = TRUE),
+  interval = get_ed_interval(mod$fct$name, small_n = TRUE, log_ed =
+    .isLogEDModel(mod$fct)),
   CI_level = 0.95,
   verbose = FALSE,
   ...
@@ -20,8 +21,11 @@ ED_robust(
 calculate ED values (e.g., \code{c(10, 50)} for ED10 and ED50).}
 
 \item{interval}{A character string specifying the method for calculating
-confidence intervals. Defaults to the output of \code{get_ed_interval()}.
-Common options include "delta", "tfls", or "buckland".}
+confidence intervals. Defaults to the output of \code{get_ed_interval()}: "tfls" for the
+log-logistic, log-normal, Brain-Cousens and Cedergreen families, "delta" for Weibull models, and
+"fls" for models returning log(ED) (\verb{LL2.*}, \code{LN.*(loge = TRUE)}), for which estimates and limits
+are back-transformed and the standard error is the delta-method SE of the dose. "fls" is only
+accepted for such models (an error is raised otherwise).}
 
 \item{CI_level}{A numeric value between 0 and 1 indicating the confidence
 level for the intervals (e.g., 0.95 for a 95\% CI).}

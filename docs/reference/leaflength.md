@@ -48,16 +48,16 @@ summary(leaflength.crs4c2)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept)   0.489758   0.030686 15.9603 < 2.2e-16 ***
-#> d:(Intercept)  10.020054   1.590491  6.3000 2.209e-07 ***
-#> e:(Intercept)   0.019138   0.028983  0.6603    0.5130    
-#> f:(Intercept) 381.722590 234.463424  1.6281    0.1118    
+#> b:(Intercept)   0.484913   0.025039 19.3667 < 2.2e-16 ***
+#> d:(Intercept)   9.789050   1.515505  6.4593 1.337e-07 ***
+#> e:(Intercept)   0.010760   0.009565  1.1250    0.2677    
+#> f:(Intercept) 484.481530 181.221498  2.6734    0.0110 *  
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  1.188513 (38 degrees of freedom)
+#>  1.183879 (38 degrees of freedom)
 #> 
 #> Non-normality/heterogeneity adjustment through Box-Cox transformation
 #> 

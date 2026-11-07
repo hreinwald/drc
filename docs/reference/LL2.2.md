@@ -46,6 +46,9 @@ and related components.
 ## Examples
 
 ``` r
+## Binomial (quantal) response: fit with drm() and plot
 earthworms.m1 <- drm(number/total ~ dose, weights = total,
   data = earthworms, fct = LL2.2(), type = "binomial")
+plot(earthworms.m1, main = "LL2.2 (upper limit fixed at 1)")
+
 ```

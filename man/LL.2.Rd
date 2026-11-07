@@ -33,8 +33,10 @@ The two-parameter log-logistic function is given by the expression
 \deqn{f(x) = \frac{upper}{1+\exp(b(\log(x)-\log(e)))}}
 }
 \examples{
-earthworms.m1 <- drm(number/total~dose, weights=total,
+## Binomial (quantal) response: fit with drm() and plot
+earthworms.m1 <- drm(number/total ~ dose, weights = total,
   data = earthworms, fct = LL.2(), type = "binomial")
+plot(earthworms.m1, main = "LL.2 (upper limit fixed at 1)")
 
 }
 \seealso{

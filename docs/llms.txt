@@ -62,7 +62,7 @@ The package offers:
 
 For more details visit:
 
-📖 **[drc github documentation](https://hreinwald.github.io/drc/)**  
+📖 **[drc github documentation](https://hreinwald.github.io/drc/)**\
 ⚡ **[drc example
 workflow](https://hreinwald.github.io/drc/articles/dose-response-workflow.html)**
 
@@ -74,19 +74,43 @@ Feature requests or ideas?
 
 **⚠️ Important:** We **do not recommend** installing the currently
 heavily outdated CRAN version of this package. Instead, we recommend
-installing the development (`dev`) or stable beta (`main_beta`) version
-from GitHub.
+installing the development (`dev`) or stable beta (`main`) version from
+GitHub.
+
+For details on why the CRAN and upstream fork version is heavily
+outdated see the [drc package comparative
+analysis](https://hreinwald.github.io/drc/articles/package-version-comparative-analysis.html).
+It also show cases the most critical bugs that were fixed in this
+re-factored version.
 
 ### Install from GitHub (Recommended)
 
+> Install via `remotes` package:
+
 ``` r
-# install.packages("devtools")
 
-# Install the re-factored development version 
-devtools::install_github("hreinwald/drc")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 
-# Install the re-factored stable beta version
-devtools::install_github("hreinwald/drc@main_beta")
+# Latest development version 
+remotes::install_github("hreinwald/drc@dev")
+
+# Latest stable release version
+devtools::install_github("hreinwald/drc@main")
+```
+
+------------------------------------------------------------------------
+
+> Install via `devtools` package:
+
+``` r
+
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+
+# Latest development version 
+devtools::install_github("hreinwald/drc@dev")
+
+# Latest stable release version
+devtools::install_github("hreinwald/drc@main")
 ```
 
 ### Local Installation from tar.gz
@@ -98,6 +122,7 @@ release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.2.tar.gz).
 After downloading the file, run the following:
 
 ``` r
+
 # Specify the path to the directory where you saved the downloaded tar.gz file.
 targz  <- file.path("~/Downloads/drc-3.3.2.tar.gz")
 
@@ -110,6 +135,7 @@ install.packages(targz, repos = NULL, type = "source")
 To install the outdated version from CRAN:
 
 ``` r
+
 install.packages("drc")
 ```
 
@@ -118,6 +144,7 @@ install.packages("drc")
 ### Fitting a basic dose-response model
 
 ``` r
+
 library(drc)
 
 # Fit a four-parameter log-logistic model to the built-in 'ryegrass' dataset
@@ -133,6 +160,7 @@ plot(model, xlab = "Concentration", ylab = "Root length")
 ### Estimating effective doses (ED values)
 
 ``` r
+
 # Estimate the ED50 (dose producing 50% effect) with confidence intervals
 ED(model, respLev = c(10, 50, 90), interval = "delta")
 ```
@@ -140,6 +168,7 @@ ED(model, respLev = c(10, 50, 90), interval = "delta")
 ### Comparing curves across groups
 
 ``` r
+
 # Fit separate curves for multiple groups
 model_multi <- drm(rootl ~ conc, curveid = herbicide,
                    data = ryegrass, fct = LL.4())
@@ -151,6 +180,7 @@ EDcomp(model_multi, percVec = c(50), interval = "delta")
 ### Model selection
 
 ``` r
+
 # Compare different dose-response model families
 mselect(model, fctList = list(W1.4(), W2.4(), LL.3()))
 ```
@@ -161,11 +191,55 @@ The package includes detailed vignettes to help you understand specific
 topics:
 
 ``` r
+
 # View available vignettes
 vignette(package = "drc")
 
 # Access the NEC models vignette
 vignette("nec-models", package = "drc")
+```
+
+## Package workflow
+
+The diagram below illustrates how the main functions of the **drc**
+package relate to each other. Raw data and a chosen model function are
+passed to [`drm()`](https://hreinwald.github.io/drc/reference/drm.md) to
+produce a `drc` object. That object is then the entry point for all
+downstream analysis.
+
+``` mermaid
+flowchart LR
+    DATA([data.frame])
+    MODELS["Model functions\nLL.4&#40;&#41; · W1.4&#40;&#41; · W2.4&#40;&#41;\nG.4&#40;&#41; · LN.4&#40;&#41; · BC.5&#40;&#41; · …"]
+    DRMC["drmc&#40;&#41;\noptimisation\ncontrol"]
+
+    DRM["drm&#40;formula, data=,\nfct=, curveid=, type=&#41;"]
+    OBJ(["drc object"])
+
+    PLOT["plot&#40;&#41;"]
+    SUMM["summary&#40;&#41; · coef&#40;&#41; · confint&#40;&#41;\npredict&#40;&#41; · fitted&#40;&#41; · residuals&#40;&#41;"]
+    ED["ED&#40;&#41; · maED&#40;&#41;\nED_robust&#40;&#41; · maED_robust&#40;&#41;"]
+    COMP["EDcomp&#40;&#41; · compParm&#40;&#41;\nrelpot&#40;&#41;"]
+    SEL["mselect&#40;fctList=&#41;"]
+    GOF["modelFit&#40;&#41; · noEffect&#40;&#41;\nanova&#40;&#41; · Rsq&#40;&#41;"]
+    SIM["rdrm&#40;&#41;\nsimulate dose-response data\n&#40;power analysis / method comparison&#41;"]
+
+    DATA --> DRM
+    MODELS -->|"fct="| DRM
+    DRMC --> DRM
+    DRM --> OBJ
+
+    OBJ --> PLOT
+    OBJ --> SUMM
+    OBJ --> ED
+    OBJ --> COMP
+    OBJ --> SEL
+    OBJ --> GOF
+
+    MODELS -->|"fctList="| SEL
+
+    DATA -.-> SIM
+    MODELS -.->|"fct="| SIM
 ```
 
 ## Available Models

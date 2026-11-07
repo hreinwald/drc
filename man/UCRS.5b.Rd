@@ -17,6 +17,15 @@ A list (see \code{\link{ucedergreen}}).
 \description{
 Five-parameter u-shaped CRS hormesis model with alpha=0.5.
 }
+\examples{
+## Simulated U-shaped data (alpha = 0.5): fit with drm() and plot
+dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+mu <- ucedergreen(alpha = 0.5)$fct(dose, matrix(c(1.5, 1, 6, 10, -2), length(dose), 5, byrow = TRUE))
+dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+m1 <- drm(response ~ dose, data = dat, fct = UCRS.5b())
+plot(m1, type = "all", main = "UCRS.5b")
+
+}
 \seealso{
 \code{\link{ucedergreen}}, \code{\link{UCRS.5a}}, \code{\link{CRS.5b}}
 }

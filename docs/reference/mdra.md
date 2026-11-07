@@ -58,14 +58,14 @@ summary(mdra.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 0.87155467 0.05369552  16.231 < 2.2e-16 ***
-#> d:(Intercept) 1.03125713 0.00904617 113.999 < 2.2e-16 ***
-#> e:(Intercept) 0.00381995 0.00021312  17.924 < 2.2e-16 ***
+#> b:(Intercept) 0.92956139 0.05698261  16.313 < 2.2e-16 ***
+#> d:(Intercept) 1.02631396 0.00886217 115.808 < 2.2e-16 ***
+#> e:(Intercept) 0.00409522 0.00021966  18.643 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.2333374 (1317 degrees of freedom)
+#>  0.2299616 (1317 degrees of freedom)
 plot(mdra.m1, main = "MDRA dose-response")
 ```

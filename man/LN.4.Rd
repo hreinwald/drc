@@ -19,6 +19,12 @@ A list (see \code{\link{lnormal}}).
 \description{
 \code{LN.4} is a convenience function for the full four-parameter log-normal model.
 }
+\examples{
+## Fit with drm() and plot
+ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4())
+plot(ryegrass.m1, type = "all", main = "LN.4")
+
+}
 \seealso{
 \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.3}}
 }

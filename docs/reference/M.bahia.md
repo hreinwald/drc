@@ -57,9 +57,9 @@ summary(M.bahia.m2)  # logarithm transformation
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -0.444809   0.056065 -7.9338 1.679e-09 ***
-#> d:(Intercept)  0.671979   0.043185 15.5603 < 2.2e-16 ***
-#> e:(Intercept)  3.905716   0.883294  4.4218 8.278e-05 ***
+#> b:(Intercept) -0.444763   0.056057 -7.9341 1.678e-09 ***
+#> d:(Intercept)  0.672035   0.043188 15.5606 < 2.2e-16 ***
+#> e:(Intercept)  3.904374   0.883008  4.4217 8.280e-05 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -87,9 +87,9 @@ ED(M.bahia.m2, c(10,20,50), ci="fls")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error
-#> e:10  0.21900    0.11667
-#> e:20  0.58881    0.24576
-#> e:50  3.90572    0.88329
+#> e:10  0.21886    0.11660
+#> e:20  0.58849    0.24565
+#> e:50  3.90437    0.88301
 
 ## A better fit
 M.bahia.m3 <- boxcox(update(M.bahia.m1, fct = LN.4()), method = "anova")
@@ -103,5 +103,5 @@ ED(M.bahia.m3, c(10,20,50), ci="fls")
 #>      Estimate Std. Error
 #> e:10  0.95677    0.18697
 #> e:20  1.17193    0.19303
-#> e:50  1.72756    0.19818
+#> e:50  1.72755    0.19818
 ```

@@ -51,8 +51,8 @@ summary(chlorac.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  -3.8861     0.5787 -6.7152 1.878e-11 ***
-#> e:(Intercept)  24.1102     1.6173 14.9082 < 2.2e-16 ***
+#> b:(Intercept) -3.88613    0.57871 -6.7152 1.878e-11 ***
+#> e:(Intercept) 24.11009    1.61723 14.9082 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

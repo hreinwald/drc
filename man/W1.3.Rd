@@ -37,7 +37,9 @@ This is a special case of the four-parameter Weibull type 1 model
 where the lower limit is fixed at 0.
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.3())
+plot(ryegrass.m1, type = "all", main = "W1.3 (lower limit fixed at 0)")
 
 }
 \seealso{

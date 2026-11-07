@@ -50,6 +50,7 @@ of the hormetic component is fixed at 0.25. The four free parameters are \code{b
 # The example below is retained for backward compatibility illustration only.
 
 lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = CRS.4c() )
+plot(lettuce.crsm3, type = "all", main = "CRS.4c (deprecated)")
 summary(lettuce.crsm3)
 ED(lettuce.crsm3, c(50))
 

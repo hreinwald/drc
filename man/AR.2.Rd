@@ -28,7 +28,9 @@ the lower limit is fixed at 0. The model is given by the equation
 \deqn{f(x) = d \cdot (1 - \exp(-x / e))}
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = AR.2())
+plot(ryegrass.m1, type = "all", main = "AR.2 (asymptotic regression)")
 
 }
 \seealso{

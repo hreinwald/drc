@@ -39,6 +39,37 @@ constraints on parameters.
 \details{
 The five-parameter log-logistic function is given by the expression
 \deqn{f(x) = c + \frac{d-c}{(1+\exp(b(\log(x)-\log(e))))^f}}
+
+The parameters are: \code{b}, the slope around \code{e} (positive for decreasing curves, negative
+for increasing curves); \code{c}, the lower asymptote; \code{d}, the upper asymptote (the response
+of the untreated control for a decreasing curve); \code{e}, the ED50, i.e. the dose half-way between
+\code{c} and \code{d} when \code{f = 1}; and \code{f}, the asymmetry parameter (\code{f = 1} gives the
+symmetric model). Fixing parameters via \code{fixed} yields the convenience models
+\code{\link{LL.2}}, \code{\link{LL.3}}, \code{\link{LL.3u}}, \code{\link{LL.4}} and \code{\link{LL.5}}.
+}
+\examples{
+## Four-parameter log-logistic model (f fixed at 1): fit with drm() and plot
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = llogistic(fixed = c(NA, NA, NA, NA, 1)))
+plot(m1, type = "all", main = "Four-parameter log-logistic model")
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, 0, NA, NA)))
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, 3, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, NA, 6, NA)))
+m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, NA, 9, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d9, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
 }
 \references{
 Finney, D. J. (1979).

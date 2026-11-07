@@ -20,7 +20,8 @@ the averaging.}
 
 \item{fct_ls}{A list of alternative dose-response functions (e.g., \code{LL.3()},
 \code{W1.4()}) to be used in the model averaging process. The list should be
-named.}
+named. Models with a log(ED) parameterisation (\verb{LL2.*}, \code{LN.*(loge = TRUE)}) are not allowed
+in the list or as \code{mod} (an error is raised); use \verb{LL.*} / \verb{LN.*} instead.}
 
 \item{respLev}{A numeric vector specifying the response levels (in
 percentages) for which to calculate the EDs (e.g., \code{c(10, 50)} for EC10

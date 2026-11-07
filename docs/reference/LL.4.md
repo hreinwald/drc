@@ -50,5 +50,19 @@ Christian Ritz and Jens C. Streibig
 ## Examples
 
 ``` r
+## Several curves fitted with drm() and plotted
 spinach.m1 <- drm(SLOPE~DOSE, CURVE, data = spinach, fct = LL.4())
+plot(spinach.m1, main = "LL.4, one curve per CURVE level")
+
+
+## Effect of the asymptotes on a single curve (ryegrass): fix c at 0 / d at 6
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, 0, NA, NA)))
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, NA, 6, NA)))
+plot(m1, type = "all", main = "LL.4: free and fixed asymptotes")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d6, type = "none", add = TRUE, col = "red")
+legend("topright", c("free", "c = 0", "d = 6"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
 ```

@@ -59,6 +59,14 @@ The four-parameter Weibull type 1 model is given by the expression
 
 The model is sometimes also called the Gompertz model.
 
+The parameters are: `b`, the slope (positive for a decreasing curve);
+`c`, the lower asymptote; `d`, the upper asymptote (the control response
+of a decreasing curve); and `e`, the dose at which the curve has dropped
+to `c + (d - c) / exp(1)`, about 37\\ way from `d` to `c`. Note that `e`
+is not the ED50; use
+[`ED`](https://hreinwald.github.io/drc/reference/ED.md) for effective
+doses. The curve is asymmetric on the log-dose axis.
+
 The `method` argument determines how starting values for the parameters
 `b` and `e` are estimated (the starting values for `c` and `d` are
 always based on the range of the response values). Four methods are
@@ -105,3 +113,32 @@ Wiley & Sons (pp. 338–339).
 ## Author
 
 Christian Ritz
+
+## Examples
+
+``` r
+## Fit with drm() and plot
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = weibull1())
+plot(m1, type = "all", main = "Four-parameter Weibull type 1 model")
+
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, 0, NA, NA)))
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, 3, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+
+## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, NA, 6, NA)))
+m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, NA, 9, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d9, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+```

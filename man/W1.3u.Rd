@@ -36,6 +36,13 @@ The model is given by the expression
 This is a special case of the four-parameter Weibull type 1 model
 where the upper limit is fixed at a specified value.
 }
+\examples{
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = W1.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "W1.3u (upper limit fixed at 1)")
+
+}
 \seealso{
 \code{\link{weibull1}}, \code{\link{W1.3}}, \code{\link{W1.4}}
 }

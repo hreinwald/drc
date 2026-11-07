@@ -55,9 +55,9 @@ summary(chlordan.m1)
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept)   1.00663    0.14921  6.7463 8.414e-09 ***
-#> d:(Intercept) 115.12320    5.05139 22.7904 < 2.2e-16 ***
-#> e:(Intercept)   1.55178    0.24368  6.3681 3.565e-08 ***
+#> b:(Intercept)   1.00670    0.14924  6.7456 8.436e-09 ***
+#> d:(Intercept) 115.12500    5.05147 22.7904 < 2.2e-16 ***
+#> e:(Intercept)   1.55155    0.24363  6.3685 3.559e-08 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 

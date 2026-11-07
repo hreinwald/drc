@@ -71,11 +71,11 @@ ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
 ## Confidence intervals for all parameters
 confint(ryegrass.m1)
-#>                    2.5 %    97.5 %
-#> b:(Intercept) 2.01211606 3.9523221
-#> c:(Intercept) 0.03878752 0.9240389
-#> d:(Intercept) 7.39961398 8.1863026
-#> e:(Intercept) 2.67052621 3.4453837
+#>                    2.5 %   97.5 %
+#> b:(Intercept) 2.01211513 3.952323
+#> c:(Intercept) 0.03878735 0.924039
+#> d:(Intercept) 7.39961636 8.186305
+#> e:(Intercept) 2.67052632 3.445384
 
 ## Confidence interval for a single parameter
 confint(ryegrass.m1, "e")

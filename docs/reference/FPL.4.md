@@ -44,3 +44,12 @@ A list (see
 
 [`fplogistic`](https://hreinwald.github.io/drc/reference/fplogistic.md),
 [`maED`](https://hreinwald.github.io/drc/reference/maED.md)
+
+## Examples
+
+``` r
+## Fit with drm() and plot
+ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = FPL.4(-1, 1))
+plot(ryegrass.m1, type = "all", main = "FPL.4(-1, 1)")
+
+```

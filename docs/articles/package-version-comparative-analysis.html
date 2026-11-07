@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Comparative Analysis: hreinwald/drc vs DoseResponse/drc">
 </head>
@@ -158,7 +158,7 @@ and all convenience wrappers <code>UCRS.4a</code>, <code>UCRS.4b</code>,
 <p><strong>Scientific impact:</strong> The published model formula
 (Cedergreen, Ritz &amp; Streibig, 2005, <em>Environ. Toxicol. Chem.</em>
 24:3166) is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>c</mi><mo>+</mo><mi>d</mi><mo>−</mo><mfrac><mrow><mi>d</mi><mo>−</mo><mi>c</mi><mo>+</mo><mi>f</mi><mspace width="0.167em"></mspace><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msup><mi>x</mi><mi>α</mi></msup></mrow></msup></mrow><mrow><mn>1</mn><mo>+</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mi>x</mi><mo>−</mo><mo>log</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">f(x) = c + d - \frac{d - c + f\,e^{-1/x^\alpha}}{1 + \exp(b(\log x - \log e))}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>c</mi><mo>+</mo><mi>d</mi><mo>−</mo><mfrac><mrow><mi>d</mi><mo>−</mo><mi>c</mi><mo>+</mo><mi>f</mi><mspace width="0.167em"></mspace><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msup><mi>x</mi><mi>α</mi></msup></mrow></msup></mrow><mrow><mn>1</mn><mo>+</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>x</mi><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>e</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">f(x) = c + d - \frac{d - c + f\,e^{-1/x^\alpha}}{1 + \exp(b(\log x - \log e))}</annotation></semantics></math></p>
 <p>The original implementation returns <code>d - numTerm/denTerm</code>,
 i.e., the fitted response is shifted upward by <code>c</code> (the lower
 horizontal asymptote) for all dose values. When <code>c = 0</code> (the

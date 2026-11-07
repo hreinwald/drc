@@ -41,5 +41,8 @@ and related components.
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.3())
+plot(ryegrass.m1, type = "all", main = "LL2.3 (lower limit fixed at 0)")
+
 ```

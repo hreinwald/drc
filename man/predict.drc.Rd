@@ -58,10 +58,19 @@ the model. Default is TRUE.}
 A matrix with as many rows as there are dose values provided in
 \code{newdata} or in the original dataset (in case \code{newdata} is not
 specified) and, at most, 4 columns containing fitted values, standard
-errors, lower and upper limits of confidence/prediction intervals.
+errors, lower and upper limits of confidence/prediction intervals. If only
+fitted values are requested (\code{se.fit = FALSE} and \code{interval = "none"}) a numeric
+vector is returned.
 }
 \description{
 Predicted values for models of class 'drc'.
+}
+\details{
+Standard errors and intervals use the delta method with the analytic first derivatives of
+the mean function (\code{deriv1}) when the model provides them. For models without analytic
+derivatives (e.g. \code{\link{NEC.4}}, \code{\link{CRS.6}}, \code{\link{baro5}}) a numerical
+gradient is used instead. If neither \code{se.fit} nor \code{interval} is requested only the
+predicted values are computed.
 }
 \examples{
 ## Fitting a model

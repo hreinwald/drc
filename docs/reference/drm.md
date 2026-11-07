@@ -46,7 +46,8 @@ drm(
 
   a data frame with as many columns as there are parameters in the
   non-linear function. Or a list containing a formula for each parameter
-  in the nonlinear function.
+  in the nonlinear function. It is evaluated in `data` and, if `data` is
+  `NULL`, in the calling environment.
 
 - weights:
 
@@ -134,7 +135,12 @@ drm(
 - separate:
 
   logical value indicating whether curves should be fit separately
-  (independent of each other).
+  (independent of each other). The arguments `robust` (except
+  `"trimmed"`, `"winsor"` and `"tukey"`), `bcVal`, `bcAdd`, `lowerl`,
+  `upperl`, `logDose` and `start` are applied to every curve; `varcov`,
+  `pshifts` and the three excluded `robust` methods are not supported
+  and raise an error. Not combined with `pmodels` (separate fitting is
+  then switched off with a warning).
 
 - pshifts:
 
@@ -189,7 +195,7 @@ summary(model)
 #> b:(Intercept)  2.98222    0.46506  6.4125 2.960e-06 ***
 #> c:(Intercept)  0.48141    0.21219  2.2688   0.03451 *  
 #> d:(Intercept)  7.79296    0.18857 41.3272 < 2.2e-16 ***
-#> e:(Intercept)  3.05795    0.18573 16.4644 4.268e-13 ***
+#> e:(Intercept)  3.05796    0.18573 16.4644 4.268e-13 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 

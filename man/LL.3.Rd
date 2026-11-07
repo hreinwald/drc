@@ -29,7 +29,9 @@ The three-parameter log-logistic function is given by the expression
 \deqn{f(x) = \frac{d}{1+\exp(b(\log(x)-\log(e)))}}
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.model1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.3())
+plot(ryegrass.model1, type = "all", main = "LL.3 (lower limit fixed at 0)")
 
 }
 \seealso{

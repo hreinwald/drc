@@ -41,5 +41,16 @@ starter function, and parameter names.
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.4())
+plot(ryegrass.m1, type = "all", main = "L.4")
+
+ED(ryegrass.m1, c(10, 50, 90))
+#> 
+#> Estimated effective doses
+#> 
+#>      Estimate Std. Error
+#> e:10  1.08166    0.51209
+#> e:50  3.06924    0.19638
+#> e:90  5.05682    0.38615
 ```

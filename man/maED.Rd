@@ -21,7 +21,9 @@ maED(
 \arguments{
 \item{object}{an object of class \code{drc}.}
 
-\item{fctList}{a list of non-linear functions to be compared.}
+\item{fctList}{a list of non-linear functions to be compared. Models with a log(ED)
+parameterisation (\code{LL2.*}, \code{LN.*(loge = TRUE)}) are not allowed (an error with
+instructions is raised); use their dose-scale equivalents \code{LL.*} / \code{LN.*}.}
 
 \item{respLev}{a numeric vector containing the response levels.}
 

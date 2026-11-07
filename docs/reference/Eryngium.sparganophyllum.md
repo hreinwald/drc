@@ -91,9 +91,9 @@ summary(Eryngium.m1)
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -2.715614   0.126975 -21.387 < 2.2e-16 ***
-#> d:(Intercept)  0.663221   0.018812  35.254 < 2.2e-16 ***
-#> e:(Intercept)  6.698683   0.215910  31.025 < 2.2e-16 ***
+#> b:(Intercept) -2.714118   0.126780 -21.408 < 2.2e-16 ***
+#> d:(Intercept)  0.661915   0.018843  35.129 < 2.2e-16 ***
+#> e:(Intercept)  6.693264   0.215667  31.035 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

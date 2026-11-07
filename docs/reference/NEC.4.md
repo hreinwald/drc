@@ -33,3 +33,12 @@ A list (see [`NEC`](https://hreinwald.github.io/drc/reference/NEC.md)).
 [`NEC`](https://hreinwald.github.io/drc/reference/NEC.md),
 [`NEC.2`](https://hreinwald.github.io/drc/reference/NEC.2.md),
 [`NEC.3`](https://hreinwald.github.io/drc/reference/NEC.3.md)
+
+## Examples
+
+``` r
+## Fit with drm() and plot
+nec.m4 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+plot(nec.m4, type = "all", main = "NEC.4")
+
+```

@@ -34,3 +34,12 @@ A list (see
 [`gompertz`](https://hreinwald.github.io/drc/reference/gompertz.md),
 [`G.2`](https://hreinwald.github.io/drc/reference/G.2.md),
 [`G.3`](https://hreinwald.github.io/drc/reference/G.3.md)
+
+## Examples
+
+``` r
+## Fit with drm() and plot
+ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = G.4())
+plot(ryegrass.m1, type = "all", main = "G.4")
+
+```

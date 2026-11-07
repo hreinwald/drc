@@ -45,6 +45,7 @@ and flexible interface.
 # The example below is retained for backward compatibility illustration only.
 
 lettuce.crsm2 <- drm( lettuce[, c(2, 1)], fct = ml3b() )
+plot(lettuce.crsm2, type = "all", main = "ml3b (deprecated)")
 summary(lettuce.crsm2)
 ED(lettuce.crsm2, c(50))
 

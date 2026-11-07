@@ -19,7 +19,11 @@ and the simple linear regression model with slope 0 (a horizontal regression lin
 corresponding to no dose effect).
 }
 \details{
-Perhaps useful for screening purposes.
+Perhaps useful for screening purposes. The test is a likelihood ratio test against the
+intercept-only model and is available for the response types \code{"continuous"},
+\code{"binomial"} and \code{"Poisson"}; for other types (\code{"negbin1"}, \code{"negbin2"},
+\code{"event"}, \code{"ssd"}) an error is raised. A warning is given if the dose-response model
+has no more free parameters than the null model (e.g. when most parameters are fixed).
 }
 \examples{
 ryegrass.LL.4 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())

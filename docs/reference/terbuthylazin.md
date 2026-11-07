@@ -54,10 +54,10 @@ summary(terbuthylazin.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 1.2474e+00 2.3543e-01  5.2984 1.532e-05 ***
-#> c:(Intercept) 8.0293e-04 2.4913e-02  0.0322    0.9745    
-#> d:(Intercept) 3.0695e-01 9.6088e-03 31.9441 < 2.2e-16 ***
-#> e:(Intercept) 1.8914e+02 3.7726e+01  5.0136 3.242e-05 ***
+#> b:(Intercept) 1.2477e+00 2.3537e-01  5.3010 1.521e-05 ***
+#> c:(Intercept) 8.6069e-04 2.4888e-02  0.0346    0.9727    
+#> d:(Intercept) 3.0693e-01 9.6070e-03 31.9488 < 2.2e-16 ***
+#> e:(Intercept) 1.8910e+02 3.7698e+01  5.0163 3.219e-05 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -76,16 +76,16 @@ summary(terbuthylazin.m2)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 1.3226e+00 2.3707e-01  5.5788 7.346e-06 ***
-#> c:(Intercept) 5.6549e-03 1.5383e-02  0.3676    0.7161    
-#> d:(Intercept) 3.0520e-01 1.1147e-02 27.3785 < 2.2e-16 ***
-#> e:(Intercept) 1.8290e+02 2.6858e+01  6.8098 3.153e-07 ***
+#> b:(Intercept) 1.3207e+00 2.3708e-01  5.5709 7.499e-06 ***
+#> c:(Intercept) 5.5003e-03 1.5436e-02  0.3563    0.7245    
+#> d:(Intercept) 3.0524e-01 1.1153e-02 27.3676 < 2.2e-16 ***
+#> e:(Intercept) 1.8306e+02 2.6920e+01  6.8003 3.229e-07 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.04562085 (26 degrees of freedom)
+#>  0.04562072 (26 degrees of freedom)
 #> 
 #> Non-normality/heterogeneity adjustment through Box-Cox transformation
 #> 

@@ -26,25 +26,25 @@ CRS.4c(names = c("b", "c", "d", "e", "f"), fixed = c(NA, 0, NA, NA, NA), ...)
 
   `b`
 
-  :   Hill slope (steepness of the dose-response curve).
+  : Hill slope (steepness of the dose-response curve).
 
   `c`
 
-  :   Lower asymptote (fixed at 0 via the `fixed` argument).
+  : Lower asymptote (fixed at 0 via the `fixed` argument).
 
   `d`
 
-  :   Upper asymptote.
+  : Upper asymptote.
 
   `e`
 
-  :   Effective dose producing a response midway between `c` and `d`
-      (ED50).
+  : Effective dose producing a response midway between `c` and `d`
+    (ED50).
 
   `f`
 
-  :   Hormesis parameter controlling the magnitude of the stimulatory
-      effect at low doses.
+  : Hormesis parameter controlling the magnitude of the stimulatory
+    effect at low doses.
 
   Defaults to `c("b", "c", "d", "e", "f")`.
 
@@ -95,6 +95,8 @@ Christian Ritz, Hannes Reinwald
 # The example below is retained for backward compatibility illustration only.
 
 lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = CRS.4c() )
+plot(lettuce.crsm3, type = "all", main = "CRS.4c (deprecated)")
+
 summary(lettuce.crsm3)
 #> 
 #> Model fitted: Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.25) (4 parms)
@@ -102,22 +104,22 @@ summary(lettuce.crsm3)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 0.488440   0.133643  3.6548  0.004427 ** 
-#> d:(Intercept) 0.973666   0.086883 11.2066 5.544e-07 ***
-#> e:(Intercept) 1.314657   3.614266  0.3637  0.723624    
-#> f:(Intercept) 2.998547   3.626210  0.8269  0.427579    
+#> b:(Intercept) 0.487078   0.134184  3.6299  0.004613 ** 
+#> d:(Intercept) 0.973569   0.086882 11.2056 5.548e-07 ***
+#> e:(Intercept) 1.275363   3.576049  0.3566  0.728771    
+#> f:(Intercept) 3.038840   3.730178  0.8147  0.434237    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.123575 (10 degrees of freedom)
+#>  0.1235706 (10 degrees of freedom)
 ED(lettuce.crsm3, c(50))
 #> 
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error
-#> e:50   37.033     15.437
+#> e:50   37.088     15.502
 
 # Recommended replacement:
 fct_spec <- CRS.5(alpha_type = "c", fixed = c(NA, 0, NA, NA, NA))
@@ -129,20 +131,20 @@ summary(lettuce.crs5)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 0.488440   0.133643  3.6548  0.004427 ** 
-#> d:(Intercept) 0.973666   0.086883 11.2066 5.544e-07 ***
-#> e:(Intercept) 1.314657   3.614266  0.3637  0.723624    
-#> f:(Intercept) 2.998547   3.626210  0.8269  0.427579    
+#> b:(Intercept) 0.487078   0.134184  3.6299  0.004613 ** 
+#> d:(Intercept) 0.973569   0.086882 11.2056 5.548e-07 ***
+#> e:(Intercept) 1.275363   3.576049  0.3566  0.728771    
+#> f:(Intercept) 3.038840   3.730178  0.8147  0.434237    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.123575 (10 degrees of freedom)
+#>  0.1235706 (10 degrees of freedom)
 ED(lettuce.crs5, c(50))
 #> 
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error
-#> e:50   37.033     15.437
+#> e:50   37.088     15.502
 ```

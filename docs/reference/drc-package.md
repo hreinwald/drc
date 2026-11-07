@@ -25,6 +25,8 @@ Useful links:
 
 Authors:
 
+- Hannes Reinwald <hannes.reinwald@bayer.com>
+
 - Christian Ritz <ritz@bioassay.dk>
 
 - Jens C. Streibig <streibig@bioassay.dk>

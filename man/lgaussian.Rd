@@ -40,6 +40,22 @@ and the parameter names.
 Model function for fitting symmetric or skewed bell-shaped/biphasic dose-response patterns
 using the log-Gaussian model. This is the log-transformed variant of the \code{\link{gaussian}} model.
 }
+\details{
+The model function is
+\deqn{f(x) = c + (d-c)\exp\left(-\frac{1}{2}\left|\frac{\log(x)-\log(e)}{b}\right|^f\right)}
+i.e. the \code{\link{gaussian}} model on the log-dose axis; the parameters have the same meaning
+(\code{c} baseline, \code{d} peak response at the dose \code{e}, \code{b} width on the log scale,
+\code{f} shape). The dose must be positive.
+}
+\examples{
+## Simulated bell-shaped data on the log-dose axis: fit with drm() and plot
+dose <- rep(c(0.5, 1, 2, 4, 8, 16, 32, 64), each = 3)
+mu <- lgaussian()$fct(dose, matrix(c(1.2, 1, 5, 8, 1.5), length(dose), 5, byrow = TRUE))
+dat <- data.frame(dose = dose, response = mu + 0.05 * sin(seq_along(dose) * 2.3))
+m1 <- drm(response ~ dose, data = dat, fct = lgaussian())
+plot(m1, type = "all", main = "Log-Gaussian biphasic model")
+
+}
 \seealso{
 \code{\link{gaussian}}, \code{\link{drm}}
 }

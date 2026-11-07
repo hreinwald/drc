@@ -91,5 +91,5 @@ xVec[1:8] <- 1e-10  # avoiding 0's
 ## Obtaining the Mizon-Richard test
 mr.test(etmotc.m1, etmotc.m2, etmotc.m3, xVec, var.equal = FALSE)
 #>   Statistic     p-value  Difference          SE 
-#> -1.65084985  0.09876924 -0.01936982  0.01173324 
+#> -1.62440940  0.10428846 -0.01904302  0.01172305 
 ```

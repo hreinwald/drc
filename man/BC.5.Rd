@@ -21,9 +21,10 @@ A list (see \code{\link{braincousens}}).
 for describing hormesis.
 }
 \examples{
+## Fit with drm() and plot
 lettuce.bcm1 <- drm(weight ~ conc, data = lettuce, fct = BC.5())
 modelFit(lettuce.bcm1)
-plot(lettuce.bcm1)
+plot(lettuce.bcm1, type = "all", main = "BC.5")
 
 }
 \seealso{

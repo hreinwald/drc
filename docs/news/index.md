@@ -1,5 +1,125 @@
 # Changelog
 
+## drc (development version)
+
+### Bug Fixes
+
+- Fixed
+  [`logistic()`](https://hreinwald.github.io/drc/reference/logistic.md)
+  / [`L.3()`](https://hreinwald.github.io/drc/reference/L.3.md) /
+  [`L.4()`](https://hreinwald.github.io/drc/reference/L.4.md) /
+  [`L.5()`](https://hreinwald.github.io/drc/reference/L.5.md) ED:
+  relative levels were mirrored (ED10 and ED90 swapped) for decreasing
+  curves (b \> 0) and `type = "absolute"` returned the dose of the
+  mirrored response. The edfct now uses
+  [`EDhelper()`](https://hreinwald.github.io/drc/reference/EDhelper.md)
+  like the log-logistic models.
+- Fixed
+  [`gompertz()`](https://hreinwald.github.io/drc/reference/gompertz.md)
+  ED gradient, which was multiplied by the ED and gave wrong standard
+  errors and confidence intervals for all `G.*` models.
+- Fixed
+  [`llogistic2()`](https://hreinwald.github.io/drc/reference/llogistic2.md)
+  ED gradient with respect to `f`, which gave wrong standard errors for
+  [`LL2.5()`](https://hreinwald.github.io/drc/reference/LL2.5.md).
+- Fixed
+  [`weibull2x()`](https://hreinwald.github.io/drc/reference/weibull2x.md)
+  ED: the gradient omitted the lag time `t0`, so
+  [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) failed for
+  [`W2x.3()`](https://hreinwald.github.io/drc/reference/W2x.3.md) /
+  [`W2x.4()`](https://hreinwald.github.io/drc/reference/W2x.4.md);
+  `type = "absolute"` now delegates to
+  [`weibull2()`](https://hreinwald.github.io/drc/reference/weibull2.md)
+  instead of returning the mirrored response.
+- Fixed
+  [`cedergreen()`](https://hreinwald.github.io/drc/reference/cedergreen.md)
+  first derivative with respect to `e` (missing factor), which affected
+  [`predict()`](https://rdrr.io/r/stats/predict.html) standard errors,
+  sandwich estimators and studentised residuals for all `CRS.*` models.
+- Fixed [`vcov()`](https://rdrr.io/r/stats/vcov.html) /
+  [`summary()`](https://rdrr.io/r/base/summary.html) /
+  [`confint()`](https://rdrr.io/r/stats/confint.html) /
+  [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) /
+  [`predict()`](https://rdrr.io/r/stats/predict.html) for
+  `drm(..., separate = TRUE)` fits, which failed with
+  `could not find function "adiag"` unless `magic` was attached; the
+  block-diagonal assembly is now internal and `magic` was dropped from
+  `Suggests`.
+- `ED(interval = "fls")` now stops with an explanatory error (reason and
+  how to fix) when the model returns ED on the dose scale; `"fls"`
+  back-transforms with [`exp()`](https://rdrr.io/r/base/Log.html) and is
+  only valid for models with a log(ED) parameter (`LL2.*`,
+  `LN.*(loge = TRUE)`, flagged by the new `edLogScale` element of the
+  model list) or log-dose fits (`logBase`).
+  [`ED_robust()`](https://hreinwald.github.io/drc/reference/ED_robust.md)
+  raises the same error instead of returning `NA` rows.
+  [`get_ed_interval()`](https://hreinwald.github.io/drc/reference/get_ed_interval.md)
+  no longer recommends `"fls"` for dose-scale models (`small_n = FALSE`
+  now gives `"delta"`) and returns `"fls"` for log(ED) models.
+- [`maED()`](https://hreinwald.github.io/drc/reference/maED.md) and
+  [`maED_robust()`](https://hreinwald.github.io/drc/reference/maED_robust.md)
+  now stop with an explanatory error if the base model or a candidate
+  has a log(ED) parameterisation (`LL2.*`, `LN.*(loge = TRUE)`), since
+  averaging mixes log-scale and dose-scale EDs; use the dose-scale
+  equivalents `LL.*` / `LN.*`.
+- Fixed
+  [`ED_robust()`](https://hreinwald.github.io/drc/reference/ED_robust.md)
+  for `LL2.*` models, which reported log(ED) as ED and turned negative
+  log-EDs into `NA`; estimates and limits are now back-transformed and
+  the SE is the delta-method SE of the dose.
+- Fixed
+  [`gammadr()`](https://hreinwald.github.io/drc/reference/gammadr.md)
+  first derivative with respect to the shape parameter (missing digamma
+  term).
+- [`predict()`](https://rdrr.io/r/stats/predict.html) now computes
+  standard errors and intervals with a numerical gradient for models
+  without analytic `deriv1` (`NEC.*`, `CRS.6`, `baro5`, …) instead of
+  silently returning plain predictions.
+- [`confint()`](https://rdrr.io/r/stats/confint.html) and
+  `ED(interval = "delta")` now work for `type = "ssd"` fits.
+- `drm(separate = TRUE)` now forwards `robust` (except `"trimmed"`,
+  `"winsor"`, `"tukey"`), `bcVal`, `bcAdd`, `lowerl`, `upperl`,
+  `logDose` and `start` to the per-curve fits instead of silently
+  ignoring them; `varcov`, `pshifts` and the three M-estimators raise an
+  error.
+- Fixed [`maED()`](https://hreinwald.github.io/drc/reference/maED.md)
+  Buckland/Kang standard errors, which centred on the unweighted mean of
+  the model estimates instead of the model-averaged estimate.
+- Fixed `comped(log = TRUE, operator = "/")`, which printed the log
+  ratio with a confidence interval on the ratio scale; estimate,
+  delta-method SE and interval are now all on the ratio scale.
+- Fixed [`simDR()`](https://hreinwald.github.io/drc/reference/simDR.md)
+  failing for increasing curves (missing `reference` argument).
+- [`noEffect()`](https://hreinwald.github.io/drc/reference/noEffect.md)
+  now stops with a clear message for response types without a null model
+  and no longer rounds tiny p-values to 0.
+- [`drm()`](https://hreinwald.github.io/drc/reference/drm.md) evaluates
+  a `pmodels` argument in the calling environment (not only
+  `.GlobalEnv`) when `data` is `NULL`.
+
+### Changes
+
+- Added `tests/testthat/test-numerical-derivatives-ed.R` and
+  `tests/testthat/test-review-fixes-f07-f17.R`: cross-check analytic
+  `deriv1`/`derivx`, ED values and ED standard errors of all model
+  functions against finite differences, and cover the fixes listed
+  above.
+- Documentation: every model-function help page now has a runnable
+  [`drm()`](https://hreinwald.github.io/drc/reference/drm.md) +
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) example, and
+  most families show the effect of fixing the lower/upper asymptotes.
+  The `arandaordaz` documentation was corrected; roxygen descriptions of
+  [`drm()`](https://hreinwald.github.io/drc/reference/drm.md)
+  (`separate`, `pmodels`),
+  [`ED_robust()`](https://hreinwald.github.io/drc/reference/ED_robust.md),
+  [`maED_robust()`](https://hreinwald.github.io/drc/reference/maED_robust.md),
+  [`predict.drc()`](https://hreinwald.github.io/drc/reference/predict.drc.md),
+  [`noEffect()`](https://hreinwald.github.io/drc/reference/noEffect.md)
+  and [`comped()`](https://hreinwald.github.io/drc/reference/comped.md)
+  were updated.
+
+------------------------------------------------------------------------
+
 ## drc 3.3.2
 
 ### New Features

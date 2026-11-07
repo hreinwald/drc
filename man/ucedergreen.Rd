@@ -49,6 +49,30 @@ modified log-logistic model for describing u-shaped hormesis, under various cons
 \details{
 The u-shaped model is given by the expression
 \deqn{f(x) = c + d - \frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}}
+
+The parameters are: \code{b}, the slope; \code{c}, the lower and \code{d} the upper asymptote of the
+component that is mirrored in the U-shape (the curve starts at \eqn{2c} and approaches
+\eqn{c + d}); \code{e}, the location of the transition; and \code{f}, the size of the hormetic
+deviation at low doses. The wrappers \code{\link{UCRS.4a}}-\code{\link{UCRS.5c}} fix \eqn{\alpha} at
+1, 0.5 and 0.25 (suffix a, b, c) and, for the four-parameter versions, \code{c} at 0.
+}
+\examples{
+## Simulated U-shaped data: fit with drm() and plot
+dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+mu <- ucedergreen(alpha = 1)$fct(dose, matrix(c(1.5, 1, 6, 10, -2), length(dose), 5, byrow = TRUE))
+dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+m1 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1))
+plot(m1, type = "all", main = "U-shaped Cedergreen-Ritz-Streibig model")
+
+## Effect of the asymptotes: fix c (lower) at 0 or d (upper) at 4
+m.c0 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1, fixed = c(NA, 0, NA, NA, NA)))
+m.d4 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1, fixed = c(NA, NA, 4, NA, NA)))
+plot(m1, type = "all", main = "Fixed asymptotes")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d4, type = "none", add = TRUE, col = "red")
+legend("topleft", c("free", "c = 0", "d = 4"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
 }
 \references{
 Cedergreen, N. and Ritz, C. and Streibig, J. C. (2005)

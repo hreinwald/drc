@@ -73,9 +73,9 @@ summary(etmotc.m1)
 #> 
 #>                 Estimate Std. Error  t-value   p-value    
 #> b:(Intercept)  0.9365452  0.0680380  13.7650 2.806e-08 ***
-#> c:(Intercept)  0.2225885  0.0199342  11.1662 2.430e-07 ***
+#> c:(Intercept)  0.2225885  0.0199342  11.1661 2.430e-07 ***
 #> d:(Intercept)  0.6496673  0.0025117 258.6611 < 2.2e-16 ***
-#> e:(Intercept) 11.6675539  1.6207593   7.1988 1.755e-05 ***
+#> e:(Intercept) 11.6675539  1.6207603   7.1988 1.755e-05 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -90,7 +90,7 @@ modelFit(etmotc.m2)
 #> 
 #>           ModelDf        RSS Df F value p value
 #> ANOVA           7 5.4128e-05                   
-#> DRC model      11 1.5608e-04  4  3.2960  0.0807
+#> DRC model      11 1.5602e-04  4  3.2942  0.0808
 summary(etmotc.m2)
 #> 
 #> Model fitted: Weibull (type 2) (4 parms)
@@ -98,16 +98,16 @@ summary(etmotc.m2)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error  t-value   p-value    
-#> b:(Intercept) -0.4585014  0.0270713 -16.9368 3.154e-09 ***
-#> c:(Intercept)  0.1105817  0.0253882   4.3556  0.001145 ** 
-#> d:(Intercept)  0.6484347  0.0012874 503.6837 < 2.2e-16 ***
-#> e:(Intercept)  9.8112667  1.1944769   8.2139 5.079e-06 ***
+#> b:(Intercept) -0.4576900  0.0271093 -16.8831 3.263e-09 ***
+#> c:(Intercept)  0.1097850  0.0255621   4.2948  0.001267 ** 
+#> d:(Intercept)  0.6484389  0.0012873 503.7183 < 2.2e-16 ***
+#> e:(Intercept)  9.8488285  1.2069758   8.1599 5.409e-06 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.003766782 (11 degrees of freedom)
+#>  0.003766102 (11 degrees of freedom)
 
 etmotc.m3<-drm(rgr1~dose1, data=etmotc[1:15,], fct=W2.3())
 plot(etmotc.m3, add = TRUE)
@@ -117,7 +117,7 @@ modelFit(etmotc.m3)
 #> 
 #>           ModelDf        RSS Df F value p value
 #> ANOVA           7 5.4128e-05                   
-#> DRC model      12 3.0527e-04  5  6.4955  0.0146
+#> DRC model      12 3.0526e-04  5  6.4953  0.0146
 summary(etmotc.m3)
 #> 
 #> Model fitted: Weibull (type 2) with lower limit at 0 (3 parms)
@@ -125,13 +125,13 @@ summary(etmotc.m3)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -0.3748065  0.0079192 -47.329 5.252e-15 ***
-#> d:(Intercept)  0.6491863  0.0017073 380.232 < 2.2e-16 ***
-#> e:(Intercept) 16.3999632  0.5104155  32.131 5.217e-13 ***
+#> b:(Intercept) -0.3748045  0.0079202 -47.323 5.256e-15 ***
+#> d:(Intercept)  0.6491734  0.0017074 380.220 < 2.2e-16 ***
+#> e:(Intercept) 16.4082296  0.5108413  32.120 5.237e-13 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.005043693 (12 degrees of freedom)
+#>  0.005043625 (12 degrees of freedom)
 ```

@@ -20,7 +20,9 @@ A list (see \code{\link{braincousens}}).
 \code{BC.4} provides the Brain-Cousens modified log-logistic model with the lower limit fixed at 0.
 }
 \examples{
+## Fit with drm() and plot
 lettuce.bcm2 <- drm(weight ~ conc, data = lettuce, fct = BC.4())
+plot(lettuce.bcm2, type = "all", main = "BC.4 (lower limit fixed at 0)")
 summary(lettuce.bcm2)
 ED(lettuce.bcm2, c(50))
 

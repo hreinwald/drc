@@ -45,16 +45,16 @@ summary(barley.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept)   9.7084    42.9166  0.2262   0.82430    
-#> c:(Intercept)  11.1275     3.7803  2.9435   0.01068 *  
-#> d:(Intercept)  52.0478     3.2487 16.0212 2.123e-10 ***
-#> e:(Intercept) 286.2600   209.6374  1.3655   0.19364    
+#> b:(Intercept)   9.7438    44.7630  0.2177   0.83082    
+#> c:(Intercept)  11.1282     3.7804  2.9436   0.01068 *  
+#> d:(Intercept)  52.0468     3.2602 15.9642 2.226e-10 ***
+#> e:(Intercept) 286.4181   217.1514  1.3190   0.20834    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  9.241941 (14 degrees of freedom)
+#>  9.24194 (14 degrees of freedom)
 
 ## Plotting the fitted curve
 plot(barley.m1, xlab = "Dose", ylab = "Weight")

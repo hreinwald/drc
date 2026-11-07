@@ -49,7 +49,8 @@ drm_legacy(
 
   a data frame with as many columns as there are parameters in the
   non-linear function. Or a list containing a formula for each parameter
-  in the nonlinear function.
+  in the nonlinear function. It is evaluated in `data` and, if `data` is
+  `NULL`, in the calling environment.
 
 - weights:
 
@@ -137,7 +138,12 @@ drm_legacy(
 - separate:
 
   logical value indicating whether curves should be fit separately
-  (independent of each other).
+  (independent of each other). The arguments `robust` (except
+  `"trimmed"`, `"winsor"` and `"tukey"`), `bcVal`, `bcAdd`, `lowerl`,
+  `upperl`, `logDose` and `start` are applied to every curve; `varcov`,
+  `pshifts` and the three excluded `robust` methods are not supported
+  and raise an error. Not combined with `pmodels` (separate fitting is
+  then switched off with a warning).
 
 - pshifts:
 

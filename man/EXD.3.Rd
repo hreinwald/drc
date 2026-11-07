@@ -35,7 +35,9 @@ This is a special case of the Weibull type 1 model
 (\code{\link{weibull1}}) with the slope fixed at 1.
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = EXD.3())
+plot(ryegrass.m1, type = "all", main = "EXD.3 (shifted exponential decay)")
 
 }
 \references{
