@@ -72,14 +72,14 @@
 #' from a matrix of parameter estimates and their standard errors. A
 #' t-distribution quantile is used for continuous response models; a standard
 #' normal quantile is used for all other response types (binomial, event,
-#' Poisson, negbin1, negbin2).
+#' Poisson, negbin1, negbin2, ssd).
 #'
 #' @param estMat A numeric matrix with two columns: the first column contains
 #'   parameter estimates and the second column contains their standard errors.
 #' @param level The confidence level required (e.g., `0.95` for 95% intervals).
 #' @param intType A character string specifying the response type of the model.
 #'   One of `"binomial"`, `"continuous"`, `"event"`, `"Poisson"`,
-#'   `"negbin1"`, or `"negbin2"`. Determines whether a normal or t-distribution
+#'   `"negbin1"`, `"negbin2"`, or `"ssd"`. Determines whether a normal or t-distribution
 #'   quantile is used. For `"continuous"` models a t-distribution with `dfres`
 #'   degrees of freedom is used; all other types use the standard normal.
 #' @param dfres The residual degrees of freedom. Only used when
@@ -104,10 +104,11 @@
                            Poisson    = qnorm(1 - alphah),
                            negbin1    = qnorm(1 - alphah),
                            negbin2    = qnorm(1 - alphah),
+                           ssd        = qnorm(1 - alphah),
                            stop(paste0(
                              "Unknown intType '", intType, "'. ",
                              "Must be one of: 'binomial', 'continuous', 'event', ",
-                             "'Poisson', 'negbin1', 'negbin2'."
+                             "'Poisson', 'negbin1', 'negbin2', 'ssd'."
                            ))
   )
   
