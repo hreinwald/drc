@@ -22,9 +22,20 @@
 #'
 #' @author Christian Ritz
 #'
-#' @note This function is for use with \code{\link{drm}}.
+#' @note This function is for use with \code{\link{drm}}. No analytic derivatives, effective doses
+#'   (\code{\link{ED}}) or \code{\link{MAX}} are available for this model; \code{\link{predict}}
+#'   uses numerical derivatives for standard errors.
 #'
 #' @seealso \code{\link{CRS.5a}}, \code{\link{cedergreen}}
+#'
+#' @examples
+#' ## Fit with drm() and plot: g is the estimated exponent (alpha)
+#' m1 <- drm(weight ~ conc, data = lettuce, fct = CRS.6())
+#' plot(m1, type = "all", main = "CRS.6 (alpha estimated)")
+#'
+#' ## Fixing the lower asymptote c at 0 (green)
+#' m.c0 <- drm(weight ~ conc, data = lettuce, fct = CRS.6(fixed = c(NA, 0, NA, NA, NA, NA)))
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
 #'
 #' @keywords models nonlinear
 "CRS.6" <- function(
