@@ -218,7 +218,7 @@ ed_values
 
 **Confidence Intervals:**
 - The `interval = "delta"` argument uses the delta method for CI estimation
-- Alternative methods include `"fls"` (fieller), `"tfls"` (transformed fieller)
+- Alternative methods include `"tfls"` (interval computed on the log scale and back-transformed) and, for models with a log(ED) parameter such as `LL2.4()`, `"fls"`
 - Narrower CIs indicate more precise estimates
 
 ### Alternative Confidence Interval Methods
@@ -228,11 +228,11 @@ ed_values
 cat("Delta method:\n")
 ED(ryegrass.LL4, respLev = 50, interval = "delta")
 
-cat("\nFieller method:\n")
-ED(ryegrass.LL4, respLev = 50, interval = "fls")
+cat("\nLog-scale interval (tfls):\n")
+ED(ryegrass.LL4, respLev = 50, interval = "tfls")
 ```
 
-The Fieller method is often preferred for ED50 estimation as it accounts for the ratio nature of the parameter.
+The log-scale interval is often preferred for ED50 estimation because ED values are positive and their sampling distribution is skewed. (`interval = "fls"` is reserved for models that return ED on the log scale, e.g. `LL2.4()`; for `LL.4()` it stops with an explanatory error.)
 
 ## Step 4: Model Comparison and Selection
 
