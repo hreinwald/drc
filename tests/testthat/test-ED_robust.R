@@ -24,9 +24,9 @@ test_that("get_ed_interval returns 'tfls' for LL model with small_n = TRUE", {
   expect_equal(drc:::get_ed_interval(m1), "tfls")
 })
 
-test_that("get_ed_interval returns 'fls' for LL model with small_n = FALSE", {
+test_that("get_ed_interval returns 'delta' for LL model with small_n = FALSE", {
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
-  expect_equal(drc:::get_ed_interval(m1, small_n = FALSE), "fls")
+  expect_equal(drc:::get_ed_interval(m1, small_n = FALSE), "delta")
 })
 
 test_that("get_ed_interval returns 'delta' for Weibull models", {
@@ -39,8 +39,13 @@ test_that("get_ed_interval returns 'tfls' for LL character input", {
   expect_equal(drc:::get_ed_interval("LL.4", small_n = TRUE), "tfls")
 })
 
-test_that("get_ed_interval returns 'fls' for LN character input with small_n = FALSE", {
-  expect_equal(drc:::get_ed_interval("LN.4", small_n = FALSE), "fls")
+test_that("get_ed_interval returns 'delta' for LN character input with small_n = FALSE", {
+  expect_equal(drc:::get_ed_interval("LN.4", small_n = FALSE), "delta")
+})
+
+test_that("get_ed_interval returns 'fls' for log-ED (LL2) models regardless of small_n", {
+  expect_equal(drc:::get_ed_interval("LL2.4"), "fls")
+  expect_equal(drc:::get_ed_interval("LL2.4", small_n = FALSE), "fls")
 })
 
 test_that("get_ed_interval returns 'tfls' for BC character input", {

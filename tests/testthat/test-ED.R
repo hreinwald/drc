@@ -256,7 +256,8 @@ test_that("ED.drc with multiple response levels and curves", {
 # Tests for different interval types
 
 test_that("ED.drc with fls interval (from log scale)", {
-  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  # 'fls' is valid for models returning log(ED), e.g. LL2.*
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4())
   result <- ED(m1, 50, interval = "fls", display = FALSE)
 
   expect_equal(ncol(result), 4)  # Estimate, Std. Error, Lower, Upper
@@ -596,7 +597,7 @@ test_that("ED() works with LL.4 and 3 fixed params (only e free)", {
   expect_equal(dim(vcov(m_1free)), c(1, 1))
 
   # All interval types should work
-  for (int in c("none", "delta", "tfls", "fls")) {
+  for (int in c("none", "delta", "tfls")) {
     result <- ED(m_1free, c(10, 50), interval = int, display = FALSE)
     expect_true(is.matrix(result), info = paste("interval =", int))
     expect_equal(nrow(result), 2, info = paste("interval =", int))

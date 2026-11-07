@@ -166,8 +166,6 @@ test_that("summary.drc works with Poisson data", {
 # --- Multi-curve models with pool=FALSE (unpooled path) ---
 
 test_that("summary.drc with pool=FALSE for multi-curve independent model", {
-  skip_if_not_installed("magic")
-  library(magic)
   data(spinach)
   m_sep <- drm(SLOPE ~ DOSE, HERBICIDE, data = spinach,
                fct = LL.4(), separate = TRUE)
@@ -185,8 +183,6 @@ test_that("summary.drc with pool=FALSE for multi-curve independent model", {
 })
 
 test_that("summary.drc with pool=TRUE for multi-curve independent model", {
-  skip_if_not_installed("magic")
-  library(magic)
   data(spinach)
   m_sep <- drm(SLOPE ~ DOSE, HERBICIDE, data = spinach,
                fct = LL.4(), separate = TRUE)
@@ -316,8 +312,6 @@ test_that("print.summary.drc shows robust estimation info", {
 })
 
 test_that("print.summary.drc shows multiple RSEs for multi-curve unpooled", {
-  skip_if_not_installed("magic")
-  library(magic)
   data(spinach)
   m_sep <- drm(SLOPE ~ DOSE, HERBICIDE, data = spinach,
                fct = LL.4(), separate = TRUE)

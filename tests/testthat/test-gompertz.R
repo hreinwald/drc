@@ -283,15 +283,12 @@ test_that("edfct returns gradients with correct length when parameters are fixed
   expect_length(result[[2]], 3)  # gradient for 3 free parameters
 })
 
-test_that("edfct gradient for 'e' equals EDp (current implementation)", {
+test_that("edfct gradient for 'e' is 1 (ED is additive in e)", {
   mod <- gompertz()
   result <- mod$edfct(c(1, 0, 100, 5), 50, reference = "control", type = "relative")
   gradient <- result[[2]]
-  EDp <- result[[1]]
 
-  # In the current implementation, EDder = EDp * c(-tempVal/b^2, 0, 0, 1)
-  # So gradient[4] = EDp * 1 = EDp
-  expect_equal(gradient[4], EDp, tolerance = 1e-10)
+  expect_equal(gradient[4], 1, tolerance = 1e-10)
 })
 
 test_that("edfct gradient for 'c' and 'd' is 0", {
