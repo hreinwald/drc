@@ -57,3 +57,6 @@ _Rbuildignore
 
 # Other artifacts from building / factory
 AGENTS.md
+.poster/
+.build_artifacts/
+TODO.md
