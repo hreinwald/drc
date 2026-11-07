@@ -12,6 +12,10 @@
 #'
 #' If the difference between b1 and b2 is nonzero, the function is asymmetric.
 #'
+#' The parameters are: \code{b1} and \code{b2}, the slopes on either side of \code{e}; \code{c}, the
+#' lower asymptote; \code{d}, the upper asymptote; and \code{e}, the location (inflection) parameter.
+#' Note the parameter order \code{b1, b2, c, d, e}.
+#'
 #' @param fixed numeric vector. Specifies which parameters are fixed and at what value
 #'   they are fixed. NAs for parameters that are not fixed.
 #' @param names a vector of character strings giving the names of the parameters
@@ -28,6 +32,22 @@
 #'   \emph{Am. J. Physiol. (Regulatory Integrative Comp. Physiol. 46)}, \bold{277}, 441--454.
 #'
 #' @author Christian Ritz
+#'
+#' @seealso \code{\link{LL.5}}, \code{\link{drm}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = baro5())
+#' plot(m1, type = "all", main = "Baroreflex five-parameter model")
+#'
+#' ## Effect of the lower asymptote c (fixed at 1) and the upper asymptote d (fixed at 6)
+#' m.c1 <- drm(rootl ~ conc, data = ryegrass, fct = baro5(fixed = c(NA, NA, 1, NA, NA)))
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = baro5(fixed = c(NA, NA, NA, 6, NA)))
+#' plot(m1, type = "all", main = "Fixed asymptotes")
+#' plot(m.c1, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d6, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("free", "c = 1", "d = 6"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "baro5" <- function(
