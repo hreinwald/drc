@@ -18,3 +18,4 @@
 ^\.vscode$
 ^build_pkgdown\.R$
 ^CITATION\.cff$
+^\.build_artifacts$
