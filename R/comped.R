@@ -15,7 +15,9 @@
 #'   confidence interval (optional). By default confidence interval relies on the normal distribution.
 #'
 #' @return A matrix with the estimated difference or ratio and the associated standard error and the
-#'   resulting confidence interval (unless not requested).
+#'   resulting confidence interval (unless not requested). For \code{log = TRUE} and
+#'   \code{operator = "/"} the estimate, its (delta method) standard error and the interval are all
+#'   on the original scale, i.e. the ratio of the two ED values.
 #'
 #' @examples
 #' ## Comparing ED50 values as a ratio
@@ -70,6 +72,14 @@
     colNames <- c("Estimate", "Std. Error")    
     
     edMat <- matrix(c(resList$estimate, resList$se), nrow = 1)
+    ratioOfLogs <- log && identical(operator, "/")   # est are log(ED): difference of logs = log ratio
+    edMatLog <- edMat
+    if (ratioOfLogs)
+    {
+        ## report the ratio itself; delta-method SE of exp(difference)
+        edMat[1, 2] <- exp(edMat[1, 1]) * edMat[1, 2]
+        edMat[1, 1] <- exp(edMat[1, 1])
+    }
     if (interval)
     {
         colNames <- c(colNames, "Lower", "Upper")
@@ -81,9 +91,9 @@
         } else {
             quanVal <- qt(1 - (1 - level)/2, df)
         }
-        ciMat <- matrix(c(edMat[1, 1] - quanVal * edMat[1, 2], edMat[1, 1] + quanVal * edMat[1, 2]), nrow = 1)        
+        ciMat <- matrix(c(edMatLog[1, 1] - quanVal * edMatLog[1, 2], edMatLog[1, 1] + quanVal * edMatLog[1, 2]), nrow = 1)        
         
-        if (log && (identical(operator, "/")))
+        if (ratioOfLogs)
         {
             ciMat <- exp(ciMat)
         }
@@ -93,7 +103,7 @@
 
     cat("\n")
     cat("Estimated", opText, "of effective doses\n")
-    if (interval && log && (identical(operator, "/"))) {cat("(confidence interval on original scale)\n")}
+    if (ratioOfLogs) {cat("(ratio of the original-scale values; SE by the delta method)\n")}
     cat("\n") 
 
     printCoefmat(edMat)
