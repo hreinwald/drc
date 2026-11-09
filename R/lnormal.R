@@ -23,6 +23,14 @@
 #'
 #' For \eqn{c=0} and \eqn{d=1}, the model reduces to the classic probit model.
 #'
+#' The parameters are: \code{b}, the slope (positive for a decreasing curve); \code{c}, the lower
+#' asymptote; \code{d}, the upper asymptote; and \code{e}, the ED50 (or log(ED50) if
+#' \code{loge = TRUE}).
+#'
+#' If \code{loge = TRUE}, \code{\link{ED}} returns \strong{log(ED)}; use
+#' \code{interval = "fls"} to obtain EDs and confidence limits on the dose scale (\code{"fls"} is
+#' only valid for such models). Model averaging with \code{\link{maED}} requires \code{loge = FALSE}.
+#'
 #' @return A list containing the non-linear function, the self starter function
 #'   and the parameter names.
 #'
@@ -35,6 +43,33 @@
 #' @author Christian Ritz
 #'
 #' @seealso The log-logistic model \code{\link{llogistic}} is very similar to the log-normal model.
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = lnormal())
+#' plot(m1, type = "all", main = "Four-parameter log-normal model")
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, 0, NA, NA)))
+#' m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, 3, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, NA, 6, NA)))
+#' m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, NA, 9, NA)))
+#' plot(m1, type = "all", main = "Upper asymptote d")
+#' plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## log(ED50) as parameter: ED() returns log(ED), 'fls' back-transforms
+#' m2 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(loge = TRUE))
+#' ED(m2, c(10, 50), interval = "fls")
 #'
 #' @keywords models nonlinear
 "lnormal" <- function(
@@ -243,7 +278,7 @@ fctName, fctText, loge = FALSE)
     name = ifelse(missing(fctName), as.character(match.call()[[1]]), fctName),
     text = ifelse(missing(fctText), "Log-normal", fctText), 
     noParm = sum(is.na(fixed)), lowerAs = lowerAs, upperAs = upperAs, monoton = monoton,
-    fixed = fixed)
+    fixed = fixed, edLogScale = loge)
     
     class(returnList) <- "log-normal"
     invisible(returnList)
@@ -263,6 +298,12 @@ fctName, fctText, loge = FALSE)
 #' @return A list (see \code{\link{lnormal}}).
 #'
 #' @seealso \code{\link{lnormal}}, \code{\link{LN.3}}, \code{\link{LN.4}}
+#'
+#' @examples
+#' ## Binomial (quantal) response (probit model): fit with drm() and plot
+#' earthworms.m1 <- drm(number/total ~ dose, weights = total,
+#'   data = earthworms, fct = LN.2(), type = "binomial")
+#' plot(earthworms.m1, main = "LN.2 (probit model)")
 #'
 #' @keywords models nonlinear
 "LN.2" <-
@@ -291,6 +332,11 @@ function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 #' @return A list (see \code{\link{lnormal}}).
 #'
 #' @seealso \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.4}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LN.3())
+#' plot(ryegrass.m1, type = "all", main = "LN.3 (lower limit fixed at 0)")
 #'
 #' @keywords models nonlinear
 "LN.3" <-
@@ -321,6 +367,12 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #'
 #' @seealso \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.3}}, \code{\link{LN.4}}
 #'
+#' @examples
+#' ## Response relative to the control mean, upper limit fixed at 1
+#' ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+#' ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LN.3u(upper = 1))
+#' plot(ryegrass.m1, type = "all", main = "LN.3u (upper limit fixed at 1)")
+#'
 #' @keywords models nonlinear
 "LN.3u" <-
 function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
@@ -349,6 +401,11 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 #' @return A list (see \code{\link{lnormal}}).
 #'
 #' @seealso \code{\link{lnormal}}, \code{\link{LN.2}}, \code{\link{LN.3}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4())
+#' plot(ryegrass.m1, type = "all", main = "LN.4")
 #'
 #' @keywords models nonlinear
 "LN.4" <-
