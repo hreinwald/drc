@@ -49,14 +49,14 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
                 vcovfct <- function(x){vcCont(x) / (2 * rse(x, TRUE))}  
                 # no individual scaling, only for continuous data
 
-                vcMat <- do.call("adiag", lapply(object$"objList", vcovfct))
+                vcMat <- blockDiag(lapply(object$"objList", vcovfct))
                 if (!unscaled)
                 {
                     vcMat <- vcMat * (2 * (object$"minval" / df.residual(object)))
                     # scaling based on all fits
                 }
             } else {
-                vcMat <- do.call("adiag", lapply(object$"objList", vcovfct))
+                vcMat <- blockDiag(lapply(object$"objList", vcovfct))
             }
             return(vcMat)
         } else {
@@ -88,11 +88,28 @@ function(object, ..., corr = FALSE, od = FALSE, pool = TRUE, unscaled = FALSE)
         }
         if (!is.null(object$"objList"))
         {
-            do.call("adiag", lapply(object$"objList", corrFct))
+            blockDiag(lapply(object$"objList", corrFct))
         } else {
             corrFct(object)
         }       
     }
+}
+
+"blockDiag" <- function(matList)
+{
+    matList <- lapply(matList, as.matrix)
+    nr <- vapply(matList, nrow, 1L)
+    nc <- vapply(matList, ncol, 1L)
+    out <- matrix(0, sum(nr), sum(nc))
+    r0 <- 0L
+    c0 <- 0L
+    for (i in seq_along(matList))
+    {
+        out[r0 + seq_len(nr[i]), c0 + seq_len(nc[i])] <- matList[[i]]
+        r0 <- r0 + nr[i]
+        c0 <- c0 + nc[i]
+    }
+    out
 }
 
 "vcCont" <- function(object)
