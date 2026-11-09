@@ -23,6 +23,15 @@
 #'
 #' @seealso \code{\link{twophase}}, \code{\link{llogistic}}
 #'
+#' @note \code{threephase()} is not exported from the package namespace; call it as
+#'   \code{drc:::threephase()}. With ten parameters the model is easily over-parameterised;
+#'   supply good starting values via \code{start} in \code{\link{drm}} for real data.
+#'
+#' @examples
+#' ## Fit with drm() and plot (accessing the unexported constructor)
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = drc:::threephase())
+#' plot(m1, type = "all", main = "Three-phase model")
+#'
 #' @keywords models nonlinear
 "threephase" <- function(
 fixed = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA), 
