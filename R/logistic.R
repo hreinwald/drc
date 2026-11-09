@@ -6,6 +6,15 @@
 #' This model differs from the log-logistic in that it uses \code{x} directly
 #' rather than \code{log(x)}. It is sometimes referred to as the Boltzmann model.
 #'
+#' @details
+#' The parameters are: \code{b}, the slope (positive for a decreasing curve, negative for an
+#' increasing curve); \code{c}, the lower asymptote; \code{d}, the upper asymptote; \code{e}, the
+#' dose at the inflection point (the ED50 when \code{f = 1}); and \code{f}, the asymmetry parameter.
+#' Effective doses from \code{\link{ED}} follow the same convention as for the log-logistic models:
+#' for a decreasing curve ED\eqn{p} is the dose giving a response \eqn{p}\% of the way from \code{d}
+#' down to \code{c}; for an increasing curve it is \eqn{p}\% of the way up from \code{c} to \code{d}.
+#' Absolute response levels (\code{type = "absolute"}) are supported as well.
+#'
 #' @param fixed numeric vector of length 5. Specifies which parameters are fixed
 #'   and at what value they are fixed. \code{NA} indicates that the corresponding
 #'   parameter is not fixed.
@@ -31,7 +40,31 @@
 #' @keywords models nonlinear
 #'
 #' @examples
-#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.4())
+#' ## Fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = logistic(fixed = c(NA, NA, NA, NA, 1)))
+#' plot(m1, type = "all", main = "Four-parameter logistic model")
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, 0, NA, NA)))
+#' m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, 3, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, NA, 6, NA)))
+#' m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = L.4(fixed = c(NA, NA, 9, NA)))
+#' plot(m1, type = "all", main = "Upper asymptote d")
+#' plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effective doses
+#' ED(m1, c(10, 50, 90))
+#'
 "logistic" <- function(
 fixed = c(NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f"), 
 method = c("1", "2", "3", "4"), ssfct = NULL,
@@ -104,23 +137,16 @@ fctName, fctText)
     {
         parmVec[notFixed] <- parm
 
-        ## Convert absolute response level to relative.
-        ## Note: unlike log-logistic models where b < 0 means decreasing,
-        ## the logistic model has b < 0 = increasing.  EDhelper's p-swap
-        ## (for b < 0, relative type) would be wrong here, so we perform
-        ## only the absolute-to-relative conversion inline.
-        if (identical(type, "absolute")) {
-            p <- 100 * ((parmVec[3] - respl) / (parmVec[3] - parmVec[2]))
-        } else {
-            p <- respl
-        }
+        ## Same sign convention as the log-logistic models (b < 0: increasing), so the
+        ## shared EDhelper() handles the absolute -> relative conversion and the p-swap.
+        p <- EDhelper(parmVec, respl, reference, type)
     
         ## deriv(~e + log((100/(100-p))^(1/f) - 1) / b, c("b", "c", "d", "e", "f"), function(b,c,d,e,f){})
         ## evaluated at the R prompt
         EDderFct <- 
         function (b, c, d, e, f) 
         {
-            .expr2 <- 100/p
+            .expr2 <- 100/(100 - p)
             .expr4 <- .expr2^(1/f)
             .expr5 <- .expr4 - 1
             .expr6 <- log(.expr5)
@@ -143,8 +169,8 @@ fctName, fctText)
         ## the absolute-to-relative conversion, where p depends on c and d.
         if (identical(type, "absolute")) {
             .edval <- function(pv) {
-                p0 <- 100 * ((pv[3] - respl) / (pv[3] - pv[2]))
-                .expr2 <- 100 / p0
+                p0 <- EDhelper(pv, respl, reference, type)
+                .expr2 <- 100 / (100 - p0)
                 .expr4 <- .expr2^(1 / pv[5])
                 .expr5 <- .expr4 - 1
                 pv[4] + log(.expr5) / pv[1]
@@ -201,7 +227,9 @@ fctName, fctText)
 #' @keywords models nonlinear
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.3())
+#' plot(ryegrass.m1, type = "all", main = "L.3 (lower limit fixed at 0)")
 "L.3" <-
 function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 {
@@ -235,7 +263,10 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #' @keywords models nonlinear
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.4())
+#' plot(ryegrass.m1, type = "all", main = "L.4")
+#' ED(ryegrass.m1, c(10, 50, 90))
 "L.4" <-
 function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 {
@@ -270,7 +301,9 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 #' @keywords models nonlinear
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.5())
+#' plot(ryegrass.m1, type = "all", main = "L.5")
 "L.5" <-
 function(fixed = c(NA, NA, NA, NA, NA), names = c("b", "c", "d", "e", "f"), ...)
 {
