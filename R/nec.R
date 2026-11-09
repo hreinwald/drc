@@ -17,6 +17,14 @@
 #' \deqn{f(x) = c + (d-c)\exp(-b(x-e)I(x-e))}
 #' where \eqn{I(x-e)} is the indicator function equal to 0 for \eqn{x<=e} and 1 for \eqn{x>e}.
 #'
+#' The parameters are: \code{b}, the rate of the exponential decline above the threshold; \code{c},
+#' the lower asymptote (the response approached at high doses); \code{d}, the upper asymptote, i.e.
+#' the constant response up to the threshold; and \code{e}, the threshold itself, the
+#' no-effect concentration (NEC), which is estimated directly as a model parameter.
+#'
+#' Effective doses are not available for these models (\code{\link{ED}} stops with an error). Standard
+#' errors and intervals from \code{\link{predict}} are based on numerical derivatives.
+#'
 #' @return A list containing the nonlinear function, the self starter function
 #'   and the parameter names.
 #'
@@ -30,9 +38,28 @@
 #' @seealso \code{\link{NEC.2}}, \code{\link{NEC.3}}, \code{\link{NEC.4}}, \code{\link{drm}}
 #'
 #' @examples
+#' ## Fit with drm() and plot; the parameter e is the NEC
 #' nec.m1 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
 #' summary(nec.m1)
-#' plot(nec.m1)
+#' plot(nec.m1, type = "all", main = "NEC model")
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+#' nec.c0 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, 0, NA, NA)))
+#' nec.c3 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, 3, NA, NA)))
+#' plot(nec.m1, type = "all", main = "Lower asymptote c")
+#' plot(nec.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(nec.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+#' nec.d6 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, NA, 6, NA)))
+#' nec.d9 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, NA, 9, NA)))
+#' plot(nec.m1, type = "all", main = "Upper asymptote d")
+#' plot(nec.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(nec.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "NEC" <- function(
@@ -105,6 +132,12 @@ fctName, fctText)
 #'
 #' @seealso \code{\link{NEC}}, \code{\link{NEC.3}}, \code{\link{NEC.4}}
 #'
+#' @examples
+#' ## Response relative to the control mean, upper limit fixed at 1
+#' ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+#' nec.m2 <- drm(rel ~ conc, data = ryegrass.rel, fct = NEC.2(upper = 1))
+#' plot(nec.m2, type = "all", main = "NEC.2 (c = 0, d = 1)")
+#'
 #' @keywords models nonlinear
 "NEC.2" <-
 function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
@@ -134,6 +167,11 @@ function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 #'
 #' @seealso \code{\link{NEC}}, \code{\link{NEC.2}}, \code{\link{NEC.4}}
 #'
+#' @examples
+#' ## Fit with drm() and plot
+#' nec.m3 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
+#' plot(nec.m3, type = "all", main = "NEC.3 (lower limit fixed at 0)")
+#'
 #' @keywords models nonlinear
 "NEC.3" <-
 function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
@@ -162,6 +200,11 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #' @return A list (see \code{\link{NEC}}).
 #'
 #' @seealso \code{\link{NEC}}, \code{\link{NEC.2}}, \code{\link{NEC.3}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' nec.m4 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+#' plot(nec.m4, type = "all", main = "NEC.4")
 #'
 #' @keywords models nonlinear
 "NEC.4" <-
