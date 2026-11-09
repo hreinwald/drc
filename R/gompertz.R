@@ -19,6 +19,13 @@
 #'
 #' If \eqn{b<0} the mean function is increasing; it is decreasing for \eqn{b>0}.
 #'
+#' Note that the model is a function of the dose \eqn{x} itself (not of \eqn{\log(x)}). The
+#' parameters are: \code{b}, the slope; \code{c}, the lower asymptote; \code{d}, the upper asymptote;
+#' and \code{e}, the location parameter (the dose at which the response is
+#' \eqn{c + (d-c)/\exp(1)}, so it is not the ED50). Effective doses are obtained with \code{\link{ED}}:
+#' \eqn{ED_p = e + \log(-\log(1-p/100))/b} for a decreasing curve, with standard errors from the
+#' delta method.
+#'
 #' @return A list containing the non-linear function, the self starter function
 #'   and the parameter names.
 #'
@@ -28,6 +35,32 @@
 #' @author Christian Ritz
 #'
 #' @seealso The Weibull model \code{\link{weibull2}} is closely related to the Gompertz model.
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = gompertz())
+#' plot(m1, type = "all", main = "Four-parameter Gompertz model")
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = G.4(fixed = c(NA, 0, NA, NA)))
+#' m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = G.4(fixed = c(NA, 3, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = G.4(fixed = c(NA, NA, 6, NA)))
+#' m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = G.4(fixed = c(NA, NA, 9, NA)))
+#' plot(m1, type = "all", main = "Upper asymptote d")
+#' plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effective doses with standard errors
+#' ED(m1, c(10, 50, 90))
 #'
 #' @keywords models nonlinear
 "gompertz" <- function(
@@ -121,7 +154,7 @@ fctName, fctText)
         p <- EDhelper(parmVec, respl, reference, type)
         tempVal <- log(-log((100 - p)/100))
         EDp <- tempVal/parmVec[1] + parmVec[4]
-        EDder <- EDp * c(-tempVal/(parmVec[1]^2), 0, 0, 1)
+        EDder <- c(-tempVal/(parmVec[1]^2), 0, 0, 1)
         return(list(EDp, EDder[notFixed]))
     }
 
@@ -157,6 +190,12 @@ fctName, fctText)
 #'
 #' @seealso \code{\link{gompertz}}, \code{\link{G.3}}, \code{\link{G.4}}
 #'
+#' @examples
+#' ## Binomial (quantal) response: fit with drm() and plot
+#' earthworms.m1 <- drm(number/total ~ dose, weights = total,
+#'   data = earthworms, fct = G.2(), type = "binomial")
+#' plot(earthworms.m1, main = "G.2 (upper limit fixed at 1)")
+#'
 #' @keywords models nonlinear
 "G.2" <-
 function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
@@ -184,6 +223,11 @@ function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 #' @return A list (see \code{\link{gompertz}}).
 #'
 #' @seealso \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.4}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = G.3())
+#' plot(ryegrass.m1, type = "all", main = "G.3 (lower limit fixed at 0)")
 #'
 #' @keywords models nonlinear
 "G.3" <-
@@ -214,6 +258,12 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #'
 #' @seealso \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.3}}, \code{\link{G.4}}
 #'
+#' @examples
+#' ## Response relative to the control mean, upper limit fixed at 1
+#' ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+#' ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = G.3u(upper = 1))
+#' plot(ryegrass.m1, type = "all", main = "G.3u (upper limit fixed at 1)")
+#'
 #' @keywords models nonlinear
 "G.3u" <-
 function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
@@ -241,6 +291,11 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 #' @return A list (see \code{\link{gompertz}}).
 #'
 #' @seealso \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.3}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = G.4())
+#' plot(ryegrass.m1, type = "all", main = "G.4")
 #'
 #' @keywords models nonlinear
 "G.4" <-
