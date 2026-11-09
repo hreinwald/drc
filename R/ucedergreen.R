@@ -24,6 +24,12 @@
 #' The u-shaped model is given by the expression
 #' \deqn{f(x) = c + d - \frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}}
 #'
+#' The parameters are: \code{b}, the slope; \code{c}, the lower and \code{d} the upper asymptote of the
+#' component that is mirrored in the U-shape (the curve starts at \eqn{2c} and approaches
+#' \eqn{c + d}); \code{e}, the location of the transition; and \code{f}, the size of the hormetic
+#' deviation at low doses. The wrappers \code{\link{UCRS.4a}}-\code{\link{UCRS.5c}} fix \eqn{\alpha} at
+#' 1, 0.5 and 0.25 (suffix a, b, c) and, for the four-parameter versions, \code{c} at 0.
+#'
 #' @return A list of class \code{"UCRS"}, containing the model function (\code{fct}),
 #'   the self-starter function (\code{ssfct}), parameter names (\code{names}), and other
 #'   components required for use with modeling functions like \code{\link[drc]{drm}}.
@@ -36,6 +42,23 @@
 #' @author Christian Ritz, Hannes Reinwald
 #'
 #' @seealso \code{\link{cedergreen}}, \code{\link{UCRS.4a}}, \code{\link{UCRS.5a}}, \code{\link{drm}}
+#'
+#' @examples
+#' ## Simulated U-shaped data: fit with drm() and plot
+#' dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+#' mu <- ucedergreen(alpha = 1)$fct(dose, matrix(c(1.5, 1, 6, 10, -2), length(dose), 5, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1))
+#' plot(m1, type = "all", main = "U-shaped Cedergreen-Ritz-Streibig model")
+#'
+#' ## Effect of the asymptotes: fix c (lower) at 0 or d (upper) at 4
+#' m.c0 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1, fixed = c(NA, 0, NA, NA, NA)))
+#' m.d4 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1, fixed = c(NA, NA, 4, NA, NA)))
+#' plot(m1, type = "all", main = "Fixed asymptotes")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d4, type = "none", add = TRUE, col = "red")
+#' legend("topleft", c("free", "c = 0", "d = 4"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "ucedergreen" <- function(
@@ -166,6 +189,15 @@
 #'
 #' @seealso \code{\link{ucedergreen}}, \code{\link{UCRS.5a}}, \code{\link{CRS.4a}}
 #'
+#' @examples
+#' ## Simulated U-shaped data (c = 0, alpha = 1): fit with drm() and plot
+#' dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+#' mu <- ucedergreen(alpha = 1, fixed = c(NA, 0, NA, NA, NA))$fct(dose,
+#'   matrix(c(1.5, 6, 10, -2), length(dose), 4, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = UCRS.4a())
+#' plot(m1, type = "all", main = "UCRS.4a")
+#'
 #' @keywords models nonlinear
 "UCRS.4a" <-
 function(names = c("b", "d", "e", "f"), ...)
@@ -195,6 +227,15 @@ uml3a <- UCRS.4a
 #' @return A list (see \code{\link{ucedergreen}}).
 #'
 #' @seealso \code{\link{ucedergreen}}, \code{\link{UCRS.4a}}, \code{\link{CRS.4b}}
+#'
+#' @examples
+#' ## Simulated U-shaped data (c = 0, alpha = 0.5): fit with drm() and plot
+#' dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+#' mu <- ucedergreen(alpha = 0.5, fixed = c(NA, 0, NA, NA, NA))$fct(dose,
+#'   matrix(c(1.5, 6, 10, -2), length(dose), 4, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = UCRS.4b())
+#' plot(m1, type = "all", main = "UCRS.4b")
 #'
 #' @keywords models nonlinear
 "UCRS.4b" <-
@@ -226,6 +267,15 @@ uml3b <- UCRS.4b
 #'
 #' @seealso \code{\link{ucedergreen}}, \code{\link{UCRS.4a}}, \code{\link{CRS.4c}}
 #'
+#' @examples
+#' ## Simulated U-shaped data (c = 0, alpha = 0.25): fit with drm() and plot
+#' dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+#' mu <- ucedergreen(alpha = 0.25, fixed = c(NA, 0, NA, NA, NA))$fct(dose,
+#'   matrix(c(1.5, 6, 10, -2), length(dose), 4, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = UCRS.4c())
+#' plot(m1, type = "all", main = "UCRS.4c")
+#'
 #' @keywords models nonlinear
 "UCRS.4c" <-
 function(names = c("b", "d", "e", "f"), ...)
@@ -255,6 +305,14 @@ uml3c <- UCRS.4c
 #' @return A list (see \code{\link{ucedergreen}}).
 #'
 #' @seealso \code{\link{ucedergreen}}, \code{\link{UCRS.4a}}, \code{\link{CRS.5a}}
+#'
+#' @examples
+#' ## Simulated U-shaped data (alpha = 1): fit with drm() and plot
+#' dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+#' mu <- ucedergreen(alpha = 1)$fct(dose, matrix(c(1.5, 1, 6, 10, -2), length(dose), 5, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = UCRS.5a())
+#' plot(m1, type = "all", main = "UCRS.5a")
 #'
 #' @keywords models nonlinear
 "UCRS.5a" <-
@@ -286,6 +344,14 @@ uml4a <- UCRS.5a
 #'
 #' @seealso \code{\link{ucedergreen}}, \code{\link{UCRS.5a}}, \code{\link{CRS.5b}}
 #'
+#' @examples
+#' ## Simulated U-shaped data (alpha = 0.5): fit with drm() and plot
+#' dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+#' mu <- ucedergreen(alpha = 0.5)$fct(dose, matrix(c(1.5, 1, 6, 10, -2), length(dose), 5, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = UCRS.5b())
+#' plot(m1, type = "all", main = "UCRS.5b")
+#'
 #' @keywords models nonlinear
 "UCRS.5b" <-
 function(names = c("b", "c", "d", "e", "f"), ...)
@@ -315,6 +381,14 @@ uml4b <- UCRS.5b
 #' @return A list (see \code{\link{ucedergreen}}).
 #'
 #' @seealso \code{\link{ucedergreen}}, \code{\link{UCRS.5a}}, \code{\link{CRS.5c}}
+#'
+#' @examples
+#' ## Simulated U-shaped data (alpha = 0.25): fit with drm() and plot
+#' dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+#' mu <- ucedergreen(alpha = 0.25)$fct(dose, matrix(c(1.5, 1, 6, 10, -2), length(dose), 5, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = UCRS.5c())
+#' plot(m1, type = "all", main = "UCRS.5c")
 #'
 #' @keywords models nonlinear
 "UCRS.5c" <-
