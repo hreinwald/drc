@@ -7,6 +7,13 @@
 #'
 #' The lag time parameter \code{t0} cannot be fixed.
 #'
+#' @details
+#' The parameters are those of \code{\link{weibull2}} (\code{b} slope, \code{c} lower asymptote,
+#' \code{d} upper asymptote, \code{e} scale) plus the lag time \code{t0}: the response stays at the
+#' lower asymptote \code{c} until the dose exceeds \code{t0}. Effective doses (\code{\link{ED}}) are
+#' shifted by \code{t0}; the derivative with respect to \code{t0} (equal to 1) is included in the
+#' standard errors.
+#'
 #' @param fixed numeric vector of length 5. Specifies which parameters are
 #'   fixed and at what value. Use \code{NA} for parameters that should be
 #'   estimated (default is \code{rep(NA, 5)}).
@@ -27,6 +34,17 @@
 #' @author Christian Ritz
 #'
 #' @seealso \code{\link{weibull2}}, \code{\link{W2x.3}}, \code{\link{W2x.4}}
+#'
+#' @examples
+#' ## Fit with drm() and plot (b fixed at 1)
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4())
+#' plot(m1, type = "all", main = "Weibull type 2 model with lag time")
+#'
+#' ## Effect of the lower asymptote c: c free or fixed at 3
+#' m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4(fixed = c(3, NA, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 3"), col = c("black", "red"), lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "weibull2x" <- function(
@@ -85,19 +103,26 @@ fctName, fctText)
     {   
         parmVec[notFixed] <- parm
         
-        if ( (parmVec[1] > 0) && (reference == "control") ) 
+        if (identical(type, "absolute"))
         {
-            p <- 100 - p
-            reference <- "upper"  # to avoid resetting of p in 'weibull1'    
+            ## same absolute -> relative conversion as the lag-free Weibull type 2 model
+            edResult <- weibull2(head(fixed, -1), head(names, -1))$edfct(head(parm, -1), p, reference, type, ...)
+        } else {
+            if ( (parmVec[1] > 0) && (reference == "control") ) 
+            {
+                p <- 100 - p
+                reference <- "upper"  # to avoid resetting of p in 'weibull1'    
+            }
+            if ( (parmVec[1] < 0) && (reference == "control") ) 
+            {
+                p <- 100 - p
+            }
+                    
+            edResult <- weibull1(head(fixed, -1), head(names, -1))$edfct(head(parm, -1), 100 - p, reference, type, ...)
         }
-        if ( (parmVec[1] < 0) && (reference == "control") ) 
-        {
-            p <- 100 - p
-        }
-                
-        edResult <- weibull1(head(fixed, -1), head(names, -1))$edfct(head(parm, -1), 100 - p, reference, type, ...)
-        # not accounting completely for the uncertainty due to estimation of the lag time
+        # t0 is estimated: its derivative (1) is appended below
         edResult[[1]] <- edResult[[1]] + parmVec[5]
+        edResult[[2]] <- c(edResult[[2]], 1)  # d ED / d t0 = 1 (t0 is never fixed)
         edResult
     }
     ## using head( , -1) to remove the lag-time parameter
@@ -135,8 +160,10 @@ fctName, fctText)
 #' @seealso \code{\link{weibull2x}}, \code{\link{W2x.4}}, \code{\link{W2.3}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' spinach.m1 <- drm(SLOPE ~ DOSE, data = spinach, fct = W2x.3())
 #' summary(spinach.m1)
+#' plot(spinach.m1, main = "W2x.3")
 #'
 #' @keywords models nonlinear
 "W2x.3" <-
@@ -170,7 +197,10 @@ function(fixed = c(NA, NA, NA), names = c("d", "e", "t0"), ...)
 #' @seealso \code{\link{weibull2x}}, \code{\link{W2x.3}}, \code{\link{W2.4}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4())
+#' plot(ryegrass.m1, type = "all", main = "W2x.4")
+#' ED(ryegrass.m1, 50)
 #'
 #' @keywords models nonlinear
 "W2x.4" <-

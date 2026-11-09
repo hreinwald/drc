@@ -9,6 +9,12 @@
 #'
 #' The model is sometimes also called the Gompertz model.
 #'
+#' The parameters are: \code{b}, the slope (positive for a decreasing curve); \code{c}, the lower
+#' asymptote; \code{d}, the upper asymptote (the control response of a decreasing curve); and
+#' \code{e}, the dose at which the curve has dropped to \code{c + (d - c) / exp(1)}, about 37\% of the
+#' way from \code{d} to \code{c}. Note that \code{e} is not the ED50; use \code{\link{ED}} for
+#' effective doses. The curve is asymmetric on the log-dose axis.
+#'
 #' The \code{method} argument determines how starting values for the parameters
 #' \code{b} and \code{e} are estimated (the starting values for \code{c} and
 #' \code{d} are always based on the range of the response values). Four methods
@@ -55,6 +61,29 @@
 #'
 #' @seealso \code{\link{W1.2}}, \code{\link{W1.3}}, \code{\link{W1.4}},
 #'   \code{\link{weibull2}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = weibull1())
+#' plot(m1, type = "all", main = "Four-parameter Weibull type 1 model")
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, 0, NA, NA)))
+#' m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, 3, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, NA, 6, NA)))
+#' m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, NA, 9, NA)))
+#' plot(m1, type = "all", main = "Upper asymptote d")
+#' plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "weibull1" <- function(
@@ -206,8 +235,10 @@ fctName, fctText)
 #' @seealso \code{\link{weibull1}}, \code{\link{W1.3}}, \code{\link{W1.4}}
 #'
 #' @examples
+#' ## Binomial (quantal) response: fit with drm() and plot
 #' earthworms.m1 <- drm(number/total ~ dose, weights = total,
 #'   data = earthworms, fct = W1.2(), type = "binomial")
+#' plot(earthworms.m1, main = "W1.2 (upper limit fixed at 1)")
 #'
 #' @keywords models nonlinear
 "W1.2" <-
@@ -254,7 +285,9 @@ w2 <- W1.2
 #' @seealso \code{\link{weibull1}}, \code{\link{W1.2}}, \code{\link{W1.4}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.3())
+#' plot(ryegrass.m1, type = "all", main = "W1.3 (lower limit fixed at 0)")
 #'
 #' @keywords models nonlinear
 "W1.3" <-
@@ -301,6 +334,12 @@ w3 <- W1.3
 #'   self starter function, and parameter names.
 #'
 #' @seealso \code{\link{weibull1}}, \code{\link{W1.3}}, \code{\link{W1.4}}
+#'
+#' @examples
+#' ## Response relative to the control mean, upper limit fixed at 1
+#' ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+#' ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = W1.3u(upper = 1))
+#' plot(ryegrass.m1, type = "all", main = "W1.3u (upper limit fixed at 1)")
 #'
 #' @keywords models nonlinear
 "W1.3u" <-
@@ -350,7 +389,19 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 #' @seealso \code{\link{weibull1}}, \code{\link{W1.2}}, \code{\link{W1.3}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' terbuthylazin.m1 <- drm(rgr ~ dose, data = terbuthylazin, fct = W1.4())
+#' plot(terbuthylazin.m1, main = "W1.4")
+#'
+#' ## Effect of the asymptotes on a single curve (ryegrass): fix c at 0 / d at 6
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4())
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, 0, NA, NA)))
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = W1.4(fixed = c(NA, NA, 6, NA)))
+#' plot(m1, type = "all", main = "W1.4: free and fixed asymptotes")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d6, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("free", "c = 0", "d = 6"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "W1.4" <-
@@ -405,7 +456,9 @@ w4 <- W1.4
 #'   \code{\link{weibull1}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = EXD.2())
+#' plot(ryegrass.m1, type = "all", main = "EXD.2 (exponential decay)")
 #'
 #' @keywords models nonlinear
 "EXD.2" <-
@@ -456,7 +509,9 @@ function(fixed = c(NA, NA), names = c("d", "e"), ...)
 #'   \code{\link{weibull1}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = EXD.3())
+#' plot(ryegrass.m1, type = "all", main = "EXD.3 (shifted exponential decay)")
 #'
 #' @keywords models nonlinear
 "EXD.3" <-
