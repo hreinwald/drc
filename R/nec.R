@@ -22,8 +22,19 @@
 #' the constant response up to the threshold; and \code{e}, the threshold itself, the
 #' no-effect concentration (NEC), which is estimated directly as a model parameter.
 #'
-#' Effective doses are not available for these models (\code{\link{ED}} stops with an error). Standard
-#' errors and intervals from \code{\link{predict}} are based on numerical derivatives.
+#' \strong{NEC versus ED.} The threshold \code{e} (the NEC) and effective doses are different
+#' quantities. \code{e} is the dose where the decline starts and is read directly from
+#' \code{coef()} (with its standard error from \code{summary()} and interval from
+#' \code{confint()}). \code{\link{ED}} returns the dose at which the response has fallen by
+#' \eqn{p} percent of the distance between the upper and lower asymptote, i.e. where
+#' \eqn{f(x) = d - (p/100)(d - c)}, which gives
+#' \deqn{ED_p = e - \log(1 - p/100)/b.}
+#' Because the response is flat up to \code{e}, every \eqn{ED_p} with \eqn{0 < p < 100} is larger
+#' than the NEC. For example, \code{ED(fit, 10)} is the EC10 and is not the NEC. The ED is
+#' available for \code{type = "relative"} and \code{type = "absolute"}; it requires \eqn{b > 0}
+#' and, for absolute levels, a response strictly between \code{c} and \code{d}. Otherwise
+#' \code{NA} is returned with a warning. Standard errors and intervals from
+#' \code{\link{predict}} are based on numerical derivatives.
 #'
 #' @return A list containing the nonlinear function, the self starter function
 #'   and the parameter names.
@@ -42,6 +53,11 @@
 #' nec.m1 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
 #' summary(nec.m1)
 #' plot(nec.m1, type = "all", main = "NEC model")
+#'
+#' ## NEC (threshold e) versus effective doses: ED() is larger than the NEC
+#' coef(nec.m1)["e:(Intercept)"]            # the NEC, estimated directly
+#' ED(nec.m1, c(10, 50), display = FALSE)   # EC10 and EC50, both above the NEC
+#' ED(nec.m1, 10, interval = "delta", display = FALSE)
 #'
 #' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
 #' nec.c0 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, 0, NA, NA)))
@@ -101,8 +117,49 @@ fctName, fctText)
     ##Defining the first derivative (in the dose)
     derivx <- NULL
 
-    ## Defining the ED function
-    edfct <- NULL
+    ## Defining the ED function: dose at which the response has dropped by p% of (d - c),
+    ## i.e. solves c + (d - c) * exp(-b * (x - e)) = d - p/100 * (d - c) for x > e.
+    ## Only defined for b > 0 and 0 < p < 100; otherwise NA.
+    edfct <- function(parm, respl, reference = "control", type = "relative", ...)
+    {
+        parmVec[notFixed] <- parm
+        p <- absToRel(parmVec, respl, type)
+
+        if (!is.finite(parmVec[1]) || parmVec[1] <= 0)
+        {
+            warning("ED is not defined for this NEC fit: the slope parameter b is ",
+                    format(parmVec[1], digits = 4), " but must be positive (the response ",
+                    "must decay beyond the threshold e). NA returned. Check the fit, e.g. ",
+                    "whether the data show a decrease with dose, or refit with different ",
+                    "starting values (start =).", call. = FALSE)
+            return(list(NA_real_, rep(NA_real_, sum(notFixed))))
+        }
+        if (!is.finite(p) || p <= 0 || p >= 100)
+        {
+            if (identical(type, "absolute"))
+            {
+                msg <- paste0("the absolute response level ", format(respl, digits = 4),
+                              " is not strictly between the asymptotes c = ",
+                              format(parmVec[2], digits = 4), " and d = ",
+                              format(parmVec[3], digits = 4),
+                              ". Choose a level inside this range.")
+            } else {
+                msg <- paste0("the relative response level ", format(respl, digits = 4),
+                              " is outside ]0, 100[. Choose a percentage strictly between ",
+                              "0 and 100.")
+            }
+            warning("ED is not defined for NEC models: ", msg, " NA returned.", call. = FALSE)
+            return(list(NA_real_, rep(NA_real_, sum(notFixed))))
+        }
+
+        logTerm <- log(1 - p/100)
+        EDp <- parmVec[4] - logTerm / parmVec[1]
+        ## Derivatives wrt b, c, d, e (p treated as constant; for type = "absolute"
+        ## ED.drc replaces the gradient by central differences)
+        EDder <- c(logTerm / parmVec[1]^2, 0, 0, 1)
+
+        list(EDp, EDder[notFixed])
+    }
   
     ## Returning the function with self starter and names
     returnList <- 

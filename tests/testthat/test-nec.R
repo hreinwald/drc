@@ -21,7 +21,7 @@ test_that("NEC.4() returns correct list structure", {
   expect_null(result$deriv1)
   expect_null(result$deriv2)
   expect_null(result$derivx)
-  expect_null(result$edfct)
+  expect_true(is.function(result$edfct))
   expect_equal(result$name, "NEC.4")
   expect_equal(result$text, "NEC")
   expect_equal(result$noParm, 4)
@@ -292,4 +292,73 @@ test_that("NEC.4() works with drm() on ryegrass data", {
   coefs <- coef(model)
   expect_length(coefs, 4)
   expect_true(all(is.finite(coefs)))
+})
+
+
+# --- ED() for NEC models ---
+
+test_that("ED() works for NEC.4: relative ED equals e - log(1 - p/100)/b", {
+  data(ryegrass, package = "drc")
+  m <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+  cf <- coef(m)
+  ed <- ED(m, c(10, 50), display = FALSE)
+
+  expect_equal(unname(ed[, "Estimate"]),
+               unname(cf["e:(Intercept)"] - log(1 - c(10, 50)/100) / cf["b:(Intercept)"]),
+               tolerance = 1e-8)
+  expect_true(all(is.finite(ed[, "Std. Error"])))
+  expect_true(all(ed[, "Estimate"] > cf["e:(Intercept)"]))
+})
+
+test_that("NEC edfct gradient matches finite differences", {
+  fct <- NEC.4()
+  parm <- c(b = 0.5, c = 1, d = 8, e = 2)
+  ed <- fct$edfct(parm, 30, reference = "control", type = "relative")
+  for (k in c(1, 4)) {
+    h <- 1e-6
+    up <- replace(parm, k, parm[k] + h)
+    dn <- replace(parm, k, parm[k] - h)
+    num <- (fct$edfct(up, 30, "control", "relative")[[1]] -
+              fct$edfct(dn, 30, "control", "relative")[[1]]) / (2 * h)
+    expect_equal(ed[[2]][k], num, tolerance = 1e-6)
+  }
+})
+
+test_that("ED() works for NEC.3 / NEC.2 and for type = 'absolute'", {
+  data(ryegrass, package = "drc")
+  m3 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
+  expect_true(is.finite(ED(m3, 50, display = FALSE)[1, "Estimate"]))
+
+  rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+  m2 <- drm(rel ~ conc, data = rel, fct = NEC.2(upper = 1))
+  expect_true(is.finite(ED(m2, 50, display = FALSE)[1, "Estimate"]))
+
+  m4 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+  cf <- coef(m4)
+  respl <- (cf["d:(Intercept)"] + cf["c:(Intercept)"]) / 2
+  eda <- ED(m4, unname(respl), type = "absolute", display = FALSE)
+  edr <- ED(m4, 50, display = FALSE)
+  expect_equal(eda[1, "Estimate"], edr[1, "Estimate"], tolerance = 1e-6)
+  expect_true(is.finite(eda[1, "Std. Error"]))
+})
+
+test_that("NEC edfct warns and returns NA for invalid slope or level", {
+  fct <- NEC.4()
+  expect_warning(
+    res <- fct$edfct(c(b = -0.5, c = 1, d = 8, e = 2), 50, "control", "relative"),
+    "slope parameter b")
+  expect_true(is.na(res[[1]]))
+  expect_length(res[[2]], 4)
+
+  parm <- c(b = 0.5, c = 1, d = 8, e = 2)
+  expect_warning(res <- fct$edfct(parm, 120, "control", "relative"), "outside \\]0, 100\\[")
+  expect_true(is.na(res[[1]]))
+  expect_warning(res <- fct$edfct(parm, 9, "control", "absolute"), "between the asymptotes")
+  expect_true(is.na(res[[1]]))
+})
+
+test_that("ED() on a NEC fit warns for relative levels outside ]0, 100[ with bound = FALSE", {
+  data(ryegrass, package = "drc")
+  m <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+  expect_warning(ED(m, 100, bound = FALSE, display = FALSE), "outside \\]0, 100\\[")
 })
