@@ -51,7 +51,7 @@ simDR <- function(mpar, sigma, fct, noSim = 1000, conc, edVec = c(10, 50), seedV
   ed_true <- rep(0, n_ed)
   for (i in 1:n_ed)
   {
-    ed_true[i] <- fct$edfct(mpar, edVec[i], type = "relative")[[1]]
+    ed_true[i] <- fct$edfct(mpar, edVec[i], reference = "control", type = "relative")[[1]]
   }
   
   ## Run simulations
