@@ -7,7 +7,11 @@
 #'
 #' @param object an object of class 'drc'.
 #'
-#' @details Perhaps useful for screening purposes.
+#' @details Perhaps useful for screening purposes. The test is a likelihood ratio test against the
+#' intercept-only model and is available for the response types \code{"continuous"},
+#' \code{"binomial"} and \code{"Poisson"}; for other types (\code{"negbin1"}, \code{"negbin2"},
+#' \code{"event"}, \code{"ssd"}) an error is raised. A warning is given if the dose-response model
+#' has no more free parameters than the null model (e.g. when most parameters are fixed).
 #'
 #' @return The likelihood ratio test statistic and the corresponding degrees of freedom
 #'   and p-value are reported.
@@ -23,6 +27,11 @@
 #' @keywords models nonlinear
 noEffect <- function(object)
 {
+    if (!(object$"type" %in% c("binomial", "Poisson", "continuous")))
+    {
+        stop("noEffect() is not available for response type '", object$"type", "'")
+    }
+
     if (identical(object$"type", "binomial"))
     {
         respVec <- object$"dataList"$resp
@@ -52,7 +61,7 @@ noEffect <- function(object)
                 "The likelihood ratio test may not be meaningful in this case.")
     }
 
-    retVec <- c(lrt, dfDiff, 1 - pchisq(lrt, dfDiff))
+    retVec <- c(lrt, dfDiff, pchisq(lrt, dfDiff, lower.tail = FALSE))
     names(retVec) <- c("Chi-square test", "Df", "p-value")
     retVec
 }
