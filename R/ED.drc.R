@@ -33,6 +33,56 @@ ED <- function(object, ...) UseMethod("ED", object)
   (edUp - edDown) / (2 * h)
 }
 
+# Models whose edfct returns log(ED): flagged by `edLogScale` in the model list
+# (llogistic2, lnormal(loge = TRUE)); the name test covers drc objects saved before the flag existed.
+.isLogEDName <- function(fctName) {
+  is.character(fctName) && length(fctName) == 1L && grepl("^(LL2\\.|llogistic2)", fctName)
+}
+.isLogEDModel <- function(fct) {
+  isTRUE(fct[["edLogScale"]]) || .isLogEDName(fct[["name"]])
+}
+
+# interval = "fls" back-transforms with exp(); stop unless the ED values are on the log scale
+.checkFlsInterval <- function(fct, logBase = NULL, logDose = NULL, dots = list()) {
+  if (!is.null(logBase) || !is.null(logDose) || isTRUE(dots[["loged"]]) || .isLogEDModel(fct)) {
+    return(invisible(TRUE))
+  }
+  nm <- fct[["name"]]
+  if (!is.character(nm) || length(nm) != 1L) nm <- "<unnamed model>"
+  stop(
+    "ED(): interval = 'fls' cannot be used with model '", nm, "'.\n",
+    "  Why: 'fls' back-transforms the estimate and the limits with exp(). That is only valid when the\n",
+    "  ED values are returned on the log scale (models with a log(ED) parameter such as LL2.* or\n",
+    "  LN.*(loge = TRUE), or fits to log-transformed doses). '", nm, "' returns ED on the original\n",
+    "  dose scale, so the 'fls' estimate and interval would be wrong.\n",
+    "  How to fix, one of:\n",
+    "  * use interval = 'delta' (Wald interval on the dose scale) or interval = 'tfls' (interval\n",
+    "    computed on the log scale and back-transformed);\n",
+    "  * refit with a log(ED) parameterisation, e.g. fct = LL2.4() instead of LL.4();\n",
+    "  * if the doses were log-transformed before fitting, state the base, e.g. logBase = exp(1) or\n",
+    "    logBase = 10.",
+    call. = FALSE
+  )
+}
+
+# model averaging combines ED values across models: every model must return ED on the dose scale
+.checkNoLogEDModels <- function(object, fctList = NULL) {
+  fcts <- c(list(object[["fct"]]), as.list(fctList))
+  isLog <- vapply(fcts, .isLogEDModel, logical(1))
+  if (!any(isLog)) return(invisible(TRUE))
+  nms <- vapply(fcts[isLog], function(f) if (is.character(f[["name"]])) f[["name"]][1] else "<unnamed model>", "")
+  stop(
+    "Model averaging (maED / maED_robust) cannot use model(s) with a log(ED) parameterisation: ",
+    paste(nms, collapse = ", "), ".\n",
+    "  Why: these models return ED on the log scale. Averaging them with dose-scale models (or averaging\n",
+    "  them on their own) mixes scales and gives meaningless estimates and standard errors.\n",
+    "  How to fix: replace each of them (also the base model fitted with drm()) by its dose-scale\n",
+    "  equivalent, which describes the same curve: LL2.2/3/3u/4/5 -> LL.2/3/3u/4/5 and\n",
+    "  LN.*(loge = TRUE) -> LN.*(loge = FALSE).",
+    call. = FALSE
+  )
+}
+
 # FIX #8: safe wrapper that validates df before calling confint.basic
 .safeConfintBasic <- function(mat, level, type, object) {
   df <- tryCatch(df.residual(object), error = function(e) Inf)
@@ -164,8 +214,10 @@ ED <- function(object, ...) UseMethod("ED", object)
 #'         method, based on the normal or t-distribution (depending on the
 #'         response type).}
 #'       \item{\code{"fls"}}{Intervals obtained by back-transforming from the
-#'         log scale.  Only meaningful when the model parameterises the ED on
-#'         the log scale (e.g. \code{\link{llogistic2}}).}
+#'         log scale.  Only valid when the model parameterises the ED on
+#'         the log scale (e.g. \code{\link{llogistic2}}, \code{LN.*(loge = TRUE)}) or
+#'         when the doses were log-transformed (\code{logBase} given). For models returning
+#'         ED on the dose scale an error with instructions is raised.}
 #'       \item{\code{"tfls"}}{Experimental: intervals obtained by transforming
 #'         to the log scale, computing Wald intervals there, then
 #'         back-transforming.}
@@ -202,7 +254,12 @@ ED <- function(object, ...) UseMethod("ED", object)
 #' ED(ryegrass.m1, c(10, 50, 90), interval = "delta")
 #'
 #' ## Displaying 95% confidence intervals using back-transformation
-#' ED(ryegrass.m1, c(10, 50, 90), interval = "fls")
+#' ## ('fls' needs ED on the log scale, e.g. the LL2.* models)
+#' ryegrass.m2 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4())
+#' ED(ryegrass.m2, c(10, 50, 90), interval = "fls")
+#'
+#' ## Displaying 95% confidence intervals computed on the log scale
+#' ED(ryegrass.m1, c(10, 50, 90), interval = "tfls")
 #'
 #' ## Displaying 95% confidence intervals using inverse regression
 #' ED(ryegrass.m1, c(10, 50, 90), interval = "inv")
@@ -277,6 +334,11 @@ ED <- function(object, ...) UseMethod("ED", object)
   
   indexMat <- object[["indexMat"]]
   parmMat  <- object[["parmMat"]]
+
+  # 'fls' back-transforms with exp(); only meaningful when the ED is on the log scale.
+  if (identical(interval, "fls")) {
+    .checkFlsInterval(object[["fct"]], logBase, object[["logDose"]], list(...))
+  }
 
   # Ensure indexMat is always a matrix, even if it's a single column vector
   if (!is.matrix(indexMat)) {
