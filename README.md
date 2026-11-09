@@ -56,28 +56,30 @@ For details on why the CRAN and upstream fork version is heavily outdated see th
 
 ### Install from GitHub (Recommended)
 
-> Install via `remotes` package:
+We recommend installing with the [`pak`](https://pak.r-lib.org/) package. It is much faster than `remotes` or `devtools`, resolves dependencies better, and installs them in parallel.
+
+``` r
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+
+# Latest development version
+pak::pak("hreinwald/drc@dev")
+
+# Latest stable release version
+pak::pak("hreinwald/drc@main")
+```
+
+#### Backup: install via `remotes`
+
+If `pak` is not available or not working, use `remotes` instead:
+
 ``` r
 if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 
-# Latest development version 
+# Latest development version
 remotes::install_github("hreinwald/drc@dev")
 
 # Latest stable release version
-devtools::install_github("hreinwald/drc@main")
-```
-
-----
-
-> Install via `devtools` package:
-```r
-if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-
-# Latest development version 
-devtools::install_github("hreinwald/drc@dev")
-
-# Latest stable release version
-devtools::install_github("hreinwald/drc@main")
+remotes::install_github("hreinwald/drc@main")
 ```
 
 ### Local Installation from tar.gz

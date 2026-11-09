@@ -69,7 +69,7 @@
 <div class="section level2">
 <h2 id="id_2-decide-on-drmemstandard-dead-code">2. Decide on <code>drmEMstandard</code> (dead code)<a class="anchor" aria-label="anchor" href="#id_2-decide-on-drmemstandard-dead-code"></a></h2>
 <p><code>R/drmEMstandard.R</code> is not reachable from <code><a href="reference/drm.html">drm()</a></code> because <code>type</code> only accepts <code>continuous, binomial, Poisson, negbin1, negbin2, event, ssd</code>. It is only exercised by <code>tests/testthat/test-drmEMstandard.R</code>.</p>
-<p>Pick one: - <strong>Remove:</strong> delete <code>R/drmEMstandard.R</code>, <code>tests/testthat/test-drmEMstandard.R</code>, and the <code>"standard"</code> branch in <code><a href="reference/vcov.drc.html">vcov.drc()</a></code> (<code>contData</code> check). Run <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code>. - <strong>Keep:</strong> add <code>"standard"</code> to the <code>type</code> choices in <code><a href="reference/drm.html">drm()</a></code> and <code><a href="reference/drm_legacy.html">drm_legacy()</a></code>, add a dispatch branch next to the other <code>drmEM*</code> calls in <code><a href="reference/drm.html">drm()</a></code>, and document the option in <code>@param type</code>.</p>
+<p>Pick one: - <strong>Remove:</strong> delete <code>R/drmEMstandard.R</code>, <code>tests/testthat/test-drmEMstandard.R</code>, and the <code>"standard"</code> branch in <code><a href="reference/vcov.drc.html">vcov.drc()</a></code> (<code>contData</code> check). Run <code><a href="https://rdrr.io/pkg/devtools/man/test.html" class="external-link">devtools::test()</a></code>. - <strong>Keep:</strong> add <code>"standard"</code> to the <code>type</code> choices in <code><a href="reference/drm.html">drm()</a></code> and <code><a href="reference/drm_legacy.html">drm_legacy()</a></code>, add a dispatch branch next to the other <code>drmEM*</code> calls in <code><a href="reference/drm.html">drm()</a></code>, and document the option in <code>@param type</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="id_3-make-getmeanfunctions-complete-documentation-inconsistency">3. Make <code>getMeanFunctions()</code> complete (documentation inconsistency)<a class="anchor" aria-label="anchor" href="#id_3-make-getmeanfunctions-complete-documentation-inconsistency"></a></h2>
@@ -90,9 +90,9 @@
 </ul></div>
 <div class="section level2">
 <h2 id="id_5-guard-against-namespace-drift-process-not-a-bug">5. Guard against NAMESPACE drift (process, not a bug)<a class="anchor" aria-label="anchor" href="#id_5-guard-against-namespace-drift-process-not-a-bug"></a></h2>
-<p><code>NAMESPACE</code> is hand-maintained (no roxygen header), so <code>@export</code> tags are ignored by <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code> for it.</p>
+<p><code>NAMESPACE</code> is hand-maintained (no roxygen header), so <code>@export</code> tags are ignored by <code><a href="https://rdrr.io/pkg/devtools/man/document.html" class="external-link">devtools::document()</a></code> for it.</p>
 <ul><li>Whenever you add an exported function or S3 method, edit <code>NAMESPACE</code> by hand in the same commit.</li>
-<li>Before each release run <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> and look for “Undocumented code objects” and “S3 methods not registered” notes.</li>
+<li>Before each release run <code><a href="https://rdrr.io/pkg/devtools/man/check.html" class="external-link">devtools::check()</a></code> and look for “Undocumented code objects” and “S3 methods not registered” notes.</li>
 <li>Optional: add a test that compares <code>getNamespaceExports("drc")</code> to a stored list so unintended export changes fail CI.</li>
 </ul></div>
 </div>
