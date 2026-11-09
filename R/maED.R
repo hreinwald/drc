@@ -13,7 +13,9 @@
 #' means of the confidence limits for the individual fits.
 #'
 #' @param object an object of class \code{drc}.
-#' @param fctList a list of non-linear functions to be compared.
+#' @param fctList a list of non-linear functions to be compared. Models with a log(ED)
+#'   parameterisation (\code{LL2.*}, \code{LN.*(loge = TRUE)}) are not allowed (an error with
+#'   instructions is raised); use their dose-scale equivalents \code{LL.*} / \code{LN.*}.
 #' @param respLev a numeric vector containing the response levels.
 #' @param interval character string specifying the type of confidence intervals
 #'   to be supplied. The default is \code{"none"}. The choices \code{"buckland"}
@@ -129,6 +131,8 @@ maED <- function(
   
   interval <- match.arg(interval)
   type     <- match.arg(type)
+  
+  .checkNoLogEDModels(object, fctList)
   
   ## --- Handling multiple curves in a single dataset ---------------------------
   
@@ -314,7 +318,7 @@ maED <- function(
       seVec <- rep(NA_real_, lenrl)
     } else {
       seVec <- apply(
-        sqrt(edSe^2 + (t(t(edEst) - apply(edEst, MARGIN = 2, FUN = mean, na.rm = effectiveNaRm)))^2) * wVec,
+        sqrt(edSe^2 + (t(t(edEst) - edVec))^2) * wVec,
         MARGIN = 2,
         FUN    = sum,
         na.rm  = effectiveNaRm
@@ -330,7 +334,7 @@ maED <- function(
       retMat <- matrix(NA_real_, lenrl, 4)
     } else {
       seVec <- apply(
-        sqrt(edSe^2 + (t(t(edEst) - apply(edEst, MARGIN = 2, FUN = mean, na.rm = effectiveNaRm)))^2) * wVec,
+        sqrt(edSe^2 + (t(t(edEst) - edVec))^2) * wVec,
         MARGIN = 2,
         FUN    = sum,
         na.rm  = effectiveNaRm
