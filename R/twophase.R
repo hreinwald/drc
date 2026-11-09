@@ -8,7 +8,10 @@
 #' \deqn{f(x) = c + \frac{d1-c}{1+\exp(b1(\log(x)-\log(e1)))} + \frac{d2}{1+\exp(b2(\log(x)-\log(e2)))}}
 #'
 #' For each of the two phases, the parameters have the same interpretation as in
-#' the ordinary log-logistic model.
+#' the ordinary log-logistic model: \code{b1}, \code{b2} are the slopes and \code{e1}, \code{e2} the
+#' locations of the two phases; \code{c} (here \code{c1}) is the lower asymptote of the whole curve
+#' and the upper asymptote is \code{d1 + d2}. Starting values from the self starter may need to be
+#' replaced by user-supplied \code{start} values. No effective doses (\code{\link{ED}}) are available.
 #'
 #' @param fixed numeric vector specifying which parameters are fixed and at what value
 #'   they are fixed. NAs are used for parameters that are not fixed.
@@ -29,6 +32,15 @@
 #'
 #' @seealso The basic component in the two-phase model is the log-logistic model
 #'   \code{\link{llogistic}}.
+#'
+#' @examples
+#' ## Simulated two-phase data: fit with drm() and plot (starting values supplied)
+#' dose <- rep(10^seq(-1, 4, length.out = 12), each = 2)
+#' parm <- c(b1 = 2, c1 = 0.5, d1 = 4, e1 = 3, b2 = 1.5, d2 = 4, e2 = 400)
+#' mu <- twophase()$fct(dose, matrix(parm, length(dose), 7, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.04 * sin(seq_along(dose) * 1.7))
+#' m1 <- drm(response ~ dose, data = dat, fct = twophase(), start = parm)
+#' plot(m1, type = "all", log = "x", main = "Two-phase model")
 #'
 #' @keywords models nonlinear
 "twophase" <- function(
