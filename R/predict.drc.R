@@ -26,10 +26,19 @@
 #'   the model. Default is TRUE.
 #' @param ... further arguments passed to or from other methods.
 #'
+#' @details
+#' Standard errors and intervals use the delta method with the analytic first derivatives of
+#' the mean function (\code{deriv1}) when the model provides them. For models without analytic
+#' derivatives (e.g. \code{\link{NEC.4}}, \code{\link{CRS.6}}, \code{\link{baro5}}) a numerical
+#' gradient is used instead. If neither \code{se.fit} nor \code{interval} is requested only the
+#' predicted values are computed.
+#'
 #' @return A matrix with as many rows as there are dose values provided in
 #'   \code{newdata} or in the original dataset (in case \code{newdata} is not
 #'   specified) and, at most, 4 columns containing fitted values, standard
-#'   errors, lower and upper limits of confidence/prediction intervals.
+#'   errors, lower and upper limits of confidence/prediction intervals. If only
+#'   fitted values are requested (\code{se.fit = FALSE} and \code{interval = "none"}) a numeric
+#'   vector is returned.
 #'
 #' @seealso For details see the help page for \code{\link{predict.lm}}.
 #'
@@ -139,7 +148,24 @@
     deriv1 <- objFct$"deriv1"
     if (is.null(deriv1))
     {
-        return(retMat[, 1])        
+        if (!se.fit && identical(interval, "none"))
+        {
+            return(retMat[, 1])
+        }
+
+        ## SE / intervals requested: fall back on a numerical gradient of the mean function
+        meanFct <- objFct$"fct"
+        deriv1 <- function(dose, parm)
+        {
+            vapply(seq_len(ncol(parm)), function(k)
+            {
+                h <- 1e-6 * max(1, abs(parm[1, k]))
+                up <- parm; dn <- parm
+                up[1, k] <- up[1, k] + h
+                dn[1, k] <- dn[1, k] - h
+                (meanFct(dose, up) - meanFct(dose, dn)) / (2 * h)
+            }, numeric(1))
+        }
     }    
 
     ## Calculating the quantile to be used in the confidence intervals
