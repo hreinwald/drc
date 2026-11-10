@@ -21,6 +21,8 @@
 * `drm()` evaluates a `pmodels` argument in the calling environment (not only `.GlobalEnv`) when `data` is `NULL`.
 
 ## Changes
+* Exported and documented `mrdrm()` as a model-robust blend of a parametric `drm()` fit and a local-linear fit; added argument/data validation, finite criterion handling, and probability-bound handling for binomial fits. Continuous leave-one-dose-out predictions are no longer incorrectly truncated to [0.01, 0.99].
+* `getMeanFunctions()` now lists all 58 built-in mean functions, including Gompertz, log-normal, logistic, Cedergreen/UCRS, NEC, and the remaining advertised models. The fractional-polynomial model is listed with powers `(-1, 1)`.
 * Added `edfct` to the NEC models: `ED()` now works for `NEC.2()` / `NEC.3()` / `NEC.4()` (relative and absolute levels; delta-method standard errors). The ED is the dose where the response has dropped by p% of (d - c), `e - log(1 - p/100) / b`, and is therefore above the NEC (the threshold parameter `e`), which is estimated directly; the `?NEC` help page and the `nec-models` vignette now explain the difference. It is `NA` (with a warning) if the slope `b` is not positive or the response level is outside the asymptote range.
 * README: the GitHub installation instructions now recommend `pak::pak("hreinwald/drc@dev")` / `pak::pak("hreinwald/drc@main")`, with `remotes::install_github()` kept as a backup; the `devtools::install_github()` instructions were removed.
 * Added `tests/testthat/test-numerical-derivatives-ed.R` and `tests/testthat/test-review-fixes-f07-f17.R`: cross-check analytic `deriv1`/`derivx`, ED values and ED standard errors of all model functions against finite differences, and cover the fixes listed above.
