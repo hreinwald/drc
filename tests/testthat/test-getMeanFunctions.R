@@ -20,6 +20,30 @@ test_that("getMeanFunctions() with no arguments returns all models invisibly", {
   expect_true(length(out) > 0)
 })
 
+test_that("getMeanFunctions() includes all built-in models", {
+  models <- getMeanFunctions(display = FALSE)
+  model_names <- vapply(models, `[`, character(1), 1L)
+  expected_names <- c(
+    "LL.2", "LL.3", "LL.3u", "LL.4", "LL.5",
+    "W1.2", "W1.3", "W1.3u", "W1.4",
+    "W2.2", "W2.3", "W2.3u", "W2.4",
+    "BC.4", "BC.5",
+    "LL2.2", "LL2.3", "LL2.3u", "LL2.4", "LL2.5",
+    "AR.2", "AR.3", "EXD.2", "EXD.3",
+    "G.2", "G.3", "G.3u", "G.4",
+    "LN.2", "LN.3", "LN.3u", "LN.4",
+    "L.3", "L.4", "L.5",
+    "MM.2", "MM.3",
+    "CRS.4a", "CRS.4b", "CRS.4c", "CRS.5a", "CRS.5b", "CRS.5c", "CRS.6",
+    "UCRS.4a", "UCRS.4b", "UCRS.4c", "UCRS.5a", "UCRS.5b", "UCRS.5c",
+    "NEC.2", "NEC.3", "NEC.4", "FPL.4(-1,1)",
+    "W2x.3", "W2x.4", "baro5", "gammadr"
+  )
+
+  expect_length(model_names, 58)
+  expect_setequal(model_names, expected_names)
+})
+
 # =============================================================================
 # 2. Filter by noParm only
 # =============================================================================
