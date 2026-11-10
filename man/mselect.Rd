@@ -14,51 +14,88 @@ mselect(
 )
 }
 \arguments{
-\item{object}{an object of class 'drc'.}
+\item{object}{A fitted object of class \code{"drc"}.}
 
-\item{fctList}{a list of dose-response functions to be compared.}
+\item{fctList}{An optional list of dose-response functions to fit to the same
+data. The original model is included even when it is not repeated in this
+list.}
 
-\item{nested}{logical. TRUE results in F tests between adjacent models (in \code{fctList}).
-Only sensible for nested models.}
+\item{nested}{Logical; if \code{TRUE}, report p-values from tests comparing
+each model with the model immediately above it in the returned table.
+These tests are meaningful only when each pair is nested and is otherwise
+comparable. The first row has no comparison and its p-value is \code{NA}.}
 
-\item{sorted}{character string determining according to which criterion the model fits
-are ranked.}
+\item{sorted}{Criterion used to order the result. \code{"IC"} (the default)
+orders by the information criterion in ascending order; \code{"Res var"}
+orders by residual variance in ascending order; \code{"Lack of fit"} orders
+by lack-of-fit p-value in descending order; and \code{"no"} preserves the
+input order. Missing values are placed last.}
 
-\item{linreg}{logical indicating whether or not additionally polynomial regression models
-(linear, quadratic, and cubic models) should be fitted.}
+\item{linreg}{Logical; if \code{TRUE}, also fit linear, quadratic, and cubic
+polynomial regressions. This option is available only for continuous data
+with a single dose-response curve.}
 
-\item{icfct}{function for supplying the information criterion to be used.
-\code{\link{AIC}} and \code{\link{BIC}} are two options.}
+\item{icfct}{Function used to calculate the information criterion. Defaults
+to \code{\link{AIC}}; \code{\link{BIC}} can also be used. The function must
+return one numeric value for a fitted model.}
 }
 \value{
-A matrix with one row for each model and one column for each criterion.
+A numeric matrix with one row per model (including the original
+model) and columns for the log likelihood, information criterion,
+lack-of-fit p-value, and, for continuous data, residual variance. If
+\code{nested = TRUE}, a nested-test p-value column is also included unless
+\code{linreg = TRUE}.
 }
 \description{
-Model selection by comparison of different models using the following criteria: the log
-likelihood value, Akaike's information criterion (AIC), the estimated residual standard
-error or the p-value from a lack-of-fit test.
+Re-fits a dose-response model with alternative dose-response functions and
+compares the resulting fits. The original model is always included.
 }
 \details{
-For Akaike's information criterion and the residual standard error: the smaller the better
-and for lack-of-fit test (against a one-way ANOVA model): the larger (the p-value) the
-better. Note that the residual standard error is only available for continuous dose-response
-data.
+The returned matrix reports the log likelihood, the selected information
+criterion, the lack-of-fit p-value, and (for continuous data) the residual
+variance. Smaller information-criterion and residual-variance values
+indicate a better fit; a larger lack-of-fit p-value indicates less evidence
+of lack of fit. A lack-of-fit p-value is \code{NA} when the fit type does not
+provide this test. Log likelihoods should only be compared for models fit to
+the same data under comparable likelihoods.
 
-Log likelihood values cannot be used for comparison unless the models are nested.
+Candidate models are re-fitted to the data stored in \code{object}. A
+candidate that cannot be fitted is retained in the result with \code{NA}
+statistics and a warning. \code{mselect()} returns a comparison table, not
+the fitted candidate objects. With the default \code{sorted = "IC"}, the
+first row is the model with the smallest information criterion.
+
+For nested comparisons, each p-value compares a row with the row immediately
+above it after sorting. Thus, the selected \code{sorted} criterion determines
+the comparison sequence. Failed fits have \code{NA} statistics; a nested
+comparison is omitted if either model in that pair failed. A test error or
+invalid p-value is reported as \code{NA} with a warning. These tests should
+not be used to compare non-nested models.
 }
 \examples{
-### Example with continuous/quantitative data
-## Fitting initial four-parameter log-logistic model
+## Fit a starting model to the ryegrass data
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 
-## Model selection
-mselect(ryegrass.m1, list(LL.3(), LL.5(), W1.3(), W1.4(), W2.4(), baro5()))
+## Compare candidate dose-response functions; the smallest AIC is ranked first
+candidate_fcts <- list(LL.3 = LL.3(), W1.4 = W1.4(), W2.4 = W2.4())
+selection <- mselect(ryegrass.m1, fctList = candidate_fcts)
+selection
 
-## Model selection including linear, quadratic, and cubic regression models
-mselect(ryegrass.m1, list(LL.3(), LL.5(), W1.3(), W1.4(), W2.4(), baro5()), linreg = TRUE)
+## Identify and refit the AIC-selected model
+best_name <- rownames(selection)[1]
+best_fit <- if (best_name == ryegrass.m1$fct$name) {
+  ryegrass.m1
+} else {
+  update(ryegrass.m1, fct = candidate_fcts[[best_name]])
+}
+best_name
+best_fit$fct$name
 
-## Comparing nested models
-mselect(ryegrass.m1, list(LL.5()), nested = TRUE)
+## Add polynomial regressions to the comparison
+mselect(ryegrass.m1, fctList = candidate_fcts, linreg = TRUE)
+
+## Compare adjacent models in the returned order
+mselect(ryegrass.m1, fctList = list(LL.5()), nested = TRUE)
 
 }
 \author{
