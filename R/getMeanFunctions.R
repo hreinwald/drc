@@ -35,12 +35,25 @@
     {
         fctList <- list(
         LL.2(), LL.3(), LL.3u(), LL.4(), LL.5(),
-        W1.2(), W1.3(), W1.4(),
-        W2.2(), W2.3(), W2.4(),
+        W1.2(), W1.3(), W1.3u(), W1.4(),
+        W2.2(), W2.3(), W2.3u(), W2.4(),
         BC.4(), BC.5(), 
         LL2.2(), LL2.3(), LL2.3u(), LL2.4(), LL2.5(),                        
         AR.2(), AR.3(),
-        MM.2(), MM.3() 
+        EXD.2(), EXD.3(),
+        G.2(), G.3(), G.3u(), G.4(),
+        LN.2(), LN.3(), LN.3u(), LN.4(),
+        L.3(), L.4(), L.5(),
+        MM.2(), MM.3(),
+        suppressWarnings(CRS.4a()), suppressWarnings(CRS.4b()), suppressWarnings(CRS.4c()),
+        suppressWarnings(CRS.5a()), suppressWarnings(CRS.5b()), suppressWarnings(CRS.5c()),
+        CRS.6(),
+        UCRS.4a(fctName = "UCRS.4a"), UCRS.4b(fctName = "UCRS.4b"), UCRS.4c(fctName = "UCRS.4c"),
+        UCRS.5a(fctName = "UCRS.5a"), UCRS.5b(fctName = "UCRS.5b"), UCRS.5c(fctName = "UCRS.5c"),
+        NEC.2(), NEC.3(), NEC.4(),
+        FPL.4(-1, 1),
+        W2x.3(), W2x.4(),
+        baro5(), gammadr()
         )
     } else {
         fctList <- flist
