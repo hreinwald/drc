@@ -13,7 +13,6 @@ Description: Analysis of dose-response data is made available through a suite of
     flexible and versatile model fitting and after-fitting functions.
 License: GPL-2 | file LICENSE
 URL: https://hreinwald.github.io/drc, https://github.com/hreinwald/drc, https://www.bioassay.dk, https://www.r-project.org, https://cran.r-project.org/web/packages/drc/index.html
-RoxygenNote: 7.3.3
 BugReports: https://github.com/hreinwald/drc/issues/
 Roxygen: list(markdown = TRUE)
 Suggests:
@@ -22,3 +21,4 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0

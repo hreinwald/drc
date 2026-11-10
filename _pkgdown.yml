@@ -32,6 +32,7 @@ reference:
   - compParm
   - mselect
   - drmc
+  - mrdrm
 
 - title: Model Functions
   desc: Available dose-response model families
