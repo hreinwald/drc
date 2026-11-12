@@ -1,4 +1,10 @@
-# drc (development version)
+# drc 3.4.0
+
+## Highlights
+* **Numerical results change.** This release corrects several wrong standard errors, confidence intervals and ED values. Re-run analyses that used the affected functions: `L.3/4/5` ED (ED10/ED90 were mirrored for decreasing curves), `G.*` and `LL2.5` ED standard errors, `W2x.3/4` ED, `CRS.*` `predict()` standard errors and sandwich estimators, `gammadr()` derivatives, and `maED()` Buckland/Kang standard errors.
+* **Stricter, explanatory errors** replace silent wrong results: `ED(interval = "fls")` on dose-scale models, `maED()` / `maED_robust()` with log(ED) models (`LL2.*`, `LN.*(loge = TRUE)`), and `drm(separate = TRUE)` with `varcov`, `pshifts` or M-estimators.
+* **New:** `mrdrm()` is exported; `ED()` works for `NEC.2/3/4`; `getMeanFunctions()` lists all 58 built-in models; `confint()` / `ED()` work for `type = "ssd"`; `predict()` gives standard errors for models without analytic derivatives; `drm(separate = TRUE)` forwards `robust`, `bcVal`, `bcAdd`, `lowerl`, `upperl`, `logDose` and `start`.
+* No functions or arguments were removed or renamed; the public API is backward compatible.
 
 ## Bug Fixes
 * Fixed `logistic()` / `L.3()` / `L.4()` / `L.5()` ED: relative levels were mirrored (ED10 and ED90 swapped) for decreasing curves (b > 0) and `type = "absolute"` returned the dose of the mirrored response. The edfct now uses `EDhelper()` like the log-logistic models.
