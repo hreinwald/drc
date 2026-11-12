@@ -19,3 +19,14 @@
 ^build_pkgdown\.R$
 ^CITATION\.cff$
 ^\.build_artifacts$
+^\.poster$
+^\.quarto$
+^\.Renviron$
+^\.Rhistory$
+^.*\.Rcheck$
+^AGENTS\.md$
+^TODO\.md$
+^pkgdown$
+^tests/package_coverage\.log$
+^tests/testthat/Rplots\.pdf$
+^Rplots\.pdf$

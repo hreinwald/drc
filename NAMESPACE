@@ -1,7 +1,7 @@
 ## functions
 export(
 
-AR.2, AR.3,
+arandaordaz, AR.2, AR.3,
 
 baro5, 
 
