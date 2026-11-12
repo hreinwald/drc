@@ -13,7 +13,7 @@
 #'
 #' @return An invisible list of functions or a list of strings with brief function descriptions.
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #'
 #' @examples
 #' ## Listing all functions

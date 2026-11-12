@@ -193,7 +193,7 @@ values, \code{\link{compParm}} for comparing other model parameters, and
 \code{\link{backfit}}.
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

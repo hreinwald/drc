@@ -50,7 +50,7 @@ comped(c(28.396, 65.573), c(1.875, 5.619), log = FALSE, operator = "-")
 
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

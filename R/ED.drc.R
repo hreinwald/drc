@@ -12,7 +12,7 @@
 #' @return See \code{\link{ED.drc}} for details on the return value.
 #'
 #' @seealso \code{\link{ED.drc}} for the default method, \code{\link{EDcomp}} for estimating differences and ratios of ED
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #' @keywords models nonlinear
 #' @export
 ED <- function(object, ...) UseMethod("ED", object)
@@ -264,7 +264,7 @@ ED <- function(object, ...) UseMethod("ED", object)
 #' ## Displaying 95% confidence intervals using inverse regression
 #' ED(ryegrass.m1, c(10, 50, 90), interval = "inv")
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #' @keywords models nonlinear
 #' @export
 "ED.drc" <- function(

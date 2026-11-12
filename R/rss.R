@@ -11,7 +11,7 @@
 #'
 #' @seealso [Rsq()] which uses this function to compute R-squared.
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #'
 #' @keywords models nonlinear
 #' @export

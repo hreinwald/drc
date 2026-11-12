@@ -40,7 +40,7 @@ getMeanFunctions(3, fname = c("LL", "W"))
 
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

@@ -23,7 +23,7 @@
 #' vcov(ryegrass.m1)
 #' vcov(ryegrass.m1, corr = TRUE)
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #'
 #' @keywords models nonlinear
 "vcov.drc" <-

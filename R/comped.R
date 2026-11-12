@@ -26,7 +26,7 @@
 #' ## Comparing ED50 values as a difference
 #' comped(c(28.396, 65.573), c(1.875, 5.619), log = FALSE, operator = "-")
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #' @keywords models nonlinear
 "comped" <- function(est, se, log = TRUE, interval = TRUE, operator = c("-", "/"), level = 0.95, df = NULL)
 {
