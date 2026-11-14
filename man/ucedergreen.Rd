@@ -47,13 +47,21 @@ components required for use with modeling functions like \code{\link[drc]{drm}}.
 modified log-logistic model for describing u-shaped hormesis, under various constraints on the parameters.
 }
 \details{
-The u-shaped model is given by the expression
-\deqn{f(x) = c + d - \frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}}
+The u-shaped model is the mirror image of the decreasing Cedergreen-Ritz-Streibig (CRS)
+model of Cedergreen et al. (2005), reflected about the mid-level \eqn{(c+d)/2}:
+\deqn{f(x) = d - \frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}}
+equivalently \eqn{f(x) = c + d - \mathrm{CRS}(x)}. Hence \eqn{f(0) = c} and
+\eqn{f(x) \to d} for \eqn{x \to \infty} (for \eqn{b > 0}), i.e. \code{c} is the response of the
+untreated control and \code{d} the upper limit. The U-shaped model is an extension in this package;
+Cedergreen et al. (2005) define only the decreasing model.
 
-The parameters are: \code{b}, the slope; \code{c}, the lower and \code{d} the upper asymptote of the
-component that is mirrored in the U-shape (the curve starts at \eqn{2c} and approaches
-\eqn{c + d}); \code{e}, the location of the transition; and \code{f}, the size of the hormetic
-deviation at low doses. The wrappers \code{\link{UCRS.4a}}-\code{\link{UCRS.5c}} fix \eqn{\alpha} at
+The parameters are: \code{b}, the slope; \code{c}, the lower and \code{d} the upper asymptote;
+\code{e}, the location of the transition; and \code{f}, the size of the hormetic
+deviation at low doses (the response dips below \code{c}). As for the CRS model, \code{b} and \code{e}
+lose their usual slope and ED50 interpretation when \eqn{f \ne 0}. Effective doses
+(\code{\link{ED}}) are the doses at which the response has covered \code{p} percent of the way from
+\code{c} to \code{d} on the increasing branch beyond the dip; for \code{type = "absolute"} the
+response level itself is supplied. The wrappers \code{\link{UCRS.4a}}-\code{\link{UCRS.5c}} fix \eqn{\alpha} at
 1, 0.5 and 0.25 (suffix a, b, c) and, for the four-parameter versions, \code{c} at 0.
 }
 \examples{

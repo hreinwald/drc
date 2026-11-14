@@ -19,6 +19,22 @@ An object of class 'drc'.
 \description{
 \code{update} updates and re-fits a model on the basis of an object of class 'drc'.
 }
+\details{
+The arguments stored in the call of the fit (e.g. \code{formula = myFormula},
+\code{data = myData}) are evaluated in the environment in which \code{drm()} was
+called, so \code{update()} - and functions that refit models through it, such as
+\code{\link{mselect}} and \code{\link{maED}} - also work for fits created inside
+functions or in a separate environment, and never pick up an object of the same
+name from the global environment by accident. New arguments supplied in \code{...}
+are evaluated in the environment \code{update()} is called from.
+
+If \code{data} is not supplied and the original \code{data} expression can no
+longer be found or now refers to different data, the data stored in the fit
+(\code{object$origData}) is used (with a warning in the latter case).
+
+Fits made inside a function keep a reference to that function's environment
+(as \code{lm()} does through its formula), which is also saved by \code{saveRDS()}.
+}
 \examples{
 ## Fitting a four-parameter Weibull model
 model1 <- drm(ryegrass, fct = W1.4())

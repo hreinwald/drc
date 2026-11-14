@@ -103,7 +103,10 @@ Default is the identity matrix (\code{NULL}), corresponding to independent respo
 with a common standard deviation estimated from the data.}
 }
 \value{
-An object of (S3) class \code{"drc"}.
+An object of (S3) class \code{"drc"}. The environment \code{drm()} was
+called from is stored in the attribute \code{"callEnv"}; \code{\link{update.drc}}
+(and thereby \code{\link{mselect}} and \code{\link{maED}}) evaluates the arguments
+of the stored call (e.g. \code{formula}, \code{data}) there when re-fitting.
 }
 \description{
 A general model fitting function for analysis of various types of dose-response data.

@@ -15,7 +15,8 @@ maED(
   type = c("relative", "absolute"),
   display = TRUE,
   na.rm = FALSE,
-  extended = FALSE
+  extended = FALSE,
+  onExclude = c("warn", "stop")
 )
 }
 \arguments{
@@ -39,7 +40,9 @@ a specific curve or compound are requested. By default estimates are shown
 for all curves.}
 
 \item{level}{numeric. The confidence level. Must be a single value strictly
-between 0 and 1. The default is \code{0.95}.}
+between 0 and 1. The default is \code{0.95}. It applies to both interval types; for
+\code{"kang"} it is also the level of the delta-method limits of the individual models
+(including the linear model if \code{linreg = TRUE}) that are averaged.}
 
 \item{type}{character string. Whether the specified response levels are
 absolute or relative (default).}
@@ -52,6 +55,12 @@ during model fitting should be excluded from subsequent calculations.}
 
 \item{extended}{logical specifying whether or not an extended output
 (including fit summaries) should be returned.}
+
+\item{onExclude}{character string, what to do if models cannot contribute to the
+average because they could not be re-fitted or have non-finite ED values:
+\code{"warn"} (default) excludes them and issues one summary warning; \code{"stop"}
+raises an error instead (recommended for scripted pipelines, where a silently
+reduced model set would change the scientific result).}
 }
 \value{
 If \code{extended = FALSE}, a matrix with two or more columns
@@ -61,7 +70,17 @@ If \code{extended = TRUE}, a list with components:
 \describe{
 \item{estimates}{Matrix of model-averaged ED estimates and intervals.}
 \item{fits}{Matrix of per-model ED estimates and AIC-based weights.}
+\item{models}{Data frame with one row per model (original model, candidates and,
+if requested, the linear model) and columns \code{model}, \code{AIC},
+\code{weight} and \code{status} (\code{"used"}, \code{"excluded: fit failed"}
+or \code{"excluded: non-finite ED"}). For several curves a column \code{curve}
+is added and the matrices are stacked.}
 }
+If at least one model was excluded, the returned matrix (\code{estimates} for
+\code{extended = TRUE}) additionally carries the attributes \code{"models"} (the data
+frame described above), \code{"n_used"} and \code{"n_requested"} (the number of models
+that contributed and that were requested; named by curve for several curves). The
+attributes are absent if all models were used.
 }
 \description{
 Estimates and confidence intervals for ED values are estimated using
@@ -76,6 +95,16 @@ variance formula under the assumption of perfectly correlated estimates
 (so, confidence intervals will tend to be too wide). Kang \emph{et al.}
 (2000) use the model weights to calculate confidence limits as weighted
 means of the confidence limits for the individual fits.
+
+The models in \code{fctList} are re-fitted with \code{\link{update.drc}}, i.e.
+the formula and data of the original call are evaluated in the environment
+\code{object} was fitted in (and \code{object$origData} is used if the data
+was changed afterwards). A model whose \emph{fit} fails (e.g. no convergence) or
+which yields non-finite ED values is excluded from the average (see
+\code{onExclude}). If instead the call stored in \code{object} cannot be
+re-evaluated at all (e.g. it refers to objects that no longer exist), no candidate
+model can be fitted and \code{maED()} stops with an explanatory error rather than
+returning the estimate of the original model as if it were a model average.
 }
 \examples{
 ## Fitting an example dose-response model

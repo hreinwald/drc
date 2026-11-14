@@ -24,7 +24,7 @@ levels. For objects of class \code{drc}, the default method
 \code{\link{ED.drc}} for the default method, \code{\link{EDcomp}} for estimating differences and ratios of ED
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}
