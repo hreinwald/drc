@@ -34,11 +34,16 @@
 #' # coeftest(ryegrass.m1, vcov = sandwich)
 #'
 #' @keywords models nonlinear
+#' @importFrom sandwich estfun
+#' @method estfun drc
+#' @export
 "estfun.drc" <- function (x, ...)
 {
     ## Extending the matrix of derivatives to have one column per parameter (not only per model parameter)
     ##  only relevant in case several curves (with different parameters) were fitted
     xderiv1 <- x$deriv1
+    ## deriv1 collapses to a vector when only one parameter is free (e.g., two parameters fixed)
+    if (!is.matrix(xderiv1)) {xderiv1 <- as.matrix(xderiv1)}
     indexMat0 <- x$indexMat2
     if (is.matrix(indexMat0))
     {
@@ -52,7 +57,7 @@
     ## Defining a helper function for making a wide version of the mattrix of parameter estimates
     xderiv2Fct <- function(xderiv1, indMat, curveID)
     {
-        xderiv2 <- xderiv1[, rep(1:ncol(xderiv1), apply(indMat, 1, function(x){length(unique(x))}))]    
+        xderiv2 <- xderiv1[, rep(1:ncol(xderiv1), apply(indMat, 1, function(x){length(unique(x))})), drop = FALSE]
         
         cnInd <- colnames(indMat)
         for (i in 1:ncol(indMat))
@@ -129,6 +134,9 @@
 #' @author Christian Ritz
 #'
 #' @keywords models nonlinear
+#' @importFrom sandwich bread
+#' @method bread drc
+#' @export
 "bread.drc" <- function (x, ...) 
 {
     if (identical(x$type, "continuous"))
@@ -137,6 +145,8 @@
     } else { ## Note: not checked for event time data!
         breadMat <- vcov(x) * unlist(x$sumList[1])
     }
+    breadMat <- as.matrix(breadMat)
+    dimnames(breadMat) <- list(names(coef(x)), names(coef(x)))
     return(breadMat)
 }
 

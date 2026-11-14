@@ -26,7 +26,9 @@
 #'   a specific curve or compound are requested. By default estimates are shown
 #'   for all curves.
 #' @param level numeric. The confidence level. Must be a single value strictly
-#'   between 0 and 1. The default is \code{0.95}.
+#'   between 0 and 1. The default is \code{0.95}. It applies to both interval types; for
+#'   \code{"kang"} it is also the level of the delta-method limits of the individual models
+#'   (including the linear model if \code{linreg = TRUE}) that are averaged.
 #' @param type character string. Whether the specified response levels are
 #'   absolute or relative (default).
 #' @param display logical. If \code{TRUE} results are displayed. Otherwise they
@@ -35,6 +37,11 @@
 #'   during model fitting should be excluded from subsequent calculations.
 #' @param extended logical specifying whether or not an extended output
 #'   (including fit summaries) should be returned.
+#' @param onExclude character string, what to do if models cannot contribute to the
+#'   average because they could not be re-fitted or have non-finite ED values:
+#'   \code{"warn"} (default) excludes them and issues one summary warning; \code{"stop"}
+#'   raises an error instead (recommended for scripted pipelines, where a silently
+#'   reduced model set would change the scientific result).
 #'
 #' @return If \code{extended = FALSE}, a matrix with two or more columns
 #'   containing the model-averaged estimates and the corresponding estimated
@@ -43,7 +50,28 @@
 #'   \describe{
 #'     \item{estimates}{Matrix of model-averaged ED estimates and intervals.}
 #'     \item{fits}{Matrix of per-model ED estimates and AIC-based weights.}
+#'     \item{models}{Data frame with one row per model (original model, candidates and,
+#'       if requested, the linear model) and columns \code{model}, \code{AIC},
+#'       \code{weight} and \code{status} (\code{"used"}, \code{"excluded: fit failed"}
+#'       or \code{"excluded: non-finite ED"}). For several curves a column \code{curve}
+#'       is added and the matrices are stacked.}
 #'   }
+#'   If at least one model was excluded, the returned matrix (\code{estimates} for
+#'   \code{extended = TRUE}) additionally carries the attributes \code{"models"} (the data
+#'   frame described above), \code{"n_used"} and \code{"n_requested"} (the number of models
+#'   that contributed and that were requested; named by curve for several curves). The
+#'   attributes are absent if all models were used.
+#'
+#' @details
+#' The models in \code{fctList} are re-fitted with \code{\link{update.drc}}, i.e.
+#' the formula and data of the original call are evaluated in the environment
+#' \code{object} was fitted in (and \code{object$origData} is used if the data
+#' was changed afterwards). A model whose \emph{fit} fails (e.g. no convergence) or
+#' which yields non-finite ED values is excluded from the average (see
+#' \code{onExclude}). If instead the call stored in \code{object} cannot be
+#' re-evaluated at all (e.g. it refers to objects that no longer exist), no candidate
+#' model can be fitted and \code{maED()} stops with an explanatory error rather than
+#' returning the estimate of the original model as if it were a model average.
 #'
 #' @references
 #'   Buckland, S. T. and Burnham, K. P. and Augustin, N. H. (1997)
@@ -100,7 +128,8 @@ maED <- function(
     type     = c("relative", "absolute"),
     display  = TRUE,
     na.rm    = FALSE,
-    extended = FALSE
+    extended = FALSE,
+    onExclude = c("warn", "stop")
 ) {
   
   ## --- Input validation -------------------------------------------------------
@@ -131,6 +160,7 @@ maED <- function(
   
   interval <- match.arg(interval)
   type     <- match.arg(type)
+  onExclude <- match.arg(onExclude)
   
   .checkNoLogEDModels(object, fctList)
   
@@ -145,6 +175,8 @@ maED <- function(
     curveIds   <- colnames(object[["parmMat"]])
     resultList <- vector("list", ncolPM)
     
+    # Per-curve results are always requested in the extended form so that the
+    # model status table can be stacked for all curves.
     for (i in seq_len(ncolPM)) {
       resultList[[i]] <- maED(
         object   = object,
@@ -157,11 +189,12 @@ maED <- function(
         type     = type,
         display  = display,
         na.rm    = na.rm,
-        extended = extended
+        extended = TRUE,
+        onExclude = onExclude
       )
     }
     
-    return(do.call(rbind, resultList))
+    return(.maEDCombineCurves(resultList, curveIds, extended))
   }
   
   ## --- Model selection summary ------------------------------------------------
@@ -181,9 +214,10 @@ maED <- function(
   fitFailed <- logical(numRows + linreg)
   
   # Confidence limit matrices are always initialised to avoid undefined
-  # variable errors in the 'kang' result-construction block.
-  edCll <- matrix(NA, numRows, lenrl)
-  edClu <- matrix(NA, numRows, lenrl)
+  # variable errors in the 'kang' result-construction block. They have one row
+  # per model including the optional linear model, like edEst and the weights.
+  edCll <- matrix(NA, numRows + linreg, lenrl)
+  edClu <- matrix(NA, numRows + linreg, lenrl)
   
   ## --- Set interval argument for individual ED calls --------------------------
   
@@ -193,7 +227,7 @@ maED <- function(
   
   ## --- ED estimates for the original model ------------------------------------
   
-  edMat      <- ED(object, respLev, interval2, clevel, type = type, display = FALSE)
+  edMat      <- ED(object, respLev, interval2, clevel, level = level, type = type, display = FALSE)
   edEst[1, ] <- edMat[, 1]
   edSe[1, ]  <- edMat[, 2]
   
@@ -204,20 +238,50 @@ maED <- function(
   
   ## --- ED estimates for each model in fctList ---------------------------------
   
+  # A failing re-fit is either a genuine fit failure of this candidate (e.g. no
+  # convergence: exclude the model) or a sign that the call stored in 'object'
+  # cannot be re-evaluated at all (affects every candidate: stop). To tell them
+  # apart, the original model is re-fitted once after the first failure.
+  callError   <- NULL
+  callChecked <- FALSE
+  
   for (i in seq_len(lenfl)) {
-    edMati <- try(
-      ED(
-        update(object, fct = fctList[[i]]),
-        respLev,
-        interval2,
-        clevel,
-        type    = type,
-        display = FALSE
-      ),
-      silent = TRUE
+    refit <- tryCatch(
+      update(object, fct = fctList[[i]]),
+      error = function(e) e
     )
     
-    if (inherits(edMati, "try-error")) {
+    if (inherits(refit, "error") && !callChecked) {
+      callChecked <- TRUE
+      callError   <- .maEDCallError(object)
+    }
+    if (!is.null(callError)) {
+      stop(
+        "maED(): cannot re-fit the candidate models because the call stored in ",
+        "'object' cannot be re-evaluated: ", conditionMessage(callError), ". ",
+        "Refit 'object' so that its formula and data are available (see ?update.drc).",
+        call. = FALSE
+      )
+    }
+    
+    edMati <- if (inherits(refit, "error")) {
+      refit
+    } else {
+      try(
+        ED(
+          refit,
+          respLev,
+          interval2,
+          clevel,
+          level   = level,
+          type    = type,
+          display = FALSE
+        ),
+        silent = TRUE
+      )
+    }
+    
+    if (inherits(edMati, "try-error") || inherits(edMati, "error")) {
       edMati <- matrix(NA, length(respLev), 4)
       fitFailed[i + 1L] <- TRUE
     }
@@ -239,11 +303,23 @@ maED <- function(
     edEst[lenfl + 2L, ] <- unlist(edLin[, 1])
     edSe[lenfl + 2L, ]  <- unlist(edLin[, 2])
     
+    # Delta-method limits of the linear model at the requested level (for Kang)
+    edLinCi <- confint.basic(
+      cbind(unlist(edLin[, 1]), unlist(edLin[, 2])),
+      level, "continuous", df.residual(linFit1), FALSE
+    )
+    edCll[lenfl + 2L, ] <- edLinCi[, 1]
+    edClu[lenfl + 2L, ] <- edLinCi[, 2]
+    
     # Include linear model AIC in the weight calculation.
-    expVec <- as.vector(exp(-c(msMat[, 2], AIC(linFit1)) / 2))
+    aicVec <- c(msMat[, 2], AIC(linFit1))
+    expVec <- as.vector(exp(-aicVec / 2))
   } else {
+    aicVec <- msMat[, 2]
     expVec <- as.vector(exp(-msMat[, 2] / 2))
   }
+  
+  modelNames <- if (linreg) c(rownames(msMat), "Lin") else rownames(msMat)
   
   ## --- Filter out models with non-finite ED estimates or fitting failures ----
   
@@ -258,30 +334,36 @@ maED <- function(
   # Combined exclusion mask: non-finite ED values OR model fitting failures.
   excludeMask <- nonFiniteMask | fitFailed
   
+  modelStatus <- rep("used", length(excludeMask))
+  modelStatus[nonFiniteMask] <- "excluded: non-finite ED"
+  modelStatus[fitFailed]     <- "excluded: fit failed"
+  
   if (any(excludeMask)) {
-    modelNames <- if (linreg) c(rownames(msMat), "Lin") else rownames(msMat)
-    for (k in which(excludeMask)) {
+    reasons <- vapply(which(excludeMask), function(k) {
       if (fitFailed[k]) {
-        warning(
-          "Model '", modelNames[k], "' excluded from model-averaging: ",
-          "model fitting or ED estimation failed",
-          call. = FALSE
-        )
+        "model fitting or ED estimation failed"
       } else {
         badIdx <- which(is.infinite(edEst[k, ]) | is.nan(edEst[k, ]))
-        warning(
-          "Model '", modelNames[k], "' excluded from model-averaging: ",
+        paste0(
           "non-finite ED value(s) detected (",
-          paste0("ED", respLev[badIdx], "=", edEst[k, badIdx], collapse = ", "), ")",
-          call. = FALSE
+          paste0("ED", respLev[badIdx], "=", edEst[k, badIdx], collapse = ", "), ")"
         )
       }
+    }, character(1))
+    
+    exclMsg <- paste0(
+      sum(excludeMask), " of ", length(excludeMask), " models excluded from model-averaging: ",
+      paste0("'", modelNames[excludeMask], "' (", reasons, ")", collapse = "; ")
+    )
+    if (identical(onExclude, "stop")) {
+      stop(exclMsg, call. = FALSE)
     }
+    warning(exclMsg, call. = FALSE)
+    
     edEst[excludeMask, ] <- NA
     edSe[excludeMask, ]  <- NA
-    excludeCI <- excludeMask[seq_len(numRows)]
-    edCll[excludeCI, ] <- NA
-    edClu[excludeCI, ] <- NA
+    edCll[excludeMask, ] <- NA
+    edClu[excludeMask, ] <- NA
   }
   
   ## --- AIC-based model weights ------------------------------------------------
@@ -351,6 +433,23 @@ maED <- function(
   
   rownames(retMat) <- rownames(edMat)
   
+  ## --- Model status table -----------------------------------------------------
+  
+  modelsDf <- data.frame(
+    model  = modelNames,
+    AIC    = as.numeric(aicVec),
+    weight = as.numeric(wVec),
+    status = modelStatus,
+    stringsAsFactors = FALSE
+  )
+  
+  # Attributes are only attached if models were excluded, to keep the printed
+  # output of regular results unchanged.
+  if (any(excludeMask)) {
+    attr(retMat, "models")      <- modelsDf
+    attr(retMat, "n_used")      <- sum(modelStatus == "used")
+    attr(retMat, "n_requested") <- length(modelStatus)
+  }  
   ## --- Construct fit summary matrix -------------------------------------------
   
   # Use original (unfiltered) ED estimates for display so that excluded
@@ -369,8 +468,47 @@ maED <- function(
   ## --- Return -----------------------------------------------------------------
   
   if (extended) {
-    return(list(estimates = retMat, fits = disMat))
+    return(list(estimates = retMat, fits = disMat, models = modelsDf))
   }
   
   return(retMat)
+}
+
+## Re-fits the original model from its stored call. Returns NULL if that works
+## and the error condition if the call cannot be re-evaluated.
+.maEDCallError <- function(object) {
+  res <- tryCatch(suppressWarnings(update(object)), error = function(e) e)
+  if (inherits(res, "error")) res else NULL
+}
+
+## Assembles the per-curve results (each from maED(extended = TRUE)) of a
+## multi-curve fit into the usual return value.
+.maEDCombineCurves <- function(resultList, curveIds, extended) {
+  estimates <- do.call(rbind, lapply(resultList, function(r) {
+    est <- r$estimates
+    attributes(est) <- attributes(est)[c("dim", "dimnames")]
+    est
+  }))
+  
+  models <- do.call(rbind, Map(function(r, id) {
+    cbind(curve = id, r$models, stringsAsFactors = FALSE)
+  }, resultList, curveIds))
+  
+  if (any(models$status != "used")) {
+    nUsed <- vapply(curveIds, function(id) sum(models$status[models$curve == id] == "used"), numeric(1))
+    nReq  <- vapply(curveIds, function(id) sum(models$curve == id), numeric(1))
+    attr(estimates, "models")      <- models
+    attr(estimates, "n_used")      <- nUsed
+    attr(estimates, "n_requested") <- nReq
+  }
+  
+  if (!extended) return(estimates)
+  
+  fits <- do.call(rbind, Map(function(r, id) {
+    f <- r$fits
+    rownames(f) <- paste(id, rownames(f), sep = ":")
+    f
+  }, resultList, curveIds))
+  
+  list(estimates = estimates, fits = fits, models = models)
 }

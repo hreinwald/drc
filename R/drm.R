@@ -57,7 +57,10 @@
 #'   Default is the identity matrix (\code{NULL}), corresponding to independent response values
 #'   with a common standard deviation estimated from the data.
 #'
-#' @return An object of (S3) class \code{"drc"}.
+#' @return An object of (S3) class \code{"drc"}. The environment \code{drm()} was
+#'   called from is stored in the attribute \code{"callEnv"}; \code{\link{update.drc}}
+#'   (and thereby \code{\link{mselect}} and \code{\link{maED}}) evaluates the arguments
+#'   of the stored call (e.g. \code{formula}, \code{data}) there when re-fitting.
 #'
 #' @details This function relies on \code{\link{optim}} for minimisation of the negative log
 #'   likelihood function. For a continuous response this reduces to least squares estimation.
@@ -165,6 +168,8 @@ pshifts = NULL, varcov = NULL)
 
     ## Storing call details
     callDetail <- match.call()
+    ## Environment the call was made from: update.drc() and drmRobust() re-evaluate the call there
+    callEnv <- parent.frame()
 
     ## Handling the 'formula', 'curveid' and 'data' arguments
     anName <- deparse(substitute(curveid))  # storing name for later use
@@ -379,9 +384,10 @@ pshifts = NULL, varcov = NULL)
     }
 
     
-    ## Re-setting na.action
-    op3 <- options(na.action = "na.omit")  # the default
-    on.exit(options(op3), add=TRUE)
+    ## Re-setting na.action (the default). No on.exit() here: 'op3' would hold the value set
+    ## from the 'na.action' argument above and restoring it would undo the restore of 'op1',
+    ## leaking that value into the user's session.
+    options(na.action = "na.omit")
 
     ## Transforming dose value if they are provided as log dose
     if ( !is.null(logDose) && is.numeric(logDose) ) 
@@ -594,7 +600,7 @@ pshifts = NULL, varcov = NULL)
     } else {multCurves2 <- multCurves}
 
     ## Defining estimation method
-    robustFct <- drmRobust(robust, callDetail, numObs, length(startVec))  
+    robustFct <- drmRobust(robust, callDetail, numObs, length(startVec), callEnv)  
 
     if (type == "continuous")
     {
@@ -979,6 +985,7 @@ pshifts = NULL, varcov = NULL)
     "curveVarNam", "origData", "weights",
     "dataList", "coefficients", "boxcox", "indexMat2")
     class(returnList) <- c("drc")
+    attr(returnList, "callEnv") <- callEnv
 
     return(returnList)
 }

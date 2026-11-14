@@ -33,7 +33,10 @@
 #' provide this test. Log likelihoods should only be compared for models fit to
 #' the same data under comparable likelihoods.
 #'
-#' Candidate models are re-fitted to the data stored in \code{object}. A
+#' Candidate models are re-fitted to the data stored in \code{object}, via
+#' \code{\link{update.drc}}: the formula and other arguments of the original
+#' call are evaluated in the environment the model was fitted in, so objects of
+#' the same name in the global environment are never used. A
 #' candidate that cannot be fitted is retained in the result with \code{NA}
 #' statistics and a warning. \code{mselect()} returns a comparison table, not
 #' the fitted candidate objects. With the default \code{sorted = "IC"}, the

@@ -33,8 +33,8 @@ function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1, dist.typ
     ## Defining the log likelihood function
     llfct <- function(object)
     {
-        c(-object$"fit"$value, object$"sumList"$"df.residual"
-        )  # adding scale constant
+        c(-object$"fit"$value, length(coef(object))  # df: number of estimated parameters (incl. dispersion)
+        )
     }
     
        

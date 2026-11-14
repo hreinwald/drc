@@ -34,10 +34,9 @@ function(dose, resp, multCurves, doseScaling = 1)
     ## Defining the log likelihood function
     llfct <- function(object)
     {
-        c(
-        -object$"fit"$value + sum(log(gamma(resp+1))),
-        object$"sumList"$"df.residual"
-        )  # adding scale constant
+        degfre <- object$"sumList"$"lenData"
+        c( -(degfre/2)*(log(2*pi)+log(object$"fit"$"value")-log(degfre)+1),
+        object$"sumList"$"lenData" - object$"sumList"$"df.residual" + 1)
     }
     
        

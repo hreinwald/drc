@@ -1,3 +1,83 @@
+#' Effective dose for the U-shaped Cedergreen-Ritz-Streibig model
+#'
+#' @description
+#' Internal helper returning the ED and its gradient for \code{\link{ucedergreen}}. The U-shaped
+#' curve starts at \code{c}, dips, and then increases towards \code{d} (\code{b > 0}). The dose
+#' is searched on the increasing branch beyond the dip, where the equation has a unique root.
+#'
+#' @param parm numeric vector of the non-fixed parameters.
+#' @param all_params numeric vector template with all parameters (b, c, d, e, f).
+#' @param not_fixed logical vector flagging the non-fixed parameters.
+#' @param alpha the fixed shape parameter.
+#' @param respl response level: percent of the way from \code{c} to \code{d} for
+#'   \code{type = "relative"}, the response itself for \code{type = "absolute"}.
+#' @param reference \code{"control"} (percentage measured from \code{c}) or otherwise
+#'   percentage measured down from \code{d}.
+#' @param type \code{"relative"} or \code{"absolute"}.
+#' @param lower,upper dose search interval.
+#'
+#' @return list(ED, gradient of ED w.r.t. the non-fixed parameters); \code{NA}s with a warning if
+#'   the level is not reached.
+#'
+#' @keywords internal
+ucedergreen_edfct <- function(parm, all_params, not_fixed, alpha, respl, reference, type,
+                              lower = 1e-4, upper = 10000)
+{
+  fail <- function(msg) {
+    warning(msg, call. = FALSE)
+    list(NA_real_, rep(NA_real_, sum(not_fixed)))
+  }
+
+  th <- all_params
+  th[not_fixed] <- parm
+  if (th[1] <= 0) return(fail("ED for the U-shaped CRS model requires b > 0. Returning NA."))
+  if (th[3] == th[2]) return(fail("Upper and lower asymptotes are equal. Returning NA."))
+
+  ufun <- function(x, th) {
+    th[3] - (th[3] - th[2] + th[5] * exp(-1 / x^alpha)) / (1 + exp(th[1] * (log(x) - log(th[4]))))
+  }
+
+  # percentage of the way from c to d (percent measured from c) and the target response
+  if (identical(type, "absolute")) {
+    pct <- 100 * (respl - th[2]) / (th[3] - th[2])
+  } else if (identical(reference, "control")) {
+    pct <- respl
+  } else {
+    pct <- 100 - respl
+  }
+  target <- th[2] + pct / 100 * (th[3] - th[2])
+
+  # dose with minimal response: the increasing branch starts here
+  grid <- exp(seq(log(lower), log(upper), length.out = 1000))
+  xDip <- grid[which.min(ufun(grid, th))]
+
+  g <- function(lx) ufun(exp(lx), th) - target
+  gLo <- g(log(xDip))
+  gHi <- g(log(upper))
+  if (!is.finite(gLo) || !is.finite(gHi) || gLo > 0 || gHi < 0) {
+    return(fail(paste0("Response level ", respl, " is not reached on the increasing branch of the curve. Returning NA.")))
+  }
+  edVal <- exp(uniroot(g, c(log(xDip), log(upper)), tol = 1e-12)$root)
+
+  # Gradient by the implicit function theorem: dED/dtheta = -(du/dtheta - dtarget/dtheta) / du/dx
+  hx <- edVal * 1e-6
+  dudx <- (ufun(edVal + hx, th) - ufun(edVal - hx, th)) / (2 * hx)
+  dudth <- vapply(seq_along(th), function(k) {
+    h <- max(abs(th[k]), 1) * 1e-6
+    thUp <- replace(th, k, th[k] + h)
+    thDn <- replace(th, k, th[k] - h)
+    (ufun(edVal, thUp) - ufun(edVal, thDn)) / (2 * h)
+  }, numeric(1))
+  dtargdth <- rep(0, 5)
+  if (!identical(type, "absolute")) {
+    dtargdth[2] <- 1 - pct / 100
+    dtargdth[3] <- pct / 100
+  }
+  grad <- -(dudth - dtargdth) / dudx
+
+  list(edVal, grad[not_fixed])
+}
+
 #' @title U-shaped Cedergreen-Ritz-Streibig model
 #'
 #' @description
@@ -21,13 +101,21 @@
 #' @param fctText An optional character string providing a descriptive text for the model.
 #'
 #' @details
-#' The u-shaped model is given by the expression
-#' \deqn{f(x) = c + d - \frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}}
+#' The u-shaped model is the mirror image of the decreasing Cedergreen-Ritz-Streibig (CRS)
+#' model of Cedergreen et al. (2005), reflected about the mid-level \eqn{(c+d)/2}:
+#' \deqn{f(x) = d - \frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}}
+#' equivalently \eqn{f(x) = c + d - \mathrm{CRS}(x)}. Hence \eqn{f(0) = c} and
+#' \eqn{f(x) \to d} for \eqn{x \to \infty} (for \eqn{b > 0}), i.e. \code{c} is the response of the
+#' untreated control and \code{d} the upper limit. The U-shaped model is an extension in this package;
+#' Cedergreen et al. (2005) define only the decreasing model.
 #'
-#' The parameters are: \code{b}, the slope; \code{c}, the lower and \code{d} the upper asymptote of the
-#' component that is mirrored in the U-shape (the curve starts at \eqn{2c} and approaches
-#' \eqn{c + d}); \code{e}, the location of the transition; and \code{f}, the size of the hormetic
-#' deviation at low doses. The wrappers \code{\link{UCRS.4a}}-\code{\link{UCRS.5c}} fix \eqn{\alpha} at
+#' The parameters are: \code{b}, the slope; \code{c}, the lower and \code{d} the upper asymptote;
+#' \code{e}, the location of the transition; and \code{f}, the size of the hormetic
+#' deviation at low doses (the response dips below \code{c}). As for the CRS model, \code{b} and \code{e}
+#' lose their usual slope and ED50 interpretation when \eqn{f \ne 0}. Effective doses
+#' (\code{\link{ED}}) are the doses at which the response has covered \code{p} percent of the way from
+#' \code{c} to \code{d} on the increasing branch beyond the dip; for \code{type = "absolute"} the
+#' response level itself is supplied. The wrappers \code{\link{UCRS.4a}}-\code{\link{UCRS.5c}} fix \eqn{\alpha} at
 #' 1, 0.5 and 0.25 (suffix a, b, c) and, for the four-parameter versions, \code{c} at 0.
 #'
 #' @return A list of class \code{"UCRS"}, containing the model function (\code{fct}),
@@ -93,8 +181,8 @@
 
         numTerm <- parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*exp(-1/dose^alpha)
         denTerm <- 1 + exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
-        # U-shaped model: f(x) = c + d - numTerm/denTerm
-        parmMat[, 2] + parmMat[, 3] - numTerm/denTerm
+        # U-shaped model: mirror image of the CRS model, f(x) = d - numTerm/denTerm = c + d - CRS(x)
+        parmMat[, 3] - numTerm/denTerm
     }
 
     ## --- Correctly defining the self-starter ---
@@ -128,7 +216,7 @@
         t4 <- (1 + t2)^(-2)
 
         cbind( t1*xlogx(dose/parmMat[, 4], parmMat[, 1])*t4,
-               1 + 1/t3,
+               1/t3,
                1 - 1/t3,
                -t1*t2*(parmMat[, 1]/parmMat[, 4])*t4,
                -t0/t3 )[, notFixed]
@@ -136,12 +224,10 @@
 
     deriv2 <- NULL
 
-    ## Defining the ED function: wrapper closure that delegates to cedergreen_edfct
-    ## The framework calls edfct(parm, respl, reference, type, ...) so we bind
-    ## parmVec, notFixed, and alpha from the enclosing scope.
+    ## Defining the ED function: dedicated closure (the CRS root finder works on the decreasing branch)
     edfct <- function(parm, respl, reference, type, lower = 1e-4, upper = 10000, ...)
     {
-        cedergreen_edfct(parm, parmVec, notFixed, alpha, 100 - respl, reference, type, lower, upper)
+        ucedergreen_edfct(parm, parmVec, notFixed, alpha, respl, reference, type, lower, upper)
     }
 
     ## Finding the maximal hormesis: wrapper closure that delegates to cedergreen_maxfct

@@ -18,9 +18,9 @@ function(dose, resp, multCurves, startVec, weightsVec, doseScaling = 1)
     llfct <- function(object)
     {
         c(
-        -object$"fit"$value + sum(log(gamma(resp+1))),
-        object$"sumList"$"df.residual"
-        )  # adding scale constant
+        -object$"fit"$value - sum(lgamma(resp + 1)),
+        object$"sumList"$"lenData" - object$"sumList"$"df.residual"  # number of estimated parameters (not the residual df)
+        )  # subtracting the log(y!) constant of the Poisson density
     }
     
        
