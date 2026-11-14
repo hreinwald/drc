@@ -80,7 +80,7 @@ test_that("llfct returns a numeric vector of length 2", {
 
   mock_object <- list(
     fit = list(value = 10),
-    sumList = list(df.residual = 3)
+    sumList = list(lenData = 8, df.residual = 5)
   )
 
   result <- em$llfct(mock_object)
@@ -93,15 +93,15 @@ test_that("llfct computes correct values", {
 
   mock_object <- list(
     fit = list(value = 10),
-    sumList = list(df.residual = 3)
+    sumList = list(lenData = 8, df.residual = 5)
   )
 
   result <- em$llfct(mock_object)
-  # First element: -object$fit$value + sum(log(gamma(resp+1)))
-  expected_ll <- -10 + sum(log(gamma(test_resp + 1)))
+  # Gaussian log-likelihood at the residual sum of squares (as in drmEMls), not a Poisson constant
+  expected_ll <- -(8 / 2) * (log(2 * pi) + log(10) - log(8) + 1)
   expect_equal(result[1], expected_ll)
-  # Second element: df.residual
-  expect_equal(result[2], 3)
+  # Second element: number of estimated parameters + 1 (variance)
+  expect_equal(result[2], 8 - 5 + 1)
 })
 
 
