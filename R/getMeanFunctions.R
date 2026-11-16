@@ -53,7 +53,8 @@
         NEC.2(), NEC.3(), NEC.4(),
         FPL.4(-1, 1),
         W2x.3(), W2x.4(),
-        baro5(), gammadr()
+        baro5(), gammadr(),
+        gaussian(), lgaussian(), multi2(), twophase()
         )
     } else {
         fctList <- flist

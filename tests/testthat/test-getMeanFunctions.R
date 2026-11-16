@@ -37,10 +37,11 @@ test_that("getMeanFunctions() includes all built-in models", {
     "CRS.4a", "CRS.4b", "CRS.4c", "CRS.5a", "CRS.5b", "CRS.5c", "CRS.6",
     "UCRS.4a", "UCRS.4b", "UCRS.4c", "UCRS.5a", "UCRS.5b", "UCRS.5c",
     "NEC.2", "NEC.3", "NEC.4", "FPL.4(-1,1)",
-    "W2x.3", "W2x.4", "baro5", "gammadr"
+    "W2x.3", "W2x.4", "baro5", "gammadr",
+    "gaussian", "lgaussian", "multi2", "twophase"
   )
 
-  expect_length(model_names, 58)
+  expect_length(model_names, 62)
   expect_setequal(model_names, expected_names)
 })
 
