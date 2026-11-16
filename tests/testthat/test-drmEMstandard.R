@@ -111,10 +111,12 @@ test_that("llfct matches the multivariate Gaussian log-likelihood", {
   diag(vcMat[zeroDose, zeroDose]) <-
     diag(vcMat[zeroDose, zeroDose]) +
     (1 / (len0 * f0^2)) - (1 / f0^2)
+  sigma2 <- fit_value / length(test_dose)
   expected_ll <- -0.5 * (
     length(test_dose) * log(2 * pi) +
       as.numeric(determinant(vcMat, logarithm = TRUE)$modulus) +
-      fit_value
+      length(test_dose) * log(sigma2) +
+      fit_value / sigma2
   )
   expect_equal(result[1], expected_ll)
   expect_equal(result[2], length(test_dose) - 3 + 1)
