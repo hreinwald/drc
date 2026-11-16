@@ -30,7 +30,13 @@ The five-parameter log-logistic function is given by the expression
 \deqn{f(x) = c + \frac{d-c}{(1+\exp(b(\log(x)-\log(e))))^f}}
 }
 \examples{
+## Fit with drm() and plot; f allows for an asymmetric curve
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.5())
+plot(ryegrass.m1, type = "all", main = "LL.5")
+
+## Effect of the lower asymptote c
+ryegrass.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LL.5(fixed = c(NA, 3, NA, NA, NA)))
+plot(ryegrass.c3, type = "none", add = TRUE, col = "red")
 
 }
 \seealso{

@@ -27,6 +27,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Hannes Reinwald \email{hannes.reinwald@bayer.com}
   \item Christian Ritz \email{ritz@bioassay.dk}
   \item Jens C. Streibig \email{streibig@bioassay.dk}
 }

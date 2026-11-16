@@ -19,6 +19,12 @@ A list (see \code{\link{NEC}}).
 \description{
 Convenience function for the full four-parameter NEC model.
 }
+\examples{
+## Fit with drm() and plot
+nec.m4 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+plot(nec.m4, type = "all", main = "NEC.4")
+
+}
 \seealso{
 \code{\link{NEC}}, \code{\link{NEC.2}}, \code{\link{NEC.3}}
 }

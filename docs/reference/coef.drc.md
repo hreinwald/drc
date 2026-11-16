@@ -35,5 +35,5 @@ Christian Ritz
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
 coef(ryegrass.m1)
 #> b:(Intercept) c:(Intercept) d:(Intercept) e:(Intercept) 
-#>     2.9822191     0.4814132     7.7929583     3.0579550 
+#>     2.9822192     0.4814132     7.7929608     3.0579552 
 ```

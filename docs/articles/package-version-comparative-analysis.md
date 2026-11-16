@@ -11,16 +11,14 @@ widely deployed tools for dose-response analysis in bioassay,
 toxicology, pharmacology, and ecotoxicology. The version maintained at
 `DoseResponse/drc` (v3.2-0, last updated January 2021) harbors multiple
 correctness bugs of varying severity that silently corrupt downstream
-results. The fork at `hreinwald/drc` (`dev` branch, v3.3.2) addresses
-these systematically. The most critical bug discovered is a missing
-lower-asymptote term (`c` parameter) in the U-shaped
-Cedergreen-Ritz-Streibig hormesis models (`UCRS.*`), rendering every
-result computed with those functions incorrect. Secondary bugs include
-incorrect gradient vectors for absolute-type effective dose (ED)
-standard errors across at least seven model families, a wrong derivative
-in [`gammadr()`](https://hreinwald.github.io/drc/reference/gammadr.md),
-and a function-level edfct signature mismatch in the logistic model
-family.
+results. The fork at `hreinwald/drc` (`dev` branch, v3.4.0) addresses
+these systematically. The most critical bugs discovered are incorrect
+gradient vectors for absolute-type effective dose (ED) standard errors
+across at least seven model families, a wrong derivative in
+[`gammadr()`](https://hreinwald.github.io/drc/reference/gammadr.md), a
+function-level edfct signature mismatch in the logistic model family,
+and an [`ED()`](https://hreinwald.github.io/drc/reference/ED.md)/`edfct`
+that did not work for the U-shaped hormesis models (`UCRS.*`; see §1.1).
 
 Beyond bug correction, `hreinwald/drc` delivers a substantially
 refactored codebase: dead code removed from 70+ source files, file
@@ -36,15 +34,17 @@ Taken together, the evidence supports the framing of this as not a mere
 maintenance release but a substantive correction to the scientific
 record. Users who computed ED confidence intervals using
 `type="absolute"` with Weibull, log-logistic, log-normal, logistic,
-Brain-Cousens, or fplogistic models—or who fitted any UCRS hormesis
-model—may have published incorrect standard errors or incorrect fitted
-values.
+Brain-Cousens, or fplogistic models—or who used
+[`ED()`](https://hreinwald.github.io/drc/reference/ED.md) or
+[`MAX()`](https://hreinwald.github.io/drc/reference/MAX.md) on UCRS
+hormesis models—may have published incorrect standard errors or
+incorrect values.
 
 ------------------------------------------------------------------------
 
 ## 1. Critical Bugs Identified
 
-### 1.1 Missing Lower Asymptote (`c`) in U-shaped CRS Model — SEVERITY: **CRITICAL**
+### 1.1 U-shaped CRS Model (`UCRS.*`): `edfct`, `deriv1` and `ED()` — SEVERITY: **HIGH**
 
 **Affected model/function:**
 [`ucedergreen()`](https://hreinwald.github.io/drc/reference/ucedergreen.md)
@@ -53,10 +53,21 @@ and all convenience wrappers `UCRS.4a`, `UCRS.4b`, `UCRS.4c`, `UCRS.5a`,
 
 **File:** `R/ucedergreen.R`
 
-**Original (incorrect) code** (`DoseResponse/drc`, `R/ucedergreen.R`,
-line ~32):
+**Note on the model function.** The model function of the original code,
+`fct = d - numTerm/denTerm`, is the exact mirror image (reflection about
+the mid-level) of the decreasing CRS model of Cedergreen, Ritz &
+Streibig (2005): `c + d - CRS(x) = d - numTerm/denTerm`. It gives
+`f(0) = c` and `f(Inf) = d`, so `c` and `d` are the asymptotes. An
+earlier version of this fork (3.4.0 and before) added an extra `+ c`
+term, based on a misreading of the documented formula; this made
+`f(0) = 2c` and `f(Inf) = c + d` (the fitted curves were identical but
+`c` and `d` were no longer interpretable as asymptotes) and has been
+**reverted**. For `c = 0` (all `UCRS.4x` models) both forms coincide.
+The 2005 paper itself only defines the decreasing model; the U-shaped
+model is an extension.
 
 ``` r
+
 fct <- function(dose, parm)
 {
     parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
@@ -64,48 +75,28 @@ fct <- function(dose, parm)
 
     numTerm <- parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*exp(-1/dose^alpha)
     denTerm <- 1 + exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
-    parmMat[, 3] - numTerm/denTerm   # WRONG: missing parmMat[, 2] (c parameter)
+    parmMat[, 3] - numTerm/denTerm   # = c + d - CRS(x)
 }
 ```
 
-**Fixed code** (`hreinwald/drc`, `R/ucedergreen.R`, line ~56):
+**Defects actually fixed in this fork:**
 
-``` r
-fct <- function(dose, parm)
-{
-    parmMat <- matrix(parmVec, nrow(parm), numParm, byrow = TRUE)
-    parmMat[, notFixed] <- parm
-
-    numTerm <- parmMat[, 3] - parmMat[, 2] + parmMat[, 5]*exp(-1/dose^alpha)
-    denTerm <- 1 + exp(parmMat[, 1]*(log(dose) - log(parmMat[, 4])))
-    parmMat[, 2] + parmMat[, 3] - numTerm/denTerm   # CORRECT: c + d - numTerm/denTerm
-}
-```
-
-**Scientific impact:** The published model formula (Cedergreen, Ritz &
-Streibig, 2005, *Environ. Toxicol. Chem.* 24:3166) is:
-
-``` math
-f(x) = c + d - \frac{d - c + f\,e^{-1/x^\alpha}}{1 + \exp(b(\log x - \log e))}
-```
-
-The original implementation returns `d - numTerm/denTerm`, i.e., the
-fitted response is shifted upward by `c` (the lower horizontal
-asymptote) for all dose values. When `c = 0` (the most common case for
-UCRS.4x models), the result is numerically coincidentally correct;
-however, when `c` is estimated (UCRS.5x) or is supplied as a non-zero
-fixed value, every fitted value is wrong by exactly `c`. Any paper that
-used `UCRS.5a`, `UCRS.5b`, or `UCRS.5c` with estimated `c ≠ 0` and
-reported dose-response parameters, EC values, or hormesis estimates has
-incorrect results that propagate to all downstream comparisons.
-
-Additionally, the `deriv1` (gradient with respect to the `c` parameter)
-in the original code is `1/t3` (positive), whereas the corrected
-formula’s partial derivative is `1 + 1/t3`. This means even if fitted
-values were not perceptibly shifted (because `c ≈ 0`), standard errors
-for the c-parameter estimate were systematically wrong.
-
-------------------------------------------------------------------------
+- `edfct` had the signature `(parm, p, ...)` without `reference`/`type`;
+  it now follows the framework signature and uses a dedicated root
+  finder on the increasing branch beyond the dip (relative levels:
+  percent of the way from `c` to `d`; absolute levels: the response
+  itself). The standard errors use the implicit function theorem. In the
+  original and in 3.4.0, absolute-level
+  [`ED()`](https://hreinwald.github.io/drc/reference/ED.md) returned a
+  dose whose fitted response was not the requested level.
+- `deriv1` was omitted from the returned model list and referenced the
+  undefined `xlogx`; it is now returned and verified against finite
+  differences.
+- `method` was never validated (`match.arg`), `|` instead of `||` was
+  used in scalar guards, and the self-starter ignored `alpha`/`method`.
+- `maxfct` (used by
+  [`MAX()`](https://hreinwald.github.io/drc/reference/MAX.md)) returns
+  the dip of the U-shaped curve, i.e. `(c + d)` minus the CRS peak.
 
 ### 1.2 Wrong Multiplier in `gammadr()` Gradient — SEVERITY: **HIGH**
 
@@ -119,6 +110,7 @@ Gamma dose-response model
 `deriv1`):
 
 ``` r
+
 cbind(
     t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * parmMat[, 1],  # WRONG: uses b not dose
     1 - t2,
@@ -130,6 +122,7 @@ cbind(
 **Fixed code** (`hreinwald/drc`, `R/gammadr.R`, inside `deriv1`):
 
 ``` r
+
 cbind(
     t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * dose,  # CORRECT: uses dose
     1 - t2,
@@ -168,6 +161,7 @@ parameter and propagates to standard errors for any derived quantities
 Original code (`DoseResponse/drc`, `R/weibull1.r`, `edfct`):
 
 ``` r
+
 edfct <- function(parm, respl, reference, type, ...)
 {
     parmVec[notFixed] <- parm
@@ -185,6 +179,7 @@ edfct <- function(parm, respl, reference, type, ...)
 Fixed code (`hreinwald/drc`, `R/weibull1.R`, `edfct`):
 
 ``` r
+
 edfct <- function(parm, respl, reference, type, ...)
 {
     parmVec[notFixed] <- parm
@@ -233,6 +228,7 @@ and all convenience wrappers `L.3`, `L.4`, `L.5`
 `edfct`):
 
 ``` r
+
 edfct <- function(parm, p, ...)
 {
     parmVec[notFixed] <- parm
@@ -245,6 +241,7 @@ edfct <- function(parm, p, ...)
 **Fixed code** (`hreinwald/drc`, `R/logistic.R`, `edfct`):
 
 ``` r
+
 edfct <- function(parm, respl, reference = "control", type = "relative", ...)
 {
     parmVec[notFixed] <- parm
@@ -275,14 +272,14 @@ of ED90).
 
 The
 [`ucedergreen()`](https://hreinwald.github.io/drc/reference/ucedergreen.md)
-function in DoseResponse/drc contained 17 separate bugs documented in
-the hreinwald NEWS.md for v3.3.0.02. A summary of the most impactful:
+function in DoseResponse/drc contained several separate bugs (an earlier
+count of 17 in this fork’s NEWS.md for v3.3.0.02 included a `+c` change
+that has since been reverted, see §1.1). A summary of the most
+impactful:
 
 | Sub-Bug | Location | Severity |
 |----|----|----|
-| Missing `+c` in fct (see §1.1) | `fct()` | CRITICAL |
-| `edfct` signature mismatch (`p` vs `respl`, missing `reference`/`type`) | `edfct()` | HIGH |
-| `deriv1`: wrong sign/formula for c-column (`1/t3` vs `1 + 1/t3`) | `deriv1()` | HIGH |
+| `edfct` signature mismatch (`p` vs `respl`, missing `reference`/`type`) and wrong absolute-level ED | `edfct()` | HIGH |
 | Undefined `xlogx` call in `deriv1` (uses unset closure) | `deriv1()` | HIGH |
 | Missing [`match.arg()`](https://rdrr.io/r/base/match.arg.html) for `method` | top-level | MEDIUM |
 | Vectorized `\|` in scalar `if()` guards | top-level | MEDIUM |
@@ -345,16 +342,14 @@ accumulated that undermine the scientific validity of results produced
 by the package. The justification for refactoring rests on five concrete
 lines of evidence:
 
-**1. Mathematical incorrectness in production models.** The missing `c`
-parameter in
-[`ucedergreen()`](https://hreinwald.github.io/drc/reference/ucedergreen.md)
-(§1.1), the wrong multiplier in
+**1. Mathematical incorrectness in production models.** The wrong
+multiplier in
 [`gammadr()`](https://hreinwald.github.io/drc/reference/gammadr.md)
-(§1.2), and the zero-gradient errors in seven model families (§1.3)
-constitute mathematical errors that silently corrupt numerical results.
-These are not software bugs in the traditional sense (crashes, type
-errors) — they pass silently and deliver plausible-looking but wrong
-numbers.
+(§1.2), the zero-gradient errors in seven model families (§1.3) and the
+`UCRS` `edfct` problems (§1.1) constitute mathematical errors that
+silently corrupt numerical results. These are not software bugs in the
+traditional sense (crashes, type errors) — they pass silently and
+deliver plausible-looking but wrong numbers.
 
 **2. API mismatch with the framework’s own calling conventions.** The
 `edfct` function is called by `ED.drc` with the signature
@@ -555,7 +550,7 @@ version, DOI, release date, and two structured `references` entries
 
 | Aspect | DoseResponse/drc | hreinwald/drc |
 |----|----|----|
-| Current version | 3.2-0 | 3.3.2 |
+| Current version | 3.2-0 | 3.4.0 |
 | Last substantive update | January 2021 | May 2026 |
 | Commit quality | Sparse, terse messages | Structured commits with clear descriptions referencing issues |
 | Active branches | Only `master` | `dev` (primary), `main_beta` (stable beta), multiple feature branches |
@@ -627,22 +622,20 @@ version, DOI, release date, and two structured `references` entries
 > toxicology, and ecotoxicology. Since its last CRAN release (v3.2-0,
 > January 2021), the package has received no substantive maintenance
 > despite continued use in the scientific literature. We present `drc`
-> v3.3.2, a corrected and modernized version of the package, addressing
+> v3.4.0, a corrected and modernized version of the package, addressing
 > a series of bugs ranging in severity from silently incorrect fitted
 > values to systematically underestimated confidence intervals. The most
-> critical error, discovered in the U-shaped Cedergreen-Ritz-Streibig
-> hormesis model family (`UCRS.*`), omits the lower horizontal asymptote
-> parameter from the model function, rendering every fitted value
-> incorrect whenever the lower asymptote differs from zero.
-> Additionally, the gradient functions used in delta-method standard
-> error calculations for absolute-type effective dose (ED) estimates
-> were incorrect in seven model families (Weibull type 1 and 2,
-> log-logistic, log-normal, logistic, Brain-Cousens, and fractional
-> polynomial logistic), consistently setting chain-rule contributions to
-> zero and producing confidence intervals that are potentially too
-> narrow. A further gradient error in the Gamma model inverted the
-> rate-parameter derivative. These bugs affect published results
-> obtained using the original package. Beyond correctness, the
+> critical errors are in the gradient functions used in delta-method
+> standard error calculations for absolute-type effective dose (ED)
+> estimates, which were incorrect in seven model families (Weibull type
+> 1 and 2, log-logistic, log-normal, logistic, Brain-Cousens, and
+> fractional polynomial logistic), consistently setting chain-rule
+> contributions to zero and producing confidence intervals that are
+> potentially too narrow. The U-shaped Cedergreen-Ritz-Streibig hormesis
+> model family (`UCRS.*`) had an unusable effective-dose function and no
+> analytic derivatives. A further gradient error in the Gamma model
+> inverted the rate-parameter derivative. These bugs affect published
+> results obtained using the original package. Beyond correctness, the
 > refactored package introduces 79 `testthat` unit tests (versus zero in
 > the original), comprehensive Roxygen2 documentation with mathematical
 > formulae and worked examples, a pkgdown documentation website, three

@@ -31,8 +31,10 @@ upper limit fixed at a specified value. The model is given by the equation
 This model is primarily intended for binomial/quantal responses.
 }
 \examples{
+## Binomial (quantal) response: fit with drm() and plot
 earthworms.m1 <- drm(number/total ~ dose, weights = total,
   data = earthworms, fct = W2.2(), type = "binomial")
+plot(earthworms.m1, main = "W2.2 (upper limit fixed at 1)")
 
 }
 \seealso{

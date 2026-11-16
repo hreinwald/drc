@@ -33,4 +33,4 @@ this function to compute R-squared.
 
 ## Author
 
-Christian Ritz
+Christian Ritz, Hannes Reinwald

@@ -8,15 +8,17 @@ get_ed_interval(
   model,
   small_n = TRUE,
   fls_pattern = "^LL|^LN|^BC|^CRS",
-  verbose = FALSE
+  verbose = FALSE,
+  log_ed = FALSE
 )
 }
 \arguments{
 \item{model}{A drc model object or a character string specifying the model name (e.g., "LL.4").}
 
-\item{small_n}{A logical value. If TRUE, the t-distribution-based Fieller's method ("tfls")
-is used for small samples for applicable models. If FALSE, the normal-distribution-based
-method ("fls") is used. Defaults to TRUE.}
+\item{small_n}{A logical value. If TRUE, "tfls" (confidence limits computed on the log scale of
+the ED and back-transformed) is used for models matched by \code{fls_pattern}; if FALSE the
+delta method ("delta") is used. Models with log(ED) parameterisation (\verb{LL2.*}) always use
+"fls", the only valid choice for them. Defaults to TRUE.}
 
 \item{fls_pattern}{A regular expression character string. This pattern is used to identify
 model families for which the "fls" or "tfls" method is appropriate. The default
@@ -25,6 +27,9 @@ covers standard log-logistic, log-normal, Brain-Cousens, and Cedergreen-Ritz-Str
 \item{verbose}{A logical value. If TRUE, a message is printed when the function
 resorts to its default choice because the model type was not explicitly matched.
 Defaults to TRUE.}
+
+\item{log_ed}{Logical; \code{TRUE} if the model returns ED on the log scale (\verb{LL2.*}, \code{LN.*(loge = TRUE)}).
+Detected automatically for \code{drc} objects and for \verb{LL2.*} names.}
 }
 \value{
 A character string: "tfls", "fls", or "delta", representing the

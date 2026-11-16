@@ -28,7 +28,9 @@ The two-parameter Michaelis-Menten function is
 which is equivalent to \eqn{d/(1+(e/x))}.
 }
 \examples{
+## Fit with drm() and plot
 met.mm.m1 <- drm(gain~dose, product, data = methionine, fct = MM.2())
+plot(met.mm.m1, main = "MM.2 (Michaelis-Menten)")
 
 }
 \seealso{

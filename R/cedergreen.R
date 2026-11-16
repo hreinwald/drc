@@ -167,6 +167,13 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
 #' If \eqn{f=0}, the model simplifies to the standard four-parameter log-logistic model.
 #' The parameter \eqn{\alpha} is a shape parameter that must be specified by the user.
 #'
+#' The parameters are: \code{b}, the slope; \code{c}, the lower asymptote; \code{d}, the upper
+#' asymptote (\code{d} is the response of the untreated control for a decreasing curve); \code{e}, the
+#' location of the decline; and \code{f}, the size of the hormetic stimulation. Smaller \eqn{\alpha}
+#' move the peak of the stimulation to lower doses. Effective doses (\code{\link{ED}}, use
+#' \code{bound = FALSE} if needed) are computed relative to the asymptotes \code{c} and \code{d} on the
+#' part of the curve beyond the peak, and the peak itself is found with \code{\link{MAX}}.
+#'
 #' @param fixed A numeric vector of length 5 specifying any parameters to be held fixed 
 #'   during the estimation. The order is \code{c(b, c, d, e, f)}. Use \code{NA} for 
 #'   parameters that should be estimated. The default is to estimate all parameters.
@@ -195,12 +202,32 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
 #' @keywords models nonlinear
 #'
 #' @examples
-#' dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
-#' response <- c(100, 102, 95, 80, 40, 25, 20)
-#' my_data <- data.frame(dose = dose, response = response)
-#' model_fit <- drm(response ~ dose, data = my_data,
-#'                  fct = cedergreen(alpha = 0.5))
-#' summary(model_fit)
+#' ## Fit with drm() and plot
+#' m1 <- drm(weight ~ conc, data = lettuce, fct = cedergreen(alpha = 1))
+#' plot(m1, type = "all", main = "Cedergreen-Ritz-Streibig model (alpha = 1)")
+#' MAX(m1)
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 0.3
+#' m.c0 <- drm(weight ~ conc, data = lettuce,
+#'   fct = cedergreen(alpha = 1, fixed = c(NA, 0, NA, NA, NA)))
+#' m.c3 <- drm(weight ~ conc, data = lettuce,
+#'   fct = cedergreen(alpha = 1, fixed = c(NA, 0.3, NA, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 0.3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 0.8 or fixed at 1.2
+#' m.d8 <- drm(weight ~ conc, data = lettuce,
+#'   fct = cedergreen(alpha = 1, fixed = c(NA, NA, 0.8, NA, NA)))
+#' m.d12 <- drm(weight ~ conc, data = lettuce,
+#'   fct = cedergreen(alpha = 1, fixed = c(NA, NA, 1.2, NA, NA)))
+#' plot(m1, type = "all", main = "Upper asymptote d")
+#' plot(m.d8, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d12, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 0.8", "d = 1.2"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @export
 "cedergreen" <- function(
@@ -264,7 +291,7 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
       -t1*xlogx(dose/parmMat[, 4], parmMat[, 1])*t4, 
       1 - 1/t3, 
       1/t3, 
-      1*t2*(parmMat[, 1]/parmMat[, 4])*t4, 
+      t1*t2*(parmMat[, 1]/parmMat[, 4])*t4, 
       t0/t3
     )[, notFixed]
   }
@@ -348,17 +375,21 @@ cedergreen_maxfct <- function(all_params, alpha, lower = 1e-6, upper = 1000, .op
 #' @param ... Additional arguments to be passed to \code{drc::cedergreen}, such 
 #'   as \code{data}.
 #'
-#' @return A \code{drc} model object of class \code{cedergreen}. If the underlying 
+#' @return A model list of class \code{mllogistic} as returned by \code{\link{cedergreen}}, for use as
+#'   the \code{fct} argument of \code{\link{drm}}. If the underlying
 #'   \code{drc::cedergreen} call fails, it issues a warning and returns \code{NULL}.
 #'
 #' @examples
-#' # Create a CRS.5 model specification
-#' crs_model_a <- CRS.5()
+#' ## Fit with drm() and plot (alpha = 1, i.e. alpha_type = "a")
+#' lettuce.crs5 <- drm(weight ~ conc, data = lettuce, fct = CRS.5(alpha_type = "a"))
+#' plot(lettuce.crs5, type = "all", main = "CRS.5, alpha = 1")
 #'
-#' # Fix the lower limit to 0 and use a custom numeric alpha
+#' ## Fix the lower limit to 0 and use a custom numeric alpha
 #' crs_model_custom <- CRS.5(
 #'   fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75
 #' )
+#' lettuce.custom <- drm(weight ~ conc, data = lettuce, fct = crs_model_custom)
+#' plot(lettuce.custom, type = "none", add = TRUE, col = "red")
 #' 
 #' @export
 CRS.5 <- function(names = c("b", "c", "d", "e", "f"), 
@@ -463,6 +494,7 @@ CRS.5 <- function(names = c("b", "c", "d", "e", "f"),
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.crsm1 <- drm( lettuce[, c(2, 1)], fct = CRS.4a() )
+#' plot(lettuce.crsm1, type = "all", main = "CRS.4a (deprecated)")
 #' summary(lettuce.crsm1)
 #' ED(lettuce.crsm1, c(50))
 #'
@@ -520,6 +552,7 @@ CRS.5 <- function(names = c("b", "c", "d", "e", "f"),
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.crsm1 <- drm( lettuce[, c(2, 1)], fct = ml3a() )
+#' plot(lettuce.crsm1, type = "all", main = "ml3a (deprecated)")
 #' summary(lettuce.crsm1)
 #' ED(lettuce.crsm1, c(50))
 #'
@@ -586,6 +619,7 @@ ml3a <- CRS.4a
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.crsm2 <- drm( lettuce[, c(2, 1)], fct = CRS.4b() )
+#' plot(lettuce.crsm2, type = "all", main = "CRS.4b (deprecated)")
 #' summary(lettuce.crsm2)
 #' ED(lettuce.crsm2, c(50))
 #'
@@ -642,6 +676,7 @@ ml3a <- CRS.4a
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.crsm2 <- drm( lettuce[, c(2, 1)], fct = ml3b() )
+#' plot(lettuce.crsm2, type = "all", main = "ml3b (deprecated)")
 #' summary(lettuce.crsm2)
 #' ED(lettuce.crsm2, c(50))
 #'
@@ -708,6 +743,7 @@ ml3b <- CRS.4b
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = CRS.4c() )
+#' plot(lettuce.crsm3, type = "all", main = "CRS.4c (deprecated)")
 #' summary(lettuce.crsm3)
 #' ED(lettuce.crsm3, c(50))
 #'
@@ -764,6 +800,7 @@ ml3b <- CRS.4b
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.crsm3 <- drm( lettuce[, c(2, 1)], fct = ml3c() )
+#' plot(lettuce.crsm3, type = "all", main = "ml3c (deprecated)")
 #' summary(lettuce.crsm3)
 #' ED(lettuce.crsm3, c(50))
 #'
@@ -831,6 +868,7 @@ ml3c <- CRS.4c
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.m1 <- drm( lettuce[, c(2, 1)], fct = CRS.5a() )
+#' plot(lettuce.m1, type = "all", main = "CRS.5a (deprecated)")
 #' summary(lettuce.m1)
 #' ED(lettuce.m1, c(50))
 #'
@@ -887,6 +925,7 @@ ml3c <- CRS.4c
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.m1 <- drm( lettuce[, c(2, 1)], fct = ml4a() )
+#' plot(lettuce.m1, type = "all", main = "ml4a (deprecated)")
 #' summary(lettuce.m1)
 #' ED(lettuce.m1, c(50))
 #'
@@ -951,6 +990,7 @@ ml4a <- CRS.5a
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.m2 <- drm( lettuce[, c(2, 1)], fct = CRS.5b() )
+#' plot(lettuce.m2, type = "all", main = "CRS.5b (deprecated)")
 #' summary(lettuce.m2)
 #' ED(lettuce.m2, c(50))
 #'
@@ -1007,6 +1047,7 @@ ml4a <- CRS.5a
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.m2 <- drm( lettuce[, c(2, 1)], fct = ml4b() )
+#' plot(lettuce.m2, type = "all", main = "ml4b (deprecated)")
 #' summary(lettuce.m2)
 #' ED(lettuce.m2, c(50))
 #'
@@ -1071,6 +1112,7 @@ ml4b <- CRS.5b
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.m3 <- drm( lettuce[, c(2, 1)], fct = CRS.5c() )
+#' plot(lettuce.m3, type = "all", main = "CRS.5c (deprecated)")
 #' summary(lettuce.m3)
 #' ED(lettuce.m3, c(50))
 #'
@@ -1126,6 +1168,7 @@ ml4b <- CRS.5b
 #' # The example below is retained for backward compatibility illustration only.
 #'
 #' lettuce.m3 <- drm( lettuce[, c(2, 1)], fct = ml4c() )
+#' plot(lettuce.m3, type = "all", main = "ml4c (deprecated)")
 #' summary(lettuce.m3)
 #' ED(lettuce.m3, c(50))
 #'

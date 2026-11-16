@@ -33,13 +33,57 @@ and 1 for $`x > e`$.
 ### Model Parameters
 
 - **b**: Slope/rate parameter controlling the steepness of the
-  dose-response curve above the threshold
-- **c**: Lower limit (control response) - the response level below the
+  exponential decline above the threshold
+- **c**: Lower limit - the response approached at high doses
+- **d**: Upper limit - the constant (control) response up to the
   threshold
-- **d**: Upper limit (maximum response) - the asymptotic response at
-  high doses
 - **e**: NEC threshold (no effect concentration) - the dose below which
   there is no effect
+
+## NEC versus Effect Doses (ED)
+
+The NEC and an effective dose (ED) are **different quantities** and are
+not interchangeable:
+
+- The **NEC** is the parameter `e`: the dose where the decline starts.
+  It is estimated directly, so read it from
+  [`coef()`](https://rdrr.io/r/stats/coef.html),
+  [`summary()`](https://rdrr.io/r/base/summary.html) and
+  [`confint()`](https://rdrr.io/r/stats/confint.html).
+- **`ED(fit, p)`** is the dose at which the response has fallen by
+  $`p`$% of the distance between the upper and lower limit,
+  i.e. $`f(x) = d - \frac{p}{100}(d - c)`$. Solving the model equation
+  gives
+
+``` math
+ED_p = e - \frac{\log(1 - p/100)}{b}
+```
+
+Because the response is flat up to `e`, every $`ED_p`$ with
+$`0 < p < 100`$ lies **above** the NEC (the larger $`p`$, the further
+above). `ED(fit, 10)` is therefore the EC10 and is *not* the NEC, and
+the NEC is not an EC0 in the usual sense.
+
+``` r
+
+nec.fit <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+
+# The NEC: the threshold parameter e
+coef(nec.fit)["e:(Intercept)"]
+#> e:(Intercept) 
+#>      1.428649
+
+# Effective doses: dose at 10%, 50% and 90% reduction (all above the NEC)
+ED(nec.fit, c(10, 50, 90), display = FALSE)
+```
+
+[`ED()`](https://hreinwald.github.io/drc/reference/ED.md) works for
+relative levels (`type = "relative"`, the default, with $`p`$ strictly
+between 0 and 100) and for absolute response levels
+(`type = "absolute"`, with a response strictly between `c` and `d`). It
+requires a positive slope $`b`$. If the level is out of range or
+$`b \leq 0`$, [`ED()`](https://hreinwald.github.io/drc/reference/ED.md)
+returns `NA` with a warning that says what to change.
 
 ## Function Overview
 
@@ -85,6 +129,7 @@ both lower and upper limits are known.
 **Example:**
 
 ``` r
+
 # Example with proportion data (bounded 0-1)
 # Using ryegrass data, normalizing to 0-1 scale
 data(ryegrass)
@@ -99,14 +144,14 @@ summary(nec2.model)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 0.303610   0.035141  8.6397 1.609e-08 ***
-#> e:(Intercept) 0.751527   0.156092  4.8146 8.261e-05 ***
+#> b:(Intercept) 0.303600   0.035145  8.6386 1.612e-08 ***
+#> e:(Intercept) 0.751389   0.156128  4.8126 8.301e-05 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.08003264 (22 degrees of freedom)
+#>  0.08003263 (22 degrees of freedom)
 ```
 
 ### NEC.3: Three-Parameter NEC Model
@@ -135,6 +180,7 @@ variable maximum.
 **Example:**
 
 ``` r
+
 # Fit NEC.3 model - most common case
 # Assumes zero baseline response
 nec3.model <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
@@ -145,15 +191,15 @@ summary(nec3.model)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  2.54094        NaN     NaN       NaN    
-#> d:(Intercept)  7.39655    0.23498  31.477 < 2.2e-16 ***
-#> e:(Intercept)  3.39679        NaN     NaN       NaN    
+#> b:(Intercept) 0.358129   0.052191  6.8619 8.787e-07 ***
+#> d:(Intercept) 7.723988   0.191151 40.4079 < 2.2e-16 ***
+#> e:(Intercept) 1.324245   0.208420  6.3537 2.673e-06 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.81401 (21 degrees of freedom)
+#>  0.5734516 (21 degrees of freedom)
 
 # Plot the fitted model
 plot(nec3.model, type = "all", log = "",
@@ -188,6 +234,7 @@ decline](nec-models_files/figure-html/nec3-example-1.png)
 **Example:**
 
 ``` r
+
 # Fit NEC.4 model - full flexibility
 nec4.model <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
 summary(nec4.model)
@@ -196,22 +243,22 @@ summary(nec4.model)
 #> 
 #> Parameter estimates:
 #> 
-#>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept)   3.16938  393.27265  0.0081  0.993650    
-#> c:(Intercept)   0.67201    0.23463  2.8641  0.009592 ** 
-#> d:(Intercept)   7.39666    0.20260 36.5091 < 2.2e-16 ***
-#> e:(Intercept)   3.41729   41.27705  0.0828  0.934842    
+#>               Estimate Std. Error t-value   p-value    
+#> b:(Intercept) 0.447556   0.072119  6.2058 4.623e-06 ***
+#> c:(Intercept) 0.498164   0.204584  2.4350   0.02438 *  
+#> d:(Intercept) 7.723988   0.173236 44.5865 < 2.2e-16 ***
+#> e:(Intercept) 1.428649   0.160386  8.9076 2.132e-08 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.7017905 (20 degrees of freedom)
+#>  0.5197084 (20 degrees of freedom)
 
 # Compare parameter estimates
 coef(nec4.model)
 #> b:(Intercept) c:(Intercept) d:(Intercept) e:(Intercept) 
-#>     3.1693834     0.6720099     7.3966630     3.4172914
+#>     0.4475562     0.4981639     7.7239878     1.4286490
 ```
 
 ## Comparison of NEC Variants
@@ -234,6 +281,7 @@ functions:
 Let’s compare the three exported NEC variants on the ryegrass dataset:
 
 ``` r
+
 # Fit all three models
 nec2.fit <- drm(rootl ~ conc, data = ryegrass, fct = NEC.2(upper = max(ryegrass$rootl)))
 nec3.fit <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
@@ -245,9 +293,9 @@ cat("Model Comparison (AIC values):\n")
 cat("NEC.2:", AIC(nec2.fit), "\n")
 #> NEC.2: 52.70586
 cat("NEC.3:", AIC(nec3.fit), "\n")
-#> NEC.3: 63.02673
+#> NEC.3: 46.21237
 cat("NEC.4:", AIC(nec4.fit), "\n")
-#> NEC.4: 56.73556
+#> NEC.4: 42.31794
 
 # Plot all three models together
 my_plot = function(mod, col = "black", lwd = 2, pch = 16) {
@@ -264,6 +312,7 @@ my_plot(nec2.fit)
 constrained](nec-models_files/figure-html/model-comparison-1.png)
 
 ``` r
+
 my_plot(nec3.fit, col = "darkblue", lwd = 2)
 ```
 
@@ -271,6 +320,7 @@ my_plot(nec3.fit, col = "darkblue", lwd = 2)
 zero](nec-models_files/figure-html/model-comparison-2.png)
 
 ``` r
+
 my_plot(nec4.fit, col = "darkred", lwd = 2)
 ```
 
@@ -335,6 +385,7 @@ Here’s a decision guide to help you choose the appropriate NEC function:
 ### Example Decision Process:
 
 ``` r
+
 # Toxicology study with percentage mortality (0-100%)
 # Known bounds: lower = 0%, upper = 100%
 # → Use NEC.2
@@ -395,6 +446,7 @@ If functions were combined, users would need to manually specify
 constraints:
 
 ``` r
+
 # Current approach (user-friendly):
 drm(y ~ x, data = mydata, fct = NEC.3())
 
@@ -415,6 +467,7 @@ When unsure which variant to use, start with NEC.3 (most common) and
 compare with other variants:
 
 ``` r
+
 # Fit an initial model, then compare with alternative NEC variants
 m3 <- drm(response ~ dose, data = mydata, fct = NEC.3())
 
@@ -428,6 +481,7 @@ If your NEC.4 model shows very large standard errors or fails to
 converge, consider constraining parameters:
 
 ``` r
+
 # If NEC.4 has convergence issues, try NEC.3
 summary(nec4.model)  # Check standard errors
 # If c is close to 0 with large SE, use NEC.3
@@ -440,12 +494,16 @@ The `e` parameter represents the NEC threshold - the concentration below
 which there is no effect:
 
 ``` r
+
 # Extract the threshold estimate
 threshold <- coef(nec3.model)["e:(Intercept)"]
 cat("Estimated NEC threshold:", threshold, "\n")
 
 # Get confidence interval for the threshold
 confint(nec3.model)
+
+# Note: the threshold (NEC) is not the same as an effect dose. ED(nec3.model, 10)
+# is the EC10 and lies above the threshold; see "NEC versus Effect Doses (ED)".
 ```
 
 ## Conclusion

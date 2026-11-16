@@ -25,7 +25,7 @@ R-squared is computed as \eqn{1 - RSS / TSS} where RSS is the residual sum of sq
 \code{\link[=rss]{rss()}} for the underlying residual sum of squares.
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

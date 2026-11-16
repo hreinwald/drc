@@ -36,7 +36,9 @@ This is a special case of the Weibull type 1 model
 fixed at 0.
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = EXD.2())
+plot(ryegrass.m1, type = "all", main = "EXD.2 (exponential decay)")
 
 }
 \references{

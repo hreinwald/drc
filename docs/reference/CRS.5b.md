@@ -26,25 +26,25 @@ CRS.5b(names = c("b", "c", "d", "e", "f"), fixed = c(NA, NA, NA, NA, NA), ...)
 
   `b`
 
-  :   Hill slope (steepness of the dose-response curve).
+  : Hill slope (steepness of the dose-response curve).
 
   `c`
 
-  :   Lower asymptote (freely estimated).
+  : Lower asymptote (freely estimated).
 
   `d`
 
-  :   Upper asymptote.
+  : Upper asymptote.
 
   `e`
 
-  :   Effective dose producing a response midway between `c` and `d`
-      (ED50).
+  : Effective dose producing a response midway between `c` and `d`
+    (ED50).
 
   `f`
 
-  :   Hormesis parameter controlling the magnitude of the stimulatory
-      effect at low doses.
+  : Hormesis parameter controlling the magnitude of the stimulatory
+    effect at low doses.
 
   Defaults to `c("b", "c", "d", "e", "f")`.
 
@@ -95,6 +95,8 @@ Christian Ritz, Hannes Reinwald
 # The example below is retained for backward compatibility illustration only.
 
 lettuce.m2 <- drm( lettuce[, c(2, 1)], fct = CRS.5b() )
+plot(lettuce.m2, type = "all", main = "CRS.5b (deprecated)")
+
 summary(lettuce.m2)
 #> 
 #> Model fitted: Cedergreen-Ritz-Streibig (alpha=0.5) (5 parms)

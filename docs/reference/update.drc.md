@@ -29,6 +29,30 @@ update(object, ..., evaluate = TRUE)
 
 An object of class 'drc'.
 
+## Details
+
+The arguments stored in the call of the fit (e.g. `formula = myFormula`,
+`data = myData`) are evaluated in the environment in which
+[`drm()`](https://hreinwald.github.io/drc/reference/drm.md) was called,
+so [`update()`](https://rdrr.io/r/stats/update.html) - and functions
+that refit models through it, such as
+[`mselect`](https://hreinwald.github.io/drc/reference/mselect.md) and
+[`maED`](https://hreinwald.github.io/drc/reference/maED.md) - also work
+for fits created inside functions or in a separate environment, and
+never pick up an object of the same name from the global environment by
+accident. New arguments supplied in `...` are evaluated in the
+environment [`update()`](https://rdrr.io/r/stats/update.html) is called
+from.
+
+If `data` is not supplied and the original `data` expression can no
+longer be found or now refers to different data, the data stored in the
+fit (`object$origData`) is used (with a warning in the latter case).
+
+Fits made inside a function keep a reference to that function's
+environment (as [`lm()`](https://rdrr.io/r/stats/lm.html) does through
+its formula), which is also saved by
+[`saveRDS()`](https://rdrr.io/r/base/readRDS.html).
+
 ## Author
 
 Christian Ritz

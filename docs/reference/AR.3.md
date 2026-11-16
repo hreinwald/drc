@@ -46,5 +46,8 @@ A list of class `"Weibull-2"` as returned by
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = AR.3())
+plot(ryegrass.m1, type = "all", main = "AR.3 (shifted asymptotic regression)")
+
 ```

@@ -19,6 +19,12 @@ A list (see \code{\link{NEC}}).
 \description{
 Convenience function for the NEC model with the lower limit fixed at 0.
 }
+\examples{
+## Fit with drm() and plot
+nec.m3 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
+plot(nec.m3, type = "all", main = "NEC.3 (lower limit fixed at 0)")
+
+}
 \seealso{
 \code{\link{NEC}}, \code{\link{NEC.2}}, \code{\link{NEC.4}}
 }

@@ -66,8 +66,8 @@ summary(deguelin.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -1.93709    0.22390 -8.6514 < 2.2e-16 ***
-#> e:(Intercept)  9.95219    0.92186 10.7958 < 2.2e-16 ***
+#> b:(Intercept) -1.93706    0.22390 -8.6514 < 2.2e-16 ***
+#> e:(Intercept)  9.95220    0.92187 10.7957 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

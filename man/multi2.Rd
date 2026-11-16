@@ -39,11 +39,25 @@ The multistage model function with quadratic terms is:
 \deqn{f(x) = c + (d-c)\exp(-b1 - b2 x - b3 x^2)}
 
 where x denotes the dose or the logarithm-transformed dose.
+
+The parameters are: \code{b1}, \code{b2}, \code{b3}, the polynomial coefficients (\code{b1} sets the
+response at dose 0 relative to the range, \code{b2} and \code{b3} the linear and quadratic decline);
+\code{c}, the lower asymptote; and \code{d}, the upper bound of the scale. No effective doses
+(\code{\link{ED}}) are available for this model.
+}
+\examples{
+## Fit with drm() and plot
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = multi2())
+plot(m1, type = "all", main = "Multistage model with quadratic terms")
+
 }
 \references{
 Wheeler, M. W., Bailer, A. J. (2009)
 Comparing model averaging with other model selection strategies for benchmark
 dose estimation, \emph{Environmental and Ecological Statistics}, \bold{16}, 37--51.
+}
+\seealso{
+\code{\link{gammadr}}, \code{\link{drm}}
 }
 \author{
 Christian Ritz

@@ -21,6 +21,13 @@ A list (see \code{\link{gompertz}}).
 \description{
 Convenience function for the Gompertz model with lower limit fixed at 0 and upper limit fixed.
 }
+\examples{
+## Binomial (quantal) response: fit with drm() and plot
+earthworms.m1 <- drm(number/total ~ dose, weights = total,
+  data = earthworms, fct = G.2(), type = "binomial")
+plot(earthworms.m1, main = "G.2 (upper limit fixed at 1)")
+
+}
 \seealso{
 \code{\link{gompertz}}, \code{\link{G.3}}, \code{\link{G.4}}
 }

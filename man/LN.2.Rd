@@ -22,6 +22,13 @@ A list (see \code{\link{lnormal}}).
 \code{LN.2} is a convenience function for the log-normal model with lower limit fixed at 0
 and upper limit fixed (default 1), corresponding to the classic probit model.
 }
+\examples{
+## Binomial (quantal) response (probit model): fit with drm() and plot
+earthworms.m1 <- drm(number/total ~ dose, weights = total,
+  data = earthworms, fct = LN.2(), type = "binomial")
+plot(earthworms.m1, main = "LN.2 (probit model)")
+
+}
 \seealso{
 \code{\link{lnormal}}, \code{\link{LN.3}}, \code{\link{LN.4}}
 }

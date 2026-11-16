@@ -56,15 +56,15 @@ summary(ctb.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept)    1.38280    0.18094  7.6423 7.777e-14 ***
-#> c:(Intercept)   -5.87847   62.69971 -0.0938    0.9253    
-#> d:(Intercept) 2018.73268   36.19882 55.7679 < 2.2e-16 ***
-#> e:(Intercept)    5.40830    0.65619  8.2420 9.203e-16 ***
+#> b:(Intercept)    1.38073    0.18040  7.6538 7.171e-14 ***
+#> c:(Intercept)   -6.36518   62.79788 -0.1014    0.9193    
+#> d:(Intercept) 2018.52582   36.19722 55.7647 < 2.2e-16 ***
+#> e:(Intercept)    5.42581    0.66035  8.2166 1.132e-15 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  625.4192 (643 degrees of freedom)
+#>  625.4188 (643 degrees of freedom)
 plot(ctb.m1, main = "CTB dose-response")
 ```

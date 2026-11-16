@@ -41,6 +41,12 @@ given by the equation
 \deqn{f(x) = c + (d - c)(1 - \exp(-\exp(b(\log(x) - \log(e)))))}
 }
 \details{
+The parameters are: \code{b}, the slope (negative for a decreasing curve, positive for an increasing
+curve); \code{c}, the lower asymptote; \code{d}, the upper asymptote; and \code{e}, the dose at
+which the response has covered about 63\\% of the distance between the asymptotes (\code{e} is not the
+ED50; use \code{\link{ED}}). The curve is asymmetric on the log-dose axis and complementary to
+\code{\link{weibull1}}.
+
 The \code{method} argument determines how starting values for the parameters
 \code{b} and \code{e} are estimated (the starting values for \code{c} and
 \code{d} are always based on the range of the response values). Four methods
@@ -61,6 +67,30 @@ for \code{b} is based on the sign of the slope at that point.}
 an initial estimate for \code{e}, then estimates \code{b} and \code{e}
 using median-based back-calculations.}
 }
+}
+\examples{
+## Fit with drm() and plot
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = weibull2())
+plot(m1, type = "all", main = "Four-parameter Weibull type 2 model")
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = W2.4(fixed = c(NA, 0, NA, NA)))
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = W2.4(fixed = c(NA, 3, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = W2.4(fixed = c(NA, NA, 6, NA)))
+m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = W2.4(fixed = c(NA, NA, 9, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d9, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
 }
 \references{
 Seber, G. A. F. and Wild, C. J. (1989)

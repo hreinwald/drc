@@ -56,8 +56,8 @@ summary(TCDD.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -0.73196    0.20589 -3.5551 0.0003778 ***
-#> e:(Intercept) 96.49945   58.87278  1.6391 0.1011886    
+#> b:(Intercept) -0.73095    0.20635 -3.5423 0.0003966 ***
+#> e:(Intercept) 96.83581   59.42131  1.6296 0.1031759    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

@@ -42,6 +42,6 @@ Christian Ritz after a suggestion from Andrew Kniss.
 ``` r
 ryegrass.m1 <- drm(ryegrass, fct = LL.4())
 PR(ryegrass.m1, c(5, 10))
-#>         5        10 
-#> 1.8523337 0.6888809 
+#>        5       10 
+#> 1.852334 0.688881 
 ```

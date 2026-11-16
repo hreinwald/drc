@@ -181,12 +181,19 @@ test_that("leaveOneOut with fixedEnd = TRUE modifies boundary values", {
   resp <- m1_cont$data[, 2]
   result_nofix <- drc:::leaveOneOut(m1_cont, m2_cont, dose, dataSet, resp, fixedEnd = FALSE)
   result_fix <- drc:::leaveOneOut(m1_cont, m2_cont, dose, dataSet, resp, fixedEnd = TRUE)
-  # Source code sets pred2Vec[1] and pred2Vec[lenUd] where lenUd = length(unique(dose))
-  # This matches exactly the indexing used in leaveOneOut()
   uniDose <- sort(unique(dose))
-  lenUd <- length(uniDose)
-  expect_equal(result_fix$pred2[1], mean(resp[dose == uniDose[1]]))
-  expect_equal(result_fix$pred2[lenUd], mean(resp[dose == uniDose[lenUd]]))
+  expect_equal(result_fix$pred2[dose == uniDose[1]],
+               rep(mean(resp[dose == uniDose[1]]), sum(dose == uniDose[1])))
+  expect_equal(result_fix$pred2[dose == tail(uniDose, 1)],
+               rep(mean(resp[dose == tail(uniDose, 1)]), sum(dose == tail(uniDose, 1))))
+})
+
+test_that("leaveOneOut does not apply binomial probability bounds to continuous data", {
+  dataSet <- m1_cont$origData
+  dose <- m1_cont$data[, 1]
+  resp <- m1_cont$data[, 2]
+  result <- drc:::leaveOneOut(m1_cont, m2_cont, dose, dataSet, resp, fixedEnd = FALSE)
+  expect_true(any(result$pred2 < 0.01 | result$pred2 > 0.99))
 })
 
 # ---- pressWeights ----
@@ -262,6 +269,22 @@ test_that("mrdrm errors with non-linear loess (degree > 1)", {
   expect_error(drc:::mrdrm(m1_cont, m2_quad), "Local regression fit not linear!")
 })
 
+test_that("mrdrm validates model type, lambda, and flags", {
+  unsupported_fit <- structure(list(type = "Poisson"), class = "drc")
+  expect_error(drc:::mrdrm(unsupported_fit), "continuous or binomial")
+  expect_error(drc:::mrdrm(m1_cont, lambda = c(0, NA)), "finite values")
+  expect_error(drc:::mrdrm(m1_cont, lambda = 1.1), "between 0 and 1")
+  expect_error(drc:::mrdrm(m1_cont, fixedEnd = NA), "TRUE or FALSE")
+  expect_error(
+    drc:::mrdrm(m1_cont, m2_cont, lambda = c(0, 1), criterion = "lcv", unitScale = TRUE),
+    "cannot be combined with leave-one-dose-out"
+  )
+})
+
+test_that("mrdrm is exported from the package namespace", {
+  expect_true("mrdrm" %in% getNamespaceExports("drc"))
+})
+
 test_that("mrdrm works with continuous data and GCV criterion", {
   mr <- drc:::mrdrm(m1_cont, m2_cont, criterion = "gcv")
   expect_s3_class(mr, "mrdrc")
@@ -312,6 +335,11 @@ test_that("mrdrm with single lambda value", {
 test_that("mrdrm with unitScale = TRUE", {
   mr <- drc:::mrdrm(m1_cont, m2_cont, unitScale = TRUE)
   expect_s3_class(mr, "mrdrc")
+  pred <- predict(mr, newdata = data.frame(conc = c(0.5, 1)))
+  expect_length(pred, 2)
+  expect_true(all(is.finite(pred)))
+  expect_equal(dim(predict(mr, newdata = data.frame(conc = c(0.5, 1)), se.fit = TRUE)),
+               c(2, 2))
 })
 
 test_that("mrdrm with fixedEnd = TRUE for LCV criterion", {

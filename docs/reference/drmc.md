@@ -130,7 +130,7 @@ drmc()
 #> [1] FALSE
 #> 
 #> $relTol
-#> [1] 1e-07
+#> [1] 1e-10
 #> 
 #> $rmNA
 #> [1] FALSE

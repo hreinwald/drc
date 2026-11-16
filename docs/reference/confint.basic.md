@@ -4,7 +4,7 @@ An internal helper function that constructs a confidence interval matrix
 from a matrix of parameter estimates and their standard errors. A
 t-distribution quantile is used for continuous response models; a
 standard normal quantile is used for all other response types (binomial,
-event, Poisson, negbin1, negbin2).
+event, Poisson, negbin1, negbin2, ssd).
 
 ## Usage
 
@@ -27,10 +27,11 @@ confint(estMat, level, intType, dfres, formatting = TRUE)
 - intType:
 
   A character string specifying the response type of the model. One of
-  `"binomial"`, `"continuous"`, `"event"`, `"Poisson"`, `"negbin1"`, or
-  `"negbin2"`. Determines whether a normal or t-distribution quantile is
-  used. For `"continuous"` models a t-distribution with `dfres` degrees
-  of freedom is used; all other types use the standard normal.
+  `"binomial"`, `"continuous"`, `"event"`, `"Poisson"`, `"negbin1"`,
+  `"negbin2"`, or `"ssd"`. Determines whether a normal or t-distribution
+  quantile is used. For `"continuous"` models a t-distribution with
+  `dfres` degrees of freedom is used; all other types use the standard
+  normal.
 
 - dfres:
 

@@ -9,6 +9,11 @@
 #'
 #' where x denotes the dose or the logarithm-transformed dose.
 #'
+#' The parameters are: \code{b1}, \code{b2}, \code{b3}, the polynomial coefficients (\code{b1} sets the
+#' response at dose 0 relative to the range, \code{b2} and \code{b3} the linear and quadratic decline);
+#' \code{c}, the lower asymptote; and \code{d}, the upper bound of the scale. No effective doses
+#' (\code{\link{ED}}) are available for this model.
+#'
 #' @param fixed numeric vector specifying which parameters are fixed and at what value
 #'   they are fixed. NAs are used for parameters that are not fixed.
 #' @param names a vector of character strings giving the names of the parameters
@@ -25,6 +30,13 @@
 #'   dose estimation, \emph{Environmental and Ecological Statistics}, \bold{16}, 37--51.
 #'
 #' @author Christian Ritz
+#'
+#' @seealso \code{\link{gammadr}}, \code{\link{drm}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = multi2())
+#' plot(m1, type = "all", main = "Multistage model with quadratic terms")
 #'
 #' @keywords models nonlinear
 "multi2" <- function(

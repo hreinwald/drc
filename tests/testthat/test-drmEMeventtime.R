@@ -145,15 +145,16 @@ test_that("llfct returns a numeric vector of length 2", {
 test_that("llfct computes correct values", {
   em <- drmEMeventtime(test_dose_2col, test_resp, simple_cdf)
 
-  mock_object <- list(
+  mock_object <- structure(list(
     fit = list(value = 10),
-    sumList = list(df.residual = 3)
-  )
+    sumList = list(df.residual = 3),
+    coefficients = c(b = 1, e = 2, d = 3)
+  ), class = "drc")
 
   result <- em$llfct(mock_object)
   # First element: -object$fit$value
   expect_equal(result[1], -10)
-  # Second element: df.residual
+  # Second element: number of estimated parameters (not the residual df)
   expect_equal(result[2], 3)
 })
 

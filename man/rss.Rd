@@ -23,7 +23,7 @@ For models with multiple curves, per-curve and total RSS values are returned.
 \code{\link[=Rsq]{Rsq()}} which uses this function to compute R-squared.
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

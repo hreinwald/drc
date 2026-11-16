@@ -17,6 +17,25 @@
 #' \deqn{f(x) = c + (d-c)\exp(-b(x-e)I(x-e))}
 #' where \eqn{I(x-e)} is the indicator function equal to 0 for \eqn{x<=e} and 1 for \eqn{x>e}.
 #'
+#' The parameters are: \code{b}, the rate of the exponential decline above the threshold; \code{c},
+#' the lower asymptote (the response approached at high doses); \code{d}, the upper asymptote, i.e.
+#' the constant response up to the threshold; and \code{e}, the threshold itself, the
+#' no-effect concentration (NEC), which is estimated directly as a model parameter.
+#'
+#' \strong{NEC versus ED.} The threshold \code{e} (the NEC) and effective doses are different
+#' quantities. \code{e} is the dose where the decline starts and is read directly from
+#' \code{coef()} (with its standard error from \code{summary()} and interval from
+#' \code{confint()}). \code{\link{ED}} returns the dose at which the response has fallen by
+#' \eqn{p} percent of the distance between the upper and lower asymptote, i.e. where
+#' \eqn{f(x) = d - (p/100)(d - c)}, which gives
+#' \deqn{ED_p = e - \log(1 - p/100)/b.}
+#' Because the response is flat up to \code{e}, every \eqn{ED_p} with \eqn{0 < p < 100} is larger
+#' than the NEC. For example, \code{ED(fit, 10)} is the EC10 and is not the NEC. The ED is
+#' available for \code{type = "relative"} and \code{type = "absolute"}; it requires \eqn{b > 0}
+#' and, for absolute levels, a response strictly between \code{c} and \code{d}. Otherwise
+#' \code{NA} is returned with a warning. Standard errors and intervals from
+#' \code{\link{predict}} are based on numerical derivatives.
+#'
 #' @return A list containing the nonlinear function, the self starter function
 #'   and the parameter names.
 #'
@@ -30,9 +49,33 @@
 #' @seealso \code{\link{NEC.2}}, \code{\link{NEC.3}}, \code{\link{NEC.4}}, \code{\link{drm}}
 #'
 #' @examples
+#' ## Fit with drm() and plot; the parameter e is the NEC
 #' nec.m1 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
 #' summary(nec.m1)
-#' plot(nec.m1)
+#' plot(nec.m1, type = "all", main = "NEC model")
+#'
+#' ## NEC (threshold e) versus effective doses: ED() is larger than the NEC
+#' coef(nec.m1)["e:(Intercept)"]            # the NEC, estimated directly
+#' ED(nec.m1, c(10, 50), display = FALSE)   # EC10 and EC50, both above the NEC
+#' ED(nec.m1, 10, interval = "delta", display = FALSE)
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+#' nec.c0 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, 0, NA, NA)))
+#' nec.c3 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, 3, NA, NA)))
+#' plot(nec.m1, type = "all", main = "Lower asymptote c")
+#' plot(nec.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(nec.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+#' nec.d6 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, NA, 6, NA)))
+#' nec.d9 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, NA, 9, NA)))
+#' plot(nec.m1, type = "all", main = "Upper asymptote d")
+#' plot(nec.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(nec.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "NEC" <- function(
@@ -74,8 +117,49 @@ fctName, fctText)
     ##Defining the first derivative (in the dose)
     derivx <- NULL
 
-    ## Defining the ED function
-    edfct <- NULL
+    ## Defining the ED function: dose at which the response has dropped by p% of (d - c),
+    ## i.e. solves c + (d - c) * exp(-b * (x - e)) = d - p/100 * (d - c) for x > e.
+    ## Only defined for b > 0 and 0 < p < 100; otherwise NA.
+    edfct <- function(parm, respl, reference = "control", type = "relative", ...)
+    {
+        parmVec[notFixed] <- parm
+        p <- absToRel(parmVec, respl, type)
+
+        if (!is.finite(parmVec[1]) || parmVec[1] <= 0)
+        {
+            warning("ED is not defined for this NEC fit: the slope parameter b is ",
+                    format(parmVec[1], digits = 4), " but must be positive (the response ",
+                    "must decay beyond the threshold e). NA returned. Check the fit, e.g. ",
+                    "whether the data show a decrease with dose, or refit with different ",
+                    "starting values (start =).", call. = FALSE)
+            return(list(NA_real_, rep(NA_real_, sum(notFixed))))
+        }
+        if (!is.finite(p) || p <= 0 || p >= 100)
+        {
+            if (identical(type, "absolute"))
+            {
+                msg <- paste0("the absolute response level ", format(respl, digits = 4),
+                              " is not strictly between the asymptotes c = ",
+                              format(parmVec[2], digits = 4), " and d = ",
+                              format(parmVec[3], digits = 4),
+                              ". Choose a level inside this range.")
+            } else {
+                msg <- paste0("the relative response level ", format(respl, digits = 4),
+                              " is outside ]0, 100[. Choose a percentage strictly between ",
+                              "0 and 100.")
+            }
+            warning("ED is not defined for NEC models: ", msg, " NA returned.", call. = FALSE)
+            return(list(NA_real_, rep(NA_real_, sum(notFixed))))
+        }
+
+        logTerm <- log(1 - p/100)
+        EDp <- parmVec[4] - logTerm / parmVec[1]
+        ## Derivatives wrt b, c, d, e (p treated as constant; for type = "absolute"
+        ## ED.drc replaces the gradient by central differences)
+        EDder <- c(logTerm / parmVec[1]^2, 0, 0, 1)
+
+        list(EDp, EDder[notFixed])
+    }
   
     ## Returning the function with self starter and names
     returnList <- 
@@ -104,6 +188,12 @@ fctName, fctText)
 #' @return A list (see \code{\link{NEC}}).
 #'
 #' @seealso \code{\link{NEC}}, \code{\link{NEC.3}}, \code{\link{NEC.4}}
+#'
+#' @examples
+#' ## Response relative to the control mean, upper limit fixed at 1
+#' ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+#' nec.m2 <- drm(rel ~ conc, data = ryegrass.rel, fct = NEC.2(upper = 1))
+#' plot(nec.m2, type = "all", main = "NEC.2 (c = 0, d = 1)")
 #'
 #' @keywords models nonlinear
 "NEC.2" <-
@@ -134,6 +224,11 @@ function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 #'
 #' @seealso \code{\link{NEC}}, \code{\link{NEC.2}}, \code{\link{NEC.4}}
 #'
+#' @examples
+#' ## Fit with drm() and plot
+#' nec.m3 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.3())
+#' plot(nec.m3, type = "all", main = "NEC.3 (lower limit fixed at 0)")
+#'
 #' @keywords models nonlinear
 "NEC.3" <-
 function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
@@ -162,6 +257,11 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #' @return A list (see \code{\link{NEC}}).
 #'
 #' @seealso \code{\link{NEC}}, \code{\link{NEC.2}}, \code{\link{NEC.3}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' nec.m4 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
+#' plot(nec.m4, type = "all", main = "NEC.4")
 #'
 #' @keywords models nonlinear
 "NEC.4" <-

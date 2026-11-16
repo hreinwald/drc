@@ -42,6 +42,7 @@ starter function, and parameter names.
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 spinach.m1 <- drm(SLOPE ~ DOSE, data = spinach, fct = W2x.3())
 summary(spinach.m1)
 #> 
@@ -50,7 +51,7 @@ summary(spinach.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> d:(Intercept)   0.827617   0.067677  12.229 < 2.2e-16 ***
+#> d:(Intercept)   0.827620   0.067677  12.229 < 2.2e-16 ***
 #> e:(Intercept)   0.008972        NaN     NaN       NaN    
 #> t0:(Intercept) -0.135527        NaN     NaN       NaN    
 #> ---
@@ -59,4 +60,6 @@ summary(spinach.m1)
 #> Residual standard error:
 #> 
 #>  0.6934874 (102 degrees of freedom)
+plot(spinach.m1, main = "W2x.3")
+
 ```

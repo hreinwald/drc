@@ -52,16 +52,16 @@ summary(aconiazide.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value p-value    
-#> b:(Intercept)    1.11216    0.45229  2.4589 0.01737 *  
-#> c:(Intercept)  -46.62703  821.99546 -0.0567 0.95499    
-#> d:(Intercept)  360.39895    4.96987 72.5168 < 2e-16 ***
-#> e:(Intercept) 1106.80577 3076.84642  0.3597 0.72054    
+#> b:(Intercept)    1.05065    0.46864  2.2419 0.02934 *  
+#> c:(Intercept) -224.92338 2000.30775 -0.1124 0.91091    
+#> d:(Intercept)  360.47322    4.96440 72.6117 < 2e-16 ***
+#> e:(Intercept) 1811.65194 8239.67421  0.2199 0.82685    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  18.72333 (51 degrees of freedom)
+#>  18.71868 (51 degrees of freedom)
 
 ## Plotting the fitted curve
 plot(aconiazide.m1, xlab = "Dose", ylab = "Weight change (g)")

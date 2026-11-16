@@ -56,40 +56,42 @@ For details on why the CRAN and upstream fork version is heavily outdated see th
 
 ### Install from GitHub (Recommended)
 
-> Install via `remotes` package:
+We recommend installing with the [`pak`](https://pak.r-lib.org/) package. It is much faster than `remotes` or `devtools`, resolves dependencies better, and installs them in parallel.
+
+``` r
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+
+# Latest development version
+pak::pak("hreinwald/drc@dev")
+
+# Latest stable release version
+pak::pak("hreinwald/drc@main")
+```
+
+#### Backup: install via `remotes`
+
+If `pak` is not available or not working, use `remotes` instead:
+
 ``` r
 if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 
-# Latest development version 
+# Latest development version
 remotes::install_github("hreinwald/drc@dev")
 
 # Latest stable release version
-devtools::install_github("hreinwald/drc@main")
-```
-
-----
-
-> Install via `devtools` package:
-```r
-if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-
-# Latest development version 
-devtools::install_github("hreinwald/drc@dev")
-
-# Latest stable release version
-devtools::install_github("hreinwald/drc@main")
+remotes::install_github("hreinwald/drc@main")
 ```
 
 ### Local Installation from tar.gz
 
 If GitHub installation is failing, you can run the installation from the local tar.gz file. 
-[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.2.tar.gz).
+[Download the latest release](https://github.com/hreinwald/drc/archive/refs/tags/3.4.0.tar.gz).
 
 After downloading the file, run the following:
 
 ``` r
 # Specify the path to the directory where you saved the downloaded tar.gz file.
-targz  <- file.path("~/Downloads/drc-3.3.2.tar.gz")
+targz  <- file.path("~/Downloads/drc-3.4.0.tar.gz")
 
 # Local installation with base R
 install.packages(targz, repos = NULL, type = "source")

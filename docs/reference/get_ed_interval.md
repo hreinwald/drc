@@ -11,7 +11,8 @@ get_ed_interval(
   model,
   small_n = TRUE,
   fls_pattern = "^LL|^LN|^BC|^CRS",
-  verbose = FALSE
+  verbose = FALSE,
+  log_ed = FALSE
 )
 ```
 
@@ -24,10 +25,11 @@ get_ed_interval(
 
 - small_n:
 
-  A logical value. If TRUE, the t-distribution-based Fieller's method
-  ("tfls") is used for small samples for applicable models. If FALSE,
-  the normal-distribution-based method ("fls") is used. Defaults to
-  TRUE.
+  A logical value. If TRUE, "tfls" (confidence limits computed on the
+  log scale of the ED and back-transformed) is used for models matched
+  by `fls_pattern`; if FALSE the delta method ("delta") is used. Models
+  with log(ED) parameterisation (`LL2.*`) always use "fls", the only
+  valid choice for them. Defaults to TRUE.
 
 - fls_pattern:
 
@@ -41,6 +43,12 @@ get_ed_interval(
   A logical value. If TRUE, a message is printed when the function
   resorts to its default choice because the model type was not
   explicitly matched. Defaults to TRUE.
+
+- log_ed:
+
+  Logical; `TRUE` if the model returns ED on the log scale (`LL2.*`,
+  `LN.*(loge = TRUE)`). Detected automatically for `drc` objects and for
+  `LL2.*` names.
 
 ## Value
 

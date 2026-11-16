@@ -26,7 +26,9 @@ given by
 \deqn{f(x) = c + \frac{d - c}{(1 + \exp(b(x - e)))^f}}
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.5())
+plot(ryegrass.m1, type = "all", main = "L.5")
 }
 \seealso{
 \code{\link{logistic}}, \code{\link{L.3}}, \code{\link{L.4}}

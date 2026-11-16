@@ -46,8 +46,8 @@ summary(finney71.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -3.10363    0.38773 -8.0047 1.154e-15 ***
-#> e:(Intercept)  4.82890    0.24958 19.3485 < 2.2e-16 ***
+#> b:(Intercept) -3.10355    0.38772 -8.0047 1.154e-15 ***
+#> e:(Intercept)  4.82892    0.24958 19.3481 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 plot(finney71.m1, broken = TRUE, bp = 0.1, lwd = 2)
@@ -58,9 +58,9 @@ ED(finney71.m1, c(10, 20, 50), interval = "delta", reference = "control")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:10  2.37896    0.25164 1.88576 2.87217
-#> e:20  3.08932    0.24372 2.61163 3.56700
-#> e:50  4.82890    0.24958 4.33974 5.31806
+#> e:10  2.37893    0.25164 1.88572 2.87214
+#> e:20  3.08929    0.24372 2.61160 3.56698
+#> e:50  4.82892    0.24958 4.33975 5.31809
 
 ## Model fitted with 'glm'
 #fitl.glm <- glm(cbind(affected, total-affected) ~ log(dose),
@@ -84,7 +84,7 @@ ED(finney71.m2, c(10, 20, 50), interval = "fls", reference = "control")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error    Lower    Upper
-#> e:10 2.378930   0.105781 1.933486 2.926996
+#> e:10 2.378929   0.105781 1.933486 2.926996
 #> e:20 3.089292   0.078893 2.646700 3.605896
-#> e:50 4.828919   0.051685 4.363709 5.343725
+#> e:50 4.828918   0.051685 4.363708 5.343724
 ```

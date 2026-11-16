@@ -25,7 +25,10 @@ A four-parameter logistic model (symmetric, with \code{f = 1}), given by
 \deqn{f(x) = c + \frac{d - c}{1 + \exp(b(x - e))}}
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = L.4())
+plot(ryegrass.m1, type = "all", main = "L.4")
+ED(ryegrass.m1, c(10, 50, 90))
 }
 \seealso{
 \code{\link{logistic}}, \code{\link{L.3}}, \code{\link{L.5}}

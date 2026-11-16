@@ -42,5 +42,18 @@ and related components.
 ## Examples
 
 ``` r
+## Several curves fitted with drm() and plotted; ED on the dose scale
 spinach.m1 <- drm(SLOPE ~ DOSE, CURVE, data = spinach, fct = LL2.4())
+plot(spinach.m1, main = "LL2.4, one curve per CURVE level")
+
+ED(spinach.m1, 50, interval = "fls")
+#> 
+#> Estimated effective doses
+#> 
+#>        Estimate Std. Error    Lower    Upper
+#> e:1:50 1.794886   0.266433 1.056753 3.048600
+#> e:2:50 0.945678   0.263895 0.559592 1.598141
+#> e:3:50 1.372715   0.329661 0.712721 2.643875
+#> e:4:50 0.197327   0.051642 0.178072 0.218665
+#> e:5:50 0.210173   0.065310 0.184579 0.239315
 ```

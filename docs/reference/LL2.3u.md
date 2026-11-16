@@ -41,3 +41,13 @@ and related components.
 [`llogistic2`](https://hreinwald.github.io/drc/reference/llogistic2.md),
 [`LL2.2`](https://hreinwald.github.io/drc/reference/LL2.2.md),
 [`LL2.3`](https://hreinwald.github.io/drc/reference/LL2.3.md)
+
+## Examples
+
+``` r
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LL2.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "LL2.3u (upper limit fixed at 1)")
+
+```

@@ -1,6 +1,21 @@
 #' @title Interactive dose-response modelling
+#'
+#' @description Internal helper used by \code{\link{drm}} when \code{separate = TRUE}: the model is
+#' fitted to each curve separately and the fits are combined into one \code{drc} object.
+#'
+#' @param x dose values.
+#' @param y response values.
+#' @param curveid curve identifiers.
+#' @param weights weights.
+#' @param fct model function (list).
+#' @param type response type.
+#' @param control list from \code{\link{drmc}}.
+#' @param robust,bcVal,bcAdd,lowerl,upperl,logDose,start arguments of \code{\link{drm}} that are
+#'   forwarded to the per-curve fits.
+#'
 #' @keywords internal
-"idrm" <- function(x, y, curveid, weights, fct, type, control)
+"idrm" <- function(x, y, curveid, weights, fct, type, control, robust = "mean", bcVal = NULL, 
+                   bcAdd = 0, lowerl = NULL, upperl = NULL, logDose = NULL, start = NULL)
 {
     oneFunction <- !is.list(fct[[1]])
  
@@ -12,8 +27,18 @@
     {
         if (oneFunction)
         {
-            fitList[[i]] <- drm(y~x, curveid, weights = weights, fct = fct, type = type, 
-            subset = curveid == uniCur[i], separate = FALSE, control = control)
+            if (is.null(start))
+            {
+                fitList[[i]] <- drm(y~x, curveid, weights = weights, fct = fct, type = type, 
+                subset = curveid == uniCur[i], separate = FALSE, control = control,
+                robust = robust, bcVal = bcVal, bcAdd = bcAdd, lowerl = lowerl, upperl = upperl, 
+                logDose = logDose)
+            } else {
+                fitList[[i]] <- drm(y~x, curveid, weights = weights, fct = fct, type = type, 
+                subset = curveid == uniCur[i], separate = FALSE, control = control,
+                robust = robust, bcVal = bcVal, bcAdd = bcAdd, lowerl = lowerl, upperl = upperl, 
+                logDose = logDose, start = start)
+            }
         } else {
             tempFitlist <- list()
             for (j in 1:length(fct))

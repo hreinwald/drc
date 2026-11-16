@@ -64,8 +64,8 @@ summary(CadmiumDaphnia.m1)
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  -1.00362    0.21675 -4.6303 3.651e-06 ***
-#> e:(Intercept) 132.42840   51.34644  2.5791  0.009905 ** 
+#> b:(Intercept)  -0.99641    0.21928 -4.5439 5.522e-06 ***
+#> e:(Intercept) 134.39673   53.67733  2.5038   0.01229 *  
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

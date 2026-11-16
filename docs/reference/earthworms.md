@@ -56,7 +56,7 @@ modelFit(earthworms.m1)  # a crude goodness-of-fit test
 #> 
 #>             Df Chisq value p value
 #>                                   
-#> DRC model   28      35.236  0.1631
+#> DRC model   28       35.23  0.1633
 
 ## Fitting an extended logistic regression model 
 ##  where the upper limit is estimated
@@ -67,7 +67,7 @@ modelFit(earthworms.m2)  # goodness-of-fit test
 #> 
 #>             Df Chisq value p value
 #>                                   
-#> DRC model   32       43.13  0.0905
+#> DRC model   32      43.122  0.0906
 # improvement not visible in test!!!
 
 ## Comparing model1 and model2 

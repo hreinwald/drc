@@ -79,8 +79,8 @@ test_that("llfct returns a numeric vector of length 2", {
   em <- drmEMstandard(test_dose, test_resp, simple_model)
 
   mock_object <- list(
-    fit = list(value = 10),
-    sumList = list(df.residual = 3)
+    fit = list(value = 10, par = test_parm),
+    sumList = list(lenData = length(test_dose), df.residual = 3)
   )
 
   result <- em$llfct(mock_object)
@@ -88,20 +88,38 @@ test_that("llfct returns a numeric vector of length 2", {
   expect_equal(length(result), 2)
 })
 
-test_that("llfct computes correct values", {
+test_that("llfct matches the multivariate Gaussian log-likelihood", {
   em <- drmEMstandard(test_dose, test_resp, simple_model)
+  fit_value <- em$opfct(test_parm)
 
   mock_object <- list(
-    fit = list(value = 10),
-    sumList = list(df.residual = 3)
+    fit = list(value = fit_value, par = test_parm),
+    sumList = list(lenData = length(test_dose), df.residual = 3)
   )
 
   result <- em$llfct(mock_object)
-  # First element: -object$fit$value + sum(log(gamma(resp+1)))
-  expected_ll <- -10 + sum(log(gamma(test_resp + 1)))
+  f0 <- simple_model(0, test_parm)[1]
+  fVec <- simple_model(test_dose, test_parm)
+  zeroDose <- test_dose < 1e-15
+  len0 <- sum(zeroDose)
+  vcMat <- (1 / len0) * (fVec %o% fVec) / (f0^4)
+  diag(vcMat) <- diag(vcMat) + (1 / (f0^2))
+  vcMat[!zeroDose, zeroDose] <- vcMat[!zeroDose, zeroDose] +
+    (1 / len0) * (-fVec[!zeroDose] / (f0^3))
+  vcMat[zeroDose, !zeroDose] <- vcMat[zeroDose, !zeroDose] +
+    (1 / len0) * (-fVec[!zeroDose] / (f0^3))
+  diag(vcMat[zeroDose, zeroDose]) <-
+    diag(vcMat[zeroDose, zeroDose]) +
+    (1 / (len0 * f0^2)) - (1 / f0^2)
+  sigma2 <- fit_value / length(test_dose)
+  expected_ll <- -0.5 * (
+    length(test_dose) * log(2 * pi) +
+      as.numeric(determinant(vcMat, logarithm = TRUE)$modulus) +
+      length(test_dose) * log(sigma2) +
+      fit_value / sigma2
+  )
   expect_equal(result[1], expected_ll)
-  # Second element: df.residual
-  expect_equal(result[2], 3)
+  expect_equal(result[2], length(test_dose) - 3 + 1)
 })
 
 

@@ -21,6 +21,13 @@ A list (see \code{\link{NEC}}).
 \description{
 Convenience function for the NEC model with lower limit fixed at 0 and upper limit fixed.
 }
+\examples{
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+nec.m2 <- drm(rel ~ conc, data = ryegrass.rel, fct = NEC.2(upper = 1))
+plot(nec.m2, type = "all", main = "NEC.2 (c = 0, d = 1)")
+
+}
 \seealso{
 \code{\link{NEC}}, \code{\link{NEC.3}}, \code{\link{NEC.4}}
 }

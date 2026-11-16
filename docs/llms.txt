@@ -62,7 +62,7 @@ The package offers:
 
 For more details visit:
 
-📖 **[drc github documentation](https://hreinwald.github.io/drc/)**  
+📖 **[drc github documentation](https://hreinwald.github.io/drc/)**\
 ⚡ **[drc example
 workflow](https://hreinwald.github.io/drc/articles/dose-response-workflow.html)**
 
@@ -74,32 +74,59 @@ Feature requests or ideas?
 
 **⚠️ Important:** We **do not recommend** installing the currently
 heavily outdated CRAN version of this package. Instead, we recommend
-installing the development (`dev`) or stable beta (`main_beta`) version
-from GitHub.
+installing the development (`dev`) or stable beta (`main`) version from
+GitHub.
+
+For details on why the CRAN and upstream fork version is heavily
+outdated see the [drc package comparative
+analysis](https://hreinwald.github.io/drc/articles/package-version-comparative-analysis.html).
+It also show cases the most critical bugs that were fixed in this
+re-factored version.
 
 ### Install from GitHub (Recommended)
 
+We recommend installing with the [`pak`](https://pak.r-lib.org/)
+package. It is much faster than `remotes` or `devtools`, resolves
+dependencies better, and installs them in parallel.
+
 ``` r
-# install.packages("devtools")
 
-# Install the re-factored development version 
-devtools::install_github("hreinwald/drc")
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 
-# Install the re-factored stable beta version
-devtools::install_github("hreinwald/drc@main_beta")
+# Latest development version
+pak::pak("hreinwald/drc@dev")
+
+# Latest stable release version
+pak::pak("hreinwald/drc@main")
+```
+
+#### Backup: install via `remotes`
+
+If `pak` is not available or not working, use `remotes` instead:
+
+``` r
+
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+
+# Latest development version
+remotes::install_github("hreinwald/drc@dev")
+
+# Latest stable release version
+remotes::install_github("hreinwald/drc@main")
 ```
 
 ### Local Installation from tar.gz
 
 If GitHub installation is failing, you can run the installation from the
 local tar.gz file. [Download the latest
-release](https://github.com/hreinwald/drc/archive/refs/tags/3.3.2.tar.gz).
+release](https://github.com/hreinwald/drc/archive/refs/tags/3.4.0.tar.gz).
 
 After downloading the file, run the following:
 
 ``` r
+
 # Specify the path to the directory where you saved the downloaded tar.gz file.
-targz  <- file.path("~/Downloads/drc-3.3.2.tar.gz")
+targz  <- file.path("~/Downloads/drc-3.4.0.tar.gz")
 
 # Local installation with base R
 install.packages(targz, repos = NULL, type = "source")
@@ -110,6 +137,7 @@ install.packages(targz, repos = NULL, type = "source")
 To install the outdated version from CRAN:
 
 ``` r
+
 install.packages("drc")
 ```
 
@@ -118,6 +146,7 @@ install.packages("drc")
 ### Fitting a basic dose-response model
 
 ``` r
+
 library(drc)
 
 # Fit a four-parameter log-logistic model to the built-in 'ryegrass' dataset
@@ -133,6 +162,7 @@ plot(model, xlab = "Concentration", ylab = "Root length")
 ### Estimating effective doses (ED values)
 
 ``` r
+
 # Estimate the ED50 (dose producing 50% effect) with confidence intervals
 ED(model, respLev = c(10, 50, 90), interval = "delta")
 ```
@@ -140,6 +170,7 @@ ED(model, respLev = c(10, 50, 90), interval = "delta")
 ### Comparing curves across groups
 
 ``` r
+
 # Fit separate curves for multiple groups
 model_multi <- drm(rootl ~ conc, curveid = herbicide,
                    data = ryegrass, fct = LL.4())
@@ -151,6 +182,7 @@ EDcomp(model_multi, percVec = c(50), interval = "delta")
 ### Model selection
 
 ``` r
+
 # Compare different dose-response model families
 mselect(model, fctList = list(W1.4(), W2.4(), LL.3()))
 ```
@@ -161,11 +193,55 @@ The package includes detailed vignettes to help you understand specific
 topics:
 
 ``` r
+
 # View available vignettes
 vignette(package = "drc")
 
 # Access the NEC models vignette
 vignette("nec-models", package = "drc")
+```
+
+## Package workflow
+
+The diagram below illustrates how the main functions of the **drc**
+package relate to each other. Raw data and a chosen model function are
+passed to [`drm()`](https://hreinwald.github.io/drc/reference/drm.md) to
+produce a `drc` object. That object is then the entry point for all
+downstream analysis.
+
+``` mermaid
+flowchart LR
+    DATA([data.frame])
+    MODELS["Model functions\nLL.4&#40;&#41; · W1.4&#40;&#41; · W2.4&#40;&#41;\nG.4&#40;&#41; · LN.4&#40;&#41; · BC.5&#40;&#41; · …"]
+    DRMC["drmc&#40;&#41;\noptimisation\ncontrol"]
+
+    DRM["drm&#40;formula, data=,\nfct=, curveid=, type=&#41;"]
+    OBJ(["drc object"])
+
+    PLOT["plot&#40;&#41;"]
+    SUMM["summary&#40;&#41; · coef&#40;&#41; · confint&#40;&#41;\npredict&#40;&#41; · fitted&#40;&#41; · residuals&#40;&#41;"]
+    ED["ED&#40;&#41; · maED&#40;&#41;\nED_robust&#40;&#41; · maED_robust&#40;&#41;"]
+    COMP["EDcomp&#40;&#41; · compParm&#40;&#41;\nrelpot&#40;&#41;"]
+    SEL["mselect&#40;fctList=&#41;"]
+    GOF["modelFit&#40;&#41; · noEffect&#40;&#41;\nanova&#40;&#41; · Rsq&#40;&#41;"]
+    SIM["rdrm&#40;&#41;\nsimulate dose-response data\n&#40;power analysis / method comparison&#41;"]
+
+    DATA --> DRM
+    MODELS -->|"fct="| DRM
+    DRMC --> DRM
+    DRM --> OBJ
+
+    OBJ --> PLOT
+    OBJ --> SUMM
+    OBJ --> ED
+    OBJ --> COMP
+    OBJ --> SEL
+    OBJ --> GOF
+
+    MODELS -->|"fctList="| SEL
+
+    DATA -.-> SIM
+    MODELS -.->|"fct="| SIM
 ```
 
 ## Available Models
@@ -262,6 +338,8 @@ Main functions for dose-response analysis
   Dose-response model selection
 - [`drmc()`](https://hreinwald.github.io/drc/reference/drmc.md) : Sets
   control arguments
+- [`mrdrm()`](https://hreinwald.github.io/drc/reference/mrdrm.md) :
+  Model-robust dose-response modelling
 
 ## Model Functions
 
@@ -342,25 +420,25 @@ Available dose-response model families
 - [`BC.5()`](https://hreinwald.github.io/drc/reference/BC.5.md) :
   Five-parameter Brain-Cousens hormesis model
 - [`CRS.4a()`](https://hreinwald.github.io/drc/reference/CRS.4a.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
   Fixed at 0 and Alpha = 1 (Deprecated)
 - [`CRS.4b()`](https://hreinwald.github.io/drc/reference/CRS.4b.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
   Fixed at 0 and Alpha = 0.5 (Deprecated)
 - [`CRS.4c()`](https://hreinwald.github.io/drc/reference/CRS.4c.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
   Fixed at 0 and Alpha = 0.25 (Deprecated)
 - [`CRS.5()`](https://hreinwald.github.io/drc/reference/CRS.5.md) :
   Wrapper for 5-parameter Cedergreen-Ritz-Streibig Model
 - [`CRS.5a()`](https://hreinwald.github.io/drc/reference/CRS.5a.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
-  with Alpha = 1 (Deprecated)
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Five-Parameter Model with
+  Alpha = 1 (Deprecated)
 - [`CRS.5b()`](https://hreinwald.github.io/drc/reference/CRS.5b.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
-  with Alpha = 0.5 (Deprecated)
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Five-Parameter Model with
+  Alpha = 0.5 (Deprecated)
 - [`CRS.5c()`](https://hreinwald.github.io/drc/reference/CRS.5c.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
-  with Alpha = 0.25 (Deprecated)
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Five-Parameter Model with
+  Alpha = 0.25 (Deprecated)
 - [`CRS.6()`](https://hreinwald.github.io/drc/reference/CRS.6.md) :
   Generalised Cedergreen-Ritz-Streibig Model for Hormesis
 - [`UCRS.4a()`](https://hreinwald.github.io/drc/reference/UCRS.4a.md) :
@@ -402,17 +480,17 @@ Available dose-response model families
 - [`FPL.4()`](https://hreinwald.github.io/drc/reference/FPL.4.md) :
   Four-parameter fractional polynomial-logistic model
 - [`ml3a()`](https://hreinwald.github.io/drc/reference/ml3a.md)
-  **\[deprecated\]** : Alias for CRS.4a (Deprecated)
+  **\[veraltet\]** : Alias for CRS.4a (Deprecated)
 - [`ml3b()`](https://hreinwald.github.io/drc/reference/ml3b.md)
-  **\[deprecated\]** : Alias for CRS.4b (Deprecated)
+  **\[veraltet\]** : Alias for CRS.4b (Deprecated)
 - [`ml3c()`](https://hreinwald.github.io/drc/reference/ml3c.md)
-  **\[deprecated\]** : Alias for CRS.4c (Deprecated)
+  **\[veraltet\]** : Alias for CRS.4c (Deprecated)
 - [`ml4a()`](https://hreinwald.github.io/drc/reference/ml4a.md)
-  **\[deprecated\]** : Alias for CRS.5a (Deprecated)
+  **\[veraltet\]** : Alias for CRS.5a (Deprecated)
 - [`ml4b()`](https://hreinwald.github.io/drc/reference/ml4b.md)
-  **\[deprecated\]** : Alias for CRS.5b (Deprecated)
+  **\[veraltet\]** : Alias for CRS.5b (Deprecated)
 - [`ml4c()`](https://hreinwald.github.io/drc/reference/ml4c.md)
-  **\[deprecated\]** : Alias for CRS.5c (Deprecated)
+  **\[veraltet\]** : Alias for CRS.5c (Deprecated)
 - [`uml3a()`](https://hreinwald.github.io/drc/reference/uml3a.md) :
   Alias for UCRS.4a
 - [`uml3b()`](https://hreinwald.github.io/drc/reference/uml3b.md) :

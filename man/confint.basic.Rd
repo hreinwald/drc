@@ -14,7 +14,7 @@ parameter estimates and the second column contains their standard errors.}
 
 \item{intType}{A character string specifying the response type of the model.
 One of \code{"binomial"}, \code{"continuous"}, \code{"event"}, \code{"Poisson"},
-\code{"negbin1"}, or \code{"negbin2"}. Determines whether a normal or t-distribution
+\code{"negbin1"}, \code{"negbin2"}, or \code{"ssd"}. Determines whether a normal or t-distribution
 quantile is used. For \code{"continuous"} models a t-distribution with \code{dfres}
 degrees of freedom is used; all other types use the standard normal.}
 
@@ -33,7 +33,7 @@ An internal helper function that constructs a confidence interval matrix
 from a matrix of parameter estimates and their standard errors. A
 t-distribution quantile is used for continuous response models; a standard
 normal quantile is used for all other response types (binomial, event,
-Poisson, negbin1, negbin2).
+Poisson, negbin1, negbin2, ssd).
 }
 \seealso{
 \code{\link[=confint.drc]{confint.drc()}} — the user-facing function that calls this helper.

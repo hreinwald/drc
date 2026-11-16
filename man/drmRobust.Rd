@@ -4,7 +4,20 @@
 \alias{drmRobust}
 \title{Robust estimation functions for drm}
 \usage{
-drmRobust(robust, fctCall, lenData, lenPar)
+drmRobust(robust, fctCall, lenData, lenPar, callEnv = parent.frame())
+}
+\arguments{
+\item{robust}{character string, the rho function (see \code{\link{drm}}).}
+
+\item{fctCall}{the (matched) call of \code{drm()}.}
+
+\item{lenData}{number of observations.}
+
+\item{lenPar}{number of estimated parameters.}
+
+\item{callEnv}{environment in which \code{fctCall} is evaluated for the
+auxiliary LTS fit (scale estimate of \code{"trimmed"}, \code{"tukey"} and
+\code{"winsor"}); \code{drm()} passes the environment it was called from.}
 }
 \description{
 Robust estimation functions for drm

@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Understanding NEC Models in the drc Package">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
                         <h4 data-toc-skip class="author">Hannes
 Reinwald</h4>
             
-            <h4 data-toc-skip class="date">2026-05-26</h4>
+            <h4 data-toc-skip class="date">2026-11-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hreinwald/drc/blob/HEAD/vignettes/nec-models.Rmd" class="external-link"><code>vignettes/nec-models.Rmd</code></a></small>
       <div class="d-none name"><code>nec-models.Rmd</code></div>
@@ -100,9 +100,9 @@ variant.</p>
 <h2 id="the-nec-model-equation">The NEC Model Equation<a class="anchor" aria-label="anchor" href="#the-nec-model-equation"></a>
 </h2>
 <p>The NEC model function proposed by Pires et al. (2002) is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>c</mi><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo>−</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><mi>b</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(x) = c + (d-c) \exp(-b(x-e)I(x-e))</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>c</mi><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo>−</mo><mi>c</mi><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="false" form="postfix">)</mo><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">f(x) = c + (d-c) \exp(-b(x-e)I(x-e))</annotation></semantics></math></p>
 <p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">I(x-e)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mi>e</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">I(x-e)</annotation></semantics></math>
 is an indicator function equal to 0 for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>≤</mo><mi>e</mi></mrow><annotation encoding="application/x-tex">x \leq e</annotation></semantics></math>
 and 1 for
@@ -113,18 +113,68 @@ and 1 for
 <ul>
 <li>
 <strong>b</strong>: Slope/rate parameter controlling the steepness
-of the dose-response curve above the threshold</li>
+of the exponential decline above the threshold</li>
 <li>
-<strong>c</strong>: Lower limit (control response) - the response
-level below the threshold</li>
+<strong>c</strong>: Lower limit - the response approached at high
+doses</li>
 <li>
-<strong>d</strong>: Upper limit (maximum response) - the asymptotic
-response at high doses</li>
+<strong>d</strong>: Upper limit - the constant (control) response up
+to the threshold</li>
 <li>
 <strong>e</strong>: NEC threshold (no effect concentration) - the
 dose below which there is no effect</li>
 </ul>
 </div>
+</div>
+<div class="section level2">
+<h2 id="nec-versus-effect-doses-ed">NEC versus Effect Doses (ED)<a class="anchor" aria-label="anchor" href="#nec-versus-effect-doses-ed"></a>
+</h2>
+<p>The NEC and an effective dose (ED) are <strong>different
+quantities</strong> and are not interchangeable:</p>
+<ul>
+<li>The <strong>NEC</strong> is the parameter <code>e</code>: the dose
+where the decline starts. It is estimated directly, so read it from
+<code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
+<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>.</li>
+<li>
+<strong><code>ED(fit, p)</code></strong> is the dose at which the
+response has fallen by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>%
+of the distance between the upper and lower limit,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>d</mi><mo>−</mo><mfrac><mi>p</mi><mn>100</mn></mfrac><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo>−</mo><mi>c</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">f(x) = d - \frac{p}{100}(d - c)</annotation></semantics></math>.
+Solving the model equation gives</li>
+</ul>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><msub><mi>D</mi><mi>p</mi></msub><mo>=</mo><mi>e</mi><mo>−</mo><mfrac><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mi>/</mi><mn>100</mn><mo stretchy="false" form="postfix">)</mo></mrow><mi>b</mi></mfrac></mrow><annotation encoding="application/x-tex">ED_p = e - \frac{\log(1 - p/100)}{b}</annotation></semantics></math></p>
+<p>Because the response is flat up to <code>e</code>, every
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><msub><mi>D</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">ED_p</annotation></semantics></math>
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>p</mi><mo>&lt;</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">0 &lt; p &lt; 100</annotation></semantics></math>
+lies <strong>above</strong> the NEC (the larger
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
+the further above). <code>ED(fit, 10)</code> is therefore the EC10 and
+is <em>not</em> the NEC, and the NEC is not an EC0 in the usual
+sense.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nec.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.4.html">NEC.4</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The NEC: the threshold parameter e</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">nec.fit</span><span class="op">)</span><span class="op">[</span><span class="st">"e:(Intercept)"</span><span class="op">]</span></span>
+<span><span class="co">#&gt; e:(Intercept) </span></span>
+<span><span class="co">#&gt;      1.428649</span></span>
+<span></span>
+<span><span class="co"># Effective doses: dose at 10%, 50% and 90% reduction (all above the NEC)</span></span>
+<span><span class="fu"><a href="../reference/ED.html">ED</a></span><span class="op">(</span><span class="va">nec.fit</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span>, display <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/ED.html">ED()</a></code> works for relative levels
+(<code>type = "relative"</code>, the default, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+strictly between 0 and 100) and for absolute response levels
+(<code>type = "absolute"</code>, with a response strictly between
+<code>c</code> and <code>d</code>). It requires a positive slope
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>.
+If the level is out of range or
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b \leq 0</annotation></semantics></math>,
+<code><a href="../reference/ED.html">ED()</a></code> returns <code>NA</code> with a warning that says what
+to change.</p>
 </div>
 <div class="section level2">
 <h2 id="function-overview">Function Overview<a class="anchor" aria-label="anchor" href="#function-overview"></a>
@@ -175,7 +225,7 @@ for percentages)</li>
 <li>Reduces model complexity and improves parameter identifiability</li>
 </ul>
 <p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example with proportion data (bounded 0-1)</span></span>
 <span><span class="co"># Using ryegrass data, normalizing to 0-1 scale</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ryegrass</span><span class="op">)</span></span>
@@ -190,14 +240,14 @@ for percentages)</li>
 <span><span class="co">#&gt; Parameter estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;               Estimate Std. Error t-value   p-value    </span></span>
-<span><span class="co">#&gt; b:(Intercept) 0.303610   0.035141  8.6397 1.609e-08 ***</span></span>
-<span><span class="co">#&gt; e:(Intercept) 0.751527   0.156092  4.8146 8.261e-05 ***</span></span>
+<span><span class="co">#&gt; b:(Intercept) 0.303600   0.035145  8.6386 1.612e-08 ***</span></span>
+<span><span class="co">#&gt; e:(Intercept) 0.751389   0.156128  4.8126 8.301e-05 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residual standard error:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  0.08003264 (22 degrees of freedom)</span></span></code></pre></div>
+<span><span class="co">#&gt;  0.08003263 (22 degrees of freedom)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="nec-3-three-parameter-nec-model">NEC.3: Three-Parameter NEC Model<a class="anchor" aria-label="anchor" href="#nec-3-three-parameter-nec-model"></a>
@@ -227,7 +277,7 @@ response with variable maximum.</p>
 <li>Reduces overfitting compared to NEC.4</li>
 </ul>
 <p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit NEC.3 model - most common case</span></span>
 <span><span class="co"># Assumes zero baseline response</span></span>
 <span><span class="va">nec3.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.3.html">NEC.3</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -238,15 +288,15 @@ response with variable maximum.</p>
 <span><span class="co">#&gt; Parameter estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;               Estimate Std. Error t-value   p-value    </span></span>
-<span><span class="co">#&gt; b:(Intercept)  2.54094        NaN     NaN       NaN    </span></span>
-<span><span class="co">#&gt; d:(Intercept)  7.39655    0.23498  31.477 &lt; 2.2e-16 ***</span></span>
-<span><span class="co">#&gt; e:(Intercept)  3.39679        NaN     NaN       NaN    </span></span>
+<span><span class="co">#&gt; b:(Intercept) 0.358129   0.052191  6.8619 8.787e-07 ***</span></span>
+<span><span class="co">#&gt; d:(Intercept) 7.723988   0.191151 40.4079 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; e:(Intercept) 1.324245   0.208420  6.3537 2.673e-06 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residual standard error:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  0.81401 (21 degrees of freedom)</span></span>
+<span><span class="co">#&gt;  0.5734516 (21 degrees of freedom)</span></span>
 <span></span>
 <span><span class="co"># Plot the fitted model</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">nec3.model</span>, type <span class="op">=</span> <span class="st">"all"</span>, log <span class="op">=</span> <span class="st">""</span>,</span>
@@ -280,7 +330,7 @@ from data.</p>
 <li>Cases where control/baseline response is non-zero and unknown</li>
 </ul>
 <p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit NEC.4 model - full flexibility</span></span>
 <span><span class="va">nec4.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.4.html">NEC.4</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">nec4.model</span><span class="op">)</span></span>
@@ -289,22 +339,22 @@ from data.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                Estimate Std. Error t-value   p-value    </span></span>
-<span><span class="co">#&gt; b:(Intercept)   3.16938  393.27265  0.0081  0.993650    </span></span>
-<span><span class="co">#&gt; c:(Intercept)   0.67201    0.23463  2.8641  0.009592 ** </span></span>
-<span><span class="co">#&gt; d:(Intercept)   7.39666    0.20260 36.5091 &lt; 2.2e-16 ***</span></span>
-<span><span class="co">#&gt; e:(Intercept)   3.41729   41.27705  0.0828  0.934842    </span></span>
+<span><span class="co">#&gt;               Estimate Std. Error t-value   p-value    </span></span>
+<span><span class="co">#&gt; b:(Intercept) 0.447556   0.072119  6.2058 4.623e-06 ***</span></span>
+<span><span class="co">#&gt; c:(Intercept) 0.498164   0.204584  2.4350   0.02438 *  </span></span>
+<span><span class="co">#&gt; d:(Intercept) 7.723988   0.173236 44.5865 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; e:(Intercept) 1.428649   0.160386  8.9076 2.132e-08 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residual standard error:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  0.7017905 (20 degrees of freedom)</span></span>
+<span><span class="co">#&gt;  0.5197084 (20 degrees of freedom)</span></span>
 <span></span>
 <span><span class="co"># Compare parameter estimates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">nec4.model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; b:(Intercept) c:(Intercept) d:(Intercept) e:(Intercept) </span></span>
-<span><span class="co">#&gt;     3.1693834     0.6720099     7.3966630     3.4172914</span></span></code></pre></div>
+<span><span class="co">#&gt;     0.4475562     0.4981639     7.7239878     1.4286490</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -385,7 +435,7 @@ functions:</p>
 </h2>
 <p>Let’s compare the three exported NEC variants on the ryegrass
 dataset:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit all three models</span></span>
 <span><span class="va">nec2.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.2.html">NEC.2</a></span><span class="op">(</span>upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ryegrass</span><span class="op">$</span><span class="va">rootl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">nec3.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">rootl</span> <span class="op">~</span> <span class="va">conc</span>, data <span class="op">=</span> <span class="va">ryegrass</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.3.html">NEC.3</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -397,9 +447,9 @@ dataset:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"NEC.2:"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">nec2.fit</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NEC.2: 52.70586</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"NEC.3:"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">nec3.fit</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NEC.3: 63.02673</span></span>
+<span><span class="co">#&gt; NEC.3: 46.21237</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"NEC.4:"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">nec4.fit</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NEC.4: 56.73556</span></span>
+<span><span class="co">#&gt; NEC.4: 42.31794</span></span>
 <span></span>
 <span><span class="co"># Plot all three models together</span></span>
 <span><span class="va">my_plot</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">col</span> <span class="op">=</span> <span class="st">"black"</span>, <span class="va">lwd</span> <span class="op">=</span> <span class="fl">2</span>, <span class="va">pch</span> <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">{</span></span>
@@ -411,10 +461,10 @@ dataset:</p>
 <span><span class="op">}</span></span>
 <span><span class="fu">my_plot</span><span class="op">(</span><span class="va">nec2.fit</span><span class="op">)</span></span></code></pre></div>
 <p><img src="nec-models_files/figure-html/model-comparison-1.png" class="r-plt" alt="NEC.2 model fitted to ryegrass data with both asymptotes constrained" width="672"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">my_plot</span><span class="op">(</span><span class="va">nec3.fit</span>, col <span class="op">=</span> <span class="st">"darkblue"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="nec-models_files/figure-html/model-comparison-2.png" class="r-plt" alt="NEC.3 model fitted to ryegrass data with lower asymptote fixed at zero" width="672"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">my_plot</span><span class="op">(</span><span class="va">nec4.fit</span>, col <span class="op">=</span> <span class="st">"darkred"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="nec-models_files/figure-html/model-comparison-3.png" class="r-plt" alt="NEC.4 model fitted to ryegrass data with all parameters estimated" width="672"></p>
 </div>
@@ -539,7 +589,7 @@ data?</strong>
 <div class="section level3">
 <h3 id="example-decision-process">Example Decision Process:<a class="anchor" aria-label="anchor" href="#example-decision-process"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Toxicology study with percentage mortality (0-100%)</span></span>
 <span><span class="co"># Known bounds: lower = 0%, upper = 100%</span></span>
 <span><span class="co"># → Use NEC.2</span></span>
@@ -624,7 +674,7 @@ non-zero</li>
 </h3>
 <p>If functions were combined, users would need to manually specify
 constraints:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Current approach (user-friendly):</span></span>
 <span><span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">mydata</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.3.html">NEC.3</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -644,7 +694,7 @@ established drc package conventions</p>
 </h3>
 <p>When unsure which variant to use, start with NEC.3 (most common) and
 compare with other variants:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit an initial model, then compare with alternative NEC variants</span></span>
 <span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/drm.html">drm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">dose</span>, data <span class="op">=</span> <span class="va">mydata</span>, fct <span class="op">=</span> <span class="fu"><a href="../reference/NEC.3.html">NEC.3</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -656,7 +706,7 @@ compare with other variants:</p>
 </h3>
 <p>If your NEC.4 model shows very large standard errors or fails to
 converge, consider constraining parameters:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># If NEC.4 has convergence issues, try NEC.3</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">nec4.model</span><span class="op">)</span>  <span class="co"># Check standard errors</span></span>
 <span><span class="co"># If c is close to 0 with large SE, use NEC.3</span></span>
@@ -667,13 +717,16 @@ converge, consider constraining parameters:</p>
 </h3>
 <p>The <code>e</code> parameter represents the NEC threshold - the
 concentration below which there is no effect:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract the threshold estimate</span></span>
 <span><span class="va">threshold</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">nec3.model</span><span class="op">)</span><span class="op">[</span><span class="st">"e:(Intercept)"</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Estimated NEC threshold:"</span>, <span class="va">threshold</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get confidence interval for the threshold</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">nec3.model</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">nec3.model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Note: the threshold (NEC) is not the same as an effect dose. ED(nec3.model, 10)</span></span>
+<span><span class="co"># is the EC10 and lies above the threshold; see "NEC versus Effect Doses (ED)".</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

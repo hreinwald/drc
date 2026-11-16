@@ -58,8 +58,8 @@ summary(liver.tumor.m1)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  -4.9750     1.6897 -2.9443  0.003237 ** 
-#> e:(Intercept)  37.1774     4.1838  8.8859 < 2.2e-16 ***
+#> b:(Intercept)  -4.9750     1.6897 -2.9444  0.003236 ** 
+#> e:(Intercept)  37.1773     4.1837  8.8862 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

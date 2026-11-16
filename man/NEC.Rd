@@ -30,11 +30,54 @@ classical NOEC and the regression-based EC/ED approach.
 The NEC model function proposed by Pires et al (2002) is:
 \deqn{f(x) = c + (d-c)\exp(-b(x-e)I(x-e))}
 where \eqn{I(x-e)} is the indicator function equal to 0 for \eqn{x<=e} and 1 for \eqn{x>e}.
+
+The parameters are: \code{b}, the rate of the exponential decline above the threshold; \code{c},
+the lower asymptote (the response approached at high doses); \code{d}, the upper asymptote, i.e.
+the constant response up to the threshold; and \code{e}, the threshold itself, the
+no-effect concentration (NEC), which is estimated directly as a model parameter.
+
+\strong{NEC versus ED.} The threshold \code{e} (the NEC) and effective doses are different
+quantities. \code{e} is the dose where the decline starts and is read directly from
+\code{coef()} (with its standard error from \code{summary()} and interval from
+\code{confint()}). \code{\link{ED}} returns the dose at which the response has fallen by
+\eqn{p} percent of the distance between the upper and lower asymptote, i.e. where
+\eqn{f(x) = d - (p/100)(d - c)}, which gives
+\deqn{ED_p = e - \log(1 - p/100)/b.}
+Because the response is flat up to \code{e}, every \eqn{ED_p} with \eqn{0 < p < 100} is larger
+than the NEC. For example, \code{ED(fit, 10)} is the EC10 and is not the NEC. The ED is
+available for \code{type = "relative"} and \code{type = "absolute"}; it requires \eqn{b > 0}
+and, for absolute levels, a response strictly between \code{c} and \code{d}. Otherwise
+\code{NA} is returned with a warning. Standard errors and intervals from
+\code{\link{predict}} are based on numerical derivatives.
 }
 \examples{
+## Fit with drm() and plot; the parameter e is the NEC
 nec.m1 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4())
 summary(nec.m1)
-plot(nec.m1)
+plot(nec.m1, type = "all", main = "NEC model")
+
+## NEC (threshold e) versus effective doses: ED() is larger than the NEC
+coef(nec.m1)["e:(Intercept)"]            # the NEC, estimated directly
+ED(nec.m1, c(10, 50), display = FALSE)   # EC10 and EC50, both above the NEC
+ED(nec.m1, 10, interval = "delta", display = FALSE)
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+nec.c0 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, 0, NA, NA)))
+nec.c3 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, 3, NA, NA)))
+plot(nec.m1, type = "all", main = "Lower asymptote c")
+plot(nec.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(nec.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+nec.d6 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, NA, 6, NA)))
+nec.d9 <- drm(rootl ~ conc, data = ryegrass, fct = NEC.4(fixed = c(NA, NA, 9, NA)))
+plot(nec.m1, type = "all", main = "Upper asymptote d")
+plot(nec.d6, type = "none", add = TRUE, col = "darkgreen")
+plot(nec.d9, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
 
 }
 \references{

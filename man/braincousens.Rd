@@ -40,6 +40,38 @@ modified log-logistic model for describing hormesis, under various constraints o
 The Brain-Cousens model is given by the expression
 \deqn{f(x) = c + \frac{d-c+fx}{1+\exp(b(\log(x)-\log(e)))}}
 which is a five-parameter model.
+
+The parameters are: \code{b}, the slope; \code{c}, the lower asymptote; \code{d}, the upper
+asymptote (the response of the untreated control is \code{d}); \code{e}, the location of the
+decline; and \code{f}, the hormesis parameter (the initial slope of the stimulation at low
+doses; \code{f = 0} gives the log-logistic model \code{\link{LL.4}}). Effective doses are computed
+relative to the asymptotes \code{c} and \code{d} (see \code{\link{ED}}, use \code{bound = FALSE}
+if levels beyond the range are needed) and the maximal response with \code{\link{MAX}}.
+}
+\examples{
+## Fit with drm() and plot
+m1 <- drm(weight ~ conc, data = lettuce, fct = braincousens())
+plot(m1, type = "all", main = "Brain-Cousens hormesis model")
+MAX(m1)
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 0.3
+m.c0 <- drm(weight ~ conc, data = lettuce, fct = BC.5(fixed = c(NA, 0, NA, NA, NA)))
+m.c3 <- drm(weight ~ conc, data = lettuce, fct = BC.5(fixed = c(NA, 0.3, NA, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 0.3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+## Effect of the upper asymptote d: d free, fixed at 0.8 or fixed at 1.2
+m.d8 <- drm(weight ~ conc, data = lettuce, fct = BC.5(fixed = c(NA, NA, 0.8, NA, NA)))
+m.d12 <- drm(weight ~ conc, data = lettuce, fct = BC.5(fixed = c(NA, NA, 1.2, NA, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d8, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d12, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 0.8", "d = 1.2"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
 }
 \references{
 Brain, P. and Cousens, R. (1989) An equation to describe dose responses

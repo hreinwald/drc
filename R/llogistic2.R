@@ -5,6 +5,17 @@
 #' \deqn{f(x) = c + \frac{d - c}{(1 + \exp(b(\log(x) - e)))^f}}{f(x) = c + (d-c)/(1+exp(b(log(x)-e)))^f}
 #' where \code{e} is the logarithm of the ED50 (not exponentiated).
 #'
+#' @details
+#' Apart from the parameterisation of \code{e} the model is identical to \code{\link{llogistic}}:
+#' \code{b} is the slope, \code{c} the lower asymptote, \code{d} the upper asymptote and \code{f}
+#' the asymmetry parameter.
+#'
+#' Because \code{e} is on the log scale, \code{\link{ED}} returns \strong{log(ED)} for these models.
+#' Use \code{ED(object, respLev, interval = "fls")} to obtain the ED values (and confidence limits)
+#' on the original dose scale; \code{interval = "fls"} is only valid for models of this kind. Model
+#' averaging with \code{\link{maED}} is not available for these models (use the dose-scale
+#' equivalents \code{\link{LL.2}}, ..., \code{\link{LL.5}} instead).
+#'
 #' @param fixed numeric vector of length 5. Specifies which parameters are
 #'   fixed and at what value. Use \code{NA} for parameters that should be
 #'   estimated.
@@ -25,6 +36,31 @@
 #'
 #' @seealso \code{\link{llogistic}}, \code{\link{LL2.2}}, \code{\link{LL2.3}},
 #'   \code{\link{LL2.4}}, \code{\link{LL2.5}}
+#'
+#' @examples
+#' ## Four-parameter model with log(ED50) as parameter: fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = llogistic2(fixed = c(NA, NA, NA, NA, 1)))
+#' plot(m1, type = "all", main = "Log-logistic model with log(ED50) as parameter")
+#'
+#' ## ED values on the dose scale (interval = "fls" back-transforms from the log scale)
+#' ED(m1, c(10, 50, 90), interval = "fls")
+#'
+#' ## Effect of the lower asymptote c and the upper asymptote d
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, 0, NA, NA)))
+#' m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, 3, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, NA, 6, NA)))
+#' m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, NA, 9, NA)))
+#' plot(m1, type = "all", main = "Upper asymptote d")
+#' plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "llogistic2" <- function(
@@ -239,7 +275,7 @@ fctName, fctText)
         lEDder <- 
         c(-tempVal2/(parmVec[1]^2), 
         0, 0, 1, 
-        tempVal1^(1/parmVec[5]-1)/(parmVec[1]*parmVec[5]*(tempVal1^(1/parmVec[5]-1))))
+        tempVal1^(1/parmVec[5])*log(tempVal1)/(-(parmVec[1]*parmVec[5]^2)*(tempVal1^(1/parmVec[5]) - 1)))
 
         ## Fix: correct c and d derivatives for absolute type using central differences.
         ## The analytical derivatives above miss the chain-rule contribution from
@@ -296,7 +332,8 @@ fctName, fctText)
     noParm = sum(is.na(fixed)),
     lowerAs = lowerAs, 
     upperAs = upperAs, 
-    monoton = monoton)
+    monoton = monoton,
+    edLogScale = TRUE)
     
     class(returnList) <- "llogistic"
     invisible(returnList)
@@ -370,8 +407,10 @@ upFixed <- function(modelStr, upper)
 #'   \code{\link{LL2.5}}
 #'
 #' @examples
+#' ## Binomial (quantal) response: fit with drm() and plot
 #' earthworms.m1 <- drm(number/total ~ dose, weights = total,
 #'   data = earthworms, fct = LL2.2(), type = "binomial")
+#' plot(earthworms.m1, main = "LL2.2 (upper limit fixed at 1)")
 #'
 #' @keywords models nonlinear
 "LL2.2" <-
@@ -408,7 +447,9 @@ function(upper = 1, fixed = c(NA, NA), names = c("b", "e"), ...)
 #' @seealso \code{\link{llogistic2}}, \code{\link{LL2.2}}, \code{\link{LL2.4}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.3())
+#' plot(ryegrass.m1, type = "all", main = "LL2.3 (lower limit fixed at 0)")
 #'
 #' @keywords models nonlinear
 "LL2.3" <-
@@ -444,6 +485,12 @@ function(fixed = c(NA, NA, NA), names = c("b", "d", "e"), ...)
 #'   self-starter, and related components.
 #'
 #' @seealso \code{\link{llogistic2}}, \code{\link{LL2.2}}, \code{\link{LL2.3}}
+#'
+#' @examples
+#' ## Response relative to the control mean, upper limit fixed at 1
+#' ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+#' ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LL2.3u(upper = 1))
+#' plot(ryegrass.m1, type = "all", main = "LL2.3u (upper limit fixed at 1)")
 #'
 #' @keywords models nonlinear
 "LL2.3u" <-
@@ -481,7 +528,10 @@ function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
 #' @seealso \code{\link{llogistic2}}, \code{\link{LL2.3}}, \code{\link{LL2.5}}
 #'
 #' @examples
+#' ## Several curves fitted with drm() and plotted; ED on the dose scale
 #' spinach.m1 <- drm(SLOPE ~ DOSE, CURVE, data = spinach, fct = LL2.4())
+#' plot(spinach.m1, main = "LL2.4, one curve per CURVE level")
+#' ED(spinach.m1, 50, interval = "fls")
 #'
 #' @keywords models nonlinear
 "LL2.4" <-
@@ -515,7 +565,9 @@ function(fixed = c(NA, NA, NA, NA), names = c("b", "c", "d", "e"), ...)
 #' @seealso \code{\link{llogistic2}}, \code{\link{LL2.3}}, \code{\link{LL2.4}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.5())
+#' plot(ryegrass.m1, type = "all", main = "LL2.5")
 #'
 #' @keywords models nonlinear
 "LL2.5" <-

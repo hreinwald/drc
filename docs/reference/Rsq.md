@@ -36,4 +36,4 @@ underlying residual sum of squares.
 
 ## Author
 
-Christian Ritz
+Christian Ritz, Hannes Reinwald

@@ -45,6 +45,24 @@ for \eqn{x > t0} and \eqn{f(x) = c} otherwise.
 }
 \details{
 The lag time parameter \code{t0} cannot be fixed.
+
+The parameters are those of \code{\link{weibull2}} (\code{b} slope, \code{c} lower asymptote,
+\code{d} upper asymptote, \code{e} scale) plus the lag time \code{t0}: the response stays at the
+lower asymptote \code{c} until the dose exceeds \code{t0}. Effective doses (\code{\link{ED}}) are
+shifted by \code{t0}; the derivative with respect to \code{t0} (equal to 1) is included in the
+standard errors.
+}
+\examples{
+## Fit with drm() and plot (b fixed at 1)
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4())
+plot(m1, type = "all", main = "Weibull type 2 model with lag time")
+
+## Effect of the lower asymptote c: c free or fixed at 3
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4(fixed = c(3, NA, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 3"), col = c("black", "red"), lty = 1, bty = "n")
+
 }
 \seealso{
 \code{\link{weibull2}}, \code{\link{W2x.3}}, \code{\link{W2x.4}}

@@ -40,3 +40,13 @@ A list (see
 [`LN.2`](https://hreinwald.github.io/drc/reference/LN.2.md),
 [`LN.3`](https://hreinwald.github.io/drc/reference/LN.3.md),
 [`LN.4`](https://hreinwald.github.io/drc/reference/LN.4.md)
+
+## Examples
+
+``` r
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LN.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "LN.3u (upper limit fixed at 1)")
+
+```

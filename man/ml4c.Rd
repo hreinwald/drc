@@ -45,6 +45,7 @@ and flexible interface.
 # The example below is retained for backward compatibility illustration only.
 
 lettuce.m3 <- drm( lettuce[, c(2, 1)], fct = ml4c() )
+plot(lettuce.m3, type = "all", main = "ml4c (deprecated)")
 summary(lettuce.m3)
 ED(lettuce.m3, c(50))
 

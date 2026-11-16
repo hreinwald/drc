@@ -18,9 +18,35 @@
 #' @return The value returned is a list containing the nonlinear function, the self starter function
 #'   and the parameter names.
 #'
+#' @details
+#' The model function is
+#' \deqn{f(x) = c + (d-c)\exp\left(-\frac{1}{2}\left|\frac{x-e}{b}\right|^f\right)}
+#' The parameters are: \code{b}, the width (scale) of the bell; \code{c}, the lower asymptote
+#' (the baseline response far from the peak); \code{d}, the response at the peak (reached at the dose
+#' \code{e}, the location of the peak, or its logarithm if \code{loge = TRUE}); and \code{f}, the shape
+#' (\code{f = 2} gives the normal density). If \code{d} exceeds \code{c} the response peaks, otherwise
+#' it dips. No effective doses (\code{\link{ED}}) are available for this model.
+#'
 #' @author Christian Ritz
 #'
 #' @seealso \code{\link{lgaussian}}, \code{\link{drm}}
+#'
+#' @examples
+#' ## Simulated bell-shaped data: fit with drm() and plot
+#' dose <- rep(c(0, 0.5, 1, 2, 4, 8, 16, 32, 64), each = 3)
+#' mu <- gaussian()$fct(dose, matrix(c(1.2, 1, 5, 8, 1.5), length(dose), 5, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.05 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = gaussian())
+#' plot(m1, type = "all", main = "Gaussian biphasic model")
+#'
+#' ## Effect of the baseline c (fixed at 0.5) and the peak height d (fixed at 4)
+#' m.c <- drm(response ~ dose, data = dat, fct = gaussian(fixed = c(NA, 0.5, NA, NA, NA)))
+#' m.d <- drm(response ~ dose, data = dat, fct = gaussian(fixed = c(NA, NA, 4, NA, NA)))
+#' plot(m1, type = "all", main = "Fixed baseline and peak height")
+#' plot(m.c, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("free", "c = 0.5", "d = 4"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "gaussian" <- function(

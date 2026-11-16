@@ -51,8 +51,8 @@ summary(nicotine.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept) -1.7590301  0.1470173 -11.965 < 2.2e-16 ***
-#> e:(Intercept)  0.0288876  0.0021099  13.691 < 2.2e-16 ***
+#> b:(Intercept) -1.7597155  0.1470702 -11.965 < 2.2e-16 ***
+#> e:(Intercept)  0.0288970  0.0021101  13.695 < 2.2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 

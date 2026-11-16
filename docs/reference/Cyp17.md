@@ -54,15 +54,15 @@ summary(Cyp17.m1)
 #> Parameter estimates:
 #> 
 #>                 Estimate Std. Error t-value   p-value    
-#> b:(Intercept)   -0.57006    0.50017 -1.1397   0.25901    
-#> c:(Intercept)    1.07498    0.10396 10.3403 7.168e-15 ***
-#> d:(Intercept)    2.30249    1.35392  1.7006   0.09428 .  
-#> e:(Intercept)  332.97197 1269.60417  0.2623   0.79403    
+#> b:(Intercept)   -0.53357    0.49317 -1.0819    0.2837    
+#> c:(Intercept)    1.07435    0.10463 10.2682 9.388e-15 ***
+#> d:(Intercept)    2.49393    2.12401  1.1742    0.2450    
+#> e:(Intercept)  556.15323 2932.24810  0.1897    0.8502    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.5299562 (59 degrees of freedom)
+#>  0.5298351 (59 degrees of freedom)
 plot(Cyp17.m1, main = "Cyp17 dose-response")
 ```

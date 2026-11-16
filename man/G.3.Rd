@@ -19,6 +19,12 @@ A list (see \code{\link{gompertz}}).
 \description{
 Convenience function for the Gompertz model with the lower limit fixed at 0.
 }
+\examples{
+## Fit with drm() and plot
+ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = G.3())
+plot(ryegrass.m1, type = "all", main = "G.3 (lower limit fixed at 0)")
+
+}
 \seealso{
 \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.4}}
 }

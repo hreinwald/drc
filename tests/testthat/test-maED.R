@@ -350,3 +350,166 @@ test_that("maED without non-finite values produces no exclusion warning", {
   expect_true(is.matrix(result))
   expect_true(is.finite(result[, "Estimate"]))
 })
+
+
+# --- Reporting of excluded models / non-evaluable calls ---
+
+# A candidate model whose self-starter fails: a genuine fit failure
+failing_fct <- function() {
+  f <- LL.5()
+  f$ssfct <- function(data) stop("no starting values")
+  f
+}
+
+collect_warnings <- function(expr) {
+  msgs <- character()
+  value <- withCallingHandlers(expr, warning = function(w) {
+    msgs <<- c(msgs, conditionMessage(w))
+    invokeRestart("muffleWarning")
+  })
+  list(value = value, warnings = msgs)
+}
+
+test_that("regular results carry no exclusion attributes and extended output has a status table", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  res <- suppressWarnings(maED(m1, list(W1.4(), LL.5()), 50, display = FALSE))
+  expect_null(attr(res, "models"))
+  expect_null(attr(res, "n_used"))
+
+  ext <- suppressWarnings(maED(m1, list(W1.4(), LL.5()), 50, display = FALSE, extended = TRUE))
+  expect_s3_class(ext$models, "data.frame")
+  expect_named(ext$models, c("model", "AIC", "weight", "status"))
+  expect_equal(nrow(ext$models), 3)
+  expect_true(all(ext$models$status == "used"))
+  expect_equal(sum(ext$models$weight), 1)
+})
+
+test_that("a model that fails to fit is excluded with one summary warning and is reported", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  out <- collect_warnings(maED(m1, list(failing_fct(), W1.4()), 50, display = FALSE))
+
+  excl <- grep("excluded from model-averaging", out$warnings, value = TRUE)
+  expect_length(excl, 1)
+  expect_match(excl, "1 of 3 models excluded")
+  expect_match(excl, "model fitting or ED estimation failed")
+
+  res <- out$value
+  expect_equal(attr(res, "n_used"), 2L)
+  expect_equal(attr(res, "n_requested"), 3L)
+  models <- attr(res, "models")
+  expect_equal(models$status, c("used", "excluded: fit failed", "used"))
+  expect_equal(models$weight[2], 0)
+  expect_equal(sum(models$weight), 1)
+
+  # the average equals the one of the successfully fitted models only
+  ref <- suppressWarnings(maED(m1, list(W1.4()), 50, display = FALSE))
+  expect_equal(res[, "Estimate"], ref[, "Estimate"])
+
+  ext <- suppressWarnings(maED(m1, list(failing_fct(), W1.4()), 50, display = FALSE, extended = TRUE))
+  expect_equal(ext$models$status, models$status)
+  expect_equal(attr(ext$estimates, "n_used"), 2L)
+})
+
+test_that("onExclude = 'stop' raises an error instead of excluding models", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  expect_error(
+    suppressWarnings(maED(m1, list(failing_fct(), W1.4()), 50, display = FALSE, onExclude = "stop")),
+    "1 of 3 models excluded from model-averaging"
+  )
+  expect_no_error(suppressWarnings(maED(m1, list(W1.4()), 50, display = FALSE, onExclude = "stop")))
+  expect_error(maED(m1, list(W1.4()), 50, onExclude = "ignore"), "should be one of")
+})
+
+test_that("a call that cannot be re-evaluated stops instead of returning the original model's ED", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  broken <- m1
+  broken$call$data <- quote(no_such_object_xyz)
+  broken$origData <- NULL
+
+  expect_error(
+    suppressWarnings(maED(broken, list(W1.4(), LL.5()), 50, display = FALSE)),
+    "cannot re-fit the candidate models"
+  )
+  # also for onExclude = "warn", and maED_robust() turns it into an NA row
+  res <- suppressWarnings(maED_robust(broken, fct_ls = list(W1.4()), respLev = 50))
+  expect_true(is.na(res$Estimate))
+})
+
+test_that("multi-curve maED stacks the results, also for extended output", {
+  m <- drm(DryMatter ~ Dose, curveid = Herbicide, data = S.alba, fct = LL.4())
+  res <- suppressWarnings(maED(m, list(LL.5(), W1.4()), 50, display = FALSE))
+  ext <- suppressWarnings(maED(m, list(LL.5(), W1.4()), 50, display = FALSE, extended = TRUE))
+
+  expect_true(is.matrix(res))
+  expect_equal(nrow(res), 2)
+  expect_equal(ext$estimates, res)
+  expect_equal(nrow(ext$fits), 6)
+  expect_true(all(c("curve", "model", "status") %in% names(ext$models)))
+  expect_equal(unique(ext$models$curve), c("Glyphosate", "Bentazone"))
+
+  out <- collect_warnings(maED(m, list(failing_fct(), W1.4()), 50, display = FALSE))
+  expect_equal(unname(attr(out$value, "n_used")), c(2, 2))
+  expect_equal(names(attr(out$value, "n_used")), c("Glyphosate", "Bentazone"))
+  expect_equal(sum(attr(out$value, "models")$status == "excluded: fit failed"), 2)
+})
+
+
+# --- Kang intervals: level and linear model ---
+
+# Kang limits recomputed by hand: weighted mean of the per-model delta limits
+kang_by_hand <- function(m, fcts, respLev, level, weights, linreg = FALSE) {
+  fits <- c(list(m), lapply(fcts, function(f) suppressWarnings(update(m, fct = f))))
+  lims <- lapply(fits, function(x) ED(x, respLev, interval = "delta", level = level, display = FALSE)[, 3:4, drop = FALSE])
+  if (linreg) {
+    lin <- lm(ryegrass[, 2:1])
+    edLin <- ED.lin(lin, respLev)
+    est <- unlist(edLin[, 1]); se <- unlist(edLin[, 2])
+    q <- qt(1 - (1 - level) / 2, df.residual(lin))
+    lims <- c(lims, list(cbind(est - q * se, est + q * se)))
+  }
+  list(
+    lower = Reduce(`+`, Map(function(l, w) l[, 1] * w, lims, weights)),
+    upper = Reduce(`+`, Map(function(l, w) l[, 2] * w, lims, weights))
+  )
+}
+
+test_that("maED(interval = 'kang') honours 'level'", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  fcts <- list(LL.5(), W1.4())
+  r95 <- suppressWarnings(maED(m1, fcts, c(10, 50), interval = "kang", level = 0.95, display = FALSE))
+  r80 <- suppressWarnings(maED(m1, fcts, c(10, 50), interval = "kang", level = 0.80, display = FALSE))
+
+  expect_true(all(r80[, "Lower"] > r95[, "Lower"]))
+  expect_true(all(r80[, "Upper"] < r95[, "Upper"]))
+
+  w <- suppressWarnings(maED(m1, fcts, c(10, 50), display = FALSE, extended = TRUE))$fits[, "Weight"]
+  hand <- kang_by_hand(m1, fcts, c(10, 50), 0.80, w)
+  expect_equal(unname(r80[, "Lower"]), unname(hand$lower), tolerance = 1e-8)
+  expect_equal(unname(r80[, "Upper"]), unname(hand$upper), tolerance = 1e-8)
+})
+
+test_that("maED(linreg = TRUE, interval = 'kang') aligns weights and limits for one and several levels", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  fcts <- list(LL.5(), W1.4())
+
+  for (lev in list(50, c(10, 50, 90))) {
+    res <- suppressWarnings(maED(m1, fcts, lev, interval = "kang", linreg = TRUE, level = 0.9, display = FALSE))
+    expect_equal(dim(res), c(length(lev), 4))
+    expect_true(all(res[, "Lower"] < res[, "Estimate"] & res[, "Estimate"] < res[, "Upper"]))
+
+    w <- suppressWarnings(maED(m1, fcts, lev, linreg = TRUE, display = FALSE, extended = TRUE))$fits[, "Weight"]
+    expect_length(w, 4)
+    hand <- kang_by_hand(m1, fcts, lev, 0.9, w, linreg = TRUE)
+    expect_equal(unname(res[, "Lower"]), unname(hand$lower), tolerance = 1e-8)
+    expect_equal(unname(res[, "Upper"]), unname(hand$upper), tolerance = 1e-8)
+  }
+})
+
+test_that("Kang limits stay aligned when a model is excluded and linreg = TRUE", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  res <- collect_warnings(
+    maED(m1, list(failing_fct(), W1.4()), 50, interval = "kang", linreg = TRUE, display = FALSE)
+  )$value
+  expect_equal(attr(res, "n_used"), 3L)
+  expect_true(res[, "Lower"] < res[, "Estimate"] && res[, "Estimate"] < res[, "Upper"])
+})

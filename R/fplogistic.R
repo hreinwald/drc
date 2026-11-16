@@ -17,7 +17,11 @@
 #'
 #' @details
 #' The fractional polynomial dose-response models introduced by Namata et al. (2008) are implemented
-#' using the logistic model as base.
+#' using the logistic model as base:
+#' \deqn{f(x) = c + \frac{d-c}{1+\exp(b \log(x+1)^{p1} + e \log(x+1)^{p2})}}
+#' where \code{c} is the lower asymptote, \code{d} the upper asymptote and \code{b} and \code{e} are
+#' the coefficients of the two fractional polynomial terms (\code{e} is not an ED50). The powers
+#' \code{p1} and \code{p2} are fixed by the user (typically from \eqn{\{-2, -1, -0.5, 0, 0.5, 1, 2, 3\}}).
 #'
 #' @return A list containing the nonlinear function, the self starter function
 #'   and the parameter names.
@@ -30,6 +34,20 @@
 #' @author Christian Ritz
 #'
 #' @seealso \code{\link{FPL.4}}, \code{\link{maED}}, \code{\link{drm}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = fplogistic(p1 = -1, p2 = 1))
+#' plot(m1, type = "all", main = "Fractional polynomial-logistic model")
+#'
+#' ## Effect of the lower asymptote c and the upper asymptote d
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = FPL.4(-1, 1, fixed = c(NA, 0, NA, NA)))
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = FPL.4(-1, 1, fixed = c(NA, NA, 6, NA)))
+#' plot(m1, type = "all", main = "Fixed asymptotes")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d6, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("free", "c = 0", "d = 6"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "fplogistic" <- function(
@@ -205,6 +223,11 @@ fctName, fctText)
 #' @return A list (see \code{\link{fplogistic}}).
 #'
 #' @seealso \code{\link{fplogistic}}, \code{\link{maED}}
+#'
+#' @examples
+#' ## Fit with drm() and plot
+#' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = FPL.4(-1, 1))
+#' plot(ryegrass.m1, type = "all", main = "FPL.4(-1, 1)")
 #'
 #' @keywords models nonlinear
 "FPL.4" <-

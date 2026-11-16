@@ -60,6 +60,15 @@ starter function, and parameter names.
 
 The lag time parameter `t0` cannot be fixed.
 
+The parameters are those of
+[`weibull2`](https://hreinwald.github.io/drc/reference/weibull2.md) (`b`
+slope, `c` lower asymptote, `d` upper asymptote, `e` scale) plus the lag
+time `t0`: the response stays at the lower asymptote `c` until the dose
+exceeds `t0`. Effective doses
+([`ED`](https://hreinwald.github.io/drc/reference/ED.md)) are shifted by
+`t0`; the derivative with respect to `t0` (equal to 1) is included in
+the standard errors.
+
 ## See also
 
 [`weibull2`](https://hreinwald.github.io/drc/reference/weibull2.md),
@@ -69,3 +78,26 @@ The lag time parameter `t0` cannot be fixed.
 ## Author
 
 Christian Ritz
+
+## Examples
+
+``` r
+## Fit with drm() and plot (b fixed at 1)
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4())
+#> Warning: NaNs produced
+#> Warning: NaNs produced
+plot(m1, type = "all", main = "Weibull type 2 model with lag time")
+#> Warning: NaNs produced
+
+
+## Effect of the lower asymptote c: c free or fixed at 3
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = W2x.4(fixed = c(3, NA, NA, NA)))
+#> Warning: NaNs produced
+#> Warning: NaNs produced
+plot(m1, type = "all", main = "Lower asymptote c")
+#> Warning: NaNs produced
+plot(m.c3, type = "none", add = TRUE, col = "red")
+#> Warning: NaNs produced
+legend("topright", c("c free", "c = 3"), col = c("black", "red"), lty = 1, bty = "n")
+
+```

@@ -27,6 +27,13 @@ A three-parameter log-logistic model where the upper limit is fixed at a
 specified value (default 1). The estimated parameters are the slope \code{b},
 the lower limit \code{c}, and the log(ED50) \code{e}.
 }
+\examples{
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LL2.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "LL2.3u (upper limit fixed at 1)")
+
+}
 \seealso{
 \code{\link{llogistic2}}, \code{\link{LL2.2}}, \code{\link{LL2.3}}
 }

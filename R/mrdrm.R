@@ -7,34 +7,46 @@ leaveOneOut <- function(object1, object2, dose, dataSet, resp, fixedEnd)
 {   
     ## Leave-one-out predictions
     uniDose <- sort(unique(dose))
-    lenUd <- length(uniDose)    
-    
-    doseDF <- dataSet[, tail(as.character(formula(object1)[[3]]), 1), drop = FALSE]  # picking dose column
-    pred1 <- list()
-    pred2 <- list()    
-    for (i in 1:lenUd)
+    if (!is.data.frame(dataSet) || nrow(dataSet) != length(dose) ||
+        length(resp) != length(dose))
     {
-        reFit1 <- update(object1, data = subset(dataSet, dose != uniDose[i]))
-        pred1[[i]] <- as.vector(predict(reFit1, newdata = subset(doseDF, dose == uniDose[i]), 
-        se.fit = FALSE))
-        
-        reFit2 <- update(object2, data = subset(dataSet, dose != uniDose[i]))
-        pred2[[i]] <- predict(reFit2, newdata = subset(doseDF, dose == uniDose[i]))
+        stop("Leave-one-dose-out prediction requires original data aligned with the fitted observations.",
+             call. = FALSE)
     }
-    
-    # Avoiding overflow problems
-    pred2Vec <- as.vector(unlist(pred2))
-    pred2Vec[pred2Vec < 0.01] <- 0.01  
-    pred2Vec[pred2Vec > 0.99] <- 0.99
-    
+
+    doseDF <- dataSet[, tail(as.character(formula(object1)[[3]]), 1), drop = FALSE]
+    pred1Vec <- pred2Vec <- rep(NA_real_, length(dose))
+    for (i in seq_along(uniDose))
+    {
+        ind <- which(dose == uniDose[i])
+        trainData <- dataSet[-ind, , drop = FALSE]
+        newData <- doseDF[ind, , drop = FALSE]
+        reFit1 <- update(object1, data = trainData)
+        reFit2 <- update(object2, data = trainData)
+        pred1 <- as.vector(predict(reFit1, newdata = newData, se.fit = FALSE))
+        pred2 <- as.vector(predict(reFit2, newdata = newData))
+        if (length(pred1) != length(ind) || length(pred2) != length(ind))
+        {
+            stop("Leave-one-dose-out refits did not predict every held-out observation.",
+                 call. = FALSE)
+        }
+        pred1Vec[ind] <- pred1
+        pred2Vec[ind] <- pred2
+    }
+
     ## Fixing boundary values at observed averages
     if (fixedEnd)
     {
-        pred2Vec[1] <- mean(resp[dose == uniDose[1]])
-        pred2Vec[lenUd] <- mean(resp[dose == uniDose[lenUd]])        
+        pred2Vec[dose == uniDose[1]] <- mean(resp[dose == uniDose[1]])
+        pred2Vec[dose == tail(uniDose, 1)] <- mean(resp[dose == tail(uniDose, 1)])
+    }
+    if (identical(object1$"type", "binomial"))
+    {
+        pred1Vec <- pmin(pmax(pred1Vec, 0.01), 0.99)
+        pred2Vec <- pmin(pmax(pred2Vec, 0.01), 0.99)
     }
     
-    return(list(pred1 = as.vector(unlist(pred1)), pred2 = pred2Vec))
+    return(list(pred1 = pred1Vec, pred2 = pred2Vec))
 }
 
 
@@ -42,26 +54,27 @@ leaveOneOut <- function(object1, object2, dose, dataSet, resp, fixedEnd)
 pressWeights <- function(w, lenData, nVec, object1, resp, object2)
 {
     switch(w,
-    "ad hoc" =  # similar to what Nottingham and Birch (2000) did
+    "ad hoc" =  # half-success adjustment to avoid zero binomial weights
     {
-        rVec <- resp * nVec
-        any01 <- abs(rVec - nVec) < 1
-        if (any(any01)) {rVec[any01] <- rVec[any01] - 0.5}
-        pVec <- rVec / nVec
+        half <- pmin(0.5 / nVec, 0.5)
+        pVec <- pmin(pmax(resp, half), 1 - half)
         nVec / (pVec * (1 - pVec))
     },
     "none" = rep(1, lenData),            
     "nonpar" = 
     {
-        predVec2 <- predict(object2)
+        predVec2 <- pmin(pmax(predict(object2), 0.01), 0.99)
         nVec / (predVec2 * (1 - predVec2))
     },      
     "par" = 
     {
-        predVec1 <- as.vector(predict(object1, se.fit = FALSE))  # se.fit = FALSE not needed 
+        predVec1 <- pmin(pmax(as.vector(predict(object1, se.fit = FALSE)), 0.01), 0.99)
         nVec / (predVec1 * (1 - predVec1))
     },    
-    "response" = nVec / (resp * (1 - resp)))
+    "response" = {
+        pVec <- pmin(pmax(resp, 0.01), 0.99)
+        nVec / (pVec * (1 - pVec))
+    })
 }
 
 ## Function calculating degrees of freedom
@@ -96,15 +109,109 @@ predFct <- function(looList)
 }
 
 
-## Obtaining model-robust fit (evaluating PRESS* criterion)
+#' Model-robust dose-response modelling
+#'
+#' Combines a parametric dose-response curve fitted by [drm()] with a
+#' non-parametric local-linear regression (`loess`) fit. The fitted response is
+#' a weighted average of the two curves. When `lambda` contains more than one
+#' value, the function selects the weight that minimizes a prediction-error
+#' criterion; this reduces reliance on a single parametric curve shape when
+#' that shape may be misspecified. The result is intended as a complementary,
+#' model-robust fit, not as a replacement for the interpretable parameters of
+#' the parametric `drm()` fit.
+#'
+#' Use this function when the parametric model is scientifically reasonable but
+#' its exact shape is uncertain, or as a sensitivity analysis alongside the
+#' parametric fit. Effective doses for the resulting fit are obtained by
+#' inverse regression with [ED()].
+#'
+#' Only single-curve continuous and binomial `drm()` fits are supported.
+#' Continuous fits always use least squares. For binomial fits, least squares
+#' or a binomial log-likelihood can be used. The cross-validation criterion
+#' leaves out one dose level at a time (all replicate observations at that
+#' dose), rather than one individual observation.
+#'
+#' @param object1 A single-curve model fitted by [drm()], with `type =
+#'   "continuous"` or `type = "binomial"`.
+#' @param object2 An optional degree-1 `loess` fit to the same response and dose
+#'   data. If omitted, one is fitted using the formula and data stored in
+#'   `object1`.
+#' @param lambda Numeric candidate mixing weights between 0 and 1, inclusive.
+#'   The combined fit is `(1 - lambda) * object1 + lambda * object2`, so 0 is
+#'   purely parametric and 1 is purely local-linear. A single value fixes the
+#'   weight and skips selection; multiple values are compared using
+#'   `criterion`.
+#' @param criterion Prediction-error criterion used to select `lambda`:
+#'   `"gcv"` for generalized cross-validation or `"lcv"` for leave-one-dose-
+#'   level-out cross-validation. With a single `lambda`, no criterion is
+#'   evaluated.
+#' @param critFct Criterion function: `"ls"` for least squares or `"ll"` for
+#'   binomial log-likelihood. Continuous fits always use least squares.
+#' @param ls.weights Weighting scheme for the least-squares cross-validation
+#'   criterion on binomial data: `"nonpar"` (weights from local-linear
+#'   predictions), `"par"` (weights from parametric predictions), `"response"`
+#'   (weights from observed proportions), `"ad hoc"` (a boundary-adjusted
+#'   scheme), or `"none"`. This argument does not affect continuous fits.
+#' @param fixedEnd If `TRUE`, use observed mean responses at the smallest and
+#'   largest dose levels for the local-linear leave-one-dose-out predictions.
+#'   This tends to favor the non-parametric component at the endpoints.
+#' @param unitScale If `TRUE`, refit the local-linear regression using dose
+#'   values rescaled to the unit interval. Any supplied `object2` is replaced
+#'   by this internally fitted regression. This option cannot be combined with
+#'   leave-one-dose-out selection.
+#'
+#' @return An object of class `"mrdrc"`, containing the selected `lambda`, the
+#'   combined fitted values, goodness-of-fit summaries, and both component
+#'   models. Use [predict()] for predictions and [ED()] for
+#'   effective-dose estimates.
+#'
+#' @seealso [drm()], [ED()], [predict()]
+#' @references Nottingham, S. F. and Birch, C. P. D. (2000). A
+#'   semi-parametric approach to analysing dose-response data. *Environmental
+#'   and Ecological Statistics*, 7, 85-100.
+#' @examples
+#' \donttest{
+#' data(ryegrass)
+#' fit <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#' robustFit <- mrdrm(fit)
+#' robustFit$lambda
+#' ED(robustFit, c(10, 50, 90), display = FALSE)
+#' }
+#' @export
 "mrdrm" <- function(object1, object2, lambda = (0:10)/10, criterion = c("gcv", "lcv"), critFct = c("ls", "ll"),
 ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE, unitScale = FALSE)  
-# object1 is the drm() model fit
-# fixedEnd = TRUE favours the non-parametric model!!!
 {
     criterion <- match.arg(criterion)
     critFct <- match.arg(critFct)    
     ls.weights <- match.arg(ls.weights)
+
+    if (!inherits(object1, "drc"))
+    {
+        stop("'object1' must be a fitted 'drc' model from drm().", call. = FALSE)
+    }
+    if (!object1$"type" %in% c("continuous", "binomial"))
+    {
+        stop("'object1' must be a continuous or binomial drm() fit.", call. = FALSE)
+    }
+    if (is.null(object1$"parmMat") || ncol(object1$"parmMat") != 1L)
+    {
+        stop("'object1' must contain a single dose-response curve.", call. = FALSE)
+    }
+    if (!is.numeric(lambda) || !length(lambda) || any(!is.finite(lambda)) ||
+        any(lambda < 0 | lambda > 1))
+    {
+        stop("'lambda' must be a non-empty numeric vector of finite values between 0 and 1.",
+             call. = FALSE)
+    }
+    if (!is.logical(fixedEnd) || length(fixedEnd) != 1L || is.na(fixedEnd))
+    {
+        stop("'fixedEnd' must be TRUE or FALSE.", call. = FALSE)
+    }
+    if (!is.logical(unitScale) || length(unitScale) != 1L || is.na(unitScale))
+    {
+        stop("'unitScale' must be TRUE or FALSE.", call. = FALSE)
+    }
+
     ## Enforcing the least squares criterion function without weighting for continuous data
     if (identical(object1$"type", "continuous")) 
     {
@@ -112,35 +219,79 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
         ls.weights <- "none"
     } 
 
+    dataSet <- object1$"origData"
+
     ## Fitting a local linear regression with default settings in case no fit is provided
-    if (missing(object2))
+    if (missing(object2) && !unitScale)
     {
+        if (is.null(dataSet))
+        {
+            stop("The original data are unavailable to fit the default local-linear regression; supply 'object2' explicitly.",
+                 call. = FALSE)
+        }
         object2 <- loess(formula(object1), data = object1$"origData", degree = 1)
     }
 
     ## Checking that a local linear regression fit is supplied
-    if ( (object2$"pars"$"degree" > 1) || (object2$"pars"$"degree" < 1) ) 
+    if (!unitScale &&
+        (!inherits(object2, "loess") || is.null(object2$"pars"$"degree") ||
+         length(object2$"pars"$"degree") != 1L ||
+         !is.finite(object2$"pars"$"degree") || object2$"pars"$"degree" != 1))
     {
         stop("Local regression fit not linear!", call. = FALSE)
     }     
 
     ## Retrieving data
-    dataSet <- object1$"origData"
     dataSet2 <- object1$"data"
+    if (!is.data.frame(dataSet2) || ncol(dataSet2) < 2L)
+    {
+        stop("'object1' does not contain a valid dose-response data frame.",
+             call. = FALSE)
+    }
     dose <- dataSet2[, 1]
     resp <- dataSet2[, 2]    
     lenData <- object1$"sumList"$lenData
+    if (!is.data.frame(dataSet2) || length(dose) != lenData || length(resp) != lenData ||
+        length(object1$"weights") != lenData || any(!is.finite(dose)) ||
+        any(!is.finite(resp)) || any(!is.finite(object1$"weights")) ||
+        any(object1$"weights" <= 0))
+    {
+        stop("'object1' does not contain complete, finite dose-response data and positive weights.",
+             call. = FALSE)
+    }
+    if (length(unique(dose)) < 3L)
+    {
+        stop("At least three distinct dose levels are required for a model-robust fit.",
+             call. = FALSE)
+    }
+    if (length(lambda) > 1L &&
+        (identical(criterion, "lcv") || identical(critFct, "ll")) &&
+        !is.data.frame(dataSet))
+    {
+        stop("The original data are required for leave-one-dose-out selection but are unavailable; fit the model with 'data' or use a single 'lambda' value.",
+             call. = FALSE)
+    }
+    if (unitScale && length(lambda) > 1L &&
+        (identical(criterion, "lcv") || identical(critFct, "ll")))
+    {
+        stop("'unitScale = TRUE' cannot be combined with leave-one-dose-out selection; use 'criterion = \"gcv\"' with 'critFct = \"ls\"' or supply a single 'lambda'.",
+             call. = FALSE)
+    }
 
     ## Transforming doses into the unit interval
     if (unitScale)
     {
         uniqDose <- sort(unique(dose))
         lenUD <- length(uniqDose)
-        doseLoess <- loess((0:(lenUD - 1))/lenUD ~ uniqDose)
+        doseLoess <- loess((0:(lenUD - 1))/(lenUD - 1) ~ uniqDose)
         dosePredict <- function(dose) {predict(doseLoess, data.frame(uniqDose = dose))}
         unitDose <- dosePredict(dose)
 
-        object2 <- loess(resp ~ unitDose, degree = 1)          
+        object2 <- loess(resp ~ unitDose, degree = 1)
+        attr(object2, "doseScale") <- list(
+            model = doseLoess,
+            doseName = tail(as.character(formula(object1)[[3]]), 1)
+        )
     }
 
        
@@ -151,13 +302,22 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
     ## Press value
     dFct <- dfFct(object1, object2)    
     nVec <- object1$weights
+    if (length(lambda) > 1L)
+    {
     pressFct <- switch(critFct,
     "ls" =  # least squares criterion function
     {
         switch(criterion,
         "gcv" = {  ## Using GCV
             looList <- NULL
-            pFct <- predFct(list(pred1 = predict(object1), pred2 = predict(object2)))
+            pred1 <- as.vector(predict(object1))
+            pred2 <- as.vector(predict(object2))
+            if (identical(object1$"type", "binomial"))
+            {
+                pred1 <- pmin(pmax(pred1, 0.01), 0.99)
+                pred2 <- pmin(pmax(pred2, 0.01), 0.99)
+            }
+            pFct <- predFct(list(pred1 = pred1, pred2 = pred2))
             pwVec <- NULL  # No weights used
                 
             function(lambda)
@@ -192,19 +352,40 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
     })    
 
     vPressFct <- Vectorize(pressFct, "lambda")
-    
-    if (length(lambda) > 1)
-    {
         pVec <- vPressFct(lambda)
-        optimalLambda <- lambda[which.min(pVec)] 
+        validPress <- is.finite(pVec)
+        if (!any(validPress))
+        {
+            stop("The prediction-error criterion was non-finite for every value of 'lambda'; check the fits and try a different criterion or candidate weights.",
+                 call. = FALSE)
+        }
+        if (any(!validPress))
+        {
+            warning("Non-finite prediction-error values were excluded when selecting 'lambda'.",
+                    call. = FALSE)
+        }
+        optimalLambda <- lambda[validPress][which.min(pVec[validPress])]
     } else {
-        pVec <- NA  # no PRESS criterion used
+        pVec <- NA
         optimalLambda <- lambda
+        looList <- NULL
+        pwVec <- NULL
     }
     
     ## Calculating fitted values
     pred1 <- as.vector(predict(object1))   
-    pred2 <- predict(object2)      
+    pred2 <- as.vector(predict(object2))
+    if (length(pred1) != lenData || length(pred2) != lenData ||
+        any(!is.finite(pred1)) || any(!is.finite(pred2)))
+    {
+        stop("The parametric and local-linear fits must both return finite fitted values for every observation.",
+             call. = FALSE)
+    }
+    if (identical(object1$"type", "binomial"))
+    {
+        pred1 <- pmin(pmax(pred1, 0.01), 0.99)
+        pred2 <- pmin(pmax(pred2, 0.01), 0.99)
+    }
     fitVal <- (1 - optimalLambda) * pred1 + optimalLambda * pred2
     
     ## Calculating goodness-of-fit values
@@ -225,6 +406,11 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
 #    "continuous" = gofVal / dFct(optimalLambda))    
     
     dfVal <- dFct(optimalLambda)
+    if (length(dfVal) != 1L || !is.finite(dfVal) || dfVal <= 0)
+    {
+        stop("The selected mixture has non-positive or non-finite residual degrees of freedom; use a different 'lambda' grid or loess fit.",
+             call. = FALSE)
+    }
     gofVec <- switch(object1$"type",
     "binomial" = {
         success <- nVec * resp
@@ -336,8 +522,16 @@ ls.weights = c("nonpar", "ad hoc", "none", "par", "response"), fixedEnd = FALSE,
     lambda <- object$"lambda"
     x <- object$"dose"
 #    if (missing(x0)) {x0 <- x}
-    
-    (1 - lambda) * hat.drc(object$object1, x, x0) + lambda * hat.loess(x, object$object2$pars$span, x0)
+
+    hat1 <- hat.drc(object$object1, x, x0)
+    doseScale <- attr(object$"object2", "doseScale")
+    if (!is.null(doseScale))
+    {
+        x <- as.vector(predict(doseScale$model, data.frame(uniqDose = x)))
+        x0 <- as.vector(predict(doseScale$model, data.frame(uniqDose = x0)))
+    }
+
+    (1 - lambda) * hat1 + lambda * hat.loess(x, object$object2$pars$span, x0)
 }
 
 
@@ -378,7 +572,21 @@ level = 0.95, pava = FALSE, ...)
         seVec <- se.mr(object, object$"dose")
     } else {
         pred1 <- as.vector(predict(object$"object1", newdata = newdata, se.fit = FALSE))    
-        pred2 <- predict(object$"object2", newdata = newdata)      
+        doseScale <- attr(object$"object2", "doseScale")
+        if (is.null(doseScale))
+        {
+            loessNewdata <- newdata
+        } else {
+            if (!doseScale$doseName %in% names(newdata))
+            {
+                stop("The `newdata` argument must contain the dose column used to fit `object1`.",
+                     call. = FALSE)
+            }
+            unitDose <- predict(doseScale$model,
+                                data.frame(uniqDose = newdata[[doseScale$doseName]]))
+            loessNewdata <- data.frame(unitDose = unitDose)
+        }
+        pred2 <- predict(object$"object2", newdata = loessNewdata)
         lambda <- object$"lambda"
         predVec <- (1 - lambda) * pred1 + lambda * pred2
         seVec <- se.mr(object, newdata[, 1])

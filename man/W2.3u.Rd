@@ -29,6 +29,13 @@ A three-parameter Weibull type 2 model with the upper limit fixed at a
 specified value. The model is given by the equation
 \deqn{f(x) = c + (\mathrm{upper} - c)(1 - \exp(-\exp(b(\log(x) - \log(e)))))}
 }
+\examples{
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = W2.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "W2.3u (upper limit fixed at 1)")
+
+}
 \seealso{
 \code{\link{weibull2}}, \code{\link{W2.3}}, \code{\link{W2.4}}
 }

@@ -26,8 +26,10 @@ fixed at 1 and \code{c} is fixed at 0. This is a convenience wrapper
 around \code{\link{weibull2x}}.
 }
 \examples{
+## Fit with drm() and plot
 spinach.m1 <- drm(SLOPE ~ DOSE, data = spinach, fct = W2x.3())
 summary(spinach.m1)
+plot(spinach.m1, main = "W2x.3")
 
 }
 \seealso{

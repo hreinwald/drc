@@ -28,7 +28,9 @@ The model is given by the equation
 \deqn{f(x) = d \cdot (1 - \exp(-\exp(b(\log(x) - \log(e)))))}
 }
 \examples{
+## Fit with drm() and plot
 ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = W2.3())
+plot(ryegrass.m1, type = "all", main = "W2.3 (lower limit fixed at 0)")
 
 }
 \seealso{

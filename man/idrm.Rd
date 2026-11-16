@@ -4,9 +4,43 @@
 \alias{idrm}
 \title{Interactive dose-response modelling}
 \usage{
-idrm(x, y, curveid, weights, fct, type, control)
+idrm(
+  x,
+  y,
+  curveid,
+  weights,
+  fct,
+  type,
+  control,
+  robust = "mean",
+  bcVal = NULL,
+  bcAdd = 0,
+  lowerl = NULL,
+  upperl = NULL,
+  logDose = NULL,
+  start = NULL
+)
+}
+\arguments{
+\item{x}{dose values.}
+
+\item{y}{response values.}
+
+\item{curveid}{curve identifiers.}
+
+\item{weights}{weights.}
+
+\item{fct}{model function (list).}
+
+\item{type}{response type.}
+
+\item{control}{list from \code{\link{drmc}}.}
+
+\item{robust, bcVal, bcAdd, lowerl, upperl, logDose, start}{arguments of \code{\link{drm}} that are
+forwarded to the per-curve fits.}
 }
 \description{
-Interactive dose-response modelling
+Internal helper used by \code{\link{drm}} when \code{separate = TRUE}: the model is
+fitted to each curve separately and the fits are combined into one \code{drc} object.
 }
 \keyword{internal}

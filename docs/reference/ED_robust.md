@@ -15,7 +15,8 @@ response level, ensuring the overall analysis can proceed.
 ED_robust(
   mod,
   respLev = c(10, 20, 50),
-  interval = get_ed_interval(mod$fct$name, small_n = TRUE),
+  interval = get_ed_interval(mod$fct$name, small_n = TRUE, log_ed =
+    .isLogEDModel(mod$fct)),
   CI_level = 0.95,
   verbose = FALSE,
   ...
@@ -37,8 +38,13 @@ ED_robust(
 
   A character string specifying the method for calculating confidence
   intervals. Defaults to the output of
-  [`get_ed_interval()`](https://hreinwald.github.io/drc/reference/get_ed_interval.md).
-  Common options include "delta", "tfls", or "buckland".
+  [`get_ed_interval()`](https://hreinwald.github.io/drc/reference/get_ed_interval.md):
+  "tfls" for the log-logistic, log-normal, Brain-Cousens and Cedergreen
+  families, "delta" for Weibull models, and "fls" for models returning
+  log(ED) (`LL2.*`, `LN.*(loge = TRUE)`), for which estimates and limits
+  are back-transformed and the standard error is the delta-method SE of
+  the dose. "fls" is only accepted for such models (an error is raised
+  otherwise).
 
 - CI_level:
 
@@ -74,10 +80,10 @@ Hannes Reinwald
 data(lettuce)
 m <- drm(weight ~ conc, data = lettuce, fct = BC.4())
 ED_robust(m, respLev = c(10, 50), CI_level = 0.95)
-#>     Estimate    stderr     Lower    Upper confint_level confint_method
-#>        <num>     <num>     <num>    <num>         <num>         <char>
-#> 1:  4.457785  1.674585  1.930237 10.29503          0.95           tfls
-#> 2: 35.022556 15.426732 13.125303 93.45151          0.95           tfls
+#>     Estimate   stderr     Lower    Upper confint_level confint_method
+#>        <num>    <num>     <num>    <num>         <num>         <char>
+#> 1:  4.458442  1.67505  1.930311 10.29767          0.95           tfls
+#> 2: 35.045444 15.44581 13.126369 93.56610          0.95           tfls
 #>           model    EC
 #>          <char> <num>
 #> 1: BC.4:b-d-e-f    10

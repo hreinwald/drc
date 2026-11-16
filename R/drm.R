@@ -8,6 +8,7 @@
 #' @param curveid a numeric vector or factor containing the grouping of the data.
 #' @param pmodels a data frame with as many columns as there are parameters in the non-linear
 #'   function. Or a list containing a formula for each parameter in the nonlinear function.
+#'   It is evaluated in \code{data} and, if \code{data} is \code{NULL}, in the calling environment.
 #' @param weights a numeric vector containing weights. For continuous/quantitative responses,
 #'   inverse weights are multiplied inside the squared errors (weights should have the same unit
 #'   as the response). For binomial responses weights provide information about the total number
@@ -45,14 +46,21 @@
 #' @param upperl a numeric vector of upper limits for all parameters in the model (the default
 #'   corresponds to plus infinity for all parameters).
 #' @param separate logical value indicating whether curves should be fit separately
-#'   (independent of each other).
+#'   (independent of each other). The arguments \code{robust} (except \code{"trimmed"},
+#'   \code{"winsor"} and \code{"tukey"}), \code{bcVal}, \code{bcAdd}, \code{lowerl}, \code{upperl},
+#'   \code{logDose} and \code{start} are applied to every curve; \code{varcov}, \code{pshifts} and the
+#'   three excluded \code{robust} methods are not supported and raise an error. Not combined with
+#'   \code{pmodels} (separate fitting is then switched off with a warning).
 #' @param pshifts a matrix of constants to be added to the matrix of parameters. Default is no
 #'   shift for all parameters.
 #' @param varcov an optional user-defined known variance-covariance matrix for the responses.
 #'   Default is the identity matrix (\code{NULL}), corresponding to independent response values
 #'   with a common standard deviation estimated from the data.
 #'
-#' @return An object of (S3) class \code{"drc"}.
+#' @return An object of (S3) class \code{"drc"}. The environment \code{drm()} was
+#'   called from is stored in the attribute \code{"callEnv"}; \code{\link{update.drc}}
+#'   (and thereby \code{\link{mselect}} and \code{\link{maED}}) evaluates the arguments
+#'   of the stored call (e.g. \code{formula}, \code{data}) there when re-fitting.
 #'
 #' @details This function relies on \code{\link{optim}} for minimisation of the negative log
 #'   likelihood function. For a continuous response this reduces to least squares estimation.
@@ -160,6 +168,8 @@ pshifts = NULL, varcov = NULL)
 
     ## Storing call details
     callDetail <- match.call()
+    ## Environment the call was made from: update.drc() and drmRobust() re-evaluate the call there
+    callEnv <- parent.frame()
 
     ## Handling the 'formula', 'curveid' and 'data' arguments
     anName <- deparse(substitute(curveid))  # storing name for later use
@@ -280,7 +290,17 @@ pshifts = NULL, varcov = NULL)
     }
     if (separate)
     {
-        return(idrm(dose, resp, assayNoOld, wVec, fct, type, control))
+        if (!is.null(varcov) || !is.null(pshifts))
+        {
+            stop("'varcov' and 'pshifts' are not supported when separate = TRUE", call. = FALSE)
+        }
+        if (robust %in% c("trimmed", "winsor", "tukey"))
+        {
+            stop("robust = '", robust, "' is not supported when separate = TRUE", call. = FALSE)
+        }
+        return(idrm(dose, resp, assayNoOld, wVec, fct, type, control, robust = robust, bcVal = bcVal, 
+                    bcAdd = bcAdd, lowerl = lowerl, upperl = upperl, logDose = logDose, 
+                    start = if (selfStart) NULL else start))
     }    
     
     ## Handling "pmodels" argument
@@ -305,7 +325,7 @@ pshifts = NULL, varcov = NULL)
         ## Handling a list or data.frame argument of "pmodels"
         if (is.null(data)) 
         {
-            pmodels <- eval(substitute(pmodels), envir = .GlobalEnv)
+            pmodels <- eval(substitute(pmodels), envir = parent.frame())
         } else {
             pmodels <- eval(substitute(pmodels), envir = data, enclos = parent.frame())
         }
@@ -364,9 +384,10 @@ pshifts = NULL, varcov = NULL)
     }
 
     
-    ## Re-setting na.action
-    op3 <- options(na.action = "na.omit")  # the default
-    on.exit(options(op3), add=TRUE)
+    ## Re-setting na.action (the default). No on.exit() here: 'op3' would hold the value set
+    ## from the 'na.action' argument above and restoring it would undo the restore of 'op1',
+    ## leaking that value into the user's session.
+    options(na.action = "na.omit")
 
     ## Transforming dose value if they are provided as log dose
     if ( !is.null(logDose) && is.numeric(logDose) ) 
@@ -579,7 +600,7 @@ pshifts = NULL, varcov = NULL)
     } else {multCurves2 <- multCurves}
 
     ## Defining estimation method
-    robustFct <- drmRobust(robust, callDetail, numObs, length(startVec))  
+    robustFct <- drmRobust(robust, callDetail, numObs, length(startVec), callEnv)  
 
     if (type == "continuous")
     {
@@ -964,6 +985,7 @@ pshifts = NULL, varcov = NULL)
     "curveVarNam", "origData", "weights",
     "dataList", "coefficients", "boxcox", "indexMat2")
     class(returnList) <- c("drc")
+    attr(returnList, "callEnv") <- callEnv
 
     return(returnList)
 }

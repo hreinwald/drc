@@ -49,6 +49,9 @@ Christian Ritz
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 met.mm.m1 <- drm(gain~dose, product, data = methionine, fct = MM.3())
 #> Control measurements detected for level: control
+plot(met.mm.m1, main = "MM.3 (shifted Michaelis-Menten)")
+
 ```

@@ -48,7 +48,10 @@ Christian Ritz
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 lettuce.bcm2 <- drm(weight ~ conc, data = lettuce, fct = BC.4())
+plot(lettuce.bcm2, type = "all", main = "BC.4 (lower limit fixed at 0)")
+
 summary(lettuce.bcm2)
 #> 
 #> Model fitted: Brain-Cousens (hormesis) with lower limit fixed at 0 (4 parms)
@@ -56,20 +59,20 @@ summary(lettuce.bcm2)
 #> Parameter estimates:
 #> 
 #>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept) 1.282812   0.049346 25.9964 1.632e-10 ***
-#> d:(Intercept) 0.967302   0.077123 12.5423 1.926e-07 ***
-#> e:(Intercept) 0.847633   0.436093  1.9437   0.08059 .  
-#> f:(Intercept) 1.620703   0.979711  1.6543   0.12908    
+#> b:(Intercept) 1.282745   0.049347 25.9945 1.633e-10 ***
+#> d:(Intercept) 0.967195   0.077127 12.5403 1.929e-07 ***
+#> e:(Intercept) 0.846276   0.435726  1.9422   0.08078 .  
+#> f:(Intercept) 1.623790   0.982039  1.6535   0.12924    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.1117922 (10 degrees of freedom)
+#>  0.1117921 (10 degrees of freedom)
 ED(lettuce.bcm2, c(50))
 #> 
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error
-#> e:50   35.023     15.427
+#> e:50   35.045     15.446
 ```

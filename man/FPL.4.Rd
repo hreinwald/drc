@@ -23,6 +23,12 @@ A list (see \code{\link{fplogistic}}).
 \description{
 Convenience function for the four-parameter fractional polynomial-logistic model.
 }
+\examples{
+## Fit with drm() and plot
+ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = FPL.4(-1, 1))
+plot(ryegrass.m1, type = "all", main = "FPL.4(-1, 1)")
+
+}
 \seealso{
 \code{\link{fplogistic}}, \code{\link{maED}}
 }

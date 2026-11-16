@@ -29,7 +29,9 @@ test_that("mselect Lack of fit values match between nested = TRUE and nested = F
   m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
   fctList <- list(LL.3(), W1.4(), W2.4())
 
-  result_nested <- mselect(m1, fctList = fctList, nested = TRUE)
+  result_nested <- suppressWarnings(
+    mselect(m1, fctList = fctList, nested = TRUE)
+  )
   result_plain <- mselect(m1, fctList = fctList, nested = FALSE)
 
   # The "Lack of fit" column should have the same values regardless of 'nested'
@@ -53,6 +55,34 @@ test_that("mselect with nested = TRUE does not produce NaN in Nested F test colu
   ftest_col <- result[, "Nested F test"]
   expect_true(all(is.na(ftest_col) | is.finite(ftest_col)),
     info = "Nested F test column should not contain NaN values")
+})
+
+test_that("nested-test p-values compare adjacent rows in the sorted output", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  fct_list <- list(LL.3(), W1.4(), W2.4())
+
+  result <- suppressWarnings(mselect(
+    m1, fctList = fct_list, nested = TRUE, sorted = "IC"
+  ))
+  fits <- list(
+    "LL.4" = m1,
+    "LL.3" = update(m1, fct = fct_list[[1L]]),
+    "W1.4" = update(m1, fct = fct_list[[2L]]),
+    "W2.4" = update(m1, fct = fct_list[[3L]])
+  )
+
+  expect_true(is.na(result[1L, "Nested F test"]))
+  for (i in 2:nrow(result)) {
+    comparison <- suppressWarnings(anova(
+      fits[[rownames(result)[i - 1L]]],
+      fits[[rownames(result)[i]]],
+      details = FALSE
+    ))
+    expect_equal(
+      unname(result[i, "Nested F test"]),
+      unname(comparison[2L, "p value"])
+    )
+  }
 })
 
 test_that("anova.drc returns p-value of 1 when F statistic is negative", {
@@ -157,6 +187,73 @@ test_that("mselect errors when nested is not logical", {
     mselect(m1, nested = 1),
     "'nested' argument takes only the values: FALSE, TRUE"
   )
+  expect_error(
+    mselect(m1, nested = NA),
+    "'nested' argument takes only the values: FALSE, TRUE"
+  )
+  expect_error(
+    mselect(m1, nested = c(TRUE, FALSE)),
+    "'nested' argument takes only the values: FALSE, TRUE"
+  )
+})
+
+test_that("mselect validates its inputs with useful errors", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  expect_error(mselect(list()), "'object' must be a fitted object")
+  expect_error(mselect(m1, fctList = LL.3()), "'fctList' must be NULL or a list")
+  expect_error(mselect(m1, icfct = 1), "'icfct' must be a function")
+  expect_error(
+    mselect(m1, icfct = function(fit) "not numeric"),
+    "must return one numeric value"
+  )
+  expect_error(mselect(m1, linreg = NA), "'linreg' must be a single")
+  expect_error(mselect(m1, sorted = "unknown"), "should be one of")
+
+  bic_result <- mselect(m1, icfct = BIC)
+  expect_true(is.finite(bic_result[1, "IC"]))
+})
+
+test_that("mselect sorts lack-of-fit p-values from largest to smallest", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+
+  result <- mselect(
+    m1,
+    fctList = list(LL.3(), W1.4(), W2.4()),
+    sorted = "Lack of fit"
+  )
+  p_values <- result[, "Lack of fit"]
+  p_values <- p_values[!is.na(p_values)]
+
+  expect_true(all(diff(p_values) <= 0))
+})
+
+test_that("mselect continues after a failed candidate in nested comparisons", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  bad_fct <- LL.3()
+  bad_fct$name <- "BadModel"
+  bad_fct$ssfct <- function(...) stop("Cannot compute starting values")
+
+  result <- suppressWarnings(mselect(
+    m1,
+    fctList = list(bad_fct, W1.4()),
+    nested = TRUE,
+    sorted = "no"
+  ))
+
+  expect_true(all(is.na(result["BadModel", ])))
+  expect_true(is.na(result["W1.4", "Nested F test"]))
+  expect_true(is.finite(result["W1.4", "logLik"]))
+})
+
+test_that("mselect rejects unsupported polynomial regression comparisons", {
+  m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+  m1$type <- "binomial"
+  expect_error(mselect(m1, linreg = TRUE), "'linreg = TRUE' is only available")
+
+  m1$type <- "continuous"
+  m1$dataList$curveid <- rep(1:2, length.out = length(m1$dataList$curveid))
+  expect_error(mselect(m1, linreg = TRUE), "only available for a single")
 })
 
 test_that("mselect with linreg = TRUE includes polynomial fits", {

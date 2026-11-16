@@ -50,15 +50,15 @@ summary(nfa.m1)
 #> Parameter estimates:
 #> 
 #>                Estimate Std. Error t-value   p-value    
-#> b:(Intercept)  1.828165   0.429684  4.2547 0.0001184 ***
-#> c:(Intercept) -3.879086   5.620773 -0.6901 0.4939982    
-#> d:(Intercept) 88.533870   2.366218 37.4158 < 2.2e-16 ***
-#> e:(Intercept)  0.730916   0.086889  8.4121 1.813e-10 ***
+#> b:(Intercept)  1.812667   0.428487  4.2304 0.0001277 ***
+#> c:(Intercept) -4.158487   5.710238 -0.7283 0.4705990    
+#> d:(Intercept) 88.572402   2.378643 37.2365 < 2.2e-16 ***
+#> e:(Intercept)  0.733853   0.088075  8.3321 2.329e-10 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  9.591243 (41 degrees of freedom)
+#>  9.590959 (41 degrees of freedom)
 plot(nfa.m1, main = "NFA dose-response")
 ```

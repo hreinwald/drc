@@ -84,12 +84,12 @@ summary(S.alba.comp.m1)
 #> Parameter estimates:
 #> 
 #>                        Estimate Std. Error t-value   p-value    
-#> b:(Intercept)          5.036275   2.100683  2.3974   0.01788 *  
-#> b:herbicideglyphosate -3.682298   2.062582 -1.7853   0.07646 .  
-#> c:(Intercept)          0.734059   0.081999  8.9520 2.432e-15 ***
-#> d:(Intercept)          3.962500   0.079820 49.6428 < 2.2e-16 ***
-#> e:(Intercept)         21.060041   1.286127 16.3748 < 2.2e-16 ***
-#> e:herbicideglyphosate 27.165817   5.568005  4.8789 2.958e-06 ***
+#> b:(Intercept)          5.036140   2.100357  2.3978   0.01786 *  
+#> b:herbicideglyphosate -3.682149   2.062260 -1.7855   0.07643 .  
+#> c:(Intercept)          0.734061   0.081998  8.9522 2.431e-15 ***
+#> d:(Intercept)          3.962501   0.079820 49.6428 < 2.2e-16 ***
+#> e:(Intercept)         21.060095   1.286105 16.3751 < 2.2e-16 ***
+#> e:herbicideglyphosate 27.165472   5.567927  4.8789 2.958e-06 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 

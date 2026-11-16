@@ -40,3 +40,13 @@ A list (see
 [`lnormal`](https://hreinwald.github.io/drc/reference/lnormal.md),
 [`LN.3`](https://hreinwald.github.io/drc/reference/LN.3.md),
 [`LN.4`](https://hreinwald.github.io/drc/reference/LN.4.md)
+
+## Examples
+
+``` r
+## Binomial (quantal) response (probit model): fit with drm() and plot
+earthworms.m1 <- drm(number/total ~ dose, weights = total,
+  data = earthworms, fct = LN.2(), type = "binomial")
+plot(earthworms.m1, main = "LN.2 (probit model)")
+
+```

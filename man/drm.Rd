@@ -35,7 +35,8 @@ values in second column.}
 \item{curveid}{a numeric vector or factor containing the grouping of the data.}
 
 \item{pmodels}{a data frame with as many columns as there are parameters in the non-linear
-function. Or a list containing a formula for each parameter in the nonlinear function.}
+function. Or a list containing a formula for each parameter in the nonlinear function.
+It is evaluated in \code{data} and, if \code{data} is \code{NULL}, in the calling environment.}
 
 \item{weights}{a numeric vector containing weights. For continuous/quantitative responses,
 inverse weights are multiplied inside the squared errors (weights should have the same unit
@@ -88,7 +89,11 @@ corresponds to minus infinity for all parameters).}
 corresponds to plus infinity for all parameters).}
 
 \item{separate}{logical value indicating whether curves should be fit separately
-(independent of each other).}
+(independent of each other). The arguments \code{robust} (except \code{"trimmed"},
+\code{"winsor"} and \code{"tukey"}), \code{bcVal}, \code{bcAdd}, \code{lowerl}, \code{upperl},
+\code{logDose} and \code{start} are applied to every curve; \code{varcov}, \code{pshifts} and the
+three excluded \code{robust} methods are not supported and raise an error. Not combined with
+\code{pmodels} (separate fitting is then switched off with a warning).}
 
 \item{pshifts}{a matrix of constants to be added to the matrix of parameters. Default is no
 shift for all parameters.}
@@ -98,7 +103,10 @@ Default is the identity matrix (\code{NULL}), corresponding to independent respo
 with a common standard deviation estimated from the data.}
 }
 \value{
-An object of (S3) class \code{"drc"}.
+An object of (S3) class \code{"drc"}. The environment \code{drm()} was
+called from is stored in the attribute \code{"callEnv"}; \code{\link{update.drc}}
+(and thereby \code{\link{mselect}} and \code{\link{maED}}) evaluates the arguments
+of the stored call (e.g. \code{formula}, \code{data}) there when re-fitting.
 }
 \description{
 A general model fitting function for analysis of various types of dose-response data.

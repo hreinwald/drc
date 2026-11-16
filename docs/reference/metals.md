@@ -64,19 +64,19 @@ ED(Zn.lgau, 50, interval = "delta")
 #> Estimated effective doses
 #> 
 #>      Estimate Std. Error   Lower   Upper
-#> e:50  3.34241    0.18363 2.96627 3.71855
+#> e:50  3.34089    0.18175 2.96858 3.71319
 ED(Zn.lgau, -50, interval = "delta", bound = FALSE)
 #> 
 #> Estimated effective doses
 #> 
 #>       Estimate Std. Error    Lower    Upper
-#> e:-50 1.508038   0.082849 1.338329 1.677746
+#> e:-50 1.508351   0.082059 1.340262 1.676441
 ED(Zn.lgau, 99.999,interval = "delta")  # approx. for ED0
 #> 
 #> Estimated effective doses
 #> 
 #>          Estimate Std. Error    Lower    Upper
-#> e:99.999 2.258720   0.058849 2.138173 2.379267
+#> e:99.999 2.258226   0.058089 2.139237 2.377215
 
 ## Fitting a model for "Cu"
 Cu.lgau <- drm(BIF ~ conc, data = subset(metals, metal == "Cu"), 

@@ -49,6 +49,13 @@ two three-parameter log-logistic models:
 \$\$f(x) = \mathrm{LL.4}(x; b1, c1, d1, e1) + \mathrm{LL.3}(x; b2, d2,
 e2) + \mathrm{LL.3}(x; b3, d3, e3)\$\$
 
+## Note
+
+`threephase()` is not exported from the package namespace; call it as
+`drc:::threephase()`. With ten parameters the model is easily
+over-parameterised; supply good starting values via `start` in
+[`drm`](https://hreinwald.github.io/drc/reference/drm.md) for real data.
+
 ## See also
 
 [`twophase`](https://hreinwald.github.io/drc/reference/twophase.md),
@@ -57,3 +64,12 @@ e2) + \mathrm{LL.3}(x; b3, d3, e3)\$\$
 ## Author
 
 Christian Ritz
+
+## Examples
+
+``` r
+## Fit with drm() and plot (accessing the unexported constructor)
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = drc:::threephase())
+plot(m1, type = "all", main = "Three-phase model")
+
+```

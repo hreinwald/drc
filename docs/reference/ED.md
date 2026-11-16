@@ -36,4 +36,4 @@ estimating differences and ratios of ED
 
 ## Author
 
-Christian Ritz
+Christian Ritz, Hannes Reinwald

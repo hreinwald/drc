@@ -72,15 +72,15 @@ yieldLoss(met.mm.m1)
 #> Estimated A parameters
 #> 
 #>     Estimate Std. Error
-#> DLM 1736.141     18.922
-#> MHA 1868.517     43.930
+#> DLM 1736.125     18.919
+#> MHA 1868.775     44.040
 #> 
 #> 
 #> Estimated I parameters
 #> 
 #>     Estimate Std. Error
-#> DLM  44578.0    11225.6
-#> MHA  16827.3     3942.7
+#> DLM  44581.4    11226.6
+#> MHA  16803.4     3942.3
 
 ## Also showing confidence intervals
 yieldLoss(met.mm.m1, "as")
@@ -88,13 +88,13 @@ yieldLoss(met.mm.m1, "as")
 #> Estimated A parameters
 #> 
 #>     Estimate Std. Error    Lower    Upper
-#> DLM 1736.141     18.922 1683.606 1788.676
-#> MHA 1868.517     43.930 1746.547 1990.487
+#> DLM 1736.125     18.919 1683.599 1788.652
+#> MHA 1868.775     44.040 1746.501 1991.048
 #> 
 #> 
 #> Estimated I parameters
 #> 
 #>     Estimate Std. Error   Lower   Upper
-#> DLM  44578.0    11225.6 13410.7 75745.2
-#> MHA  16827.3     3942.7  5880.7 27773.8
+#> DLM  44581.4    11226.6 13411.3 75751.6
+#> MHA  16803.4     3942.3  5857.8 27748.9
 ```

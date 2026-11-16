@@ -166,15 +166,16 @@ test_that("llfct returns a numeric vector of length 2", {
 test_that("llfct computes correct values", {
   em <- drmEMssd(test_dose, test_resp, simple_pdf)
 
-  mock_object <- list(
+  mock_object <- structure(list(
     fit = list(value = 10),
-    sumList = list(df.residual = 3)
-  )
+    sumList = list(df.residual = 5),
+    coefficients = c(b = 1, e = 2, d = 3)
+  ), class = "drc")
 
   result <- em$llfct(mock_object)
   # First element: -object$fit$value (negated because opfct minimizes negative LL)
   expect_equal(result[1], -10)
-  # Second element: df.residual
+  # Second element: number of estimated parameters (not the residual df)
   expect_equal(result[2], 3)
 })
 

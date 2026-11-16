@@ -61,7 +61,7 @@ modelFit(mecter.free)  # not really acceptable
 #> 
 #>           ModelDf      RSS Df F value p value
 #> ANOVA          71 0.033732                   
-#> DRC model      94 0.063801 23  2.7518  0.0006
+#> DRC model      94 0.063801 23  2.7517  0.0006
 summary(mecter.free)
 #> 
 #> Model fitted: Log-logistic (ED50 as parameter) (4 parms)
@@ -69,20 +69,20 @@ summary(mecter.free)
 #> Parameter estimates:
 #> 
 #>                  Estimate  Std. Error t-value   p-value    
-#> b:(Intercept)  1.1263e+00  1.2130e-01  9.2851 6.153e-15 ***
-#> c:(Intercept) -4.1327e-02  2.1251e-02 -1.9447    0.0548 .  
-#> d:(Intercept)  3.0006e-01  5.8249e-03 51.5127 < 2.2e-16 ***
-#> e:100          1.5090e+04  2.4007e+03  6.2856 1.015e-08 ***
-#> e:75           3.1667e+04  5.2165e+03  6.0705 2.673e-08 ***
-#> e:50           3.0038e+04  5.0377e+03  5.9627 4.321e-08 ***
-#> e:25           1.9395e+04  3.2661e+03  5.9382 4.818e-08 ***
-#> e:0            1.9855e+04  3.5090e+03  5.6583 1.646e-07 ***
+#> b:(Intercept)  1.1244e+00  1.2135e-01  9.2659 6.676e-15 ***
+#> c:(Intercept) -4.1730e-02  2.1388e-02 -1.9511   0.05402 .  
+#> d:(Intercept)  3.0010e-01  5.8297e-03 51.4770 < 2.2e-16 ***
+#> e:100          1.5124e+04  2.4160e+03  6.2600 1.140e-08 ***
+#> e:75           3.1743e+04  5.2485e+03  6.0480 2.956e-08 ***
+#> e:50           3.0113e+04  5.0692e+03  5.9404 4.771e-08 ***
+#> e:25           1.9441e+04  3.2854e+03  5.9172 5.287e-08 ***
+#> e:0            1.9908e+04  3.5326e+03  5.6355 1.816e-07 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error:
 #> 
-#>  0.02605256 (94 degrees of freedom)
+#>  0.0260525 (94 degrees of freedom)
 
 ## Plotting isobole structure
 isobole(mecter.free, exchange = 0.02)
@@ -133,7 +133,7 @@ anova(mecter.hew, mecter.free)  # rejected
 #> 
 #>           ModelDf      RSS Df F value p value
 #> 1st model      96 0.074836                   
-#> 2nd model      94 0.063801  2  8.1286  0.0006
+#> 2nd model      94 0.063801  2  8.1289  0.0006
 
 ## Plotting isobole based on the Hewlett model
 isobole(mecter.free, mecter.hew, exchange = 0.02)  # poor fit
@@ -159,7 +159,7 @@ anova(mecter.voe, mecter.free)  # accepted
 #> 
 #>           ModelDf      RSS Df F value p value
 #> 1st model      95 0.065481                   
-#> 2nd model      94 0.063801  1  2.4755  0.1190
+#> 2nd model      94 0.063801  1   2.476   0.119
 
 ## Plotting isobole based on the Voelund model
 isobole(mecter.free, mecter.voe, exchange = 0.02)  # good fit

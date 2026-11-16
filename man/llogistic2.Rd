@@ -42,6 +42,43 @@ log scale. The mean function is:
 \deqn{f(x) = c + \frac{d - c}{(1 + \exp(b(\log(x) - e)))^f}}{f(x) = c + (d-c)/(1+exp(b(log(x)-e)))^f}
 where \code{e} is the logarithm of the ED50 (not exponentiated).
 }
+\details{
+Apart from the parameterisation of \code{e} the model is identical to \code{\link{llogistic}}:
+\code{b} is the slope, \code{c} the lower asymptote, \code{d} the upper asymptote and \code{f}
+the asymmetry parameter.
+
+Because \code{e} is on the log scale, \code{\link{ED}} returns \strong{log(ED)} for these models.
+Use \code{ED(object, respLev, interval = "fls")} to obtain the ED values (and confidence limits)
+on the original dose scale; \code{interval = "fls"} is only valid for models of this kind. Model
+averaging with \code{\link{maED}} is not available for these models (use the dose-scale
+equivalents \code{\link{LL.2}}, ..., \code{\link{LL.5}} instead).
+}
+\examples{
+## Four-parameter model with log(ED50) as parameter: fit with drm() and plot
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = llogistic2(fixed = c(NA, NA, NA, NA, 1)))
+plot(m1, type = "all", main = "Log-logistic model with log(ED50) as parameter")
+
+## ED values on the dose scale (interval = "fls" back-transforms from the log scale)
+ED(m1, c(10, 50, 90), interval = "fls")
+
+## Effect of the lower asymptote c and the upper asymptote d
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, 0, NA, NA)))
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, 3, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, NA, 6, NA)))
+m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = LL2.4(fixed = c(NA, NA, 9, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d9, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+}
 \seealso{
 \code{\link{llogistic}}, \code{\link{LL2.2}}, \code{\link{LL2.3}},
 \code{\link{LL2.4}}, \code{\link{LL2.5}}

@@ -6,6 +6,14 @@
 #' The five-parameter log-logistic function is given by the expression
 #' \deqn{f(x) = c + \frac{d-c}{(1+\exp(b(\log(x)-\log(e))))^f}}
 #'
+#' @details
+#' The parameters are: \code{b}, the slope around \code{e} (positive for decreasing curves, negative
+#' for increasing curves); \code{c}, the lower asymptote; \code{d}, the upper asymptote (the response
+#' of the untreated control for a decreasing curve); \code{e}, the ED50, i.e. the dose half-way between
+#' \code{c} and \code{d} when \code{f = 1}; and \code{f}, the asymmetry parameter (\code{f = 1} gives the
+#' symmetric model). Fixing parameters via \code{fixed} yields the convenience models
+#' \code{\link{LL.2}}, \code{\link{LL.3}}, \code{\link{LL.3u}}, \code{\link{LL.4}} and \code{\link{LL.5}}.
+#'
 #' @param fixed numeric vector of length 5, specifying fixed parameters
 #'   (use NA for non-fixed parameters).
 #' @param names character vector of length 5, specifying the names of the
@@ -27,6 +35,29 @@
 #'
 #' @seealso \code{\link{LL.2}}, \code{\link{LL.3}}, \code{\link{LL.4}},
 #'   \code{\link{LL.5}}
+#'
+#' @examples
+#' ## Four-parameter log-logistic model (f fixed at 1): fit with drm() and plot
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = llogistic(fixed = c(NA, NA, NA, NA, 1)))
+#' plot(m1, type = "all", main = "Four-parameter log-logistic model")
+#'
+#' ## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, 0, NA, NA)))
+#' m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, 3, NA, NA)))
+#' plot(m1, type = "all", main = "Lower asymptote c")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.c3, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
+#'
+#' ## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, NA, 6, NA)))
+#' m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, NA, 9, NA)))
+#' plot(m1, type = "all", main = "Upper asymptote d")
+#' plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d9, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "llogistic" <- function(
@@ -245,8 +276,10 @@ fctName, fctText)
 #'   \code{\link{llogistic}}
 #'
 #' @examples
-#' earthworms.m1 <- drm(number/total~dose, weights=total,
+#' ## Binomial (quantal) response: fit with drm() and plot
+#' earthworms.m1 <- drm(number/total ~ dose, weights = total,
 #'   data = earthworms, fct = LL.2(), type = "binomial")
+#' plot(earthworms.m1, main = "LL.2 (upper limit fixed at 1)")
 #'
 #' @keywords models nonlinear
 "LL.2" <-
@@ -288,7 +321,9 @@ l2 <- LL.2
 #'   \code{\link{llogistic}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' ryegrass.model1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.3())
+#' plot(ryegrass.model1, type = "all", main = "LL.3 (lower limit fixed at 0)")
 #'
 #' @keywords models nonlinear
 "LL.3" <-
@@ -331,6 +366,12 @@ l3 <- LL.3
 #' @seealso \code{\link{LL.2}}, \code{\link{LL.3}}, \code{\link{LL.4}},
 #'   \code{\link{llogistic}}
 #'
+#' @examples
+#' ## Response relative to the control mean, upper limit fixed at 1
+#' ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+#' ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = LL.3u(upper = 1))
+#' plot(ryegrass.m1, type = "all", main = "LL.3u (upper limit fixed at 1)")
+#'
 #' @keywords models nonlinear
 "LL.3u" <-
 function(upper = 1, fixed = c(NA, NA, NA), names = c("b", "c", "e"), ...)
@@ -370,7 +411,19 @@ l3u <- LL.3u
 #' @seealso \code{\link{LL.3}}, \code{\link{LL.5}}, \code{\link{llogistic}}
 #'
 #' @examples
+#' ## Several curves fitted with drm() and plotted
 #' spinach.m1 <- drm(SLOPE~DOSE, CURVE, data = spinach, fct = LL.4())
+#' plot(spinach.m1, main = "LL.4, one curve per CURVE level")
+#'
+#' ## Effect of the asymptotes on a single curve (ryegrass): fix c at 0 / d at 6
+#' m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4())
+#' m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, 0, NA, NA)))
+#' m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LL.4(fixed = c(NA, NA, 6, NA)))
+#' plot(m1, type = "all", main = "LL.4: free and fixed asymptotes")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d6, type = "none", add = TRUE, col = "red")
+#' legend("topright", c("free", "c = 0", "d = 6"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "LL.4" <-
@@ -409,7 +462,13 @@ l4 <- LL.4
 #' @seealso \code{\link{LL.3}}, \code{\link{LL.4}}, \code{\link{llogistic}}
 #'
 #' @examples
+#' ## Fit with drm() and plot; f allows for an asymmetric curve
 #' ryegrass.m1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.5())
+#' plot(ryegrass.m1, type = "all", main = "LL.5")
+#'
+#' ## Effect of the lower asymptote c
+#' ryegrass.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LL.5(fixed = c(NA, 3, NA, NA, NA)))
+#' plot(ryegrass.c3, type = "none", add = TRUE, col = "red")
 #'
 #' @keywords models nonlinear
 "LL.5" <-
@@ -445,7 +504,9 @@ l5 <- LL.5
 #' @seealso \code{\link{MM.3}}, \code{\link{AR.2}}, \code{\link{AR.3}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' met.mm.m1 <- drm(gain~dose, product, data = methionine, fct = MM.2())
+#' plot(met.mm.m1, main = "MM.2 (Michaelis-Menten)")
 #'
 #' @keywords models nonlinear
 "MM.2" <-
@@ -483,7 +544,9 @@ function(fixed = c(NA, NA), names = c("d", "e"), ...)
 #' @seealso \code{\link{MM.2}}, \code{\link{AR.2}}, \code{\link{AR.3}}
 #'
 #' @examples
+#' ## Fit with drm() and plot
 #' met.mm.m1 <- drm(gain~dose, product, data = methionine, fct = MM.3())
+#' plot(met.mm.m1, main = "MM.3 (shifted Michaelis-Menten)")
 #'
 #' @keywords models nonlinear
 "MM.3" <-

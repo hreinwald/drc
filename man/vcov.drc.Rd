@@ -38,7 +38,7 @@ vcov(ryegrass.m1, corr = TRUE)
 
 }
 \author{
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 }
 \keyword{models}
 \keyword{nonlinear}

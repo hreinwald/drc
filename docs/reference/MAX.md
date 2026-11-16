@@ -100,18 +100,18 @@ lettuce.m1 <- drm(weight ~ conc, data = lettuce, fct = CRS.4c())
 
 ## Finding the maximum mean response and the corresponding dose
 MAX(lettuce.m1)
-#>     Dose Response
-#> 1 0.2546   1.1787
+#>      Dose Response
+#> 1 0.25375   1.1792
 
 ## Custom search interval
 MAX(lettuce.m1, lower = 1e-5, upper = 500)
 #>      Dose Response
-#> 1 0.25461   1.1787
+#> 1 0.25377   1.1792
 
 ## Capture the result matrix
 result <- MAX(lettuce.m1)
-#>     Dose Response
-#> 1 0.2546   1.1787
+#>      Dose Response
+#> 1 0.25375   1.1792
 result["Dose"]
 #> [1] NA
 ```

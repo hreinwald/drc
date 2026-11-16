@@ -53,7 +53,11 @@ CRS.5(
 
 ## Value
 
-A `drc` model object of class `cedergreen`. If the underlying
+A model list of class `mllogistic` as returned by
+[`cedergreen`](https://hreinwald.github.io/drc/reference/cedergreen.md),
+for use as the `fct` argument of
+[`drm`](https://hreinwald.github.io/drc/reference/drm.md). If the
+underlying
 [`drc::cedergreen`](https://hreinwald.github.io/drc/reference/cedergreen.md)
 call fails, it issues a warning and returns `NULL`.
 
@@ -85,11 +89,15 @@ Hannes Reinwald
 ## Examples
 
 ``` r
-# Create a CRS.5 model specification
-crs_model_a <- CRS.5()
+## Fit with drm() and plot (alpha = 1, i.e. alpha_type = "a")
+lettuce.crs5 <- drm(weight ~ conc, data = lettuce, fct = CRS.5(alpha_type = "a"))
+plot(lettuce.crs5, type = "all", main = "CRS.5, alpha = 1")
 
-# Fix the lower limit to 0 and use a custom numeric alpha
+## Fix the lower limit to 0 and use a custom numeric alpha
 crs_model_custom <- CRS.5(
   fixed = c(NA, 0, NA, NA, NA), alpha_type = 0.75
 )
+lettuce.custom <- drm(weight ~ conc, data = lettuce, fct = crs_model_custom)
+plot(lettuce.custom, type = "none", add = TRUE, col = "red")
+
 ```

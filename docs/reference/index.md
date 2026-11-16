@@ -16,6 +16,8 @@ Main functions for dose-response analysis
   Dose-response model selection
 - [`drmc()`](https://hreinwald.github.io/drc/reference/drmc.md) : Sets
   control arguments
+- [`mrdrm()`](https://hreinwald.github.io/drc/reference/mrdrm.md) :
+  Model-robust dose-response modelling
 
 ## Model Functions
 
@@ -96,25 +98,25 @@ Available dose-response model families
 - [`BC.5()`](https://hreinwald.github.io/drc/reference/BC.5.md) :
   Five-parameter Brain-Cousens hormesis model
 - [`CRS.4a()`](https://hreinwald.github.io/drc/reference/CRS.4a.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
   Fixed at 0 and Alpha = 1 (Deprecated)
 - [`CRS.4b()`](https://hreinwald.github.io/drc/reference/CRS.4b.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
   Fixed at 0 and Alpha = 0.5 (Deprecated)
 - [`CRS.4c()`](https://hreinwald.github.io/drc/reference/CRS.4c.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Model with Lower Limit
   Fixed at 0 and Alpha = 0.25 (Deprecated)
 - [`CRS.5()`](https://hreinwald.github.io/drc/reference/CRS.5.md) :
   Wrapper for 5-parameter Cedergreen-Ritz-Streibig Model
 - [`CRS.5a()`](https://hreinwald.github.io/drc/reference/CRS.5a.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
-  with Alpha = 1 (Deprecated)
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Five-Parameter Model with
+  Alpha = 1 (Deprecated)
 - [`CRS.5b()`](https://hreinwald.github.io/drc/reference/CRS.5b.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
-  with Alpha = 0.5 (Deprecated)
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Five-Parameter Model with
+  Alpha = 0.5 (Deprecated)
 - [`CRS.5c()`](https://hreinwald.github.io/drc/reference/CRS.5c.md)
-  **\[deprecated\]** : Cedergreen-Ritz-Streibig Five-Parameter Model
-  with Alpha = 0.25 (Deprecated)
+  **\[veraltet\]** : Cedergreen-Ritz-Streibig Five-Parameter Model with
+  Alpha = 0.25 (Deprecated)
 - [`CRS.6()`](https://hreinwald.github.io/drc/reference/CRS.6.md) :
   Generalised Cedergreen-Ritz-Streibig Model for Hormesis
 - [`UCRS.4a()`](https://hreinwald.github.io/drc/reference/UCRS.4a.md) :
@@ -156,17 +158,17 @@ Available dose-response model families
 - [`FPL.4()`](https://hreinwald.github.io/drc/reference/FPL.4.md) :
   Four-parameter fractional polynomial-logistic model
 - [`ml3a()`](https://hreinwald.github.io/drc/reference/ml3a.md)
-  **\[deprecated\]** : Alias for CRS.4a (Deprecated)
+  **\[veraltet\]** : Alias for CRS.4a (Deprecated)
 - [`ml3b()`](https://hreinwald.github.io/drc/reference/ml3b.md)
-  **\[deprecated\]** : Alias for CRS.4b (Deprecated)
+  **\[veraltet\]** : Alias for CRS.4b (Deprecated)
 - [`ml3c()`](https://hreinwald.github.io/drc/reference/ml3c.md)
-  **\[deprecated\]** : Alias for CRS.4c (Deprecated)
+  **\[veraltet\]** : Alias for CRS.4c (Deprecated)
 - [`ml4a()`](https://hreinwald.github.io/drc/reference/ml4a.md)
-  **\[deprecated\]** : Alias for CRS.5a (Deprecated)
+  **\[veraltet\]** : Alias for CRS.5a (Deprecated)
 - [`ml4b()`](https://hreinwald.github.io/drc/reference/ml4b.md)
-  **\[deprecated\]** : Alias for CRS.5b (Deprecated)
+  **\[veraltet\]** : Alias for CRS.5b (Deprecated)
 - [`ml4c()`](https://hreinwald.github.io/drc/reference/ml4c.md)
-  **\[deprecated\]** : Alias for CRS.5c (Deprecated)
+  **\[veraltet\]** : Alias for CRS.5c (Deprecated)
 - [`uml3a()`](https://hreinwald.github.io/drc/reference/uml3a.md) :
   Alias for UCRS.4a
 - [`uml3b()`](https://hreinwald.github.io/drc/reference/uml3b.md) :

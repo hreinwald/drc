@@ -21,6 +21,13 @@ A list (see \code{\link{gompertz}}).
 \description{
 Convenience function for the Gompertz model with the upper limit fixed.
 }
+\examples{
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = G.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "G.3u (upper limit fixed at 1)")
+
+}
 \seealso{
 \code{\link{gompertz}}, \code{\link{G.2}}, \code{\link{G.3}}, \code{\link{G.4}}
 }

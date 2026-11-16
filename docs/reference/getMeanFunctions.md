@@ -38,7 +38,7 @@ descriptions.
 
 ## Author
 
-Christian Ritz
+Christian Ritz, Hannes Reinwald
 
 ## Examples
 
@@ -73,6 +73,10 @@ getMeanFunctions()
 #> (3 parameters) 
 #> In 'drc':  W1.3 
 #> 
+#> Weibull (type 1) with upper limit at 1 
+#> (3 parameters) 
+#> In 'drc':  W1.3u 
+#> 
 #> Weibull (type 1) 
 #> (4 parameters) 
 #> In 'drc':  W1.4 
@@ -84,6 +88,10 @@ getMeanFunctions()
 #> Weibull (type 2) with lower limit at 0 
 #> (3 parameters) 
 #> In 'drc':  W2.3 
+#> 
+#> Weibull (type 2) with upper limit at 1 
+#> (3 parameters) 
+#> In 'drc':  W2.3u 
 #> 
 #> Weibull (type 2) 
 #> (4 parameters) 
@@ -125,6 +133,58 @@ getMeanFunctions()
 #> (3 parameters) 
 #> In 'drc':  AR.3 
 #> 
+#> Exponential decay with lower limit at 0 
+#> (2 parameters) 
+#> In 'drc':  EXD.2 
+#> 
+#> Shifted exponential decay 
+#> (3 parameters) 
+#> In 'drc':  EXD.3 
+#> 
+#> Gompertz with lower limit at 0 and upper limit at 1 
+#> (2 parameters) 
+#> In 'drc':  G.2 
+#> 
+#> Gompertz with lower limit at 0 
+#> (3 parameters) 
+#> In 'drc':  G.3 
+#> 
+#> Gompertz with upper limit at 1 
+#> (3 parameters) 
+#> In 'drc':  G.3u 
+#> 
+#> Gompertz 
+#> (4 parameters) 
+#> In 'drc':  G.4 
+#> 
+#> Log-normal with lower limit at 0 and upper limit at 1 
+#> (2 parameters) 
+#> In 'drc':  LN.2 
+#> 
+#> Log-normal with lower limit at 0 
+#> (3 parameters) 
+#> In 'drc':  LN.3 
+#> 
+#> Log-normal with upper limit at 1 
+#> (3 parameters) 
+#> In 'drc':  LN.3u 
+#> 
+#> Log-normal 
+#> (4 parameters) 
+#> In 'drc':  LN.4 
+#> 
+#> Logistic (ED50 as parameter) with lower limit fixed at 0 
+#> (3 parameters) 
+#> In 'drc':  L.3 
+#> 
+#> Logistic (ED50 as parameter) 
+#> (4 parameters) 
+#> In 'drc':  L.4 
+#> 
+#> Generalised logistic (ED50 as parameter) 
+#> (5 parameters) 
+#> In 'drc':  L.5 
+#> 
 #> Michaelis-Menten 
 #> (2 parameters) 
 #> In 'drc':  MM.2 
@@ -132,6 +192,90 @@ getMeanFunctions()
 #> Shifted Michaelis-Menten 
 #> (3 parameters) 
 #> In 'drc':  MM.3 
+#> 
+#> Cedergreen-Ritz-Streibig with lower limit 0 (alpha=1) 
+#> (4 parameters) 
+#> In 'drc':  CRS.4a 
+#> 
+#> Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.5) 
+#> (4 parameters) 
+#> In 'drc':  CRS.4b 
+#> 
+#> Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.25) 
+#> (4 parameters) 
+#> In 'drc':  CRS.4c 
+#> 
+#> Cedergreen-Ritz-Streibig (alpha=1) 
+#> (5 parameters) 
+#> In 'drc':  CRS.5a 
+#> 
+#> Cedergreen-Ritz-Streibig (alpha=0.5) 
+#> (5 parameters) 
+#> In 'drc':  CRS.5b 
+#> 
+#> Cedergreen-Ritz-Streibig (alpha=0.25) 
+#> (5 parameters) 
+#> In 'drc':  CRS.5c 
+#> 
+#> Generalised Cedergreen-Ritz-Streibig (hormesis) 
+#> (6 parameters) 
+#> In 'drc':  CRS.6 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (4 parameters) 
+#> In 'drc':  UCRS.4a 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (4 parameters) 
+#> In 'drc':  UCRS.4b 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (4 parameters) 
+#> In 'drc':  UCRS.4c 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (5 parameters) 
+#> In 'drc':  UCRS.5a 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (5 parameters) 
+#> In 'drc':  UCRS.5b 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (5 parameters) 
+#> In 'drc':  UCRS.5c 
+#> 
+#> NEC with lower limit at 0 and upper limit at 1 
+#> (2 parameters) 
+#> In 'drc':  NEC.2 
+#> 
+#> NEC with lower limit at 0 
+#> (3 parameters) 
+#> In 'drc':  NEC.3 
+#> 
+#> NEC 
+#> (4 parameters) 
+#> In 'drc':  NEC.4 
+#> 
+#> Fractional polynomial 
+#> (4 parameters) 
+#> In 'drc':  FPL.4(-1,1) 
+#> 
+#> Weibull (type 2) with lower limit at 0 
+#> (3 parameters) 
+#> In 'drc':  W2x.3 
+#> 
+#> Weibull (type 2) 
+#> (4 parameters) 
+#> In 'drc':  W2x.4 
+#> 
+#> Baroreflex 
+#> (5 parameters) 
+#> In 'drc':  baro5 
+#> 
+#> Gamma 
+#> (4 parameters) 
+#> In 'drc':  gammadr 
 #> 
 
 ## Listing all functions with 4 parameters
@@ -155,6 +299,58 @@ getMeanFunctions(4)
 #> Log-logistic (log(ED50) as parameter) 
 #> (4 parameters) 
 #> In 'drc':  LL2.4 
+#> 
+#> Gompertz 
+#> (4 parameters) 
+#> In 'drc':  G.4 
+#> 
+#> Log-normal 
+#> (4 parameters) 
+#> In 'drc':  LN.4 
+#> 
+#> Logistic (ED50 as parameter) 
+#> (4 parameters) 
+#> In 'drc':  L.4 
+#> 
+#> Cedergreen-Ritz-Streibig with lower limit 0 (alpha=1) 
+#> (4 parameters) 
+#> In 'drc':  CRS.4a 
+#> 
+#> Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.5) 
+#> (4 parameters) 
+#> In 'drc':  CRS.4b 
+#> 
+#> Cedergreen-Ritz-Streibig with lower limit 0 (alpha=0.25) 
+#> (4 parameters) 
+#> In 'drc':  CRS.4c 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (4 parameters) 
+#> In 'drc':  UCRS.4a 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (4 parameters) 
+#> In 'drc':  UCRS.4b 
+#> 
+#> U-shaped Cedergreen-Ritz-Streibig 
+#> (4 parameters) 
+#> In 'drc':  UCRS.4c 
+#> 
+#> NEC 
+#> (4 parameters) 
+#> In 'drc':  NEC.4 
+#> 
+#> Fractional polynomial 
+#> (4 parameters) 
+#> In 'drc':  FPL.4(-1,1) 
+#> 
+#> Weibull (type 2) 
+#> (4 parameters) 
+#> In 'drc':  W2x.4 
+#> 
+#> Gamma 
+#> (4 parameters) 
+#> In 'drc':  gammadr 
 #> 
 
 ## Listing all (log-)logistic functions

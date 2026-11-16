@@ -9,7 +9,7 @@ arandaordaz(fixed = c(NA, NA, NA), names = c("a", "b", "c"), fctName, fctText)
 \arguments{
 \item{fixed}{numeric vector. Specifies which parameters are fixed and at what
 value they are fixed. Use \code{NA} for parameters that are not fixed.
-Must be of length 3.}
+Must be of length 3 (order: lower limit \code{a}, upper limit \code{b}, rate \code{c}).}
 
 \item{names}{character vector of length 3 giving the names of the parameters
 (should not contain ":").}
@@ -47,10 +47,30 @@ function and self starter for a three-parameter model.
 \details{
 The asymptotic regression model is a three-parameter model with mean function:
 
-\deqn{f(x) = c + (d-c)(1-\exp(-x/e))}
+\deqn{f(x) = a + (b-a)(1-\exp(-c x))}
 
-The parameter \eqn{c} is the lower limit (at \eqn{x=0}), \eqn{d} is the upper limit,
-and \eqn{e>0} determines the steepness of the increase.
+The parameter \eqn{a} is the lower limit (the response at \eqn{x=0}), \eqn{b} is the upper limit
+(asymptote) and \eqn{c>0} is the rate of the increase. The default \code{names} are
+\code{c("a", "b", "c")}. The equivalent models \code{\link{AR.3}} and \code{\link{AR.2}}
+(parameterised by the scale \eqn{e = 1/c}) are usually preferred.
+}
+\examples{
+## Simulated increasing data: fit with drm() and plot
+dose <- rep(c(0.5, 1, 2, 4, 8, 16, 32), each = 3)
+mu <- arandaordaz()$fct(dose, matrix(c(1, 8, 0.15), length(dose), 3, byrow = TRUE))
+dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+m1 <- drm(response ~ dose, data = dat, fct = arandaordaz())
+plot(m1, type = "all", main = "Asymptotic regression")
+
+## Effect of the lower limit a (fixed at 0) and the upper asymptote b (fixed at 6)
+m.a0 <- drm(response ~ dose, data = dat, fct = arandaordaz(fixed = c(0, NA, NA)))
+m.b6 <- drm(response ~ dose, data = dat, fct = arandaordaz(fixed = c(NA, 6, NA)))
+plot(m1, type = "all", main = "Fixed lower limit and asymptote")
+plot(m.a0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.b6, type = "none", add = TRUE, col = "red")
+legend("bottomright", c("free", "a = 0", "b = 6"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
 }
 \seealso{
 \code{\link{AR.2}}, \code{\link{AR.3}}, \code{\link{EXD.2}},

@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Comparative Analysis: hreinwald/drc vs DoseResponse/drc">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">drc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,16 +90,14 @@ bioassay, toxicology, pharmacology, and ecotoxicology. The version
 maintained at <code>DoseResponse/drc</code> (v3.2-0, last updated
 January 2021) harbors multiple correctness bugs of varying severity that
 silently corrupt downstream results. The fork at
-<code>hreinwald/drc</code> (<code>dev</code> branch, v3.3.2) addresses
-these systematically. The most critical bug discovered is a missing
-lower-asymptote term (<code>c</code> parameter) in the U-shaped
-Cedergreen-Ritz-Streibig hormesis models (<code>UCRS.*</code>),
-rendering every result computed with those functions incorrect.
-Secondary bugs include incorrect gradient vectors for absolute-type
-effective dose (ED) standard errors across at least seven model
-families, a wrong derivative in <code><a href="../reference/gammadr.html">gammadr()</a></code>, and a
-function-level edfct signature mismatch in the logistic model
-family.</p>
+<code>hreinwald/drc</code> (<code>dev</code> branch, v3.4.0) addresses
+these systematically. The most critical bugs discovered are incorrect
+gradient vectors for absolute-type effective dose (ED) standard errors
+across at least seven model families, a wrong derivative in
+<code><a href="../reference/gammadr.html">gammadr()</a></code>, a function-level edfct signature mismatch in the
+logistic model family, and an <code><a href="../reference/ED.html">ED()</a></code>/<code>edfct</code> that
+did not work for the U-shaped hormesis models (<code>UCRS.*</code>; see
+§1.1).</p>
 <p>Beyond bug correction, <code>hreinwald/drc</code> delivers a
 substantially refactored codebase: dead code removed from 70+ source
 files, file naming standardized, a comprehensive test suite of 79
@@ -113,26 +111,39 @@ has only a deprecated Travis CI configuration, no
 mere maintenance release but a substantive correction to the scientific
 record. Users who computed ED confidence intervals using
 <code>type="absolute"</code> with Weibull, log-logistic, log-normal,
-logistic, Brain-Cousens, or fplogistic models—or who fitted any UCRS
-hormesis model—may have published incorrect standard errors or incorrect
-fitted values.</p>
+logistic, Brain-Cousens, or fplogistic models—or who used
+<code><a href="../reference/ED.html">ED()</a></code> or <code><a href="../reference/MAX.html">MAX()</a></code> on UCRS hormesis models—may have
+published incorrect standard errors or incorrect values.</p>
 <hr>
 </div>
 <div class="section level2">
 <h2 id="critical-bugs-identified">1. Critical Bugs Identified<a class="anchor" aria-label="anchor" href="#critical-bugs-identified"></a>
 </h2>
 <div class="section level3">
-<h3 id="missing-lower-asymptote-c-in-u-shaped-crs-model-severity-critical">1.1 Missing Lower Asymptote (<code>c</code>) in U-shaped CRS Model —
-SEVERITY: <strong>CRITICAL</strong><a class="anchor" aria-label="anchor" href="#missing-lower-asymptote-c-in-u-shaped-crs-model-severity-critical"></a>
+<h3 id="u-shaped-crs-model-ucrs--edfct-deriv1-and-ed-severity-high">1.1 U-shaped CRS Model (<code>UCRS.*</code>): <code>edfct</code>,
+<code>deriv1</code> and <code>ED()</code> — SEVERITY:
+<strong>HIGH</strong><a class="anchor" aria-label="anchor" href="#u-shaped-crs-model-ucrs--edfct-deriv1-and-ed-severity-high"></a>
 </h3>
 <p><strong>Affected model/function:</strong> <code><a href="../reference/ucedergreen.html">ucedergreen()</a></code>
 and all convenience wrappers <code>UCRS.4a</code>, <code>UCRS.4b</code>,
 <code>UCRS.4c</code>, <code>UCRS.5a</code>, <code>UCRS.5b</code>,
 <code>UCRS.5c</code></p>
 <p><strong>File:</strong> <code>R/ucedergreen.R</code></p>
-<p><strong>Original (incorrect) code</strong>
-(<code>DoseResponse/drc</code>, <code>R/ucedergreen.R</code>, line
-~32):</p>
+<p><strong>Note on the model function.</strong> The model function of
+the original code, <code>fct = d - numTerm/denTerm</code>, is the exact
+mirror image (reflection about the mid-level) of the decreasing CRS
+model of Cedergreen, Ritz &amp; Streibig (2005):
+<code>c + d - CRS(x) = d - numTerm/denTerm</code>. It gives
+<code>f(0) = c</code> and <code>f(Inf) = d</code>, so <code>c</code> and
+<code>d</code> are the asymptotes. An earlier version of this fork
+(3.4.0 and before) added an extra <code>+ c</code> term, based on a
+misreading of the documented formula; this made <code>f(0) = 2c</code>
+and <code>f(Inf) = c + d</code> (the fitted curves were identical but
+<code>c</code> and <code>d</code> were no longer interpretable as
+asymptotes) and has been <strong>reverted</strong>. For
+<code>c = 0</code> (all <code>UCRS.4x</code> models) both forms
+coincide. The 2005 paper itself only defines the decreasing model; the
+U-shaped model is an extension.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fct</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dose</span>, <span class="va">parm</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
@@ -141,42 +152,31 @@ and all convenience wrappers <code>UCRS.4a</code>, <code>UCRS.4b</code>,
 <span></span>
 <span>    <span class="va">numTerm</span> <span class="op">&lt;-</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">5</span><span class="op">]</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="va">dose</span><span class="op">^</span><span class="va">alpha</span><span class="op">)</span></span>
 <span>    <span class="va">denTerm</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">parmMat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">dose</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">parmMat</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">numTerm</span><span class="op">/</span><span class="va">denTerm</span>   <span class="co"># WRONG: missing parmMat[, 2] (c parameter)</span></span>
+<span>    <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">numTerm</span><span class="op">/</span><span class="va">denTerm</span>   <span class="co"># = c + d - CRS(x)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><strong>Fixed code</strong> (<code>hreinwald/drc</code>,
-<code>R/ucedergreen.R</code>, line ~56):</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fct</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dose</span>, <span class="va">parm</span><span class="op">)</span></span>
-<span><span class="op">{</span></span>
-<span>    <span class="va">parmMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="va">parmVec</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">parm</span><span class="op">)</span>, <span class="va">numParm</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>    <span class="va">parmMat</span><span class="op">[</span>, <span class="va">notFixed</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">parm</span></span>
-<span></span>
-<span>    <span class="va">numTerm</span> <span class="op">&lt;-</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">5</span><span class="op">]</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="va">dose</span><span class="op">^</span><span class="va">alpha</span><span class="op">)</span></span>
-<span>    <span class="va">denTerm</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">parmMat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">dose</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">parmMat</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">numTerm</span><span class="op">/</span><span class="va">denTerm</span>   <span class="co"># CORRECT: c + d - numTerm/denTerm</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p><strong>Scientific impact:</strong> The published model formula
-(Cedergreen, Ritz &amp; Streibig, 2005, <em>Environ. Toxicol. Chem.</em>
-24:3166) is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>c</mi><mo>+</mo><mi>d</mi><mo>−</mo><mfrac><mrow><mi>d</mi><mo>−</mo><mi>c</mi><mo>+</mo><mi>f</mi><mspace width="0.167em"></mspace><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msup><mi>x</mi><mi>α</mi></msup></mrow></msup></mrow><mrow><mn>1</mn><mo>+</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mi>x</mi><mo>−</mo><mo>log</mo><mi>e</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">f(x) = c + d - \frac{d - c + f\,e^{-1/x^\alpha}}{1 + \exp(b(\log x - \log e))}</annotation></semantics></math></p>
-<p>The original implementation returns <code>d - numTerm/denTerm</code>,
-i.e., the fitted response is shifted upward by <code>c</code> (the lower
-horizontal asymptote) for all dose values. When <code>c = 0</code> (the
-most common case for UCRS.4x models), the result is numerically
-coincidentally correct; however, when <code>c</code> is estimated
-(UCRS.5x) or is supplied as a non-zero fixed value, every fitted value
-is wrong by exactly <code>c</code>. Any paper that used
-<code>UCRS.5a</code>, <code>UCRS.5b</code>, or <code>UCRS.5c</code> with
-estimated <code>c ≠ 0</code> and reported dose-response parameters, EC
-values, or hormesis estimates has incorrect results that propagate to
-all downstream comparisons.</p>
-<p>Additionally, the <code>deriv1</code> (gradient with respect to the
-<code>c</code> parameter) in the original code is <code>1/t3</code>
-(positive), whereas the corrected formula’s partial derivative is
-<code>1 + 1/t3</code>. This means even if fitted values were not
-perceptibly shifted (because <code>c ≈ 0</code>), standard errors for
-the c-parameter estimate were systematically wrong.</p>
-<hr>
+<p><strong>Defects actually fixed in this fork:</strong></p>
+<ul>
+<li>
+<code>edfct</code> had the signature <code>(parm, p, ...)</code>
+without <code>reference</code>/<code>type</code>; it now follows the
+framework signature and uses a dedicated root finder on the increasing
+branch beyond the dip (relative levels: percent of the way from
+<code>c</code> to <code>d</code>; absolute levels: the response itself).
+The standard errors use the implicit function theorem. In the original
+and in 3.4.0, absolute-level <code><a href="../reference/ED.html">ED()</a></code> returned a dose whose
+fitted response was not the requested level.</li>
+<li>
+<code>deriv1</code> was omitted from the returned model list and
+referenced the undefined <code>xlogx</code>; it is now returned and
+verified against finite differences.</li>
+<li>
+<code>method</code> was never validated (<code>match.arg</code>),
+<code>|</code> instead of <code>||</code> was used in scalar guards, and
+the self-starter ignored <code>alpha</code>/<code>method</code>.</li>
+<li>
+<code>maxfct</code> (used by <code><a href="../reference/MAX.html">MAX()</a></code>) returns the dip of
+the U-shaped curve, i.e. <code>(c + d)</code> minus the CRS peak.</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="wrong-multiplier-in-gammadr-gradient-severity-high">1.2 Wrong Multiplier in <code>gammadr()</code> Gradient — SEVERITY:
@@ -189,7 +189,7 @@ Gamma dose-response model</p>
 <p><strong>Original (incorrect) code</strong>
 (<code>DoseResponse/drc</code>, <code>R/gammadr.r</code>, inside
 <code>deriv1</code>):</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
 <span>    <span class="va">t1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">dgamma</a></span><span class="op">(</span><span class="va">parmMat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">dose</span>, <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,  <span class="co"># WRONG: uses b not dose</span></span>
 <span>    <span class="fl">1</span> <span class="op">-</span> <span class="va">t2</span>,</span>
@@ -198,7 +198,7 @@ Gamma dose-response model</p>
 <span><span class="op">)</span><span class="op">[</span>, <span class="va">notFixed</span><span class="op">]</span></span></code></pre></div>
 <p><strong>Fixed code</strong> (<code>hreinwald/drc</code>,
 <code>R/gammadr.R</code>, inside <code>deriv1</code>):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
 <span>    <span class="va">t1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">dgamma</a></span><span class="op">(</span><span class="va">parmMat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">dose</span>, <span class="va">parmMat</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="va">dose</span>,  <span class="co"># CORRECT: uses dose</span></span>
 <span>    <span class="fl">1</span> <span class="op">-</span> <span class="va">t2</span>,</span>
@@ -231,7 +231,7 @@ repositories</p>
 <code><a href="../reference/weibull1.html">weibull1()</a></code>)</strong>:</p>
 <p>Original code (<code>DoseResponse/drc</code>,
 <code>R/weibull1.r</code>, <code>edfct</code>):</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">edfct</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">parm</span>, <span class="va">respl</span>, <span class="va">reference</span>, <span class="va">type</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>    <span class="va">parmVec</span><span class="op">[</span><span class="va">notFixed</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">parm</span></span>
@@ -246,7 +246,7 @@ repositories</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Fixed code (<code>hreinwald/drc</code>, <code>R/weibull1.R</code>,
 <code>edfct</code>):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">edfct</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">parm</span>, <span class="va">respl</span>, <span class="va">reference</span>, <span class="va">type</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>    <span class="va">parmVec</span><span class="op">[</span><span class="va">notFixed</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">parm</span></span>
@@ -294,7 +294,7 @@ all convenience wrappers <code>L.3</code>, <code>L.4</code>,
 <p><strong>Original (incorrect) code</strong>
 (<code>DoseResponse/drc</code>, <code>R/logistic.r</code>,
 <code>edfct</code>):</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">edfct</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">parm</span>, <span class="va">p</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>    <span class="va">parmVec</span><span class="op">[</span><span class="va">notFixed</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">parm</span></span>
@@ -304,7 +304,7 @@ all convenience wrappers <code>L.3</code>, <code>L.4</code>,
 <span><span class="op">}</span></span></code></pre></div>
 <p><strong>Fixed code</strong> (<code>hreinwald/drc</code>,
 <code>R/logistic.R</code>, <code>edfct</code>):</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">edfct</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">parm</span>, <span class="va">respl</span>, <span class="va">reference</span> <span class="op">=</span> <span class="st">"control"</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">"relative"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>    <span class="va">parmVec</span><span class="op">[</span><span class="va">notFixed</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">parm</span></span>
@@ -335,8 +335,9 @@ ED90).</p>
 SEVERITY: <strong>CRITICAL/HIGH/MEDIUM</strong><a class="anchor" aria-label="anchor" href="#ucedergreen-additional-bugs-17-total-severity-criticalhighmedium"></a>
 </h3>
 <p>The <code><a href="../reference/ucedergreen.html">ucedergreen()</a></code> function in DoseResponse/drc contained
-17 separate bugs documented in the hreinwald NEWS.md for v3.3.0.02. A
-summary of the most impactful:</p>
+several separate bugs (an earlier count of 17 in this fork’s NEWS.md for
+v3.3.0.02 included a <code>+c</code> change that has since been
+reverted, see §1.1). A summary of the most impactful:</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -350,23 +351,11 @@ summary of the most impactful:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Missing <code>+c</code> in fct (see §1.1)</td>
-<td><code>fct()</code></td>
-<td>CRITICAL</td>
-</tr>
-<tr class="even">
 <td>
 <code>edfct</code> signature mismatch (<code>p</code> vs
-<code>respl</code>, missing
-<code>reference</code>/<code>type</code>)</td>
+<code>respl</code>, missing <code>reference</code>/<code>type</code>)
+and wrong absolute-level ED</td>
 <td><code>edfct()</code></td>
-<td>HIGH</td>
-</tr>
-<tr class="odd">
-<td>
-<code>deriv1</code>: wrong sign/formula for c-column
-(<code>1/t3</code> vs <code>1 + 1/t3</code>)</td>
-<td><code>deriv1()</code></td>
 <td>HIGH</td>
 </tr>
 <tr class="even">
@@ -473,12 +462,12 @@ multiple bugs have accumulated that undermine the scientific validity of
 results produced by the package. The justification for refactoring rests
 on five concrete lines of evidence:</p>
 <p><strong>1. Mathematical incorrectness in production models.</strong>
-The missing <code>c</code> parameter in <code><a href="../reference/ucedergreen.html">ucedergreen()</a></code>
-(§1.1), the wrong multiplier in <code><a href="../reference/gammadr.html">gammadr()</a></code> (§1.2), and the
-zero-gradient errors in seven model families (§1.3) constitute
-mathematical errors that silently corrupt numerical results. These are
-not software bugs in the traditional sense (crashes, type errors) — they
-pass silently and deliver plausible-looking but wrong numbers.</p>
+The wrong multiplier in <code><a href="../reference/gammadr.html">gammadr()</a></code> (§1.2), the zero-gradient
+errors in seven model families (§1.3) and the <code>UCRS</code>
+<code>edfct</code> problems (§1.1) constitute mathematical errors that
+silently corrupt numerical results. These are not software bugs in the
+traditional sense (crashes, type errors) — they pass silently and
+deliver plausible-looking but wrong numbers.</p>
 <p><strong>2. API mismatch with the framework’s own calling
 conventions.</strong> The <code>edfct</code> function is called by
 <code>ED.drc</code> with the signature
@@ -962,7 +951,7 @@ CIcompX, rss, and many more</td>
 <tr class="odd">
 <td>Current version</td>
 <td>3.2-0</td>
-<td>3.3.2</td>
+<td>3.4.0</td>
 </tr>
 <tr class="even">
 <td>Last substantive update</td>
@@ -1104,24 +1093,22 @@ a widely-used framework for parametric dose-response modeling in
 bioassay, toxicology, and ecotoxicology. Since its last CRAN release
 (v3.2-0, January 2021), the package has received no substantive
 maintenance despite continued use in the scientific literature. We
-present <code>drc</code> v3.3.2, a corrected and modernized version of
+present <code>drc</code> v3.4.0, a corrected and modernized version of
 the package, addressing a series of bugs ranging in severity from
 silently incorrect fitted values to systematically underestimated
-confidence intervals. The most critical error, discovered in the
-U-shaped Cedergreen-Ritz-Streibig hormesis model family
-(<code>UCRS.*</code>), omits the lower horizontal asymptote parameter
-from the model function, rendering every fitted value incorrect whenever
-the lower asymptote differs from zero. Additionally, the gradient
+confidence intervals. The most critical errors are in the gradient
 functions used in delta-method standard error calculations for
-absolute-type effective dose (ED) estimates were incorrect in seven
-model families (Weibull type 1 and 2, log-logistic, log-normal,
+absolute-type effective dose (ED) estimates, which were incorrect in
+seven model families (Weibull type 1 and 2, log-logistic, log-normal,
 logistic, Brain-Cousens, and fractional polynomial logistic),
 consistently setting chain-rule contributions to zero and producing
-confidence intervals that are potentially too narrow. A further gradient
-error in the Gamma model inverted the rate-parameter derivative. These
-bugs affect published results obtained using the original package.
-Beyond correctness, the refactored package introduces 79
-<code>testthat</code> unit tests (versus zero in the original),
+confidence intervals that are potentially too narrow. The U-shaped
+Cedergreen-Ritz-Streibig hormesis model family (<code>UCRS.*</code>) had
+an unusable effective-dose function and no analytic derivatives. A
+further gradient error in the Gamma model inverted the rate-parameter
+derivative. These bugs affect published results obtained using the
+original package. Beyond correctness, the refactored package introduces
+79 <code>testthat</code> unit tests (versus zero in the original),
 comprehensive Roxygen2 documentation with mathematical formulae and
 worked examples, a pkgdown documentation website, three GitHub Actions
 CI/CD workflows, and a <code>CITATION.cff</code> metadata file. The

@@ -51,5 +51,8 @@ Christian Ritz
 ## Examples
 
 ``` r
+## Fit with drm() and plot
 ryegrass.model1 <- drm(rootl ~ conc, data = ryegrass, fct = LL.3())
+plot(ryegrass.model1, type = "all", main = "LL.3 (lower limit fixed at 0)")
+
 ```

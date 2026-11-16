@@ -39,3 +39,13 @@ A list (see
 [`G.2`](https://hreinwald.github.io/drc/reference/G.2.md),
 [`G.3`](https://hreinwald.github.io/drc/reference/G.3.md),
 [`G.4`](https://hreinwald.github.io/drc/reference/G.4.md)
+
+## Examples
+
+``` r
+## Response relative to the control mean, upper limit fixed at 1
+ryegrass.rel <- transform(ryegrass, rel = rootl / mean(rootl[conc == 0]))
+ryegrass.m1 <- drm(rel ~ conc, data = ryegrass.rel, fct = G.3u(upper = 1))
+plot(ryegrass.m1, type = "all", main = "G.3u (upper limit fixed at 1)")
+
+```

@@ -120,8 +120,8 @@ test_that("ucedergreen fct function can be called", {
   expect_true(all(is.finite(response)))
 })
 
-test_that("ucedergreen fct implements correct u-shaped formula f(x)=c+d-numTerm/denTerm", {
-  # f(x) = c + d - (d - c + f*exp(-1/x^alpha)) / (1 + exp(b*(log(x) - log(e))))
+test_that("ucedergreen fct implements the mirrored CRS formula f(x)=d-numTerm/denTerm", {
+  # f(x) = d - (d - c + f*exp(-1/x^alpha)) / (1 + exp(b*(log(x) - log(e))))
   result <- ucedergreen(alpha = 1)
 
   dose <- 1
@@ -133,9 +133,25 @@ test_that("ucedergreen fct implements correct u-shaped formula f(x)=c+d-numTerm/
   # Manual calculation
   numTerm <- d - c_val + f_val * exp(-1/dose^1)
   denTerm <- 1 + exp(b * (log(dose) - log(e)))
-  expected <- c_val + d - numTerm/denTerm
+  expected <- d - numTerm/denTerm
 
   expect_equal(response, expected)
+})
+
+test_that("ucedergreen: c is the response at dose 0 and d the upper limit", {
+  fct <- ucedergreen(alpha = 0.5)$fct
+  parm_mat <- function(n) matrix(c(1.5, 25, 100, 10, 8), n, 5, byrow = TRUE)
+  expect_equal(fct(1e-8, parm_mat(1)), 25, tolerance = 1e-6)
+  expect_equal(fct(1e8, parm_mat(1)), 100, tolerance = 1e-6)
+})
+
+test_that("ucedergreen is the mirror image of the CRS model: UCRS = c + d - CRS", {
+  dose <- c(0.05, 0.3, 1, 4, 10, 40, 200)
+  p <- matrix(c(1.5, 25, 100, 10, 8), length(dose), 5, byrow = TRUE)
+  for (a in c(1, 0.5, 0.25)) {
+    expect_equal(ucedergreen(alpha = a)$fct(dose, p),
+                 25 + 100 - cedergreen(alpha = a)$fct(dose, p))
+  }
 })
 
 test_that("ucedergreen fct handles fixed c parameter correctly", {
@@ -152,7 +168,7 @@ test_that("ucedergreen fct handles fixed c parameter correctly", {
   b <- 2; c_val <- 0; d <- 100; e <- 5; f_val <- 20
   numTerm <- d - c_val + f_val * exp(-1/dose)
   denTerm <- 1 + exp(b * (log(dose) - log(e)))
-  expected <- c_val + d - numTerm/denTerm
+  expected <- d - numTerm/denTerm
 
   expect_equal(response, expected)
 })
@@ -184,24 +200,24 @@ test_that("ucedergreen deriv1 function can be called", {
   expect_true(is.matrix(derivs) || is.numeric(derivs))
 })
 
-test_that("ucedergreen deriv1 c-derivative is 1 + 1/t3 (not 1/t3)", {
-  # Verify derivative with respect to c for U-shaped model
+test_that("ucedergreen deriv1 agrees with finite differences of fct for all parameters", {
   result <- ucedergreen(alpha = 1)
 
-  dose <- 5
-  b <- 2; c_val <- 10; d <- 100; e <- 5; f_val <- 20
-  parm_mat <- matrix(c(b, c_val, d, e, f_val), nrow = 1)
+  dose <- c(0.3, 5, 40)
+  p0 <- c(2, 10, 100, 5, 20)
+  analytic <- result$deriv1(dose, matrix(p0, length(dose), 5, byrow = TRUE))
+  numeric <- sapply(1:5, function(j) {
+    h <- 1e-6
+    up <- dn <- p0
+    up[j] <- up[j] + h
+    dn[j] <- dn[j] - h
+    (result$fct(dose, matrix(up, length(dose), 5, byrow = TRUE)) -
+       result$fct(dose, matrix(dn, length(dose), 5, byrow = TRUE))) / (2 * h)
+  })
 
-  derivs <- result$deriv1(dose, parm_mat)
-
-  # Manual: d/dc of (c + d - numTerm/denTerm)
-  # = 1 + 1/denTerm  (since numTerm has -c)
-  t2 <- exp(b * (log(dose) - log(e)))
-  t3 <- 1 + t2
-  expected_dc <- 1 + 1/t3
-
-  # Second column should be c-derivative
-  expect_equal(derivs[2], expected_dc, tolerance = 1e-10)
+  expect_equal(unname(analytic), unname(numeric), tolerance = 1e-6)
+  # c-derivative is 1/(1+exp(...)) for d - (d - c + ...)/(1 + exp(...))
+  expect_equal(analytic[, 2], 1 / (1 + exp(p0[1] * (log(dose) - log(p0[4])))), tolerance = 1e-10)
 })
 
 # ==============================================================================
@@ -217,6 +233,88 @@ test_that("ucedergreen edfct function accepts correct signature", {
 
   expect_true(is.list(ed_result))
   expect_equal(length(ed_result), 2)
+})
+
+test_that("ucedergreen edfct: relative ED hits the target response (increasing branch)", {
+  mod <- ucedergreen(alpha = 0.5)
+  parm <- c(1.5, 30, 100, 10, 15)
+  for (p in c(10, 20, 50, 80, 90)) {
+    ed <- suppressWarnings(mod$edfct(parm, respl = p, reference = "control", type = "relative"))
+    expect_true(is.finite(ed[[1]]))
+    expect_equal(mod$fct(ed[[1]], matrix(parm, 1)), 30 + p / 100 * 70, tolerance = 1e-6)
+    expect_equal(length(ed[[2]]), 5)
+  }
+})
+
+test_that("ucedergreen edfct: absolute ED hits the requested response", {
+  mod <- ucedergreen(alpha = 0.5)
+  parm <- c(1.5, 30, 100, 10, 15)
+  for (y in c(40, 50, 70, 90)) {
+    ed <- mod$edfct(parm, respl = y, reference = "control", type = "absolute")
+    expect_equal(mod$fct(ed[[1]], matrix(parm, 1)), y, tolerance = 1e-6)
+  }
+})
+
+test_that("ucedergreen edfct: analytic gradient matches numerical gradient", {
+  mod <- ucedergreen(alpha = 0.5)
+  parm <- c(1.5, 30, 100, 10, 15)
+  ed <- mod$edfct(parm, respl = 30, reference = "control", type = "relative")
+  num <- sapply(seq_along(parm), function(k) {
+    h <- 1e-5 * abs(parm[k])
+    up <- dn <- parm
+    up[k] <- up[k] + h
+    dn[k] <- dn[k] - h
+    (mod$edfct(up, 30, "control", "relative")[[1]] - mod$edfct(dn, 30, "control", "relative")[[1]]) / (2 * h)
+  })
+  expect_equal(as.numeric(ed[[2]]), num, tolerance = 1e-4)
+})
+
+test_that("ucedergreen edfct handles fixed parameters and unreachable levels", {
+  mod <- ucedergreen(fixed = c(NA, 0, NA, NA, NA), alpha = 1)
+  ed <- mod$edfct(c(1.5, 100, 10, 15), respl = 50, reference = "control", type = "relative")
+  expect_equal(length(ed[[2]]), 4)
+  expect_equal(mod$fct(ed[[1]], matrix(c(1.5, 100, 10, 15), 1)), 50, tolerance = 1e-6)
+
+  expect_warning(res <- mod$edfct(c(1.5, 100, 10, 15), respl = 150, reference = "control", type = "absolute"),
+                 "not reached")
+  expect_true(is.na(res[[1]]))
+  expect_warning(res <- mod$edfct(c(-1.5, 100, 10, 15), respl = 50, reference = "control", type = "relative"),
+                 "b > 0")
+})
+
+test_that("ED() on a fitted UCRS model returns doses that reproduce the requested levels", {
+  set.seed(1)
+  dose <- rep(c(0, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100), each = 4)
+  mu <- ifelse(dose == 0, 30,
+               100 - (70 + 15 * exp(-1 / dose^0.5)) / (1 + exp(1.5 * (log(dose) - log(10)))))
+  dd <- data.frame(dose = dose, y = mu + rnorm(length(dose), 0, 2))
+  fit <- drm(y ~ dose, data = dd, fct = UCRS.5b())
+
+  # c and d are the asymptotes (the fit recovers the simulated values)
+  expect_equal(unname(coef(fit)[2]), 30, tolerance = 0.1)
+  expect_equal(unname(coef(fit)[3]), 100, tolerance = 0.1)
+
+  edRel <- ED(fit, c(20, 50), display = FALSE)
+  pred <- predict(fit, data.frame(dose = edRel[, 1]))
+  expect_equal(as.numeric(pred), coef(fit)[[2]] + c(0.2, 0.5) * (coef(fit)[[3]] - coef(fit)[[2]]), tolerance = 1e-5)
+  expect_true(all(is.finite(edRel[, 2])))
+
+  edAbs <- ED(fit, c(50, 70), type = "absolute", display = FALSE)
+  expect_equal(as.numeric(predict(fit, data.frame(dose = edAbs[, 1]))), c(50, 70), tolerance = 1e-5)
+  expect_true(all(is.finite(edAbs[, 2])))
+})
+
+test_that("MAX() on a UCRS model returns the dip of the curve", {
+  fit_dat <- data.frame(dose = rep(c(0, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100), each = 4))
+  set.seed(1)
+  fit_dat$y <- ifelse(fit_dat$dose == 0, 30,
+                      100 - (70 + 15 * exp(-1 / fit_dat$dose^0.5)) / (1 + exp(1.5 * (log(fit_dat$dose) - log(10))))) +
+    rnorm(nrow(fit_dat), 0, 2)
+  fit <- drm(y ~ dose, data = fit_dat, fct = UCRS.5b())
+  mx <- MAX(fit)
+  num <- optimize(function(x) predict(fit, data.frame(dose = x))[1], c(0.01, 100))
+  expect_equal(as.numeric(mx[1, 1]), as.numeric(num$minimum), tolerance = 1e-2)
+  expect_equal(as.numeric(mx[1, 2]), as.numeric(num$objective), tolerance = 1e-4)
 })
 
 # ==============================================================================

@@ -13,7 +13,7 @@
 #'
 #' @seealso [rss()] for the underlying residual sum of squares.
 #'
-#' @author Christian Ritz
+#' @author Christian Ritz, Hannes Reinwald
 #'
 #' @keywords models nonlinear
 #' @export

@@ -47,6 +47,42 @@ and in case ED50 is a parameter:
 \deqn{f(x) = c + (d-c)(\Phi(b(\log(x)-\log(e))))}
 
 For \eqn{c=0} and \eqn{d=1}, the model reduces to the classic probit model.
+
+The parameters are: \code{b}, the slope (positive for a decreasing curve); \code{c}, the lower
+asymptote; \code{d}, the upper asymptote; and \code{e}, the ED50 (or log(ED50) if
+\code{loge = TRUE}).
+
+If \code{loge = TRUE}, \code{\link{ED}} returns \strong{log(ED)}; use
+\code{interval = "fls"} to obtain EDs and confidence limits on the dose scale (\code{"fls"} is
+only valid for such models). Model averaging with \code{\link{maED}} requires \code{loge = FALSE}.
+}
+\examples{
+## Fit with drm() and plot
+m1 <- drm(rootl ~ conc, data = ryegrass, fct = lnormal())
+plot(m1, type = "all", main = "Four-parameter log-normal model")
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 3
+m.c0 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, 0, NA, NA)))
+m.c3 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, 3, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+## Effect of the upper asymptote d: d free, fixed at 6 or fixed at 9
+m.d6 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, NA, 6, NA)))
+m.d9 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(fixed = c(NA, NA, 9, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d6, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d9, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 6", "d = 9"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+## log(ED50) as parameter: ED() returns log(ED), 'fls' back-transforms
+m2 <- drm(rootl ~ conc, data = ryegrass, fct = LN.4(loge = TRUE))
+ED(m2, c(10, 50), interval = "fls")
+
 }
 \references{
 Finney, D. J. (1971) \emph{Probit analysis}, London: Cambridge University Press.

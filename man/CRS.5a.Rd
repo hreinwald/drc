@@ -49,6 +49,7 @@ All five parameters \code{b}, \code{c}, \code{d}, \code{e}, and \code{f} are fre
 # The example below is retained for backward compatibility illustration only.
 
 lettuce.m1 <- drm( lettuce[, c(2, 1)], fct = CRS.5a() )
+plot(lettuce.m1, type = "all", main = "CRS.5a (deprecated)")
 summary(lettuce.m1)
 ED(lettuce.m1, c(50))
 

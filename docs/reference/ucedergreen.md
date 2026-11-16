@@ -69,8 +69,28 @@ components required for use with modeling functions like
 
 ## Details
 
-The u-shaped model is given by the expression \$\$f(x) = c + d -
-\frac{d-c+f \exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}\$\$
+The u-shaped model is the mirror image of the decreasing
+Cedergreen-Ritz-Streibig (CRS) model of Cedergreen et al. (2005),
+reflected about the mid-level \\(c+d)/2\\: \$\$f(x) = d - \frac{d-c+f
+\exp(-1/x^{\alpha})}{1+\exp(b(\log(x)-\log(e)))}\$\$ equivalently \\f(x)
+= c + d - \mathrm{CRS}(x)\\. Hence \\f(0) = c\\ and \\f(x) \to d\\ for
+\\x \to \infty\\ (for \\b \> 0\\), i.e. `c` is the response of the
+untreated control and `d` the upper limit. The U-shaped model is an
+extension in this package; Cedergreen et al. (2005) define only the
+decreasing model.
+
+The parameters are: `b`, the slope; `c`, the lower and `d` the upper
+asymptote; `e`, the location of the transition; and `f`, the size of the
+hormetic deviation at low doses (the response dips below `c`). As for
+the CRS model, `b` and `e` lose their usual slope and ED50
+interpretation when \\f \ne 0\\. Effective doses
+([`ED`](https://hreinwald.github.io/drc/reference/ED.md)) are the doses
+at which the response has covered `p` percent of the way from `c` to `d`
+on the increasing branch beyond the dip; for `type = "absolute"` the
+response level itself is supplied. The wrappers
+[`UCRS.4a`](https://hreinwald.github.io/drc/reference/UCRS.4a.md)-[`UCRS.5c`](https://hreinwald.github.io/drc/reference/UCRS.5c.md)
+fix \\\alpha\\ at 1, 0.5 and 0.25 (suffix a, b, c) and, for the
+four-parameter versions, `c` at 0.
 
 ## References
 
@@ -88,3 +108,25 @@ Chemistry* **24**, 3166–3172.
 ## Author
 
 Christian Ritz, Hannes Reinwald
+
+## Examples
+
+``` r
+## Simulated U-shaped data: fit with drm() and plot
+dose <- rep(c(0.1, 0.3, 1, 3, 10, 30, 100, 300), each = 3)
+mu <- ucedergreen(alpha = 1)$fct(dose, matrix(c(1.5, 1, 6, 10, -2), length(dose), 5, byrow = TRUE))
+dat <- data.frame(dose = dose, response = mu + 0.15 * sin(seq_along(dose) * 2.3))
+m1 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1))
+plot(m1, type = "all", main = "U-shaped Cedergreen-Ritz-Streibig model")
+
+
+## Effect of the asymptotes: fix c (lower) at 0 or d (upper) at 4
+m.c0 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1, fixed = c(NA, 0, NA, NA, NA)))
+m.d4 <- drm(response ~ dose, data = dat, fct = ucedergreen(alpha = 1, fixed = c(NA, NA, 4, NA, NA)))
+plot(m1, type = "all", main = "Fixed asymptotes")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d4, type = "none", add = TRUE, col = "red")
+legend("topleft", c("free", "c = 0", "d = 4"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+```

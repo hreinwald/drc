@@ -53,7 +53,12 @@ estimating the alpha exponent (parameter \\g\\) instead of fixing it.
 ## Note
 
 This function is for use with
-[`drm`](https://hreinwald.github.io/drc/reference/drm.md).
+[`drm`](https://hreinwald.github.io/drc/reference/drm.md). No analytic
+derivatives, effective doses
+([`ED`](https://hreinwald.github.io/drc/reference/ED.md)) or
+[`MAX`](https://hreinwald.github.io/drc/reference/MAX.md) are available
+for this model; [`predict`](https://rdrr.io/r/stats/predict.html) uses
+numerical derivatives for standard errors.
 
 ## See also
 
@@ -63,3 +68,16 @@ This function is for use with
 ## Author
 
 Christian Ritz
+
+## Examples
+
+``` r
+## Fit with drm() and plot: g is the estimated exponent (alpha)
+m1 <- drm(weight ~ conc, data = lettuce, fct = CRS.6())
+plot(m1, type = "all", main = "CRS.6 (alpha estimated)")
+
+## Fixing the lower asymptote c at 0 (green)
+m.c0 <- drm(weight ~ conc, data = lettuce, fct = CRS.6(fixed = c(NA, 0, NA, NA, NA, NA)))
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+
+```

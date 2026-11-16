@@ -7,6 +7,11 @@
 #'
 #' \deqn{f(x) = c + (d-c) \cdot \mathrm{pgamma}(b \cdot x, e, 1)}
 #'
+#' The parameters are: \code{b}, the rate (scale) of the dose; \code{c}, the lower asymptote (the
+#' response at dose 0); \code{d}, the upper asymptote (approached at high doses); and \code{e}, the
+#' shape of the gamma distribution. Effective doses are not available for this model;
+#' \code{\link{predict}} uses the analytic derivatives for standard errors.
+#'
 #' @param fixed numeric vector specifying which parameters are fixed and at what value
 #'   they are fixed. NAs are used for parameters that are not fixed.
 #' @param names a vector of character strings giving the names of the parameters
@@ -22,6 +27,25 @@
 #'   dose estimation, \emph{Environmental and Ecological Statistics}, \bold{16}, 37--51.
 #'
 #' @author Christian Ritz
+#'
+#' @seealso \code{\link{drm}}, \code{\link{multi2}}
+#'
+#' @examples
+#' ## Simulated increasing dose-response data: fit with drm() and plot
+#' dose <- rep(c(0.5, 1, 2, 4, 8, 16, 32), each = 3)
+#' mu <- gammadr()$fct(dose, matrix(c(0.2, 1, 9, 2.5), length(dose), 4, byrow = TRUE))
+#' dat <- data.frame(dose = dose, response = mu + 0.25 * sin(seq_along(dose) * 2.3))
+#' m1 <- drm(response ~ dose, data = dat, fct = gammadr())
+#' plot(m1, type = "all", main = "Gamma dose-response model")
+#'
+#' ## Effect of the lower asymptote c and the upper asymptote d
+#' m.c0 <- drm(response ~ dose, data = dat, fct = gammadr(fixed = c(NA, 0, NA, NA)))
+#' m.d7 <- drm(response ~ dose, data = dat, fct = gammadr(fixed = c(NA, NA, 7, NA)))
+#' plot(m1, type = "all", main = "Fixed asymptotes")
+#' plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+#' plot(m.d7, type = "none", add = TRUE, col = "red")
+#' legend("bottomright", c("free", "c = 0", "d = 7"), col = c("black", "darkgreen", "red"),
+#'   lty = 1, bty = "n")
 #'
 #' @keywords models nonlinear
 "gammadr" <- function(
@@ -82,7 +106,7 @@ fctName, fctText)
         t1 * dgamma(parmMat[, 1] * dose, parmMat[, 4], 1) * dose,
         1 - t2,
         t2,
-        t1 * logGamma(parmMat[, 1] * dose, parmMat[, 4])
+        t1 * (logGamma(parmMat[, 1] * dose, parmMat[, 4]) - digamma(parmMat[, 4]) * t2)
         )[, notFixed]
     }
     deriv2 <- NULL

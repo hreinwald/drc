@@ -78,6 +78,16 @@ effect (stimulation). If \\f=0\\, the model simplifies to the standard
 four-parameter log-logistic model. The parameter \\\alpha\\ is a shape
 parameter that must be specified by the user.
 
+The parameters are: `b`, the slope; `c`, the lower asymptote; `d`, the
+upper asymptote (`d` is the response of the untreated control for a
+decreasing curve); `e`, the location of the decline; and `f`, the size
+of the hormetic stimulation. Smaller \\\alpha\\ move the peak of the
+stimulation to lower doses. Effective doses
+([`ED`](https://hreinwald.github.io/drc/reference/ED.md), use
+`bound = FALSE` if needed) are computed relative to the asymptotes `c`
+and `d` on the part of the curve beyond the peak, and the peak itself is
+found with [`MAX`](https://hreinwald.github.io/drc/reference/MAX.md).
+
 ## See also
 
 [`drm`](https://hreinwald.github.io/drc/reference/drm.md) for model
@@ -92,27 +102,35 @@ Christian Ritz, Hannes Reinwald
 ## Examples
 
 ``` r
-dose <- c(0, 0.1, 0.5, 1, 5, 10, 20)
-response <- c(100, 102, 95, 80, 40, 25, 20)
-my_data <- data.frame(dose = dose, response = response)
-model_fit <- drm(response ~ dose, data = my_data,
-                 fct = cedergreen(alpha = 0.5))
-summary(model_fit)
-#> 
-#> Model fitted: Cedergreen-Ritz-Streibig (5 parms)
-#> 
-#> Parameter estimates:
-#> 
-#>               Estimate Std. Error t-value   p-value    
-#> b:(Intercept)   1.1619     0.2153  5.3965 0.0326651 *  
-#> c:(Intercept)  13.5774     4.5892  2.9585 0.0977776 .  
-#> d:(Intercept) 101.4210     2.0399 49.7190 0.0004043 ***
-#> e:(Intercept)   1.3820     1.1363  1.2162 0.3479717    
-#> f:(Intercept)  72.5388   126.6937  0.5726 0.6247324    
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error:
-#> 
-#>  2.513311 (2 degrees of freedom)
+## Fit with drm() and plot
+m1 <- drm(weight ~ conc, data = lettuce, fct = cedergreen(alpha = 1))
+plot(m1, type = "all", main = "Cedergreen-Ritz-Streibig model (alpha = 1)")
+
+MAX(m1)
+#>     Dose Response
+#> 1 1.0175   1.2374
+
+## Effect of the lower asymptote c: c free, fixed at 0 or fixed at 0.3
+m.c0 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, 0, NA, NA, NA)))
+m.c3 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, 0.3, NA, NA, NA)))
+plot(m1, type = "all", main = "Lower asymptote c")
+plot(m.c0, type = "none", add = TRUE, col = "darkgreen")
+plot(m.c3, type = "none", add = TRUE, col = "red")
+legend("topright", c("c free", "c = 0", "c = 0.3"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
+
+## Effect of the upper asymptote d: d free, fixed at 0.8 or fixed at 1.2
+m.d8 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, NA, 0.8, NA, NA)))
+m.d12 <- drm(weight ~ conc, data = lettuce,
+  fct = cedergreen(alpha = 1, fixed = c(NA, NA, 1.2, NA, NA)))
+plot(m1, type = "all", main = "Upper asymptote d")
+plot(m.d8, type = "none", add = TRUE, col = "darkgreen")
+plot(m.d12, type = "none", add = TRUE, col = "red")
+legend("topright", c("d free", "d = 0.8", "d = 1.2"), col = c("black", "darkgreen", "red"),
+  lty = 1, bty = "n")
+
 ```

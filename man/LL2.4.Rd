@@ -27,7 +27,10 @@ parameters are the slope \code{b}, the lower limit \code{c}, the upper
 limit \code{d}, and the log(ED50) \code{e}.
 }
 \examples{
+## Several curves fitted with drm() and plotted; ED on the dose scale
 spinach.m1 <- drm(SLOPE ~ DOSE, CURVE, data = spinach, fct = LL2.4())
+plot(spinach.m1, main = "LL2.4, one curve per CURVE level")
+ED(spinach.m1, 50, interval = "fls")
 
 }
 \seealso{

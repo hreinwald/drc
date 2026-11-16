@@ -34,7 +34,10 @@ maED_robust(
   A list of alternative dose-response functions (e.g.,
   [`LL.3()`](https://hreinwald.github.io/drc/reference/LL.3.md),
   [`W1.4()`](https://hreinwald.github.io/drc/reference/W1.4.md)) to be
-  used in the model averaging process. The list should be named.
+  used in the model averaging process. The list should be named. Models
+  with a log(ED) parameterisation (`LL2.*`, `LN.*(loge = TRUE)`) are not
+  allowed in the list or as `mod` (an error is raised); use `LL.*` /
+  `LN.*` instead.
 
 - respLev:
 
@@ -138,10 +141,10 @@ data(lettuce)
 base_model <- drm(weight ~ conc, data = lettuce, fct = BC.5())
 model_list <- list(W2.4 = W2.4())
 maED_robust(base_model, fct_ls = model_list, respLev = c(10, 50))
-#>     Estimate    stderr      Lower    Upper confint_level confint_method
-#>        <num>     <num>      <num>    <num>         <num>         <char>
-#> 1:  3.561851  1.610667   0.405001  6.71870          0.95       buckland
-#> 2: 11.952400 11.849870 -11.272918 35.17772          0.95       buckland
+#>     Estimate    stderr       Lower     Upper confint_level confint_method
+#>        <num>     <num>       <num>     <num>         <num>         <char>
+#> 1:  3.560026  1.454012   0.7102158  6.409837          0.95       buckland
+#> 2: 11.923805 11.718409 -11.0438550 34.891465          0.95       buckland
 #>        model    EC
 #>       <char> <num>
 #> 1: BC.5/W2.4    10

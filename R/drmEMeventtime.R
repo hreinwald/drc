@@ -29,7 +29,7 @@ function(dose, resp, multCurves, doseScaling = 1)
     {
         c(
         -object$"fit"$value,  # oops a constant is missing!
-        object$"sumList"$"df.residual"
+        length(coef(object))  # df: number of estimated parameters (not the residual df)
         )
     }
     
