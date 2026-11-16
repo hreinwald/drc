@@ -35,7 +35,10 @@ function(dose, resp, multCurves, doseScaling = 1)
     llfct <- function(object)
     {
         degfre <- object$"sumList"$"lenData"
-        c( -(degfre/2)*(log(2*pi)+log(object$"fit"$"value")-log(degfre)+1),
+        f0 <- multCurves(0, object$"fit"$"par")[1]
+        fVec <- multCurves(dose / doseScaling, object$"fit"$"par")
+        logDet <- determinant(vcFct2(f0, fVec), logarithm = TRUE)$modulus
+        c( -0.5 * (degfre * log(2*pi) + logDet + object$"fit"$"value"),
         object$"sumList"$"lenData" - object$"sumList"$"df.residual" + 1)
     }
     

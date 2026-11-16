@@ -79,8 +79,8 @@ test_that("llfct returns a numeric vector of length 2", {
   em <- drmEMstandard(test_dose, test_resp, simple_model)
 
   mock_object <- list(
-    fit = list(value = 10),
-    sumList = list(lenData = 8, df.residual = 5)
+    fit = list(value = 10, par = test_parm),
+    sumList = list(lenData = length(test_dose), df.residual = 3)
   )
 
   result <- em$llfct(mock_object)
@@ -88,20 +88,36 @@ test_that("llfct returns a numeric vector of length 2", {
   expect_equal(length(result), 2)
 })
 
-test_that("llfct computes correct values", {
+test_that("llfct matches the multivariate Gaussian log-likelihood", {
   em <- drmEMstandard(test_dose, test_resp, simple_model)
+  fit_value <- em$opfct(test_parm)
 
   mock_object <- list(
-    fit = list(value = 10),
-    sumList = list(lenData = 8, df.residual = 5)
+    fit = list(value = fit_value, par = test_parm),
+    sumList = list(lenData = length(test_dose), df.residual = 3)
   )
 
   result <- em$llfct(mock_object)
-  # Gaussian log-likelihood at the residual sum of squares (as in drmEMls), not a Poisson constant
-  expected_ll <- -(8 / 2) * (log(2 * pi) + log(10) - log(8) + 1)
+  f0 <- simple_model(0, test_parm)[1]
+  fVec <- simple_model(test_dose, test_parm)
+  zeroDose <- test_dose < 1e-15
+  len0 <- sum(zeroDose)
+  vcMat <- (1 / len0) * (fVec %o% fVec) / (f0^4)
+  diag(vcMat) <- diag(vcMat) + (1 / (f0^2))
+  vcMat[!zeroDose, zeroDose] <- vcMat[!zeroDose, zeroDose] +
+    (1 / len0) * (-fVec[!zeroDose] / (f0^3))
+  vcMat[zeroDose, !zeroDose] <- vcMat[zeroDose, !zeroDose] +
+    (1 / len0) * (-fVec[!zeroDose] / (f0^3))
+  diag(vcMat[zeroDose, zeroDose]) <-
+    diag(vcMat[zeroDose, zeroDose]) +
+    (1 / (len0 * f0^2)) - (1 / f0^2)
+  expected_ll <- -0.5 * (
+    length(test_dose) * log(2 * pi) +
+      as.numeric(determinant(vcMat, logarithm = TRUE)$modulus) +
+      fit_value
+  )
   expect_equal(result[1], expected_ll)
-  # Second element: number of estimated parameters + 1 (variance)
-  expect_equal(result[2], 8 - 5 + 1)
+  expect_equal(result[2], length(test_dose) - 3 + 1)
 })
 
 
