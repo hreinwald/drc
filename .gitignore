@@ -5,6 +5,7 @@
 .Ruserdata
 
 # R package build artifacts
+.tarball/
 *.tar.gz
 *.tgz
 *.zip
